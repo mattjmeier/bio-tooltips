@@ -1,103 +1,93 @@
 # Guide: Adding a New Data Section to the Tooltip
 
-This document outlines the general procedure for adding a new, optional data section to the gene tooltip (e.g., GO Terms, Phenotypes, etc.). The package is designed with an extensible pattern, so adding new sections involves touching four key files in a predictable way.
+This document outlines the procedure for adding a new data section (e.g., GO Terms, Phenotypes) to the gene tooltip. The package uses a modular pattern involving configuration, data formatting, rendering, and lifecycle management.
 
-For this guide, we'll use "GO Terms" as our running example. The mygene.info API provides this data under a `go` field.
+For this guide, we'll use **GO Terms** (`go` field from mygene.info) as the example.
 
-The 4-Step Pattern
-- Configure: Define the data shape and user-facing options.
-- Fetch: Request the new data from the API.
-- Render: Create the HTML for the new section.
-- Integrate: Wire up the renderer and any interactivity (like "more" buttons).
+## The 5-Step Pattern
 
-> [!WARNING]
-> This is an untested example, and may contain out of date information.
+1.  **Configure:** Define types and defaults in `src/config.ts`.
+2.  **Fetch:** Request data in `src/api.ts`.
+3.  **Format:** Transform raw API data into standard objects in `src/formatters.ts`.
+4.  **Render:** Generate HTML in `src/renderer.ts`.
+5.  **Integrate:** Wire up nested tooltips in `src/lifecycle.ts`.
 
-## Step 1: Configure the New Section (src/config.ts)
+---
 
-This is the source of truth for your data structures and user settings.
+## Step 1: Configure (src/config.ts)
 
-### A. Define the incoming data shape:
+Define the shape of the data and user configuration options.
 
-If the API returns a complex object, create a new interface for it.
+### A. Define the data interface
+Add the interface for the raw API data.
 
 ```typescript
 // src/config.ts
 
-// ... other interfaces
 export interface MyGeneGoTerm {
   id: string;
   term: string;
-  category: "CC" | "BP" | "MF";
+  category: 'CC' | 'BP' | 'MF';
 }
 ```
 
-### B. Add the new field to MyGeneInfoResult:
-
-Update the main data interface to include your new field.
+### B. Update `MyGeneInfoResult`
+Add the new field to the main result interface.
 
 ```typescript
 // src/config.ts
 
 export interface MyGeneInfoResult {
-  // ... other fields
-  interpro?: MyGeneInterproDomain[] | MyGeneInterproDomain;
-  go?: MyGeneGoTerm[] | MyGeneGoTerm; // <--- ADD YOUR NEW FIELD
-  // ... other fields
+  // ... existing fields
+  generif?: GeneRIF[] | GeneRIF;
+  go?: MyGeneGoTerm[] | MyGeneGoTerm; // <--- ADD THIS
 }
 ```
 
-### C. Add a display flag to TooltipDisplayConfig:
-
-This gives users a boolean switch to show or hide the section.
+### C. Update `TooltipDisplayConfig`
+Add a visibility flag. Note that sections now use `SectionVisibility` (boolean | 'expanded' | 'collapsed').
 
 ```typescript
 // src/config.ts
 
 export interface TooltipDisplayConfig {
-  // ... other flags
-  geneTrack: boolean;
-  generifs: boolean;
-  goTerms: boolean; // <--- ADD YOUR NEW DISPLAY FLAG
-  links: {
-    // ...
-  };
+  // ... existing fields
+  generifs: SectionVisibility;
+  goTerms: SectionVisibility; // <--- ADD THIS
+  // ...
 }
 ```
 
-### D. Add configuration options to GeneTooltipConfig and defaultConfig:
-
-Add a `...Count` property to control how many items are shown initially, and set its default value.
+### D. Update `GeneTooltipConfig` and `defaultConfig`
+Add an item count setting and set defaults.
 
 ```typescript
 // src/config.ts
 
 export interface GeneTooltipConfig {
-  // ... other counts
+  // ...
   generifCount: number;
-  goTermCount: number; // <--- ADD YOUR NEW COUNT
-  tooltipWidth?: number;
+  goTermCount: number; // <--- ADD THIS
 }
 
 export const defaultConfig: GeneTooltipConfig = {
-  // ... other defaults
+  // ...
   display: {
     // ...
     generifs: true,
-    goTerms: true, // <--- SET DISPLAY DEFAULT
+    goTerms: true, // <--- SET DEFAULT VISIBILITY
   },
   // ...
   generifCount: 3,
-  goTermCount: 5, // <--- SET COUNT DEFAULT
-  // ...
+  goTermCount: 3, // <--- SET DEFAULT COUNT
 };
 ```
 
-## Step 2: Fetch the Data (src/api.ts)
+---
 
-This is the simplest step. You just need to tell the mygene.info query to include your new field in its response.
+## Step 2: Fetch (src/api.ts)
 
-### A. Add the new field name to the fields array:
+Add the API field name to the query list.
 
 ```typescript
 // src/api.ts
@@ -105,125 +95,160 @@ This is the simplest step. You just need to tell the mygene.info query to includ
 export async function fetchMyGeneBatch(/*...*/) {
   // ...
   const fields = [
-    // ... other fields
-    'pdb',
+    // ...
     'generif',
-    'go' // <--- ADD THE API FIELD NAME HERE
+    'wikipedia.url_stub',
+    'go' // <--- ADD API FIELD NAME
   ].join(',');
   // ...
 }
 ```
 
-## Step 3: Render the HTML (src/renderer.ts)
+---
 
-This is where you transform the raw JSON data into user-friendly HTML.
+## Step 3: Format (src/formatters.ts)
 
-### A. Create a new `render...` function for your section:
-Follow the pattern of the existing `renderPathways` or `renderDomains` functions. The goal is to convert the raw data into an array of `{ name: string, url: string }` objects that the generic renderParagraphSection helper can use.
+Create a pure function to transform raw API data into a standard list of items (`{ name, url }`).
 
 ```typescript
-// src/renderer.ts
+// src/formatters.ts
+import type { MyGeneGoTerm } from './config'; // Import your new type
 
-// Helper to ensure data is an array
-function asArray<T>(data: T | T[] | undefined): T[] {
+// ... existing functions
+
+export function formatGoTerms(data: MyGeneGoTerm[] | MyGeneGoTerm | undefined): FormattedItem[] {
   if (!data) return [];
-  return Array.isArray(data) ? data : [data];
-}
-
-// NEW RENDER FUNCTION
-function renderGoTerms(data: MyGeneInfoResult, count: number): string {
-  const rawGoTerms = asArray(data.go);
-  if (rawGoTerms.length === 0) return '';
-
-  // 1. Map raw data to the { name, url } format
-  const goTerms = rawGoTerms.map(go => ({
-    name: `${go.term} (${go.category})`, // e.g., "nucleus (CC)"
-    url: `https://www.ebi.ac.uk/QuickGO/term/${go.id}`
-  })).sort((a, b) => a.name.localeCompare(b.name));
-
-  // 2. Define a unique ID for the "more" button
-  const moreButtonId = `goterms-more-${data._id}`;
-
-  // 3. Call the generic helper to create the HTML
-  return renderParagraphSection('GO Terms', goTerms, count, moreButtonId);
+  
+  // Use asArray helper to handle single objects vs arrays
+  return asArray(data)
+    .map(item => ({
+      name: `${item.term} (${item.category})`,
+      url: `https://www.ebi.ac.uk/QuickGO/term/${item.id}`
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 ```
 
-### B. Call your new function from renderTooltipHTML:
+---
 
-Add the function call inside the main template, wrapped in its display flag check.
+## Step 4: Render (src/renderer.ts)
+
+Generate the HTML. We use `renderParagraphContent` for comma-separated lists or `renderListContent` for bullet points.
+
+### A. Import the formatter
+```typescript
+import { 
+  // ...
+  formatGoTerms // <--- Import
+} from './formatters';
+```
+
+### B. Create a specific render function
+Use the `uniqueId` to ensure the "Show more" button works correctly.
 
 ```typescript
-// src/renderer.ts
+function renderGoTerms(data: MyGeneInfoResult, count: number, uniqueId: string): string {
+  const items = formatGoTerms(data.go);
+  // Use renderParagraphContent (comma separated) or renderListContent (<ul>)
+  return renderParagraphContent(items, count, `goterms-more-${uniqueId}`);
+}
+```
 
-export function renderTooltipHTML(/*...*/) {
-  // ... destructure new count
-  const { 
+### C. Update `renderTooltipHTML`
+Update the options interface and the main HTML template.
+
+```typescript
+// Inside src/renderer.ts
+
+// 1. Update RenderOptions interface
+interface RenderOptions {
+  // ...
+  generifCount?: number;
+  goTermCount?: number; // <--- Add
+}
+
+export function renderTooltipHTML(data: MyGeneInfoResult | null | undefined, options: RenderOptions = {}): string {
+  // ...
+  
+  const {
     // ...
     generifCount = 3,
-    goTermCount = 5, // <--- GET YOUR NEW COUNT
-    // ...
+    goTermCount = 3, // <--- Destructure
   } = options;
+
+  // ...
+
+  // 2. Generate the content
+  const goTermContent = renderGoTerms(data, goTermCount, uniqueId);
 
   return `
     <div class="gene-tooltip-content" ...>
-      <!-- ... other sections -->
-      ${display.generifs !== false ? renderGeneRIFs(data, generifCount) : ''}
-      ${display.goTerms !== false ? renderGoTerms(data, goTermCount) : ''} {/* <--- ADD YOUR NEW SECTION */}
-      ${renderLinks(data, display)}
+      <!-- ... -->
+      ${buildSection('generifs', 'GeneRIFs', generifContent)}
+      
+      <!-- 3. Add the section using buildSection -->
+      ${buildSection('goTerms', 'GO Terms', goTermContent)}
+      
+      <!-- ... -->
     </div>
   `;
 }
 ```
 
-## Step 4: Integrate Interactivity (src/index.ts)
+---
 
-The final step is to wire up the "more" button so it shows a nested tooltip with the full list of items.
+## Step 5: Integrate Lifecycle (src/lifecycle.ts)
 
-### A. Pass the new count to the renderOptions:
+This step activates the "Show more" button functionality (nested tooltips).
 
-In the onShow hook, make sure the count from the configuration is passed down to the renderer.
+### A. Update `renderVisualsAndNestedTippys`
 
 ```typescript
-// src/index.ts
+// src/lifecycle.ts
 
-// ...
-onShow(instance: Instance) {
+import { 
   // ...
-  const renderOptions = {
-    // ...
-    generifCount: config.generifCount,
-    goTermCount: config.goTermCount, // <--- PASS THE COUNT
-    tooltipWidth: config.tooltipWidth,
-    // ...
-  };
-  // ...
+  formatGoTerms // <--- Import formatter
+} from './formatters.js';
+
+async function renderVisualsAndNestedTippys(instance: TippyInstanceWithCustoms, config: GeneTooltipConfig) {
+    // ... setup code ...
+
+    // 1. Format the data again for the nested tooltip
+    const goItems = formatGoTerms(data.go);
+
+    // 2. Register the nested tooltip
+    // Arguments: instance, options, selector_id, items_array
+    createNestedTippy(
+      instance, 
+      finalNestedTippyOptions, 
+      `#goterms-more-${uniqueId}`, 
+      goItems
+    );
+    
+    // ... existing calls for transcripts, structures, etc.
 }
 ```
 
-### B. Add the nested tippy logic in onMount:
+### B. Update `createOnShowHandler`
 
-In the onMount hook, add logic to find your new "more" button and attach a nested tippy to it. Use the createNestedTippy helper for consistency.
+Pass the new count configuration to the renderer options.
 
 ```typescript
-// src/index.ts
+// src/lifecycle.ts
 
-// ...
-onMount(instance: TippyInstanceWithCustoms) {
-  // ...
-  if (!data) return;
-
-  // ... (existing helper and other sections)
-
-  // NEW: Handle GO Terms
-  const goTermItems = asArray(data.go)
-    .map(go => ({
-      name: `${go.term} (${go.category})`,
-      url: `https://www.ebi.ac.uk/QuickGO/term/${go.id}`
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name));
-  createNestedTippy(`#goterms-more-${data._id}`, goTermItems);
+export function createOnShowHandler(...) {
+  return function onShow(instance: TippyInstanceWithCustoms) {
+     // ...
+     const renderOptions = {
+        // ...
+        generifCount: config.generifCount,
+        goTermCount: config.goTermCount, // <--- Pass from config
+        uniqueId: instance._uniqueId,
+      };
+      // ...
+  }
 }
 ```
 
-By following these four steps, you can cleanly and consistently add new data-driven sections to the tooltip while maintinaing flexible configuration options.
+By following these five steps, you can cleanly and consistently add new sections while maintinaing flexible configuration options.
