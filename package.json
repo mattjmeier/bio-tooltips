@@ -1,6 +1,6 @@
 {
   "name": "gene-tooltips",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "A framework-agnostic library for showing gene information as a tooltip",
   "keywords": [
     "genetics",
