@@ -22,6 +22,18 @@ These options control the core functionality of the tooltip library.
     * `'all'`: Fetches data for all tooltips on the page as soon as `init()` is called.
     * `'none'`: Fetches data only when the user hovers directly over a gene.
 * `tippyOptions` (object): An object of options passed directly to the underlying Tippy.js instance. This allows for advanced customization of animations, placement, delays, and more. See the [Tippy.js documentation](https://atomiks.github.io/tippyjs/v6/all-props/) for all possibilities.
+* `nestedTippyOptions` (object): Options passed to the secondary "popovers" that appear when clicking "Show more" (e.g., on long pathway lists).
+
+### Pinning
+
+The tooltip header includes a Pushpin icon. Clicking this "pins" the tooltip open, allowing users to:
+
+1. Copy text from the summary.
+2. Click links inside the tooltip without it disappearing.
+3. Interact with the Gene Track dropdowns or Ideogram.
+4. Scroll through long lists.
+
+Clicking the pin again will unpin and close it.
 
 ### Example: changing the theme and placement
 
@@ -42,28 +54,30 @@ Hover over the gene to see the configured tooltip: <GeneDemo genes="TP53" specie
 
 You have fine-grained control over which sections appear in the tooltip.
 
-### Hiding and Showing Sections
+### Section Display & Collapsibility
 
-The `display` object contains boolean flags to toggle entire sections of the tooltip.
+You have granular control over which sections appear and their initial state. The display object accepts boolean values to show/hide sections, or string values (`'expanded'` | `'collapsed'`) to control their initial accordion state.
 
 ```javascript
-// Structure of the 'display' object
-display: {
-  species: boolean;
-  location: boolean;
-  ideogram: boolean;
-  pathways: boolean;
-  domains: boolean;
-  geneTrack: boolean;
-  transcripts: boolean;
-  structures: boolean;
-  generifs: boolean;
-  links: {
-    ncbi?: boolean;
-    ensembl?: boolean;
-    wikipedia?: boolean;
-  };
-}
+GeneTooltip.init({
+  display: {
+    // Boolean: Completely hide the section
+    domains: false, 
+    
+    // String: Show section, but start collapsed (accordion style)
+    pathways: 'collapsed',
+    
+    // String: Show section and start expanded
+    summary: 'expanded',
+    
+    // Global toggle: If false, headers are static and cannot be collapsed
+    collapsible: true,
+    
+    // Global default: If set to true, all sections default to 'collapsed' 
+    // unless explicitly set to 'expanded'
+    collapsedByDefault: true
+  }
+});
 ```
 
 ### Example: A Minimalist Tooltip
@@ -103,6 +117,8 @@ These options control the size of the tooltip and how much content is shown init
 * `transcriptCount` (number): The number of transcripts to show initially.
 * `structureCount` (number): The number of PDB structures to show initially.
 * `generifCount` (number): The number of GeneRIFs to show initially.
+* `constrainToViewport` (boolean): Default: true. Automatically sets a max-height on the tooltip content to ensure it fits within the current viewport. Useful for mobile devices or large tooltips.
+
 
 ### Example: Wider Tooltip with More Content
 

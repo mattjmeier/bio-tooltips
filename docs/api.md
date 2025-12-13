@@ -75,27 +75,37 @@ new GeneTooltip(config);
 
 ## 🎨 Display Configuration (`display`)
 
-Control which content sections are shown in the tooltip.
+Control which content sections are shown in the tooltip. `display.collapsible` and `display.collapsedByDefault` are global options, but they can be over-ridden with granular settings.
+
+The display keys accept:
+
+`false`: Hide section.
+`true`: Show section (uses collapsedByDefault state).
+`'expanded'`: Force start open.
+`'collapsed'`: Force start closed.
+
+Note: `display.ideogram` simply toggles the graphic on/off, but the section it lives in is controlled by display.location.
 
 ### `display`
 - **Type:** `Partial<TooltipDisplayConfig>`
 - **Default:**
   ```ts
   {
-    species: true,
-    location: true,
-    ideogram: true,
-    pathways: true,
-    domains: true,
-    geneTrack: true,
-    transcripts: true,
-    structures: true,
-    generifs: true,
+    species: boolean; // Header only, no collapse state
+    location: SectionVisibility;
+    ideogram: boolean; // Integrated into location, no separate collapse
+    pathways: SectionVisibility;
+    domains: SectionVisibility;
+    geneTrack: SectionVisibility;
+    transcripts: SectionVisibility;
+    structures: SectionVisibility;
+    generifs: SectionVisibility;
+    linksSection: SectionVisibility; // Controls the "Links" container
     links: {
-      ncbi: true,
-      ensembl: true,
-      wikipedia: true,
-    },
+      ncbi: boolean;
+      ensembl: boolean;
+      wikipedia: boolean;
+    };
   }
   ```
 
@@ -115,7 +125,16 @@ Control which content sections are shown in the tooltip.
 | `links.ncbi` | `boolean` | `true` | Show link to NCBI Gene page. |
 | `links.ensembl` | `boolean` | `true` | Show link to ENSEMBL Gene page. |
 | `links.wikipedia` | `boolean` | `true` | Show link to Wikipedia. |
-
+| `selector` | `string` | `'.gene-tooltip'`| CSS selector for tooltip targets.|
+| `api` | `'mygene'` | `'mygene'` | Backend API source.|
+| `prefetch` | `'smart'` \| `'all'` \| `'none'` | `'smart'` | Prefetching behavior. |
+| `theme` | `string` | `'auto'` | Tooltip theme. |
+| `display` | `Partial<TooltipDisplayConfig> `| (see below) | Controls visibility and accordion state. |
+| `display.collapsible` | `boolean` | `true` | Enables accordion-style headers. |
+| `display.collapsedByDefault` | `boolean` | `true` | Default state for sections. |
+| `constrainToViewport` | `boolean` | `true` | Prevents tooltip from exceeding screen height. |
+| `nestedTippyOptions` | `Partial<Props> `| `{ placement: 'right', ... }` | Config for "Show more" popovers. |
+| `tippyOptions` | `Partial<Props>` | `{...}` | Main tooltip behavior (Tippy.js props). |
 
 ## 🧬 Ideogram Configuration (`ideogram`)
 
