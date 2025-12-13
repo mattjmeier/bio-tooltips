@@ -1,4 +1,4 @@
-import type { MyGeneInfoResult, GenomicPosition, TooltipDisplayConfig } from './config';
+import type { MyGeneInfoResult, GenomicPosition, TooltipDisplayConfig, SectionVisibility  } from './config';
 import { speciesMap } from './constants';
 import { formatPathways, formatDomains, formatTranscripts, formatStructures, formatGeneRIFs } from './formatters';
 export type FormattedItem = { name: string; url: string };
@@ -8,6 +8,32 @@ const NCBILogo = `data:image/svg+xml,${encodeURIComponent(NCBILogoText)}`;
 import EnsemblLogo from "./assets/ebang-400dpi.png";
 import WikiLogoText from "./assets/Wikipedia-logo.svg";
 const WikiLogo = `data:image/svg+xml,${encodeURIComponent(WikiLogoText)}`;
+
+function getSectionState(
+  setting: SectionVisibility | undefined, 
+  globalCollapsedByDefault: boolean
+): { isVisible: boolean; startCollapsed: boolean } {
+  // Handle explicit boolean false
+  if (setting === false) {
+    return { isVisible: false, startCollapsed: true };
+  }
+
+  // Handle explicit states
+  if (setting === 'expanded') {
+    return { isVisible: true, startCollapsed: false };
+  }
+  
+  if (setting === 'collapsed') {
+    return { isVisible: true, startCollapsed: true };
+  }
+
+  // Handle true or undefined (default behavior)
+  return { 
+    isVisible: true, 
+    startCollapsed: globalCollapsedByDefault 
+  };
+}
+
 
 interface RenderOptions {
   truncate?: number;
@@ -30,15 +56,16 @@ function renderCollapsibleSection(
   innerHTML: string,
   uniqueId: string,
   collapsible: boolean,
-  collapsedByDefault: boolean,
+  isCollapsed: boolean, // Changed from collapsedByDefault
   headerRightHTML: string = ''
 ): string {
-  const isCollapsed = collapsible && collapsedByDefault;
+  // Use the passed-in state, but force false if functionality is disabled globally
+  const collapsedState = collapsible ? isCollapsed : false;
+  
   const arrow = collapsible
-    ? `<span class="gt-section-arrow ${isCollapsed ? 'collapsed' : ''}" aria-hidden="true"></span>`
+    ? `<span class="gt-section-arrow ${collapsedState ? 'collapsed' : ''}" aria-hidden="true"></span>`
     : '';
 
-  // Add ARIA attributes for accessibility
   const contentId = `gt-content-${uniqueId}-${title.replace(/\s+/g, '-').toLowerCase()}`;
   let headerClasses = 'gene-tooltip-section-header gt-collapsible-header';
   if (collapsible) {
@@ -47,13 +74,13 @@ function renderCollapsibleSection(
 
   return `
     <div class="gene-tooltip-section-container ${collapsible ? 'gt-collapsible' : ''}" 
-        data-collapsed="${isCollapsed ? 'true' : 'false'}"
+        data-collapsed="${collapsedState ? 'true' : 'false'}"
         data-section="${title.replace(/\s+/g, '-').toLowerCase()}">
 
       <div class="${headerClasses}" 
           role="${collapsible ? 'button' : 'heading'}"
           tabindex="${collapsible ? '0' : '-1'}"
-          aria-expanded="${collapsible ? !isCollapsed : 'true'}"
+          aria-expanded="${collapsible ? !collapsedState : 'true'}"
           aria-controls="${contentId}">
         <div class="gt-section-left">
           ${arrow}
@@ -330,52 +357,55 @@ export function renderTooltipHTML(
 
   // These flags will be passed to renderCollapsibleSection
   const collapsible = display.collapsible ?? false;
-  const collapsedByDefault = display.collapsedByDefault ?? false;
+  const globalCollapsedByDefault = display.collapsedByDefault ?? false;
   
+  // Helper to generate the section HTML only if visible, calculating state
+  const buildSection = (
+    key: keyof TooltipDisplayConfig, 
+    title: string, 
+    content: string, 
+    extraHeaderHtml: string = ''
+  ) => {
+    if (!content) return '';
+    
+    // Type assertion because display[key] can be complex types not just SectionVisibility
+    const setting = display[key] as SectionVisibility | undefined;
+    
+    const { isVisible, startCollapsed } = getSectionState(setting, globalCollapsedByDefault);
+
+    if (!isVisible) return '';
+
+    console.log("isVisible:", isVisible)
+    console.log("startCollapsed:", startCollapsed)
+    console.log("globalCollapsedByDefault:", globalCollapsedByDefault)
+    
+    return renderCollapsibleSection(
+      title,
+      content,
+      uniqueId,
+      collapsible,
+      startCollapsed, // Pass the specific state
+      extraHeaderHtml
+    );
+  };
+
   const styleParts: string[] = [];
   if (tooltipWidth) styleParts.push(`max-width: ${tooltipWidth}px`);
   if (tooltipHeight) styleParts.push(`max-height: ${tooltipHeight}px`, `overflow-y: auto`);
   const inlineStyle = styleParts.length > 0 ? `style="${styleParts.join('; ')}"` : '';
+
+  // Content generation (Logic remains similar, just decoupled rendering from wrapping)
+  const summaryContent = data.summary ? renderSummaryContent(data.summary, truncate, uniqueId) : '';
+  const locationContent = renderLocation(data.genomic_pos, display.ideogram, uniqueId);
+  const geneTrackContent = data.exons && data.exons.length > 0 ? renderGeneTrackContent(uniqueId) : '';
+  const pathwayContent = renderPathways(data, pathwaySource, pathwayCount, uniqueId);
+  const domainContent = renderDomains(data, domainCount, uniqueId);
+  const transcriptContent = renderTranscripts(data, transcriptCount, uniqueId);
+  const structureContent = renderStructures(data, structureCount, uniqueId);
+  const generifContent = renderGeneRIFs(data, generifCount, uniqueId);
+  const linksContent = renderLinksContent(data, display);
   
-  // Helper to decide whether to render a section
-  const shouldRender = (key: keyof TooltipDisplayConfig) => display[key] !== false;
-
-  const summaryContent = shouldRender('summary') 
-    ? renderSummaryContent(data.summary, truncate, uniqueId) 
-    : '';
-
-  const locationContent = shouldRender('location')
-    ? renderLocation(data.genomic_pos, display.ideogram, uniqueId)
-    : '';
-  
-  const geneTrackContent = shouldRender('geneTrack') && data.exons && data.exons.length > 0
-    ? renderGeneTrackContent(uniqueId)
-    : '';
-
-  const pathwayContent = shouldRender('pathways')
-    ? renderPathways(data, pathwaySource, pathwayCount, uniqueId)
-    : '';
-
-  const domainContent = shouldRender('domains')
-    ? renderDomains(data, domainCount, uniqueId)
-    : '';
-    
-  const transcriptContent = shouldRender('transcripts')
-    ? renderTranscripts(data, transcriptCount, uniqueId)
-    : '';
-
-  const structureContent = shouldRender('structures')
-    ? renderStructures(data, structureCount, uniqueId)
-    : '';
-
-  const generifContent = shouldRender('generifs')
-    ? renderGeneRIFs(data, generifCount, uniqueId)
-    : '';
-
-  const linksContent = shouldRender('links')
-    ? renderLinksContent(data, display)
-    : '';
-
+  // Header HTML generation (unchanged)
   const pinButtonHTML = `
     <button class="gt-pin-button" aria-label="Pin tooltip" type="button">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -394,82 +424,24 @@ export function renderTooltipHTML(
         ${pinButtonHTML} 
       </div>
 
-      ${shouldRender('species') && data.taxid ? renderSpecies(data.taxid) : ''}
+      ${display.species !== false && data.taxid ? renderSpecies(data.taxid) : ''}
 
-      ${summaryContent ? renderCollapsibleSection(
-            'Summary',
-            summaryContent,
-            uniqueId,
-            collapsible,
-            collapsedByDefault
-          ) : ''}
-
-      ${locationContent ? renderCollapsibleSection(
-            'Location',
-            locationContent,
-            uniqueId,
-            collapsible,
-            collapsedByDefault
-          ) : ''}
-      
-      ${geneTrackContent ? renderCollapsibleSection(
-        'Gene Model',
-        `<div class="gene-tooltip-track" id="gene-tooltip-track-${uniqueId}">${loaderHTML}</div>`,
-        uniqueId,
-        collapsible,
-        collapsedByDefault,
+      ${buildSection('summary', 'Summary', summaryContent)}
+      ${buildSection('location', 'Location', locationContent)}
+      ${buildSection('geneTrack', 'Gene Model', geneTrackContent, 
         `<div class="gene-tooltip-track-controls">
           <select class="gt-transcript-selector form-select-sm" id="transcript-selector-${uniqueId}"></select>
         </div>`
-      ) : ''}
-
-      ${pathwayContent ? renderCollapsibleSection(
-            'Pathways',
-            pathwayContent,
-            uniqueId,
-            collapsible,
-            collapsedByDefault
-          ) : ''}
-
-      ${domainContent ? renderCollapsibleSection(
-            'Protein Domains',
-            domainContent,
-            uniqueId,
-            collapsible,
-            collapsedByDefault
-          ) : ''}
-        
-      ${transcriptContent ? renderCollapsibleSection(
-            'Transcripts',
-            transcriptContent,
-            uniqueId,
-            collapsible,
-            collapsedByDefault
-          ) : ''}
-
-      ${structureContent ? renderCollapsibleSection(
-            'PDB Structures',
-            structureContent,
-            uniqueId,
-            collapsible,
-            collapsedByDefault
-          ) : ''}
-
-      ${generifContent ? renderCollapsibleSection(
-            'GeneRIFs',
-            generifContent,
-            uniqueId,
-            collapsible,
-            collapsedByDefault
-          ) : ''}
-
-       ${linksContent ? renderCollapsibleSection(
-            'Links',
-            linksContent,
-            uniqueId,
-            collapsible,
-            collapsedByDefault
-          ) : ''}
+      )}
+      ${buildSection('pathways', 'Pathways', pathwayContent)}
+      ${buildSection('domains', 'Protein Domains', domainContent)}
+      ${buildSection('transcripts', 'Transcripts', transcriptContent)}
+      ${buildSection('structures', 'PDB Structures', structureContent)}
+      ${buildSection('generifs', 'GeneRIFs', generifContent)}
+      
+      ${/* Note: We use the new linksSection key for the container state, but check content existence too */ 
+        linksContent ? buildSection('linksSection', 'Links', linksContent) : ''
+      }
     </div>
   `;
 }

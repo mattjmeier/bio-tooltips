@@ -51,18 +51,22 @@ export interface MyGeneInfoResult {
   generif?: GeneRIF[] | GeneRIF;
 }
 
+// Section visibility
+export type SectionVisibility = boolean | 'expanded' | 'collapsed';
+
 // Define the components that can be shown or hidden
 export interface TooltipDisplayConfig {
-  summary: boolean;
-  species: boolean;
-  location: boolean;
-  ideogram: boolean;
-  pathways: boolean;
-  domains: boolean;
-  geneTrack: boolean;
-  transcripts: boolean;
-  structures: boolean;
-  generifs: boolean;
+  summary: SectionVisibility;
+  species: boolean; // Species is usually just a header line, not a collapsible section
+  location: SectionVisibility;
+  ideogram: boolean; // Not a section
+  pathways: SectionVisibility;
+  domains: SectionVisibility;
+  geneTrack: SectionVisibility;
+  transcripts: SectionVisibility;
+  structures: SectionVisibility;
+  generifs: SectionVisibility;
+  linksSection: SectionVisibility; // Added this to explicitly control the "Links" container state
   collapsible?: boolean;
   collapsedByDefault?: boolean;
   links: {
@@ -125,15 +129,17 @@ export const defaultConfig: GeneTooltipConfig = {
   theme: 'auto',
   constrainToViewport: true,
   display: {
+    summary: 'expanded',
     species: true,
-    location: true,
+    location: 'expanded',
     ideogram: true,
     pathways: true,
     domains: true,
-    geneTrack: true,
+    geneTrack: 'expanded',
     transcripts: true,
     structures: true,
     generifs: true,
+    linksSection: true,
     collapsible: true,
     collapsedByDefault: true,
     links: {
