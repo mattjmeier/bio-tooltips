@@ -175,7 +175,6 @@ export async function renderGeneTrack(
         // --- Conditionally Initialize Dropdown ---
         if (transcripts.length > 1) {
             const sortedTranscripts = [...transcripts].sort((a, b) => a.transcript.localeCompare(b.transcript));
-
             const tomSelectOptions = sortedTranscripts.map(tx => {
                 const exonCount = tx.position?.length || 0;
                 return {
@@ -189,8 +188,8 @@ export async function renderGeneTrack(
                 options: tomSelectOptions,
                 items: [longestTranscript.transcript], // Pre-select the longest
                 create: false,
-                // dropdownParent: `#${instance.popper.id}`,
-                plugins: ['dropdown_input'],
+                controlInput: null as any, // This is what the docs say to do, but the TomSettings types don't have `null` here.
+                plugins: [], 
                 onChange: (selectedValue: string) => {
                     const selectedTranscript = transcripts.find(tx => tx.transcript === selectedValue);
                     if (selectedTranscript) {
@@ -198,10 +197,11 @@ export async function renderGeneTrack(
                     }
                 }
             });
-            // Store the instance for the onHide handler to clean up
+            
             instance._tomselect = tomselect;
 
         } else {
+
             // If there's only one transcript, just hide the selector dropdown
             selectorEl.style.display = 'none';
         }
