@@ -6,7 +6,7 @@
 
 ### SectionState
 
-Defined in: [core/sections.ts:3](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/core/sections.ts#L3)
+Defined in: [core/sections.ts:3](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/sections.ts#L3)
 
 #### Properties
 
@@ -14,13 +14,13 @@ Defined in: [core/sections.ts:3](https://github.com/mattjmeier/gene-tooltips/blo
 
 > **isVisible**: `boolean`
 
-Defined in: [core/sections.ts:4](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/core/sections.ts#L4)
+Defined in: [core/sections.ts:4](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/sections.ts#L4)
 
 ##### startCollapsed
 
 > **startCollapsed**: `boolean`
 
-Defined in: [core/sections.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/core/sections.ts#L5)
+Defined in: [core/sections.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/sections.ts#L5)
 
 ## Type Aliases
 
@@ -28,7 +28,7 @@ Defined in: [core/sections.ts:5](https://github.com/mattjmeier/gene-tooltips/blo
 
 > **CoreSectionVisibility** = `boolean` \| `"expanded"` \| `"collapsed"`
 
-Defined in: [core/sections.ts:1](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/core/sections.ts#L1)
+Defined in: [core/sections.ts:1](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/sections.ts#L1)
 
 ## Functions
 
@@ -36,7 +36,7 @@ Defined in: [core/sections.ts:1](https://github.com/mattjmeier/gene-tooltips/blo
 
 > **getSectionKey**(`title`): `string`
 
-Defined in: [core/sections.ts:30](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/core/sections.ts#L30)
+Defined in: [core/sections.ts:30](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/sections.ts#L30)
 
 #### Parameters
 
@@ -54,7 +54,7 @@ Defined in: [core/sections.ts:30](https://github.com/mattjmeier/gene-tooltips/bl
 
 > **getSectionState**(`setting`, `globalCollapsedByDefault`): [`SectionState`](#sectionstate)
 
-Defined in: [core/sections.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/core/sections.ts#L8)
+Defined in: [core/sections.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/sections.ts#L8)
 
 #### Parameters
 
@@ -76,7 +76,7 @@ Defined in: [core/sections.ts:8](https://github.com/mattjmeier/gene-tooltips/blo
 
 > **renderCollapsibleSection**(`title`, `innerHTML`, `uniqueId`, `collapsible`, `isCollapsed`, `headerRightHTML`): `string`
 
-Defined in: [core/sections.ts:34](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/core/sections.ts#L34)
+Defined in: [core/sections.ts:34](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/sections.ts#L34)
 
 #### Parameters
 

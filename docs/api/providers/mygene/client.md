@@ -8,7 +8,7 @@
 
 > **fetchMyGeneBatch**(`geneSymbols`, `species`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyGeneInfoResult`](types.md#mygeneinforesult)\>\>
 
-Defined in: [providers/mygene/client.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mygene/client.ts#L10)
+Defined in: [providers/mygene/client.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mygene/client.ts#L10)
 
 Fetches data for multiple genes in a single batch request from mygene.info.
 
@@ -38,7 +38,7 @@ A Map of gene symbols to data.
 
 > **fetchMyGeneRefs**(`refs`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyGeneInfoResult`](types.md#mygeneinforesult)\>\>
 
-Defined in: [providers/mygene/client.ts:64](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mygene/client.ts#L64)
+Defined in: [providers/mygene/client.ts:64](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mygene/client.ts#L64)
 
 #### Parameters
 
@@ -56,7 +56,7 @@ Defined in: [providers/mygene/client.ts:64](https://github.com/mattjmeier/gene-t
 
 > **getMyGeneCacheKey**(`symbol`, `taxid`): `string`
 
-Defined in: [providers/mygene/client.ts:91](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mygene/client.ts#L91)
+Defined in: [providers/mygene/client.ts:91](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mygene/client.ts#L91)
 
 #### Parameters
 

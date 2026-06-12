@@ -6,7 +6,7 @@
 
 ### MyChemInfoResult
 
-Defined in: [providers/mychem/types.ts:1](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L1)
+Defined in: [providers/mychem/types.ts:1](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L1)
 
 #### Properties
 
@@ -14,13 +14,13 @@ Defined in: [providers/mychem/types.ts:1](https://github.com/mattjmeier/gene-too
 
 > **\_id**: `string`
 
-Defined in: [providers/mychem/types.ts:2](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L2)
+Defined in: [providers/mychem/types.ts:2](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L2)
 
 ##### chebi?
 
 > `optional` **chebi**: `object`
 
-Defined in: [providers/mychem/types.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L12)
+Defined in: [providers/mychem/types.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L12)
 
 ###### id?
 
@@ -34,7 +34,7 @@ Defined in: [providers/mychem/types.ts:12](https://github.com/mattjmeier/gene-to
 
 > `optional` **chembl**: `object`
 
-Defined in: [providers/mychem/types.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L8)
+Defined in: [providers/mychem/types.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L8)
 
 ###### molecule\_chembl\_id?
 
@@ -48,7 +48,7 @@ Defined in: [providers/mychem/types.ts:8](https://github.com/mattjmeier/gene-too
 
 > `optional` **drugbank**: `object`
 
-Defined in: [providers/mychem/types.ts:16](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L16)
+Defined in: [providers/mychem/types.ts:16](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L16)
 
 ###### description?
 
@@ -66,31 +66,31 @@ Defined in: [providers/mychem/types.ts:16](https://github.com/mattjmeier/gene-to
 
 > `optional` **formula**: `string`
 
-Defined in: [providers/mychem/types.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L7)
+Defined in: [providers/mychem/types.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L7)
 
 ##### inchi?
 
 > `optional` **inchi**: `string`
 
-Defined in: [providers/mychem/types.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L5)
+Defined in: [providers/mychem/types.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L5)
 
 ##### inchikey?
 
 > `optional` **inchikey**: `string`
 
-Defined in: [providers/mychem/types.ts:6](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L6)
+Defined in: [providers/mychem/types.ts:6](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L6)
 
 ##### name?
 
 > `optional` **name**: `string` \| `string`[]
 
-Defined in: [providers/mychem/types.ts:4](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L4)
+Defined in: [providers/mychem/types.ts:4](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L4)
 
 ##### pubchem?
 
 > `optional` **pubchem**: `object`
 
-Defined in: [providers/mychem/types.ts:21](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L21)
+Defined in: [providers/mychem/types.ts:21](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L21)
 
 ###### cid?
 
@@ -100,13 +100,13 @@ Defined in: [providers/mychem/types.ts:21](https://github.com/mattjmeier/gene-to
 
 > `optional` **query**: `string`
 
-Defined in: [providers/mychem/types.ts:3](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L3)
+Defined in: [providers/mychem/types.ts:3](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L3)
 
 ##### unii?
 
 > `optional` **unii**: `object`
 
-Defined in: [providers/mychem/types.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L24)
+Defined in: [providers/mychem/types.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L24)
 
 ###### preferred\_term?
 
@@ -122,4 +122,4 @@ Defined in: [providers/mychem/types.ts:24](https://github.com/mattjmeier/gene-to
 
 > **MyChemScope** = `"name"` \| `"inchikey"` \| `"chebi"` \| `"chembl"` \| `"drugbank"` \| `"pubchem"` \| `"unii"`
 
-Defined in: [providers/mychem/types.ts:30](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/types.ts#L30)
+Defined in: [providers/mychem/types.ts:30](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/types.ts#L30)
