@@ -2,6 +2,122 @@
 
 ***
 
+## Variables
+
+### GeneTooltip
+
+> `const` **GeneTooltip**: `object`
+
+Defined in: mygene.ts:38
+
+#### Type Declaration
+
+##### filterNestedList()
+
+> **filterNestedList**: (`query`, `listId`) => `void`
+
+###### Parameters
+
+###### query
+
+`string`
+
+###### listId
+
+`string`
+
+###### Returns
+
+`void`
+
+##### init()
+
+> **init**: (`userConfig`) => () => `void`
+
+###### Parameters
+
+###### userConfig
+
+[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`GeneTooltipConfig`](providers/mygene/config.md#genetooltipconfig)\> = `{}`
+
+###### Returns
+
+> (): `void`
+
+###### Returns
+
+`void`
+
+##### preload()
+
+> **preload**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
+
+Preloads the optional heavy dependencies (d3, ideogram) so they
+are ready when tooltips are first shown.
+
+###### Returns
+
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
+
+## Functions
+
+### filterNestedList()
+
+> **filterNestedList**(`query`, `listId`): `void`
+
+Defined in: mygene.ts:24
+
+#### Parameters
+
+##### query
+
+`string`
+
+##### listId
+
+`string`
+
+#### Returns
+
+`void`
+
+***
+
+### init()
+
+> **init**(`userConfig`): () => `void`
+
+Defined in: mygene.ts:12
+
+#### Parameters
+
+##### userConfig
+
+[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`GeneTooltipConfig`](providers/mygene/config.md#genetooltipconfig)\> = `{}`
+
+#### Returns
+
+> (): `void`
+
+##### Returns
+
+`void`
+
+***
+
+### preload()
+
+> **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
+
+Defined in: mygene.ts:20
+
+Preloads the optional heavy dependencies (d3, ideogram) so they
+are ready when tooltips are first shown.
+
+#### Returns
+
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
+
 ## References
 
 ### asArray
@@ -18,7 +134,7 @@ Re-exports [createMyGeneSectionContext](providers/mygene/sections.md#createmygen
 
 ### default
 
-Renames and re-exports [GeneTooltip](mygene.md#genetooltip)
+Renames and re-exports [GeneTooltip](#genetooltip)
 
 ***
 
@@ -37,12 +153,6 @@ Re-exports [fetchMyGeneBatch](providers/mygene/client.md#fetchmygenebatch)
 ### fetchMyGeneRefs
 
 Re-exports [fetchMyGeneRefs](providers/mygene/client.md#fetchmygenerefs)
-
-***
-
-### filterNestedList
-
-Re-exports [filterNestedList](mygene.md#filternestedlist-1)
 
 ***
 
@@ -106,12 +216,6 @@ Re-exports [GeneRIF](providers/mygene/types.md#generif)
 
 ***
 
-### GeneTooltip
-
-Re-exports [GeneTooltip](mygene.md#genetooltip)
-
-***
-
 ### GeneTooltipConfig
 
 Re-exports [GeneTooltipConfig](providers/mygene/config.md#genetooltipconfig)
@@ -163,12 +267,6 @@ Re-exports [getUniqueItems](providers/mygene/formatters.md#getuniqueitems)
 ### IdeogramConfig
 
 Re-exports [IdeogramConfig](providers/mygene/config.md#ideogramconfig)
-
-***
-
-### init
-
-Re-exports [init](mygene.md#init-1)
 
 ***
 
@@ -229,12 +327,6 @@ Re-exports [myGeneSections](providers/mygene/sections.md#mygenesections)
 ### parseGeneElement
 
 Re-exports [parseGeneElement](providers/mygene/parser.md#parsegeneelement)
-
-***
-
-### preload
-
-Re-exports [preload](mygene.md#preload-1)
 
 ***
 

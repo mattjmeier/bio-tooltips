@@ -18,6 +18,21 @@ Or include it directly in your HTML from a CDN like unpkg:
 <script src="https://unpkg.com/gene-tooltips/dist/gene-tooltips.global.js"></script>
 ```
 
+For module-based applications, prefer the provider-specific MyGene entry point:
+
+```ts
+import { GeneTooltip } from 'gene-tooltips/mygene';
+import 'gene-tooltips/style.css';
+
+GeneTooltip.init();
+```
+
+The root import is still supported for backward compatibility:
+
+```ts
+import GeneTooltip from 'gene-tooltips';
+```
+
 ## Basic Usage
 
 Once the script is loaded, you can initialize it. Add the class `gene-tooltip` and a `data-species` attribute to any `<span>` element.
@@ -132,7 +147,7 @@ Material theme:  <GeneDemo genes="TP53" species="human" :config="{ theme: 'mater
 
 ## How it works
 
-This library leverages the MyGene.info API. Read about it [here](https://mygene.info). The function `fetchMyGeneBatch` in [`./src/api.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/api.ts) makes a POST batch request to the API using the numeric NCBI taxid for each gene requested.
+This library leverages the MyGene.info API. Read about it [here](https://mygene.info). The function `fetchMyGeneBatch` in [`./src/providers/mygene/client.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/providers/mygene/client.ts) makes a POST batch request to the API using the numeric NCBI taxid for each gene requested.
 
 It will dynamically build a query that looks something like this:
 
@@ -140,6 +155,6 @@ It will dynamically build a query that looks something like this:
 
 The example above is shortened, since the default is to include more fields of interest. Future improvements to this package could further parameterize the API query generation.
 
-The JSON that is returned from the query is then parsed and put into components by the collection of functions, culminating in `renderTooltipHTML` in [`./src/renderer.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/renderer.ts). The entire process is orchestrated by [`index.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/index.ts) which calls `tippy()` and populates the tooltip with the value returned by `renderTooltipHTML`, and uses all the appropriate props for tooltip settings. 
+The JSON that is returned from the query is parsed and rendered by the MyGene provider. The provider renderer lives in [`./src/providers/mygene/renderer.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/providers/mygene/renderer.ts), with individual sections registered in [`./src/providers/mygene/sections/index.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/providers/mygene/sections/index.ts). The public MyGene entry point is [`./src/mygene.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/mygene.ts), while [`./src/index.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/index.ts) remains a backward-compatible root wrapper.
 
-This pattern could be extended to other APIs, but new sections would most likely need to be written to accomodate differently shaped data structures. I welcome any pull requests on this topic but I am not likely to develop this idea any further, given that MyGene.info is such a rich and fast data source.
+This pattern can be extended to other providers by adding a provider folder under `src/providers` and a package subpath similar to `gene-tooltips/mygene`.

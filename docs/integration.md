@@ -11,8 +11,8 @@ Use the `useEffect` hook to initialize the tooltip when the component mounts.
 
 ```jsx
 import React, { useEffect } from 'react';
-import GeneTooltip from 'gene-tooltips';
-import 'gene-tooltips/dist/css/main.css';
+import { GeneTooltip } from 'gene-tooltips/mygene';
+import 'gene-tooltips/style.css';
 
 function MyComponent() {
   useEffect(() => {
@@ -57,8 +57,8 @@ Use the onMounted lifecycle hook in the Composition API.
 
 <script setup>
 import { onMounted } from 'vue';
-import GeneTooltip from 'gene-tooltips';
-import 'gene-tooltips/dist/gene-tooltips.css';
+import { GeneTooltip } from 'gene-tooltips/mygene';
+import 'gene-tooltips/style.css';
 
 onMounted(() => {
   GeneTooltip.init({

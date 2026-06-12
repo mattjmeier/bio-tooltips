@@ -8,7 +8,7 @@
 
 > **getD3**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`__module` \| `null`\>
 
-Defined in: [providers/mygene/visuals/gene-track.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/providers/mygene/visuals/gene-track.ts#L13)
+Defined in: [providers/mygene/visuals/gene-track.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mygene/visuals/gene-track.ts#L13)
 
 #### Returns
 
@@ -20,7 +20,7 @@ Defined in: [providers/mygene/visuals/gene-track.ts:13](https://github.com/mattj
 
 > **renderGeneTrack**(`instance`, `data`, `uniqueId`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [providers/mygene/visuals/gene-track.ts:106](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/providers/mygene/visuals/gene-track.ts#L106)
+Defined in: [providers/mygene/visuals/gene-track.ts:106](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mygene/visuals/gene-track.ts#L106)
 
 Main rendering function
 

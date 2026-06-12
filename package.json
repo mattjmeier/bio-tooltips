@@ -12,10 +12,10 @@
     "type": "git",
     "url": "git+https://github.com/mattjmeier/gene-tooltips.git"
   },
-  "main": "dist/gene-tooltips.cjs.js",
+  "main": "dist/gene-tooltips.cjs",
   "module": "dist/gene-tooltips.esm.js",
   "global": "dist/gene-tooltips.global.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/types/src/index.d.ts",
   "files": [
     "dist",
     "README.md",
@@ -23,9 +23,14 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/types/src/index.d.ts",
       "import": "./dist/gene-tooltips.esm.js",
-      "require": "./dist/gene-tooltips.cjs.js"
+      "require": "./dist/gene-tooltips.cjs"
+    },
+    "./mygene": {
+      "types": "./dist/types/src/mygene.d.ts",
+      "import": "./dist/gene-tooltips.mygene.esm.js",
+      "require": "./dist/gene-tooltips.mygene.cjs"
     },
     "./style.css": "./dist/gene-tooltips.css"
   },

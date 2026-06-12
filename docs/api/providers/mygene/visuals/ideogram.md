@@ -8,7 +8,7 @@
 
 > **getIdeogram**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`any`\>
 
-Defined in: [providers/mygene/visuals/ideogram.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/providers/mygene/visuals/ideogram.ts#L10)
+Defined in: [providers/mygene/visuals/ideogram.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mygene/visuals/ideogram.ts#L10)
 
 #### Returns
 
@@ -20,7 +20,7 @@ Defined in: [providers/mygene/visuals/ideogram.ts:10](https://github.com/mattjme
 
 > **renderIdeogram**(`instance`, `data`, `ideogramConfig`, `uniqueId`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [providers/mygene/visuals/ideogram.ts:42](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/providers/mygene/visuals/ideogram.ts#L42)
+Defined in: [providers/mygene/visuals/ideogram.ts:42](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mygene/visuals/ideogram.ts#L42)
 
 #### Parameters
 

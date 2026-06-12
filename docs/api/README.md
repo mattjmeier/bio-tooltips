@@ -51,6 +51,21 @@ To initialize gene tooltip object, add something like this (with configurable op
 
 You can also add the class to a list of consistently delimited gene names (as long as they belong to the same species)
 
+For module-based applications, the preferred MyGene entry point is:
+
+```ts
+import { GeneTooltip } from 'gene-tooltips/mygene';
+import 'gene-tooltips/style.css';
+
+GeneTooltip.init();
+```
+
+The root import remains available for backward compatibility:
+
+```ts
+import GeneTooltip from 'gene-tooltips';
+```
+
 ## Documentation
 
 Full documentation and examples are available in the docs

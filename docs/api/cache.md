@@ -8,7 +8,7 @@
 
 > **get**(`symbol`, `taxid`): [`MyGeneInfoResult`](providers/mygene/types.md#mygeneinforesult) \| `null` \| `undefined`
 
-Defined in: [cache.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/cache.ts#L9)
+Defined in: [cache.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/cache.ts#L9)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [cache.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/595b70
 
 > **getCacheKey**(`symbol`, `taxid`): `string`
 
-Defined in: [cache.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/cache.ts#L5)
+Defined in: [cache.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/cache.ts#L5)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ Defined in: [cache.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/595b70
 
 > **has**(`symbol`, `taxid`): `boolean`
 
-Defined in: [cache.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/cache.ts#L7)
+Defined in: [cache.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/cache.ts#L7)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [cache.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/595b70
 
 > **set**(`symbol`, `taxid`, `data`): `void`
 
-Defined in: [cache.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/cache.ts#L13)
+Defined in: [cache.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/cache.ts#L13)
 
 #### Parameters
 
@@ -100,7 +100,7 @@ Defined in: [cache.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/595b7
 
 > **setBatch**(`resultsMap`): `void`
 
-Defined in: [cache.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/cache.ts#L17)
+Defined in: [cache.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/cache.ts#L17)
 
 #### Parameters
 

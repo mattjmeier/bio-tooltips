@@ -8,7 +8,7 @@
 
 > **createOnShowHandler**(`config`, `inFlightRequests`): (`instance`) => `void`
 
-Defined in: [lifecycle.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/lifecycle.ts#L12)
+Defined in: [lifecycle.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/lifecycle.ts#L12)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [lifecycle.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/5
 
 > **createOnShownHandler**(`config`): (`instance`) => `void`
 
-Defined in: [lifecycle.ts:19](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/lifecycle.ts#L19)
+Defined in: [lifecycle.ts:19](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/lifecycle.ts#L19)
 
 #### Parameters
 

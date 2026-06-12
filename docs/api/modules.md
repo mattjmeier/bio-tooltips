@@ -17,6 +17,7 @@
 - [core/types](core/types.md)
 - [index](index.md)
 - [lifecycle](lifecycle.md)
+- [mygene](mygene.md)
 - [parser](parser.md)
 - [prefetch](prefetch.md)
 - [providers/mychem/client](providers/mychem/client.md)

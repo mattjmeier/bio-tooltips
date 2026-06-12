@@ -8,7 +8,7 @@
 
 > **attachPushpin**(`instance`): `void`
 
-Defined in: [ui/pushpin.ts:3](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/ui/pushpin.ts#L3)
+Defined in: [ui/pushpin.ts:3](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/ui/pushpin.ts#L3)
 
 #### Parameters
 

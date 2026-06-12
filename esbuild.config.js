@@ -5,7 +5,6 @@ const isWatching = process.argv.includes('--watch');
 
 // Shared configuration for all builds
 const sharedConfig = {
-  entryPoints: ['src/index.ts'],
   bundle: true,
   minify: !isWatching,
   sourcemap: isWatching,
@@ -18,25 +17,24 @@ const sharedConfig = {
   logLevel: 'info',
 };
 
+const createConfig = (entryPoint, outfile, format, platform) => ({
+  ...sharedConfig,
+  entryPoints: [entryPoint],
+  platform,
+  format,
+  outfile,
+});
+
 // --- Build Tasks ---
 const buildJS = () => Promise.all([
-  // CJS
-  esbuild.build({
-    ...sharedConfig,
-    platform: 'node',
-    format: 'cjs',
-    outfile: 'dist/gene-tooltips.cjs.js',
-  }),
-  // ESM
-  esbuild.build({
-    ...sharedConfig,
-    platform: 'browser',
-    format: 'esm',
-    outfile: 'dist/gene-tooltips.esm.js',
-  }),
+  esbuild.build(createConfig('src/index.ts', 'dist/gene-tooltips.cjs', 'cjs', 'node')),
+  esbuild.build(createConfig('src/index.ts', 'dist/gene-tooltips.esm.js', 'esm', 'browser')),
+  esbuild.build(createConfig('src/mygene.ts', 'dist/gene-tooltips.mygene.cjs', 'cjs', 'node')),
+  esbuild.build(createConfig('src/mygene.ts', 'dist/gene-tooltips.mygene.esm.js', 'esm', 'browser')),
   // UMD/IIFE
   esbuild.build({
     ...sharedConfig,
+    entryPoints: ['src/index.ts'],
     platform: 'browser',
     format: 'iife',
     globalName: 'GeneTooltip',

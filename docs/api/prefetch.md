@@ -8,7 +8,7 @@
 
 > **runPrefetch**(`strategy`, `elements`, `threshold`, `inFlightRequests`): `void`
 
-Defined in: [prefetch.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/prefetch.ts#L5)
+Defined in: [prefetch.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/prefetch.ts#L5)
 
 #### Parameters
 
