@@ -1,4 +1,4 @@
-[**gene-tooltips**](README.md)
+[**gene-tooltips**](../../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > `const` **speciesMap**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`number`, `SpeciesInfo`\>
 
-Defined in: [constants.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/constants.ts#L9)
+Defined in: [providers/mygene/species.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/providers/mygene/species.ts#L9)
 
 ## Functions
 
@@ -16,7 +16,7 @@ Defined in: [constants.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/54
 
 > **findSpecies**(`identifier`): \{ `info`: `SpeciesInfo`; `taxid`: `number`; \} \| `null`
 
-Defined in: [constants.ts:27](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/constants.ts#L27)
+Defined in: [providers/mygene/species.ts:27](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/providers/mygene/species.ts#L27)
 
 Finds species data by either taxid or common name (case-insensitive).
 

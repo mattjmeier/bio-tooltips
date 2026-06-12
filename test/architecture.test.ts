@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { renderTooltipShell } from '../src/core/renderer';
 import { renderCollapsibleSection } from '../src/core/sections';
 import { myGeneProfile } from '../src/providers/mygene/profile';
+import { myGeneSections } from '../src/providers/mygene/sections';
 import { defaultConfig, mergeConfig, type MyGeneInfoResult } from '../src/config';
-import { formatTranscripts } from '../src/formatters';
+import { formatTranscripts } from '../src/providers/mygene';
 import { renderTooltipHTML } from '../src/renderer';
 
 const mockGeneData: MyGeneInfoResult = {
@@ -44,5 +45,19 @@ describe('architecture compatibility', () => {
     expect(config.truncateSummary).toBe(2);
     expect(transcripts[0].url).toBe('https://www.ensembl.org/id/ENST1');
     expect(html).toContain('<strong>TP53</strong>');
+  });
+
+  it('MyGene sections are registered in render order', () => {
+    expect(myGeneSections.map(section => section.key)).toEqual([
+      'summary',
+      'location',
+      'geneTrack',
+      'pathways',
+      'domains',
+      'transcripts',
+      'structures',
+      'generifs',
+      'linksSection',
+    ]);
   });
 });

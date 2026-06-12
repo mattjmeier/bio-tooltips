@@ -2,21 +2,14 @@ import type { MyGeneInfoResult } from './types.js';
 import type { SectionVisibility, TooltipDisplayConfig } from './config.js';
 import {
   generateUniqueId,
-  renderCollapseButton,
   renderTooltipHeader,
   renderTooltipShell,
 } from '../../core/renderer.js';
 import { getSectionState, renderCollapsibleSection } from '../../core/sections.js';
 import {
-  renderDomains,
-  renderGeneRIFs,
-  renderGeneTrackContent,
-  renderLinksContent,
-  renderLocation,
-  renderPathways,
+  myGeneSections,
   renderSpecies,
-  renderStructures,
-  renderTranscripts,
+  type MyGeneSectionContext,
 } from './sections/index.js';
 
 interface RenderOptions {
@@ -31,23 +24,6 @@ interface RenderOptions {
   tooltipWidth?: number;
   tooltipHeight?: number;
   uniqueId?: string;
-}
-
-function renderSummaryContent(summaryText: string | undefined, truncate: number, uniqueId: string): string {
-  const summary = summaryText || "";
-
-  if (!summary) {
-    return '';
-  }
-
-  const summaryClass = 'gene-tooltip-summary';
-  const summaryStyle = `style="--line-clamp: ${truncate};"`;
-  const lessButton = renderCollapseButton(`summary-less-${uniqueId}`, 'Show less');
-
-  return `
-    <p class="${summaryClass}" ${summaryStyle}>${summary}</p>
-    ${lessButton}
-  `;
 }
 
 function renderPinButton(): string {
@@ -112,15 +88,27 @@ export function renderTooltipHTML(
   if (tooltipHeight) styleParts.push(`max-height: ${tooltipHeight}px`, `overflow-y: auto`);
   const inlineStyle = styleParts.length > 0 ? `style="${styleParts.join('; ')}"` : '';
 
-  const summaryContent = data.summary ? renderSummaryContent(data.summary, truncate, uniqueId) : '';
-  const locationContent = renderLocation(data.genomic_pos, display.ideogram, uniqueId);
-  const geneTrackContent = data.exons && data.exons.length > 0 ? renderGeneTrackContent(uniqueId) : '';
-  const pathwayContent = renderPathways(data, pathwaySource, pathwayCount, uniqueId);
-  const domainContent = renderDomains(data, domainCount, uniqueId);
-  const transcriptContent = renderTranscripts(data, transcriptCount, uniqueId);
-  const structureContent = renderStructures(data, structureCount, uniqueId);
-  const generifContent = renderGeneRIFs(data, generifCount, uniqueId);
-  const linksContent = renderLinksContent(data, display);
+  const sectionContext: MyGeneSectionContext = {
+    data,
+    uniqueId,
+    display,
+    truncate,
+    pathwaySource,
+    pathwayCount,
+    domainCount,
+    transcriptCount,
+    structureCount,
+    generifCount,
+  };
+
+  const sectionHTML = myGeneSections
+    .map(section => buildSection(
+      section.key,
+      section.title,
+      section.render(sectionContext),
+      section.renderHeader?.(sectionContext) ?? ''
+    ))
+    .join('');
 
   const titleHTML = `
           <strong>${data.symbol}</strong>
@@ -134,19 +122,7 @@ export function renderTooltipHTML(
 
       ${display.species !== false && data.taxid ? renderSpecies(data.taxid) : ''}
 
-      ${buildSection('summary', 'Summary', summaryContent)}
-      ${buildSection('location', 'Location', locationContent)}
-      ${buildSection('geneTrack', 'Gene Model', geneTrackContent,
-        `<div class="gene-tooltip-track-controls">
-          <select class="gt-transcript-selector form-select-sm" id="transcript-selector-${uniqueId}"></select>
-        </div>`
-      )}
-      ${buildSection('pathways', 'Pathways', pathwayContent)}
-      ${buildSection('domains', 'Protein Domains', domainContent)}
-      ${buildSection('transcripts', 'Transcripts', transcriptContent)}
-      ${buildSection('structures', 'PDB Structures', structureContent)}
-      ${buildSection('generifs', 'GeneRIFs', generifContent)}
-      ${linksContent ? buildSection('linksSection', 'Links', linksContent) : ''}
+      ${sectionHTML}
     `,
     inlineStyle
   );

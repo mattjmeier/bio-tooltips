@@ -6,9 +6,9 @@
 
 ### get()
 
-> **get**(`symbol`, `taxid`): [`MyGeneInfoResult`](config.md#mygeneinforesult) \| `null` \| `undefined`
+> **get**(`symbol`, `taxid`): [`MyGeneInfoResult`](providers/mygene/types.md#mygeneinforesult) \| `null` \| `undefined`
 
-Defined in: [cache.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/cache.ts#L9)
+Defined in: [cache.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/cache.ts#L9)
 
 #### Parameters
 
@@ -22,7 +22,7 @@ Defined in: [cache.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/547536
 
 #### Returns
 
-[`MyGeneInfoResult`](config.md#mygeneinforesult) \| `null` \| `undefined`
+[`MyGeneInfoResult`](providers/mygene/types.md#mygeneinforesult) \| `null` \| `undefined`
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [cache.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/547536
 
 > **getCacheKey**(`symbol`, `taxid`): `string`
 
-Defined in: [cache.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/cache.ts#L5)
+Defined in: [cache.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/cache.ts#L5)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ Defined in: [cache.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/547536
 
 > **has**(`symbol`, `taxid`): `boolean`
 
-Defined in: [cache.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/cache.ts#L7)
+Defined in: [cache.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/cache.ts#L7)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [cache.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/547536
 
 > **set**(`symbol`, `taxid`, `data`): `void`
 
-Defined in: [cache.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/cache.ts#L13)
+Defined in: [cache.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/cache.ts#L13)
 
 #### Parameters
 
@@ -88,7 +88,7 @@ Defined in: [cache.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/54753
 
 ##### data
 
-[`MyGeneInfoResult`](config.md#mygeneinforesult) | `null`
+[`MyGeneInfoResult`](providers/mygene/types.md#mygeneinforesult) | `null`
 
 #### Returns
 
@@ -100,13 +100,13 @@ Defined in: [cache.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/54753
 
 > **setBatch**(`resultsMap`): `void`
 
-Defined in: [cache.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/cache.ts#L24)
+Defined in: [cache.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/cache.ts#L17)
 
 #### Parameters
 
 ##### resultsMap
 
-[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyGeneInfoResult`](config.md#mygeneinforesult)\>
+[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyGeneInfoResult`](providers/mygene/types.md#mygeneinforesult)\>
 
 #### Returns
 

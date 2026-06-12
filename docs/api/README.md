@@ -56,6 +56,14 @@ You can also add the class to a list of consistently delimited gene names (as lo
 Full documentation and examples are available in the docs
  folder or at the [project site](https://mattjmeier.github.io/gene-tooltips/).
 
+## Development
+
+You can run a development server with this command:
+
+```bash
+npm run docs:dev
+```
+
 ## Contributing
 
 Issues and pull requests are welcome. Please open a discussion if you’d like to propose a new feature or bug fix.

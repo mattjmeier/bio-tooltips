@@ -26,7 +26,7 @@ Here are a bunch of human genes, separated by commas: <GeneDemo genes="TP53, GAD
 
 ## Supported species
 
-The species in [`src/constants.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/constants.ts) are supported. The MyGene.info API supports ~22K species via the taxid, so the data retrieval will work for many species. This is also true for `ideogram.js`. I only built in icons and common names for convenience for popular species, but using the taxid should be an option for many model organisms.
+The species in [`src/providers/mygene/species.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/providers/mygene/species.ts) are supported. The MyGene.info API supports ~22K species via the taxid, so the data retrieval will work for many species. This is also true for `ideogram.js`. I only built in icons and common names for convenience for popular species, but using the taxid should be an option for many model organisms.
 
 ### Human
 <GeneDemo genes="TP53, BRCA1, MYC" species="human" />

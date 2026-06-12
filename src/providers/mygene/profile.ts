@@ -8,13 +8,7 @@ import { renderIdeogram } from './visuals/ideogram.js';
 import { renderGeneTrack } from './visuals/gene-track.js';
 import { getIdeogram } from './visuals/ideogram.js';
 import { getD3 } from './visuals/gene-track.js';
-import {
-  formatDomains,
-  formatGeneRIFs,
-  formatPathways,
-  formatStructures,
-  formatTranscripts,
-} from './formatters.js';
+import { getMyGeneNestedTooltipDefinitions } from './sections/index.js';
 
 async function renderMyGeneVisuals(
   instance: TippyInstanceWithCustoms<MyGeneInfoResult>,
@@ -80,28 +74,7 @@ export const myGeneProfile: TooltipProfile<MyGeneInfoResult, GeneTooltipConfig> 
     return renderMyGeneVisuals(instance, data, config, uniqueId, sectionKey);
   },
   getNestedTooltipDefinitions(data, config, uniqueId) {
-    return [
-      {
-        selector: `#pathways-more-${uniqueId}`,
-        items: formatPathways(data.pathway?.[config.pathwaySource], config.pathwaySource),
-      },
-      {
-        selector: `#domains-more-${uniqueId}`,
-        items: formatDomains(data.interpro),
-      },
-      {
-        selector: `#transcripts-more-${uniqueId}`,
-        items: formatTranscripts(data.ensembl?.transcript),
-      },
-      {
-        selector: `#structures-more-${uniqueId}`,
-        items: formatStructures(data.pdb),
-      },
-      {
-        selector: `#generifs-more-${uniqueId}`,
-        items: formatGeneRIFs(data.generif),
-      },
-    ];
+    return getMyGeneNestedTooltipDefinitions(data, config, uniqueId);
   },
   preload() {
     return Promise.allSettled([

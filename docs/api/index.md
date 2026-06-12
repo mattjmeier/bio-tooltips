@@ -8,7 +8,7 @@
 
 > **default**: `object`
 
-Defined in: [index.ts:105](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/index.ts#L105)
+Defined in: [index.ts:51](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/index.ts#L51)
 
 #### Type Declaration
 
@@ -20,7 +20,7 @@ Defined in: [index.ts:105](https://github.com/mattjmeier/gene-tooltips/blob/5475
 
 ###### userConfig
 
-[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`GeneTooltipConfig`](config.md#genetooltipconfig)\> = `{}`
+[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`GeneTooltipConfig`](providers/mygene/config.md#genetooltipconfig)\> = `{}`
 
 ###### Returns
 
@@ -32,12 +32,11 @@ Defined in: [index.ts:105](https://github.com/mattjmeier/gene-tooltips/blob/5475
 
 ##### preload()
 
-> **preload**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<\[`PromiseSettledResult`\<`any`\>, `PromiseSettledResult`\<`any`\>\]\>
+> **preload**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
 Preloads the optional heavy dependencies (d3, ideogram) so they
-are ready when tooltips are first shown. This is useful to call
-once in your application's entry point.
+are ready when tooltips are first shown.
 
 ###### Returns
 
-[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<\[`PromiseSettledResult`\<`any`\>, `PromiseSettledResult`\<`any`\>\]\>
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>

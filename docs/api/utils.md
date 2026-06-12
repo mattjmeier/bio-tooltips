@@ -8,7 +8,7 @@
 
 > **createNestedContent**(`items`): `string`
 
-Defined in: [utils.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/utils.ts#L10)
+Defined in: [utils.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/utils.ts#L12)
 
 #### Parameters
 
@@ -26,8 +26,32 @@ Defined in: [utils.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/54753
 
 > **generateUniqueTooltipId**(): `string`
 
-Defined in: [utils.ts:2](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/utils.ts#L2)
+Defined in: [utils.ts:4](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/utils.ts#L4)
 
 #### Returns
 
 `string`
+
+***
+
+### getSectionBackgroundColor()
+
+> **getSectionBackgroundColor**(`instance`): `string` \| `null`
+
+Defined in: [utils.ts:38](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/utils.ts#L38)
+
+Gets the computed background color from a Tippy instance's popper.
+
+#### Parameters
+
+##### instance
+
+`Instance`
+
+The Tippy instance to inspect.
+
+#### Returns
+
+`string` \| `null`
+
+The background color string (e.g., 'rgb(255, 255, 255)') or null if not found.

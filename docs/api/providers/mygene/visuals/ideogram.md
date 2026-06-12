@@ -1,4 +1,4 @@
-[**gene-tooltips**](README.md)
+[**gene-tooltips**](../../../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **getIdeogram**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`any`\>
 
-Defined in: [ideogram.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/ideogram.ts#L9)
+Defined in: [providers/mygene/visuals/ideogram.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/providers/mygene/visuals/ideogram.ts#L10)
 
 #### Returns
 
@@ -20,7 +20,7 @@ Defined in: [ideogram.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/547
 
 > **renderIdeogram**(`instance`, `data`, `ideogramConfig`, `uniqueId`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [ideogram.ts:41](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/ideogram.ts#L41)
+Defined in: [providers/mygene/visuals/ideogram.ts:42](https://github.com/mattjmeier/gene-tooltips/blob/595b70cd58b858cebe77452ff128b703e14eb32a/src/providers/mygene/visuals/ideogram.ts#L42)
 
 #### Parameters
 
@@ -30,11 +30,11 @@ Defined in: [ideogram.ts:41](https://github.com/mattjmeier/gene-tooltips/blob/54
 
 ##### data
 
-[`MyGeneInfoResult`](config.md#mygeneinforesult)
+[`MyGeneInfoResult`](../types.md#mygeneinforesult)
 
 ##### ideogramConfig
 
-[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`IdeogramConfig`](config.md#ideogramconfig)\>
+[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`IdeogramConfig`](../config.md#ideogramconfig)\>
 
 ##### uniqueId
 
