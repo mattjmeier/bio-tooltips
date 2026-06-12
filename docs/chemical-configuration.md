@@ -22,6 +22,7 @@ ChemicalTooltip.init({
   display: {
     identity: 'expanded',
     structureProperties: 'expanded',
+    detailedProperties: true,
     summary: 'expanded',
     classes: true,
     pharmacology: true,
@@ -40,6 +41,10 @@ ChemicalTooltip.init({
 ## Counts
 
 `synonymCount` controls how many synonyms appear inline before the overflow control. `listCount` controls grouped list sections such as classes, targets, products, and reported effects.
+
+## Section Visibility
+
+Section display options accept `true`, `false`, `'expanded'`, or `'collapsed'`. `true` follows `collapsedByDefault`; the default chemical tooltip keeps `Structure & Properties` and `Summary` expanded while secondary sections, including `Detailed Properties`, start collapsed.
 
 ## Source and Debug Options
 

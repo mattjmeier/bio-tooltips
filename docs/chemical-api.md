@@ -25,7 +25,8 @@ import { ChemicalTooltip } from 'gene-tooltips/mychem';
 | `synonymCount` | `6` | Synonyms shown before overflow UI. |
 | `listCount` | `5` | Items shown in grouped sections before overflow UI. |
 | `display.identity` | `expanded` | Name, badges, and match context. |
-| `display.structureProperties` | `expanded` | Structure image and resolved molecular properties. |
+| `display.structureProperties` | `expanded` | Structure image plus formula, mass, identity, SMILES, and InChIKey. |
+| `display.detailedProperties` | `true` | Secondary property table such as LogP, TPSA, H-bond counts, charge, and stereochemistry count. |
 | `display.summary` | `expanded` | Description and synonyms. |
 | `display.classes` | `true` | Chemical classes and categories. |
 | `display.pharmacology` | `true` | Mechanism, indications, targets, and bioactivity summaries. |

@@ -175,6 +175,7 @@ describe('renderMyChemTooltipHTML', () => {
 
     expect(html).toContain('<strong>Acetaminophen</strong>');
     expect(html).toContain('Structure & Properties');
+    expect(html).toContain('Detailed Properties');
     expect(html).toContain('C8H9NO2');
     expect(html).toContain('3 sources');
     expect(html).toContain('compare sources');
@@ -183,5 +184,43 @@ describe('renderMyChemTooltipHTML', () => {
     expect(html).toContain('Identifiers & External Records');
     expect(html).toContain('https://pubchem.ncbi.nlm.nih.gov/compound/1983');
     expect(html).toContain('Data from MyChem.info');
+
+    expect(html.indexOf('SMILES')).toBeGreaterThan(html.indexOf('Structure & Properties'));
+    expect(html.indexOf('SMILES')).toBeLessThan(html.indexOf('Detailed Properties'));
+    expect(html.indexOf('XLogP / LogP')).toBeGreaterThan(html.indexOf('Detailed Properties'));
+  });
+
+  it('allows structure, summary, and detailed properties sections to be collapsed independently', () => {
+    const mockChemicalData: MyChemInfoResult = {
+      _id: '2519',
+      query: 'caffeine',
+      name: 'Caffeine',
+      formula: 'C8H10N4O2',
+      inchikey: 'RYYVLZVUVIJVGH-UHFFFAOYSA-N',
+      pubchem: {
+        cid: 2519,
+        molecular_formula: 'C8H10N4O2',
+        molecular_weight: 194.19,
+        exact_mass: 194.08037557,
+        canonical_smiles: 'Cn1c(=O)c2c(ncn2C)n(C)c1=O',
+        xlogp: -0.1,
+      },
+      drugbank: {
+        description: 'A methylxanthine compound used as a mild stimulant.',
+      },
+    };
+
+    const html = renderMyChemTooltipHTML(mockChemicalData, {
+      uniqueId: 'mychem-collapse-test',
+      display: {
+        structureProperties: 'collapsed',
+        detailedProperties: 'expanded',
+        summary: 'collapsed',
+      },
+    });
+
+    expect(html).toMatch(/data-collapsed="true"[\s\S]*data-section="structure-&-properties"/);
+    expect(html).toMatch(/data-collapsed="true"[\s\S]*data-section="summary"/);
+    expect(html).toMatch(/data-collapsed="false"[\s\S]*data-section="detailed-properties"/);
   });
 });

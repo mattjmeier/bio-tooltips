@@ -6,6 +6,7 @@ export type MyChemSectionVisibility = boolean | 'expanded' | 'collapsed';
 export interface MyChemDisplayConfig {
   identity: MyChemSectionVisibility;
   structureProperties: MyChemSectionVisibility;
+  detailedProperties: MyChemSectionVisibility;
   summary: MyChemSectionVisibility;
   classes: MyChemSectionVisibility;
   pharmacology: MyChemSectionVisibility;
@@ -38,6 +39,7 @@ export const defaultMyChemConfig: MyChemTooltipConfig = {
   display: {
     identity: 'expanded',
     structureProperties: 'expanded',
+    detailedProperties: true,
     summary: 'expanded',
     classes: true,
     pharmacology: true,

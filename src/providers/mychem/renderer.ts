@@ -1,4 +1,9 @@
-import type { MyChemTooltipConfig, MyChemDisplayConfig, MyChemSectionVisibility } from './config.js';
+import {
+  defaultMyChemConfig,
+  type MyChemTooltipConfig,
+  type MyChemDisplayConfig,
+  type MyChemSectionVisibility,
+} from './config.js';
 import type { MyChemInfoResult, ResolvedField, SourceValue } from './types.js';
 import {
   buildChemicalIdentity,
@@ -65,7 +70,10 @@ export function renderTooltipHTML(
   const truncate = options.truncate ?? 4;
   const synonymCount = options.synonymCount ?? 6;
   const listCount = options.listCount ?? 5;
-  const display = options.display ?? {};
+  const display = {
+    ...defaultMyChemConfig.display,
+    ...options.display,
+  };
   const collapsible = display.collapsible ?? true;
   const globalCollapsedByDefault = display.collapsedByDefault ?? true;
   const showSourcePaths = display.sourcePaths === true;
@@ -76,16 +84,21 @@ export function renderTooltipHTML(
   const inlineStyle = styleParts.length > 0 ? `style="${styleParts.join('; ')}"` : '';
 
   const identity = buildChemicalIdentity(data, data.query);
+  const { isVisible: showIdentityMeta } = getSectionState(
+    display.identity as MyChemSectionVisibility | undefined,
+    globalCollapsedByDefault
+  );
   const titleHTML = `
     <strong>${escapeHTML(identity.preferredName)}</strong>
     ${identity.secondaryName ? `<span class="gene-tooltip-name">(${escapeHTML(identity.secondaryName)})</span>` : ''}
   `;
+  const propertyFields = getResolvedPropertyFields(data);
 
   const buildSection = (
     key: keyof MyChemDisplayConfig,
     title: string,
     content: string,
-    forceExpanded = false
+    headerRightHTML = ''
   ) => {
     if (!content) return '';
 
@@ -98,21 +111,28 @@ export function renderTooltipHTML(
       title,
       content,
       uniqueId,
-      collapsible && !forceExpanded,
-      forceExpanded ? false : startCollapsed
+      collapsible,
+      startCollapsed,
+      headerRightHTML
     );
   };
 
+  const visibleIdentity = showIdentityMeta ? identity : undefined;
   const sections = [
-    buildSection('identity', 'Identity', renderIdentitySection(identity), true),
-    buildSection('structureProperties', 'Structure & Properties', renderStructureProperties(data, showSourcePaths), true),
-    buildSection('summary', 'Summary', renderSummarySection(data, truncate, synonymCount, identity.synonyms), true),
+    buildSection(
+      'structureProperties',
+      'Structure & Properties',
+      renderStructureProperties(data, propertyFields, visibleIdentity, showSourcePaths),
+      renderIdentityHeaderMeta(visibleIdentity)
+    ),
+    buildSection('detailedProperties', 'Detailed Properties', renderDetailedProperties(propertyFields, showSourcePaths)),
+    buildSection('summary', 'Summary', renderSummarySection(data, truncate, synonymCount, identity.synonyms)),
     buildSection('classes', 'Chemical Classes', renderGroupedSection(getClassGroups(data), listCount, showSourcePaths)),
     buildSection('pharmacology', 'Pharmacology & Targets', renderGroupedSection(getPharmacologyGroups(data), listCount, showSourcePaths)),
     buildSection('regulatory', 'Regulatory / Products', renderGroupedSection(getRegulatoryGroups(data), listCount, showSourcePaths)),
     buildSection('safety', 'Safety & Reported Effects', renderSafetySection(data, listCount, showSourcePaths)),
     buildSection('identifiers', 'Identifiers & External Records', renderIdentifiers(data, showSourcePaths)),
-    display.rawJson ? buildSection('identifiers', 'Raw MyChem JSON', renderRawJson(data), false) : '',
+    display.rawJson ? buildSection('rawJson', 'Raw MyChem JSON', renderRawJson(data)) : '',
   ].join('');
 
   return renderTooltipShell(
@@ -142,30 +162,118 @@ export function renderMyChemTooltipFromConfig(
   });
 }
 
-function renderIdentitySection(identity: ReturnType<typeof buildChemicalIdentity>): string {
-  const badges = identity.badges.length > 0
-    ? `<div class="gt-chem-badges">${identity.badges.map(badge => `<span>${escapeHTML(badge)}</span>`).join('')}</div>`
-    : '';
-  const match = identity.matchLabel
-    ? `<div class="gt-chem-match">${escapeHTML(identity.matchLabel)}</div>`
-    : '';
+function renderIdentityHeaderMeta(identity: ReturnType<typeof buildChemicalIdentity> | undefined): string {
+  if (!identity) return '';
 
-  return `${badges}${match}`;
+  return identity.matchLabel
+    ? `<span class="gt-chem-section-meta">${escapeHTML(identity.matchLabel)}</span>`
+    : '';
 }
 
-function renderStructureProperties(data: MyChemInfoResult, showSourcePaths: boolean): string {
-  const fields = getResolvedPropertyFields(data);
-  const rows = fields.map(field => renderResolvedField(field, showSourcePaths)).join('');
-  const structure = getBestStructureInput(data);
-  const image = structure ? renderStructureImage(structure) : '<div class="gt-chem-structure-empty">Structure unavailable</div>';
+function renderIdentityRow(identity: ReturnType<typeof buildChemicalIdentity> | undefined): string {
+  if (!identity || identity.badges.length === 0) return '';
 
-  if (!rows && !structure) return '';
+  return `
+    <div class="gt-chem-property-row gt-chem-identity-row">
+      <dt>Identity</dt>
+      <dd>${identity.badges.map(escapeHTML).join(', ')}</dd>
+    </div>
+  `;
+}
+
+function renderIdentityMeta(identity: ReturnType<typeof buildChemicalIdentity> | undefined): string {
+  const row = renderIdentityRow(identity);
+
+  return row
+    ? `<div class="gt-chem-identity-meta">${row}</div>`
+    : '';
+}
+
+function renderStructureProperties(
+  data: MyChemInfoResult,
+  fields: ResolvedField<string>[],
+  identity: ReturnType<typeof buildChemicalIdentity> | undefined,
+  showSourcePaths: boolean
+): string {
+  const compactLabels = new Set(['Formula', 'Molecular weight', 'Exact mass']);
+  const identifierLabels = new Set(['SMILES', 'InChIKey']);
+  const compactRows = fields
+    .filter(field => compactLabels.has(field.label))
+    .map(field => renderResolvedField(field, showSourcePaths, compactLabel(field.label)))
+    .join('');
+  const identifierRows = fields
+    .filter(field => identifierLabels.has(field.label))
+    .map(field => renderResolvedField(field, showSourcePaths))
+    .join('');
+  const structure = getBestStructureInput(data);
+  const figure = renderStructureFigure(structure);
+  const identityMeta = renderIdentityMeta(identity);
+
+  if (!compactRows && !identifierRows && !structure) return '';
 
   return `
     <div class="gt-chem-structure-layout">
-      ${image}
-      <div class="gt-chem-property-grid">
-        ${rows}
+      ${figure}
+      ${compactRows || identityMeta ? `
+        <div class="gt-chem-structure-summary">
+          ${compactRows ? `
+            <div class="gt-chem-property-grid gt-chem-property-grid-compact">
+              ${compactRows}
+            </div>
+          ` : ''}
+          ${identityMeta}
+        </div>
+      ` : ''}
+      ${identifierRows ? `
+        <div class="gt-chem-structure-identifiers">
+          <div class="gt-chem-property-grid">
+            ${identifierRows}
+          </div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function renderDetailedProperties(fields: ResolvedField<string>[], showSourcePaths: boolean): string {
+  const detailedLabels = new Set([
+    'XLogP / LogP',
+    'TPSA',
+    'H-bond donors',
+    'H-bond acceptors',
+    'Rotatable bonds',
+    'Charge',
+    'Stereochemistry count',
+  ]);
+  const rows = fields
+    .filter(field => detailedLabels.has(field.label))
+    .map(field => renderResolvedField(field, showSourcePaths))
+    .join('');
+
+  if (!rows) return '';
+
+  return `
+    <div class="gt-chem-property-grid gt-chem-property-grid-detailed">
+      ${rows}
+    </div>
+  `;
+}
+
+function compactLabel(label: string): string {
+  return label === 'Molecular weight' ? 'MW' : label;
+}
+
+function renderStructureFigure(
+  structure: { kind: 'cid' | 'smiles' | 'inchi'; value: string } | undefined
+): string {
+  const image = structure
+    ? renderStructureImage(structure)
+    : '<div class="gt-chem-structure-empty">Structure unavailable</div>';
+
+  return `
+    <div class="gt-chem-structure-figure">
+      <div class="gt-chem-structure-art">
+        ${image}
       </div>
     </div>
   `;
@@ -179,9 +287,7 @@ function renderStructureImage(structure: { kind: 'cid' | 'smiles' | 'inchi'; val
   const src = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/${path}/PNG?image_size=large`;
 
   return `
-    <div class="gt-chem-structure-figure">
-      <img src="${escapeAttr(src)}" alt="2D chemical structure" loading="lazy" />
-    </div>
+    <img src="${escapeAttr(src)}" alt="2D chemical structure" loading="lazy" />
   `;
 }
 
@@ -205,7 +311,7 @@ function renderSummarySection(
   return `${summaryHTML}${synonymHTML}`;
 }
 
-function renderResolvedField(field: ResolvedField<string>, showSourcePaths: boolean): string {
+function renderResolvedField(field: ResolvedField<string>, showSourcePaths: boolean, label = field.label): string {
   const sourceCount = uniqueStrings([
     field.canonical.source,
     ...field.alternatives.map(value => value.source),
@@ -213,20 +319,16 @@ function renderResolvedField(field: ResolvedField<string>, showSourcePaths: bool
   const sourceBadge = sourceCount > 1
     ? `<span class="gt-chem-source-badge">${sourceCount} sources</span>`
     : `<span class="gt-chem-source-badge">${escapeHTML(field.canonical.source)}</span>`;
-  const warning = field.resolution === 'conflict'
-    ? '<span class="gt-chem-conflict" title="Sources may describe different chemical forms or curation models.">compare</span>'
-    : '';
   const compare = field.alternatives.length > 0
     ? renderSourceCompare(field, showSourcePaths)
     : '';
 
   return `
     <div class="gt-chem-property-row">
-      <dt>${escapeHTML(field.label)}</dt>
+      <dt>${escapeHTML(label)}</dt>
       <dd>
         <span>${escapeHTML(field.canonical.value)}</span>
         ${sourceBadge}
-        ${warning}
         ${showSourcePaths ? `<code>${escapeHTML(field.canonical.sourcePath)}</code>` : ''}
         ${compare}
       </dd>
