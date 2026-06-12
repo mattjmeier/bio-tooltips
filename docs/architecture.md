@@ -1,6 +1,8 @@
 # Architecture
 
-`gene-tooltips` is moving toward a core/provider architecture.
+`gene-tooltips` uses a core/provider architecture.
+
+## Core
 
 The core owns generic tooltip behavior:
 
@@ -9,6 +11,11 @@ The core owns generic tooltip behavior:
 - cache and prefetch plumbing
 - generic renderer helpers
 - section wrappers and collapsible state
+- viewport and theme behavior
+
+Core code lives under `src/core` and `src/ui`.
+
+## Providers
 
 Providers own domain-specific behavior:
 
@@ -17,88 +24,31 @@ Providers own domain-specific behavior:
 - result types
 - provider config
 - section rendering
-- visuals
-- provider-specific formatting
+- visuals and formatters
 
-## Package Entry Points
+Provider code lives under `src/providers`.
 
-The package now has two public JavaScript entry points.
+## Public Entry Points
 
-### Root Entry
+```ts
+import { GeneTooltip } from 'gene-tooltips/mygene';
+import { ChemicalTooltip } from 'gene-tooltips/mychem';
+```
+
+The root entry remains available for backward-compatible gene usage:
 
 ```ts
 import GeneTooltip from 'gene-tooltips';
 ```
 
-The root entry is kept for backward compatibility. Today it still exposes the MyGene tooltip API.
+## Current Providers
 
-Use this if you are upgrading existing code and want the least churn.
+MyGene-specific code lives under `src/providers/mygene`. It renders gene summaries, species context, locations, pathways, domains, transcripts, structures, GeneRIFs, and external links.
 
-### MyGene Entry
+MyChem-specific code lives under `src/providers/mychem`. It renders chemical identity, structure and properties, summaries, classes, pharmacology, regulatory/product information, safety annotations, identifiers, and MyChem source details.
 
-```ts
-import { GeneTooltip } from 'gene-tooltips/mygene';
-```
+## Extending the System
 
-This is the preferred modular entry for gene tooltips. It imports the MyGene provider directly and is the pattern future providers should follow.
+Future providers should get a provider folder under `src/providers` and a package subpath similar to `gene-tooltips/mygene` or `gene-tooltips/mychem`.
 
-Provider-specific helpers are also exported from this entry:
-
-```ts
-import {
-  GeneTooltip,
-  mergeConfig,
-  formatTranscripts,
-  myGeneProfile,
-} from 'gene-tooltips/mygene';
-```
-
-## Provider Layout
-
-MyGene-specific code lives under `src/providers/mygene`:
-
-```txt
-src/providers/mygene/
-  client.ts
-  config.ts
-  formatters.ts
-  index.ts
-  parser.ts
-  profile.ts
-  renderer.ts
-  species.ts
-  types.ts
-  sections/
-  visuals/
-```
-
-The top-level `src` folder should stay reserved for package entry points and generic shared pieces. Provider-specific code should not be added there.
-
-## Removed Compatibility Modules
-
-The former top-level modules `api.ts`, `cache.ts`, `config.ts`, `parser.ts`, `prefetch.ts`, `lifecycle.ts`, and `renderer.ts` were removed during the major-version core/provider refactor.
-
-Provider-specific imports should come from `gene-tooltips/mygene`, and generic tooltip plumbing should live under `src/core`.
-
-## Adding Sections
-
-MyGene tooltip sections are registered through `myGeneSections` in `src/providers/mygene/sections/index.ts`.
-
-To add a new MyGene section:
-
-1. Add a section file under `src/providers/mygene/sections/`.
-2. Export a `MyGeneSectionDefinition`.
-3. Add it to `myGeneSections` in render order.
-4. Add config/types/formatters only if the new section needs them.
-
-See [Adding new sections to tooltips](./add-modules.md) for a full walkthrough.
-
-## Future Providers
-
-Future providers should get their own package subpath:
-
-```ts
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-```
-
-That keeps provider-specific code out of unrelated provider bundles and makes the architecture obvious to users and maintainers.
+For gene section extensions, see [Adding New Sections](./add-modules.md).

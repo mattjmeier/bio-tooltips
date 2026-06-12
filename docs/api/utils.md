@@ -8,7 +8,7 @@
 
 > **createNestedContent**(`items`): `string`
 
-Defined in: [utils.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/utils.ts#L12)
+Defined in: [utils.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/utils.ts#L12)
 
 #### Parameters
 
@@ -26,7 +26,7 @@ Defined in: [utils.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/0ace9
 
 > **generateUniqueTooltipId**(): `string`
 
-Defined in: [utils.ts:4](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/utils.ts#L4)
+Defined in: [utils.ts:4](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/utils.ts#L4)
 
 #### Returns
 
@@ -38,7 +38,7 @@ Defined in: [utils.ts:4](https://github.com/mattjmeier/gene-tooltips/blob/0ace97
 
 > **getSectionBackgroundColor**(`instance`): `string` \| `null`
 
-Defined in: [utils.ts:38](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/utils.ts#L38)
+Defined in: [utils.ts:38](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/utils.ts#L38)
 
 Gets the computed background color from a Tippy instance's popper.
 

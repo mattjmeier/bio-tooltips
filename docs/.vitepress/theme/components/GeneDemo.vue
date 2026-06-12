@@ -9,7 +9,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
 import 'gene-tooltips/style.css';
-import GeneTooltip from 'gene-tooltips';
+import { GeneTooltip } from 'gene-tooltips/mygene';
 
 const props = defineProps({
   genes: { type: String, required: true },

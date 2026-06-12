@@ -10,6 +10,12 @@ Re-exports [asArray](providers/mygene/formatters.md#asarray)
 
 ***
 
+### ChemicalTooltip
+
+Re-exports [ChemicalTooltip](mychem.md#chemicaltooltip)
+
+***
+
 ### createMyGeneSectionContext
 
 Re-exports [createMyGeneSectionContext](providers/mygene/sections.md#createmygenesectioncontext)
@@ -172,9 +178,21 @@ Re-exports [init](mygene.md#init-1)
 
 ***
 
+### initChemicalTooltip
+
+Renames and re-exports [init](mychem.md#init-1)
+
+***
+
 ### mergeConfig
 
 Re-exports [mergeConfig](providers/mygene/config.md#mergeconfig)
+
+***
+
+### MyChemTooltipConfig
+
+Re-exports [MyChemTooltipConfig](providers/mychem/config.md#mychemtooltipconfig)
 
 ***
 
@@ -235,6 +253,12 @@ Re-exports [parseGeneElement](providers/mygene/parser.md#parsegeneelement)
 ### preload
 
 Re-exports [preload](mygene.md#preload-1)
+
+***
+
+### preloadChemicalTooltip
+
+Renames and re-exports [preload](mychem.md#preload-1)
 
 ***
 

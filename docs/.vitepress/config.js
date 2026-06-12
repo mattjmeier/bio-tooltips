@@ -1,6 +1,6 @@
 export default {
   title: 'Gene Tooltips JS',
-  description: 'A lightweight library for creating gene information tooltips.',
+  description: 'A lightweight library for creating gene and chemical information tooltips.',
   base: '/gene-tooltips/',
   head: [
     [
@@ -23,31 +23,51 @@ export default {
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/guide' },
-      { text: 'Demo', link: '/demo' },
+      { text: 'Demos', link: '/demo' },
+      { text: 'API', link: '/api' },
       { text: 'GitHub', link: 'https://github.com/mattjmeier/gene-tooltips' }
     ],
     sidebar: [
       {
-        text: 'Documentation',
+        text: 'Start Here',
         items: [
-          { text: 'Getting started', link: '/guide' },
-          { text: 'Architecture', link: '/architecture.md'},
-          { text: 'Advanced configuration', link: '/configuration.md'},
-          { text: 'Integration with various frameworks', link: '/integration.md'},
-          { text: 'Adding new sections to tooltips', link: '/add-modules.md'} 
+          { text: 'Getting Started', link: '/guide' },
+          { text: 'Core Concepts', link: '/core-concepts' },
+          { text: 'Framework Integration', link: '/integration' }
         ]
       },
       {
-        text: 'Live Example',
+        text: 'Live Demos',
         items: [
-            { text: 'Demo Page', link: '/demo' },
+          { text: 'Demo Overview', link: '/demo' },
+          { text: 'Gene Demo', link: '/demos/gene' },
+          { text: 'Chemical Demo', link: '/demos/chemical' }
         ]
       },
       {
-        text: "API Reference",
+        text: 'Gene Tooltips',
         items: [
-          { text: "Description of props", link: '/api.md'},
-          { text: "Full API", link: '/api/modules'}
+          { text: 'Gene Usage', link: '/gene-usage' },
+          { text: 'Gene Configuration', link: '/gene-configuration' },
+          { text: 'Gene API', link: '/gene-api' }
+        ]
+      },
+      {
+        text: 'Chemical Tooltips',
+        items: [
+          { text: 'Chemical Usage', link: '/chemical-usage' },
+          { text: 'Chemical Configuration', link: '/chemical-configuration' },
+          { text: 'Chemical API', link: '/chemical-api' }
+        ]
+      },
+      {
+        text: 'Reference',
+        items: [
+          { text: 'Curated API Overview', link: '/api' },
+          { text: 'Core Reference', link: '/reference/core' },
+          { text: 'Provider Reference', link: '/reference/providers' },
+          { text: 'Full Generated Reference', link: '/api/modules' },
+          { text: 'Adding New Sections', link: '/add-modules' }
         ]
       }
     ]

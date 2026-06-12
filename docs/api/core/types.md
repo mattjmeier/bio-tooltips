@@ -6,7 +6,7 @@
 
 ### DataProvider
 
-Defined in: [core/types.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L13)
+Defined in: [core/types.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L13)
 
 #### Type Parameters
 
@@ -20,7 +20,7 @@ Defined in: [core/types.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **fetchBatch**: (`refs`) => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`EntityDataMap`](#entitydatamap)\<`TData`\>\>
 
-Defined in: [core/types.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L17)
+Defined in: [core/types.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L17)
 
 ###### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [core/types.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **getCacheKey**: (`ref`) => `string`
 
-Defined in: [core/types.ts:16](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L16)
+Defined in: [core/types.ts:16](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L16)
 
 ###### Parameters
 
@@ -52,13 +52,13 @@ Defined in: [core/types.ts:16](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **id**: `string`
 
-Defined in: [core/types.ts:14](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L14)
+Defined in: [core/types.ts:14](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L14)
 
 ##### parseElement()
 
 > **parseElement**: (`el`) => [`EntityRef`](#entityref) \| `null`
 
-Defined in: [core/types.ts:15](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L15)
+Defined in: [core/types.ts:15](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L15)
 
 ###### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [core/types.ts:15](https://github.com/mattjmeier/gene-tooltips/blob/
 
 ### EntityRef
 
-Defined in: [core/types.ts:6](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L6)
+Defined in: [core/types.ts:6](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L6)
 
 #### Properties
 
@@ -82,19 +82,19 @@ Defined in: [core/types.ts:6](https://github.com/mattjmeier/gene-tooltips/blob/0
 
 > `optional` **context**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, `string` \| `number` \| `boolean` \| `undefined`\>
 
-Defined in: [core/types.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L8)
+Defined in: [core/types.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L8)
 
 ##### query
 
 > **query**: `string`
 
-Defined in: [core/types.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L7)
+Defined in: [core/types.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L7)
 
 ***
 
 ### NestedTooltipDefinition
 
-Defined in: [core/types.ts:22](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L22)
+Defined in: [core/types.ts:22](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L22)
 
 #### Properties
 
@@ -102,19 +102,19 @@ Defined in: [core/types.ts:22](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **items**: [`FormattedItem`](#formatteditem)[]
 
-Defined in: [core/types.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L24)
+Defined in: [core/types.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L24)
 
 ##### selector
 
 > **selector**: `string`
 
-Defined in: [core/types.ts:23](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L23)
+Defined in: [core/types.ts:23](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L23)
 
 ***
 
 ### RenderTooltipOptions
 
-Defined in: [core/types.ts:45](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L45)
+Defined in: [core/types.ts:45](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L45)
 
 #### Properties
 
@@ -122,13 +122,13 @@ Defined in: [core/types.ts:45](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **uniqueId**: `string`
 
-Defined in: [core/types.ts:46](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L46)
+Defined in: [core/types.ts:46](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L46)
 
 ***
 
 ### TippyInstanceWithCustoms
 
-Defined in: [core/types.ts:27](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L27)
+Defined in: [core/types.ts:27](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L27)
 
 #### Extends
 
@@ -146,61 +146,61 @@ Defined in: [core/types.ts:27](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > `optional` **\_entityData**: `TData` \| `null`
 
-Defined in: [core/types.ts:29](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L29)
+Defined in: [core/types.ts:29](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L29)
 
 ##### \_geneData?
 
 > `optional` **\_geneData**: `TData` \| `null`
 
-Defined in: [core/types.ts:30](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L30)
+Defined in: [core/types.ts:30](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L30)
 
 ##### \_isChildTippyVisible?
 
 > `optional` **\_isChildTippyVisible**: `boolean`
 
-Defined in: [core/types.ts:34](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L34)
+Defined in: [core/types.ts:34](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L34)
 
 ##### \_isFetching?
 
 > `optional` **\_isFetching**: `boolean`
 
-Defined in: [core/types.ts:31](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L31)
+Defined in: [core/types.ts:31](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L31)
 
 ##### \_isFullyShown?
 
 > `optional` **\_isFullyShown**: `boolean`
 
-Defined in: [core/types.ts:35](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L35)
+Defined in: [core/types.ts:35](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L35)
 
 ##### \_isPinned?
 
 > `optional` **\_isPinned**: `boolean`
 
-Defined in: [core/types.ts:40](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L40)
+Defined in: [core/types.ts:40](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L40)
 
 ##### \_nestedTippys?
 
 > `optional` **\_nestedTippys**: `Instance`\<`Props`\>[]
 
-Defined in: [core/types.ts:28](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L28)
+Defined in: [core/types.ts:28](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L28)
 
 ##### \_originalTrigger?
 
 > `optional` **\_originalTrigger**: `string`
 
-Defined in: [core/types.ts:41](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L41)
+Defined in: [core/types.ts:41](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L41)
 
 ##### \_pinButton?
 
 > `optional` **\_pinButton**: [`HTMLElement`](https://developer.mozilla.org/docs/Web/API/HTMLElement) \| `null`
 
-Defined in: [core/types.ts:42](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L42)
+Defined in: [core/types.ts:42](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L42)
 
 ##### \_sectionKeydownHandler()?
 
 > `optional` **\_sectionKeydownHandler**: (`event`) => `void`
 
-Defined in: [core/types.ts:38](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L38)
+Defined in: [core/types.ts:38](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L38)
 
 ###### Parameters
 
@@ -216,7 +216,7 @@ Defined in: [core/types.ts:38](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > `optional` **\_sectionToggleHandler**: (`event`) => `void`
 
-Defined in: [core/types.ts:37](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L37)
+Defined in: [core/types.ts:37](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L37)
 
 ###### Parameters
 
@@ -232,31 +232,31 @@ Defined in: [core/types.ts:37](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > `optional` **\_themeIntent**: `string`
 
-Defined in: [core/types.ts:33](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L33)
+Defined in: [core/types.ts:33](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L33)
 
 ##### \_tomselect?
 
 > `optional` **\_tomselect**: `TomSelect` \| `null`
 
-Defined in: [core/types.ts:36](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L36)
+Defined in: [core/types.ts:36](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L36)
 
 ##### \_uniqueId?
 
 > `optional` **\_uniqueId**: `string`
 
-Defined in: [core/types.ts:32](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L32)
+Defined in: [core/types.ts:32](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L32)
 
 ##### \_visualsRendered?
 
 > `optional` **\_visualsRendered**: `boolean`
 
-Defined in: [core/types.ts:39](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L39)
+Defined in: [core/types.ts:39](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L39)
 
 ***
 
 ### TooltipProfile
 
-Defined in: [core/types.ts:57](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L57)
+Defined in: [core/types.ts:57](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L57)
 
 #### Type Parameters
 
@@ -274,7 +274,7 @@ Defined in: [core/types.ts:57](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > `optional` **getNestedTooltipDefinitions**: (`data`, `config`, `uniqueId`) => [`NestedTooltipDefinition`](#nestedtooltipdefinition)[]
 
-Defined in: [core/types.ts:64](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L64)
+Defined in: [core/types.ts:64](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L64)
 
 ###### Parameters
 
@@ -298,25 +298,25 @@ Defined in: [core/types.ts:64](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **id**: `string`
 
-Defined in: [core/types.ts:58](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L58)
+Defined in: [core/types.ts:58](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L58)
 
 ##### invalidElementMessage?
 
 > `optional` **invalidElementMessage**: `string`
 
-Defined in: [core/types.ts:60](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L60)
+Defined in: [core/types.ts:60](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L60)
 
 ##### notFoundHTML?
 
 > `optional` **notFoundHTML**: `string`
 
-Defined in: [core/types.ts:61](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L61)
+Defined in: [core/types.ts:61](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L61)
 
 ##### preload()?
 
 > `optional` **preload**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [core/types.ts:69](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L69)
+Defined in: [core/types.ts:69](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L69)
 
 ###### Returns
 
@@ -326,13 +326,13 @@ Defined in: [core/types.ts:69](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **provider**: [`DataProvider`](#dataprovider)\<`TData`\>
 
-Defined in: [core/types.ts:59](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L59)
+Defined in: [core/types.ts:59](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L59)
 
 ##### renderTooltipHTML()
 
 > **renderTooltipHTML**: (`data`, `options`, `config`) => `string`
 
-Defined in: [core/types.ts:62](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L62)
+Defined in: [core/types.ts:62](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L62)
 
 ###### Parameters
 
@@ -356,7 +356,7 @@ Defined in: [core/types.ts:62](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > `optional` **renderVisuals**: (`ctx`) => `void` \| [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [core/types.ts:63](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L63)
+Defined in: [core/types.ts:63](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L63)
 
 ###### Parameters
 
@@ -372,7 +372,7 @@ Defined in: [core/types.ts:63](https://github.com/mattjmeier/gene-tooltips/blob/
 
 ### VisualRenderContext
 
-Defined in: [core/types.ts:49](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L49)
+Defined in: [core/types.ts:49](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L49)
 
 #### Type Parameters
 
@@ -390,31 +390,31 @@ Defined in: [core/types.ts:49](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **config**: `TConfig`
 
-Defined in: [core/types.ts:52](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L52)
+Defined in: [core/types.ts:52](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L52)
 
 ##### data
 
 > **data**: `TData`
 
-Defined in: [core/types.ts:51](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L51)
+Defined in: [core/types.ts:51](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L51)
 
 ##### instance
 
 > **instance**: [`TippyInstanceWithCustoms`](#tippyinstancewithcustoms)\<`TData`\>
 
-Defined in: [core/types.ts:50](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L50)
+Defined in: [core/types.ts:50](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L50)
 
 ##### sectionKey?
 
 > `optional` **sectionKey**: `string`
 
-Defined in: [core/types.ts:54](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L54)
+Defined in: [core/types.ts:54](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L54)
 
 ##### uniqueId
 
 > **uniqueId**: `string`
 
-Defined in: [core/types.ts:53](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L53)
+Defined in: [core/types.ts:53](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L53)
 
 ## Type Aliases
 
@@ -422,7 +422,7 @@ Defined in: [core/types.ts:53](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **EntityDataMap**\<`TData`\> = [`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, `TData`\>
 
-Defined in: [core/types.ts:11](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L11)
+Defined in: [core/types.ts:11](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L11)
 
 #### Type Parameters
 
@@ -436,7 +436,7 @@ Defined in: [core/types.ts:11](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **FormattedItem** = `object`
 
-Defined in: [core/types.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L20)
+Defined in: [core/types.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L20)
 
 #### Properties
 
@@ -444,13 +444,13 @@ Defined in: [core/types.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **name**: `string`
 
-Defined in: [core/types.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L20)
+Defined in: [core/types.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L20)
 
 ##### url
 
 > **url**: `string`
 
-Defined in: [core/types.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/types.ts#L20)
+Defined in: [core/types.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/types.ts#L20)
 
 ## References
 

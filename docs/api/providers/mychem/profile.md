@@ -6,6 +6,6 @@
 
 ### myChemProfile
 
-> `const` **myChemProfile**: [`TooltipProfile`](../../core/types.md#tooltipprofile)\<[`MyChemInfoResult`](types.md#mycheminforesult)\>
+> `const` **myChemProfile**: [`TooltipProfile`](../../core/types.md#tooltipprofile)\<[`MyChemInfoResult`](types.md#mycheminforesult), [`MyChemTooltipConfig`](config.md#mychemtooltipconfig)\>
 
-Defined in: [providers/mychem/profile.ts:53](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/providers/mychem/profile.ts#L53)
+Defined in: [providers/mychem/profile.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/profile.ts#L8)

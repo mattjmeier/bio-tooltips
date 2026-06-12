@@ -8,7 +8,7 @@
 
 > **createOnHideHandler**(): (`instance`) => `false` \| `undefined`
 
-Defined in: [core/lifecycle.ts:238](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/lifecycle.ts#L238)
+Defined in: [core/lifecycle.ts:238](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/lifecycle.ts#L238)
 
 #### Returns
 
@@ -30,7 +30,7 @@ Defined in: [core/lifecycle.ts:238](https://github.com/mattjmeier/gene-tooltips/
 
 > **createOnShowHandler**\<`TData`, `TConfig`\>(`config`, `profile`, `inFlightRequests`): (`instance`) => `void`
 
-Defined in: [core/lifecycle.ts:103](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/lifecycle.ts#L103)
+Defined in: [core/lifecycle.ts:103](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/lifecycle.ts#L103)
 
 #### Type Parameters
 
@@ -76,7 +76,7 @@ Defined in: [core/lifecycle.ts:103](https://github.com/mattjmeier/gene-tooltips/
 
 > **createOnShownHandler**\<`TData`, `TConfig`\>(`config`, `profile`): (`instance`) => `void`
 
-Defined in: [core/lifecycle.ts:174](https://github.com/mattjmeier/gene-tooltips/blob/0ace97422ac9fd146992b5d4f865f0eef15b5d06/src/core/lifecycle.ts#L174)
+Defined in: [core/lifecycle.ts:174](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/lifecycle.ts#L174)
 
 #### Type Parameters
 
