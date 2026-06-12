@@ -1,19 +1,20 @@
 import type { TooltipProfile, TippyInstanceWithCustoms } from '../../core/types.js';
-import type { GeneTooltipConfig, MyGeneInfoResult } from '../../config.js';
+import type { GeneTooltipConfig } from './config.js';
+import type { MyGeneInfoResult } from './types.js';
 import { fetchMyGeneRefs, getMyGeneCacheKey } from './client.js';
 import { parseGeneElement } from './parser.js';
-import { renderTooltipHTML } from '../../renderer.js';
-import { renderIdeogram } from '../../ideogram.js';
-import { renderGeneTrack } from '../../gene-track.js';
-import { getIdeogram } from '../../ideogram.js';
-import { getD3 } from '../../gene-track.js';
+import { renderTooltipHTML } from './renderer.js';
+import { renderIdeogram } from './visuals/ideogram.js';
+import { renderGeneTrack } from './visuals/gene-track.js';
+import { getIdeogram } from './visuals/ideogram.js';
+import { getD3 } from './visuals/gene-track.js';
 import {
   formatDomains,
   formatGeneRIFs,
   formatPathways,
   formatStructures,
   formatTranscripts,
-} from '../../formatters.js';
+} from './formatters.js';
 
 async function renderMyGeneVisuals(
   instance: TippyInstanceWithCustoms<MyGeneInfoResult>,

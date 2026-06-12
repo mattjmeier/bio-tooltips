@@ -1,5 +1,5 @@
 import type { EntityRef } from '../../core/types.js';
-import { findSpecies } from '../../constants.js';
+import { findSpecies } from './species.js';
 
 export interface GeneInfo {
   symbol: string;

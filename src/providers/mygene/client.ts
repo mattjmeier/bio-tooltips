@@ -1,5 +1,5 @@
 import type { EntityRef } from '../../core/types.js';
-import type { MyGeneInfoResult } from '../../config.js';
+import type { MyGeneInfoResult } from './types.js';
 
 /**
  * Fetches data for multiple genes in a single batch request from mygene.info.

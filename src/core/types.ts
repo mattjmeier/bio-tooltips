@@ -1,5 +1,7 @@
-import type { Instance, Props } from 'tippy.js';
+import type { Instance } from 'tippy.js';
 import type TomSelect from 'tom-select';
+import type { CoreTooltipConfig } from './config.js';
+export type { CoreTooltipConfig } from './config.js';
 
 export interface EntityRef {
   query: string;
@@ -20,19 +22,6 @@ export type FormattedItem = { name: string; url: string };
 export interface NestedTooltipDefinition {
   selector: string;
   items: FormattedItem[];
-}
-
-export interface CoreTooltipConfig {
-  selector: string;
-  prefetch: 'smart' | 'all' | 'none';
-  prefetchThreshold: number;
-  theme: 'light' | 'dark' | 'auto' | 'material' | 'translucent' | 'light-border' | undefined;
-  tippyOptions: Partial<Props>;
-  nestedTippyOptions: Partial<Props>;
-  tooltipWidth?: number;
-  tooltipHeight?: number;
-  constrainToViewport: boolean;
-  display?: unknown;
 }
 
 export interface TippyInstanceWithCustoms<TData = unknown> extends Instance {
