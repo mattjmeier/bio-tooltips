@@ -12,14 +12,14 @@ Kinase inhibitor: <ChemicalDemo query="imatinib" />
 
 ## Identifier Scopes
 
-Use `data-scope` when the visible text is an identifier rather than a name.
+Use `data-query` and `data-scope` when you know a stable identifier. Visible-text name lookup is supported as an experimental best-guess search.
 
 ::: details Show code
 
 ```html
-<span class="chemical-tooltip" data-scope="pubchem">2244</span>
-<span class="chemical-tooltip" data-scope="chembl">CHEMBL25</span>
-<span class="chemical-tooltip" data-scope="drugbank">DB00945</span>
+<span class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</span>
+<span class="chemical-tooltip" data-query="CHEMBL25" data-scope="chembl">aspirin</span>
+<span class="chemical-tooltip" data-query="DB00945" data-scope="drugbank">aspirin</span>
 ```
 
 :::

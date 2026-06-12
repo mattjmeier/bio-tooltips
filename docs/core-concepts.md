@@ -33,7 +33,7 @@ cleanup();
 
 ## Element Parsing
 
-The visible text inside a matched element becomes the lookup query.
+The visible text inside a matched element usually becomes the lookup query. Providers can also support data attributes for stable identifiers.
 
 Gene tooltips use `data-species`:
 
@@ -41,11 +41,13 @@ Gene tooltips use `data-species`:
 <span class="gene-tooltip" data-species="human">TP53</span>
 ```
 
-Chemical tooltips use `data-scope`:
+Chemical tooltips prefer `data-query` for stable identifiers and `data-scope` for the identifier type:
 
 ```html
-<span class="chemical-tooltip" data-scope="pubchem">2244</span>
+<span class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</span>
 ```
+
+When `data-query` is omitted, chemical tooltips use visible text as an experimental best-guess name search.
 
 ## Prefetching
 

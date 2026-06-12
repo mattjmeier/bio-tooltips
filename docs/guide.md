@@ -58,12 +58,12 @@ For chromosome ideograms and gene model visuals, include the optional peer libra
 
 ## Chemical Tooltips
 
-Chemical tooltips read the element text as a chemical query. Add `data-scope` when the text is an identifier instead of a name.
+Prefer stable chemical identifiers in `data-query` and use the element text as the human-readable label. Visible-text name searches are still available as experimental best-guess lookups.
 
 ```html
-<span class="chemical-tooltip">aspirin</span>
-<span class="chemical-tooltip" data-scope="pubchem">2244</span>
-<span class="chemical-tooltip" data-scope="chembl">CHEMBL25</span>
+<span class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</span>
+<span class="chemical-tooltip" data-query="CHEMBL25" data-scope="chembl">aspirin</span>
+<span class="chemical-tooltip" data-lookup="best-guess">caffeine</span>
 ```
 
 ```ts

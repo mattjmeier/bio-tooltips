@@ -68,3 +68,5 @@ export type MyChemScope =
   | 'drugbank.id'
   | 'pubchem.cid'
   | 'unii.unii';
+
+export type MyChemLookupMode = 'id' | 'best-guess';

@@ -1,18 +1,20 @@
 import type { EntityRef } from '../../core/types.js';
-import { normalizeMyChemScope } from './client.js';
+import { normalizeMyChemLookupMode, normalizeMyChemScope } from './client.js';
 
 export function findChemicalElements(selector: string): HTMLElement[] {
   return Array.from(document.querySelectorAll<HTMLElement>(selector));
 }
 
 export function parseChemicalElement(el: HTMLElement): EntityRef | null {
-  const query = el.textContent?.trim();
+  const scope = normalizeMyChemScope(el.dataset.scope);
+  const query = el.dataset.query?.trim() || el.textContent?.trim();
   if (!query) return null;
 
   return {
     query,
     context: {
-      scope: normalizeMyChemScope(el.dataset.scope),
+      lookup: normalizeMyChemLookupMode(el.dataset.lookup, scope),
+      scope,
     },
   };
 }

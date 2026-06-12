@@ -36,4 +36,12 @@ import { ChemicalTooltip } from 'gene-tooltips/mychem';
 | `display.rawJson` | `false` | Raw MyChem record display. |
 | `display.sourcePaths` | `false` | Source path labels for rendered fields. |
 
+## Markup Attributes
+
+| Attribute | Description |
+| --- | --- |
+| `data-query` | Optional lookup value. Use this for stable IDs while keeping readable visible text. |
+| `data-scope` | Identifier or search field, such as `pubchem`, `chembl`, `chebi`, `drugbank`, `unii`, `inchikey`, or `name`. |
+| `data-lookup` | Optional lookup mode: `id` or `best-guess`. Non-`name` scopes default to `id`; `name` defaults to `best-guess`. |
+
 For exact exported types, see the generated MyChem reference pages for [config](./api/providers/mychem/config.md), [client](./api/providers/mychem/client.md), and [types](./api/providers/mychem/types.md).

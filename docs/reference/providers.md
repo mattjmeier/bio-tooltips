@@ -20,7 +20,7 @@ Providers plug domain-specific behavior into the shared core engine.
 | Entry point | `gene-tooltips/mychem` |
 | Main export | `ChemicalTooltip` |
 | Default selector | `.chemical-tooltip` |
-| Element context | `data-scope` |
+| Element context | `data-query`, `data-scope`, `data-lookup` |
 | API source | MyChem.info |
 | Main sections | Identity, structure and properties, summary, classes, pharmacology, regulatory, safety, identifiers |
 
