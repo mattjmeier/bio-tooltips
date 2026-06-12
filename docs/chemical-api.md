@@ -27,7 +27,8 @@ import { ChemicalTooltip } from 'gene-tooltips/mychem';
 | `display.identity` | `expanded` | Name, badges, and match context. |
 | `display.structureProperties` | `expanded` | Structure image plus formula, mass, identity, SMILES, and InChIKey. |
 | `display.detailedProperties` | `true` | Secondary property table such as LogP, TPSA, H-bond counts, charge, and stereochemistry count. |
-| `display.summary` | `expanded` | Description and synonyms. |
+| `display.summary` | `expanded` | Description text. |
+| `display.synonyms` | `expanded` | Synonym list. |
 | `display.classes` | `true` | Chemical classes and categories. |
 | `display.pharmacology` | `true` | Mechanism, indications, targets, and bioactivity summaries. |
 | `display.regulatory` | `true` | Approval status, products, and orphan designations. |

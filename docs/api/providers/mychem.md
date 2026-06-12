@@ -52,9 +52,21 @@ Re-exports [escapeHTML](mychem/formatters.md#escapehtml)
 
 ***
 
+### fetchMyChemAnnotationBatch
+
+Re-exports [fetchMyChemAnnotationBatch](mychem/client.md#fetchmychemannotationbatch)
+
+***
+
 ### fetchMyChemBatch
 
 Re-exports [fetchMyChemBatch](mychem/client.md#fetchmychembatch)
+
+***
+
+### fetchMyChemBestGuessBatch
+
+Re-exports [fetchMyChemBestGuessBatch](mychem/client.md#fetchmychembestguessbatch)
 
 ***
 
@@ -100,6 +112,12 @@ Re-exports [getMyChemCacheKey](mychem/client.md#getmychemcachekey)
 
 ***
 
+### getMyChemNestedTooltipDefinitions
+
+Re-exports [getMyChemNestedTooltipDefinitions](mychem/renderer.md#getmychemnestedtooltipdefinitions)
+
+***
+
 ### getPathValues
 
 Re-exports [getPathValues](mychem/formatters.md#getpathvalues)
@@ -133,6 +151,12 @@ Re-exports [MyChemDisplayConfig](mychem/config.md#mychemdisplayconfig)
 ### MyChemInfoResult
 
 Re-exports [MyChemInfoResult](mychem/types.md#mycheminforesult)
+
+***
+
+### MyChemLookupMode
+
+Re-exports [MyChemLookupMode](mychem/types.md#mychemlookupmode)
 
 ***
 
@@ -175,6 +199,12 @@ Re-exports [MyChemSectionVisibility](mychem/config.md#mychemsectionvisibility)
 ### MyChemTooltipConfig
 
 Re-exports [MyChemTooltipConfig](mychem/config.md#mychemtooltipconfig)
+
+***
+
+### normalizeMyChemLookupMode
+
+Re-exports [normalizeMyChemLookupMode](mychem/client.md#normalizemychemlookupmode)
 
 ***
 

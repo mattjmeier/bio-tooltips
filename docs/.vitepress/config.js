@@ -1,3 +1,5 @@
+import { fileURLToPath, URL } from 'node:url';
+
 export default {
   title: 'Gene Tooltips JS',
   description: 'A lightweight library for creating gene and chemical information tooltips.',
@@ -72,15 +74,26 @@ export default {
       }
     ]
   },
-  // build: {
-  //   rollupOptions: {
-  //     external: ['d3', 'ideogram'],
-  //     output: {
-  //       globals: {
-  //         d3: 'd3',
-  //         Ideogram: 'Ideogram'
-  //       }
-  //     }
-  //   }
-  // }
+  vite: {
+    resolve: {
+      alias: [
+        {
+          find: /^gene-tooltips$/,
+          replacement: fileURLToPath(new URL('../../src/index.ts', import.meta.url))
+        },
+        {
+          find: /^gene-tooltips\/mygene$/,
+          replacement: fileURLToPath(new URL('../../src/mygene.ts', import.meta.url))
+        },
+        {
+          find: /^gene-tooltips\/mychem$/,
+          replacement: fileURLToPath(new URL('../../src/mychem.ts', import.meta.url))
+        },
+        {
+          find: /^gene-tooltips\/style\.css$/,
+          replacement: fileURLToPath(new URL('../../src/css/main.css', import.meta.url))
+        }
+      ]
+    }
+  }
 }

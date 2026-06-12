@@ -2,6 +2,9 @@ import { createTooltipEngine } from './core/engine.js';
 import { mergeConfig, type GeneTooltipConfig } from './providers/mygene/config.js';
 import { findGeneElements } from './providers/mygene/parser.js';
 import { myGeneProfile } from './providers/mygene/profile.js';
+import { filterNestedList } from './utils.js';
+
+export { filterNestedList };
 
 const geneTooltipEngine = createTooltipEngine({
   profile: myGeneProfile,
@@ -19,20 +22,6 @@ export function init(userConfig: Partial<GeneTooltipConfig> = {}): () => void {
  */
 export function preload(): Promise<unknown> {
   return geneTooltipEngine.preload();
-}
-
-export function filterNestedList(query: string, listId: string): void {
-  const list = document.getElementById(listId);
-  if (!list) return;
-
-  const items = list.getElementsByTagName('li');
-  const normalizedQuery = query.toLowerCase();
-
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    const text = item.textContent || '';
-    item.style.display = text.toLowerCase().includes(normalizedQuery) ? '' : 'none';
-  }
 }
 
 export const GeneTooltip = {

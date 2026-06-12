@@ -2,6 +2,28 @@
 
 ***
 
+## Functions
+
+### filterNestedList()
+
+> **filterNestedList**(`query`, `listId`): `void`
+
+Defined in: [utils.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/utils.ts#L24)
+
+#### Parameters
+
+##### query
+
+`string`
+
+##### listId
+
+`string`
+
+#### Returns
+
+`void`
+
 ## References
 
 ### asArray
@@ -43,12 +65,6 @@ Re-exports [fetchMyGeneBatch](providers/mygene/client.md#fetchmygenebatch)
 ### fetchMyGeneRefs
 
 Re-exports [fetchMyGeneRefs](providers/mygene/client.md#fetchmygenerefs)
-
-***
-
-### filterNestedList
-
-Re-exports [filterNestedList](mygene.md#filternestedlist-1)
 
 ***
 

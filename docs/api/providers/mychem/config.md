@@ -6,7 +6,7 @@
 
 ### MyChemDisplayConfig
 
-Defined in: [providers/mychem/config.ts:6](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L6)
+Defined in: [providers/mychem/config.ts:6](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L6)
 
 #### Properties
 
@@ -14,85 +14,97 @@ Defined in: [providers/mychem/config.ts:6](https://github.com/mattjmeier/gene-to
 
 > **classes**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L10)
+Defined in: [providers/mychem/config.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L12)
 
 ##### collapsedByDefault?
 
 > `optional` **collapsedByDefault**: `boolean`
 
-Defined in: [providers/mychem/config.ts:19](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L19)
+Defined in: [providers/mychem/config.ts:21](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L21)
 
 ##### collapsible?
 
 > `optional` **collapsible**: `boolean`
 
-Defined in: [providers/mychem/config.ts:18](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L18)
+Defined in: [providers/mychem/config.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L20)
+
+##### detailedProperties
+
+> **detailedProperties**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
+
+Defined in: [providers/mychem/config.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L9)
 
 ##### footer
 
 > **footer**: `boolean`
 
-Defined in: [providers/mychem/config.ts:15](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L15)
+Defined in: [providers/mychem/config.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L17)
 
 ##### identifiers
 
 > **identifiers**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:14](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L14)
+Defined in: [providers/mychem/config.ts:16](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L16)
 
 ##### identity
 
 > **identity**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L7)
+Defined in: [providers/mychem/config.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L7)
 
 ##### pharmacology
 
 > **pharmacology**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:11](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L11)
+Defined in: [providers/mychem/config.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L13)
 
 ##### rawJson
 
 > **rawJson**: `boolean`
 
-Defined in: [providers/mychem/config.ts:16](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L16)
+Defined in: [providers/mychem/config.ts:18](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L18)
 
 ##### regulatory
 
 > **regulatory**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L12)
+Defined in: [providers/mychem/config.ts:14](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L14)
 
 ##### safety
 
 > **safety**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L13)
+Defined in: [providers/mychem/config.ts:15](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L15)
 
 ##### sourcePaths
 
 > **sourcePaths**: `boolean`
 
-Defined in: [providers/mychem/config.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L17)
+Defined in: [providers/mychem/config.ts:19](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L19)
 
 ##### structureProperties
 
 > **structureProperties**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L8)
+Defined in: [providers/mychem/config.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L8)
 
 ##### summary
 
 > **summary**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L9)
+Defined in: [providers/mychem/config.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L10)
+
+##### synonyms
+
+> **synonyms**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
+
+Defined in: [providers/mychem/config.ts:11](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L11)
 
 ***
 
 ### MyChemTooltipConfig
 
-Defined in: [providers/mychem/config.ts:22](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L22)
+Defined in: [providers/mychem/config.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L24)
 
 #### Extends
 
@@ -104,13 +116,13 @@ Defined in: [providers/mychem/config.ts:22](https://github.com/mattjmeier/gene-t
 
 > **api**: `"mychem"`
 
-Defined in: [providers/mychem/config.ts:23](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L23)
+Defined in: [providers/mychem/config.ts:25](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L25)
 
 ##### constrainToViewport
 
 > **constrainToViewport**: `boolean`
 
-Defined in: [core/config.ts:15](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/config.ts#L15)
+Defined in: [core/config.ts:15](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/config.ts#L15)
 
 ###### Inherited from
 
@@ -120,7 +132,7 @@ Defined in: [core/config.ts:15](https://github.com/mattjmeier/gene-tooltips/blob
 
 > **display**: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`MyChemDisplayConfig`](#mychemdisplayconfig)\>
 
-Defined in: [providers/mychem/config.ts:27](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L27)
+Defined in: [providers/mychem/config.ts:29](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L29)
 
 ###### Overrides
 
@@ -130,13 +142,13 @@ Defined in: [providers/mychem/config.ts:27](https://github.com/mattjmeier/gene-t
 
 > **listCount**: `number`
 
-Defined in: [providers/mychem/config.ts:26](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L26)
+Defined in: [providers/mychem/config.ts:28](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L28)
 
 ##### nestedTippyOptions
 
 > **nestedTippyOptions**: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<`Props`\>
 
-Defined in: [core/config.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/config.ts#L12)
+Defined in: [core/config.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/config.ts#L12)
 
 ###### Inherited from
 
@@ -146,7 +158,7 @@ Defined in: [core/config.ts:12](https://github.com/mattjmeier/gene-tooltips/blob
 
 > **prefetch**: [`PrefetchMode`](../../core/config.md#prefetchmode)
 
-Defined in: [core/config.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/config.ts#L8)
+Defined in: [core/config.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/config.ts#L8)
 
 ###### Inherited from
 
@@ -156,7 +168,7 @@ Defined in: [core/config.ts:8](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **prefetchThreshold**: `number`
 
-Defined in: [core/config.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/config.ts#L9)
+Defined in: [core/config.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/config.ts#L9)
 
 ###### Inherited from
 
@@ -166,7 +178,7 @@ Defined in: [core/config.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **selector**: `string`
 
-Defined in: [core/config.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/config.ts#L7)
+Defined in: [core/config.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/config.ts#L7)
 
 ###### Inherited from
 
@@ -176,13 +188,13 @@ Defined in: [core/config.ts:7](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **synonymCount**: `number`
 
-Defined in: [providers/mychem/config.ts:25](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L25)
+Defined in: [providers/mychem/config.ts:27](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L27)
 
 ##### theme
 
 > **theme**: [`TooltipTheme`](../../core/config.md#tooltiptheme)
 
-Defined in: [core/config.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/config.ts#L10)
+Defined in: [core/config.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/config.ts#L10)
 
 ###### Inherited from
 
@@ -192,7 +204,7 @@ Defined in: [core/config.ts:10](https://github.com/mattjmeier/gene-tooltips/blob
 
 > **tippyOptions**: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<`Props`\>
 
-Defined in: [core/config.ts:11](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/config.ts#L11)
+Defined in: [core/config.ts:11](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/config.ts#L11)
 
 ###### Inherited from
 
@@ -202,7 +214,7 @@ Defined in: [core/config.ts:11](https://github.com/mattjmeier/gene-tooltips/blob
 
 > `optional` **tooltipHeight**: `number`
 
-Defined in: [core/config.ts:14](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/config.ts#L14)
+Defined in: [core/config.ts:14](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/config.ts#L14)
 
 ###### Inherited from
 
@@ -212,7 +224,7 @@ Defined in: [core/config.ts:14](https://github.com/mattjmeier/gene-tooltips/blob
 
 > `optional` **tooltipWidth**: `number`
 
-Defined in: [core/config.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/config.ts#L13)
+Defined in: [core/config.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/config.ts#L13)
 
 ###### Inherited from
 
@@ -222,7 +234,7 @@ Defined in: [core/config.ts:13](https://github.com/mattjmeier/gene-tooltips/blob
 
 > **truncateSummary**: `number`
 
-Defined in: [providers/mychem/config.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L24)
+Defined in: [providers/mychem/config.ts:26](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L26)
 
 ## Type Aliases
 
@@ -230,7 +242,7 @@ Defined in: [providers/mychem/config.ts:24](https://github.com/mattjmeier/gene-t
 
 > **MyChemSectionVisibility** = `boolean` \| `"expanded"` \| `"collapsed"`
 
-Defined in: [providers/mychem/config.ts:4](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L4)
+Defined in: [providers/mychem/config.ts:4](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L4)
 
 ## Variables
 
@@ -238,7 +250,7 @@ Defined in: [providers/mychem/config.ts:4](https://github.com/mattjmeier/gene-to
 
 > `const` **defaultMyChemConfig**: [`MyChemTooltipConfig`](#mychemtooltipconfig)
 
-Defined in: [providers/mychem/config.ts:30](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L30)
+Defined in: [providers/mychem/config.ts:32](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L32)
 
 ## Functions
 
@@ -246,7 +258,7 @@ Defined in: [providers/mychem/config.ts:30](https://github.com/mattjmeier/gene-t
 
 > **mergeConfig**(`userConfig`): [`MyChemTooltipConfig`](#mychemtooltipconfig)
 
-Defined in: [providers/mychem/config.ts:55](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/providers/mychem/config.ts#L55)
+Defined in: [providers/mychem/config.ts:59](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mychem/config.ts#L59)
 
 #### Parameters
 

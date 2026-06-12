@@ -4,6 +4,7 @@ import { createOnHideHandler, createOnShowHandler, createOnShownHandler } from '
 import { runPrefetch } from './prefetch.js';
 import { enableSummaryExpand } from '../ui/summaryExpand.js';
 import { getEffectiveTheme, initializeThemeObserver } from '../ui/theme.js';
+import { installNestedListFilter } from '../utils.js';
 
 let isSummaryHandlerEnabled = false;
 
@@ -60,6 +61,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
       enableSummaryExpand();
       isSummaryHandlerEnabled = true;
     }
+    installNestedListFilter();
 
     return () => {
       instances.forEach(instance => {

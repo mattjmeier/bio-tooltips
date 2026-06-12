@@ -8,7 +8,7 @@
 
 > **get**\<`TData`\>(`cacheKey`): `TData` \| `null` \| `undefined`
 
-Defined in: [core/cache.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/cache.ts#L9)
+Defined in: [core/cache.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/cache.ts#L9)
 
 #### Type Parameters
 
@@ -32,7 +32,7 @@ Defined in: [core/cache.ts:9](https://github.com/mattjmeier/gene-tooltips/blob/b
 
 > **has**(`cacheKey`): `boolean`
 
-Defined in: [core/cache.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/cache.ts#L5)
+Defined in: [core/cache.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/cache.ts#L5)
 
 #### Parameters
 
@@ -50,7 +50,7 @@ Defined in: [core/cache.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/b
 
 > **set**\<`TData`\>(`cacheKey`, `data`): `void`
 
-Defined in: [core/cache.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/cache.ts#L13)
+Defined in: [core/cache.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/cache.ts#L13)
 
 #### Type Parameters
 
@@ -78,7 +78,7 @@ Defined in: [core/cache.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/
 
 > **setBatch**\<`TData`\>(`resultsMap`): `void`
 
-Defined in: [core/cache.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/cache.ts#L24)
+Defined in: [core/cache.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/cache.ts#L24)
 
 #### Type Parameters
 

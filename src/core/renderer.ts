@@ -1,4 +1,4 @@
-export type FormattedItem = { name: string; url: string };
+export type FormattedItem = { name: string; url?: string };
 
 export const loaderHTML = `<div class="gt-loader-container"><div class="gt-spinner"></div><span>Loading...</span></div>`;
 

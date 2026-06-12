@@ -8,7 +8,7 @@
 
 > `const` **ChemicalTooltip**: `object`
 
-Defined in: [mychem.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/mychem.ts#L20)
+Defined in: [mychem.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/mychem.ts#L20)
 
 #### Type Declaration
 
@@ -44,7 +44,7 @@ Defined in: [mychem.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/b5d0
 
 > **init**(`userConfig`): () => `void`
 
-Defined in: [mychem.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/mychem.ts#L12)
+Defined in: [mychem.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/mychem.ts#L12)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [mychem.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/b5d0
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mychem.ts:16](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/mychem.ts#L16)
+Defined in: [mychem.ts:16](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/mychem.ts#L16)
 
 #### Returns
 
@@ -128,9 +128,21 @@ Re-exports [escapeHTML](providers/mychem/formatters.md#escapehtml)
 
 ***
 
+### fetchMyChemAnnotationBatch
+
+Re-exports [fetchMyChemAnnotationBatch](providers/mychem/client.md#fetchmychemannotationbatch)
+
+***
+
 ### fetchMyChemBatch
 
 Re-exports [fetchMyChemBatch](providers/mychem/client.md#fetchmychembatch)
+
+***
+
+### fetchMyChemBestGuessBatch
+
+Re-exports [fetchMyChemBestGuessBatch](providers/mychem/client.md#fetchmychembestguessbatch)
 
 ***
 
@@ -176,6 +188,12 @@ Re-exports [getMyChemCacheKey](providers/mychem/client.md#getmychemcachekey)
 
 ***
 
+### getMyChemNestedTooltipDefinitions
+
+Re-exports [getMyChemNestedTooltipDefinitions](providers/mychem/renderer.md#getmychemnestedtooltipdefinitions)
+
+***
+
 ### getPathValues
 
 Re-exports [getPathValues](providers/mychem/formatters.md#getpathvalues)
@@ -209,6 +227,12 @@ Re-exports [MyChemDisplayConfig](providers/mychem/config.md#mychemdisplayconfig)
 ### MyChemInfoResult
 
 Re-exports [MyChemInfoResult](providers/mychem/types.md#mycheminforesult)
+
+***
+
+### MyChemLookupMode
+
+Re-exports [MyChemLookupMode](providers/mychem/types.md#mychemlookupmode)
 
 ***
 
@@ -251,6 +275,12 @@ Re-exports [MyChemSectionVisibility](providers/mychem/config.md#mychemsectionvis
 ### MyChemTooltipConfig
 
 Re-exports [MyChemTooltipConfig](providers/mychem/config.md#mychemtooltipconfig)
+
+***
+
+### normalizeMyChemLookupMode
+
+Re-exports [normalizeMyChemLookupMode](providers/mychem/client.md#normalizemychemlookupmode)
 
 ***
 

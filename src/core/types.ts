@@ -17,7 +17,7 @@ export interface DataProvider<TData> {
   fetchBatch: (refs: EntityRef[]) => Promise<EntityDataMap<TData>>;
 }
 
-export type FormattedItem = { name: string; url: string };
+export type FormattedItem = { name: string; url?: string };
 
 export interface NestedTooltipDefinition {
   selector: string;

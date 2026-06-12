@@ -121,6 +121,16 @@ describe('renderMyChemTooltipHTML', () => {
       _id: '1983',
       query: 'acetaminophen',
       name: ['Acetaminophen', 'Paracetamol'],
+      synonyms: [
+        'APAP',
+        'Acetaminofen',
+        'Acetaminophene',
+        'N-acetyl-p-aminophenol',
+        '4-acetamidophenol',
+        'Hydroxyacetanilide',
+        'p-Hydroxyacetanilide',
+        'p-Acetamidophenol',
+      ],
       formula: 'C8H9NO2',
       inchikey: 'RZVAJINKPMORJF-UHFFFAOYSA-N',
       pubchem: {
@@ -164,7 +174,15 @@ describe('renderMyChemTooltipHTML', () => {
         toxicity: 'Overdose may cause liver injury.',
       },
       sider: {
-        side_effect: [{ name: 'Nausea' }],
+        side_effect: [
+          { name: 'Nausea' },
+          { name: 'Acidemia' },
+          { name: 'Acidosis' },
+          { name: 'Agitation' },
+          { name: 'Anaemia' },
+          { name: 'Anaphylactic shock' },
+          { name: 'Rash' },
+        ],
       },
     };
 
@@ -175,6 +193,7 @@ describe('renderMyChemTooltipHTML', () => {
 
     expect(html).toContain('<strong>Acetaminophen</strong>');
     expect(html).toContain('Structure & Properties');
+    expect(html).toContain('Synonyms');
     expect(html).toContain('Detailed Properties');
     expect(html).toContain('C8H9NO2');
     expect(html).toContain('3 sources');
@@ -184,9 +203,14 @@ describe('renderMyChemTooltipHTML', () => {
     expect(html).toContain('Identifiers & External Records');
     expect(html).toContain('https://pubchem.ncbi.nlm.nih.gov/compound/1983');
     expect(html).toContain('Data from MyChem.info');
+    expect(html).toContain('id="mychem-more-synonyms-mychem-test"');
+    expect(html).toContain('id="mychem-more-safety-reported-side-effects-mychem-test"');
+    expect(html.match(/\.\.\. and 3 more/g)).toHaveLength(2);
+    expect(html).not.toContain('class="gt-chem-more"');
 
     expect(html.indexOf('SMILES')).toBeGreaterThan(html.indexOf('Structure & Properties'));
     expect(html.indexOf('SMILES')).toBeLessThan(html.indexOf('Detailed Properties'));
+    expect(html.indexOf('Detailed Properties')).toBeGreaterThan(html.indexOf('Synonyms'));
     expect(html.indexOf('XLogP / LogP')).toBeGreaterThan(html.indexOf('Detailed Properties'));
   });
 

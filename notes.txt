@@ -10,6 +10,7 @@ npm.cmd publish
 
 
 To do
+- rdk package as optional dependency
 
 - rename package... Bio Tool Tips? Biochem Tooltips?
 

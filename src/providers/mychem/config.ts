@@ -8,6 +8,7 @@ export interface MyChemDisplayConfig {
   structureProperties: MyChemSectionVisibility;
   detailedProperties: MyChemSectionVisibility;
   summary: MyChemSectionVisibility;
+  synonyms: MyChemSectionVisibility;
   classes: MyChemSectionVisibility;
   pharmacology: MyChemSectionVisibility;
   regulatory: MyChemSectionVisibility;
@@ -41,6 +42,7 @@ export const defaultMyChemConfig: MyChemTooltipConfig = {
     structureProperties: 'expanded',
     detailedProperties: true,
     summary: 'expanded',
+    synonyms: 'expanded',
     classes: true,
     pharmacology: true,
     regulatory: true,

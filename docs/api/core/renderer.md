@@ -8,7 +8,7 @@
 
 > **FormattedItem** = `object`
 
-Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L1)
+Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L1)
 
 #### Properties
 
@@ -16,13 +16,13 @@ Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/gene-tooltips/blo
 
 > **name**: `string`
 
-Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L1)
+Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L1)
 
-##### url
+##### url?
 
-> **url**: `string`
+> `optional` **url**: `string`
 
-Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L1)
+Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L1)
 
 ## Variables
 
@@ -30,7 +30,7 @@ Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/gene-tooltips/blo
 
 > `const` **loaderHTML**: "\<div class=\"gt-loader-container\"\>\<div class=\"gt-spinner\"\>\</div\>\<span\>Loading...\</span\>\</div\>"
 
-Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L3)
+Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L3)
 
 ## Functions
 
@@ -38,7 +38,7 @@ Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/gene-tooltips/blo
 
 > **generateUniqueId**(): `string`
 
-Defined in: [core/renderer.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L5)
+Defined in: [core/renderer.ts:5](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L5)
 
 #### Returns
 
@@ -50,7 +50,7 @@ Defined in: [core/renderer.ts:5](https://github.com/mattjmeier/gene-tooltips/blo
 
 > **renderCollapseButton**(`id`, `text`): `string`
 
-Defined in: [core/renderer.ts:44](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L44)
+Defined in: [core/renderer.ts:44](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L44)
 
 #### Parameters
 
@@ -72,7 +72,7 @@ Defined in: [core/renderer.ts:44](https://github.com/mattjmeier/gene-tooltips/bl
 
 > **renderListContent**(`items`, `initialCount`, `moreButtonId`): `string`
 
-Defined in: [core/renderer.ts:75](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L75)
+Defined in: [core/renderer.ts:75](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L75)
 
 #### Parameters
 
@@ -98,7 +98,7 @@ Defined in: [core/renderer.ts:75](https://github.com/mattjmeier/gene-tooltips/bl
 
 > **renderMoreButton**(`id`, `text`): `string`
 
-Defined in: [core/renderer.ts:36](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L36)
+Defined in: [core/renderer.ts:36](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L36)
 
 #### Parameters
 
@@ -120,7 +120,7 @@ Defined in: [core/renderer.ts:36](https://github.com/mattjmeier/gene-tooltips/bl
 
 > **renderParagraphContent**(`items`, `initialCount`, `moreButtonId`): `string`
 
-Defined in: [core/renderer.ts:48](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L48)
+Defined in: [core/renderer.ts:48](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L48)
 
 #### Parameters
 
@@ -146,7 +146,7 @@ Defined in: [core/renderer.ts:48](https://github.com/mattjmeier/gene-tooltips/bl
 
 > **renderTooltipHeader**(`titleHTML`, `actionHTML`): `string`
 
-Defined in: [core/renderer.ts:25](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L25)
+Defined in: [core/renderer.ts:25](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L25)
 
 #### Parameters
 
@@ -168,7 +168,7 @@ Defined in: [core/renderer.ts:25](https://github.com/mattjmeier/gene-tooltips/bl
 
 > **renderTooltipShell**(`uniqueId`, `innerHTML`, `inlineStyle`): `string`
 
-Defined in: [core/renderer.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/b5d09179fd4d947739c7e3359f147dfdd0a65905/src/core/renderer.ts#L13)
+Defined in: [core/renderer.ts:13](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/renderer.ts#L13)
 
 #### Parameters
 

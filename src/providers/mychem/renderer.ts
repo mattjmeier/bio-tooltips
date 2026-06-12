@@ -5,6 +5,7 @@ import {
   type MyChemSectionVisibility,
 } from './config.js';
 import type { MyChemInfoResult, ResolvedField, SourceValue } from './types.js';
+import type { NestedTooltipDefinition } from '../../core/types.js';
 import {
   buildChemicalIdentity,
   collectSourceValues,
@@ -21,6 +22,7 @@ import {
 } from './formatters.js';
 import {
   generateUniqueId,
+  renderMoreButton,
   renderTooltipHeader,
   renderTooltipShell,
 } from '../../core/renderer.js';
@@ -125,12 +127,13 @@ export function renderTooltipHTML(
       renderStructureProperties(data, propertyFields, visibleIdentity, showSourcePaths),
       renderIdentityHeaderMeta(visibleIdentity)
     ),
+    buildSection('summary', 'Summary', renderSummarySection(data, truncate)),
+    buildSection('synonyms', 'Synonyms', renderSynonymsSection(identity.synonyms, synonymCount, uniqueId)),
     buildSection('detailedProperties', 'Detailed Properties', renderDetailedProperties(propertyFields, showSourcePaths)),
-    buildSection('summary', 'Summary', renderSummarySection(data, truncate, synonymCount, identity.synonyms)),
-    buildSection('classes', 'Chemical Classes', renderGroupedSection(getClassGroups(data), listCount, showSourcePaths)),
-    buildSection('pharmacology', 'Pharmacology & Targets', renderGroupedSection(getPharmacologyGroups(data), listCount, showSourcePaths)),
-    buildSection('regulatory', 'Regulatory / Products', renderGroupedSection(getRegulatoryGroups(data), listCount, showSourcePaths)),
-    buildSection('safety', 'Safety & Reported Effects', renderSafetySection(data, listCount, showSourcePaths)),
+    buildSection('classes', 'Chemical Classes', renderGroupedSection(getClassGroups(data), listCount, showSourcePaths, uniqueId, 'classes')),
+    buildSection('pharmacology', 'Pharmacology & Targets', renderGroupedSection(getPharmacologyGroups(data), listCount, showSourcePaths, uniqueId, 'pharmacology')),
+    buildSection('regulatory', 'Regulatory / Products', renderGroupedSection(getRegulatoryGroups(data), listCount, showSourcePaths, uniqueId, 'regulatory')),
+    buildSection('safety', 'Safety & Reported Effects', renderSafetySection(data, listCount, showSourcePaths, uniqueId)),
     buildSection('identifiers', 'Identifiers & External Records', renderIdentifiers(data, showSourcePaths)),
     display.rawJson ? buildSection('rawJson', 'Raw MyChem JSON', renderRawJson(data)) : '',
   ].join('');
@@ -293,9 +296,7 @@ function renderStructureImage(structure: { kind: 'cid' | 'smiles' | 'inchi'; val
 
 function renderSummarySection(
   data: MyChemInfoResult,
-  truncate: number,
-  synonymCount: number,
-  synonyms: string[]
+  truncate: number
 ): string {
   const summary = getFirstString(data, [
     'drugbank.description',
@@ -306,9 +307,12 @@ function renderSummarySection(
   const summaryHTML = summary
     ? `<p class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${escapeHTML(summary)}</p>`
     : '';
-  const synonymHTML = renderLimitedList('Synonyms', synonyms, synonymCount);
 
-  return `${summaryHTML}${synonymHTML}`;
+  return summaryHTML;
+}
+
+function renderSynonymsSection(synonyms: string[], synonymCount: number, uniqueId: string): string {
+  return renderValueList(uniqueStrings(synonyms), synonymCount, getSynonymsMoreButtonId(uniqueId));
 }
 
 function renderResolvedField(field: ResolvedField<string>, showSourcePaths: boolean, label = field.label): string {
@@ -510,20 +514,13 @@ function getRegulatoryGroups(data: MyChemInfoResult): Group[] {
   ];
 }
 
-function renderSafetySection(data: MyChemInfoResult, listCount: number, showSourcePaths: boolean): string {
-  const groups: Group[] = [
-    {
-      title: 'Reported side effects',
-      items: collectStrings(data, ['sider.side_effect.name', 'sider.side_effect', 'drugbank.toxicity']),
-      sourcePath: 'sider.side_effect',
-    },
-    {
-      title: 'Adverse-event reports',
-      items: collectStrings(data, ['aeolus.outcomes.name', 'aeolus.outcomes', 'aeolus.adverse_events']),
-      sourcePath: 'aeolus.outcomes',
-    },
-  ];
-  const rendered = renderGroupedSection(groups, listCount, showSourcePaths);
+function renderSafetySection(
+  data: MyChemInfoResult,
+  listCount: number,
+  showSourcePaths: boolean,
+  uniqueId: string
+): string {
+  const rendered = renderGroupedSection(getSafetyGroups(data), listCount, showSourcePaths, uniqueId, 'safety');
 
   if (!rendered) return '';
 
@@ -533,7 +530,13 @@ function renderSafetySection(data: MyChemInfoResult, listCount: number, showSour
   `;
 }
 
-function renderGroupedSection(groups: Group[], listCount: number, showSourcePaths: boolean): string {
+function renderGroupedSection(
+  groups: Group[],
+  listCount: number,
+  showSourcePaths: boolean,
+  uniqueId: string,
+  sectionKey: string
+): string {
   return groups
     .map(group => ({ ...group, items: uniqueStrings(group.items) }))
     .filter(group => group.items.length > 0)
@@ -543,13 +546,13 @@ function renderGroupedSection(groups: Group[], listCount: number, showSourcePath
           <span>${escapeHTML(group.title)}</span>
           ${showSourcePaths && group.sourcePath ? `<code>${escapeHTML(group.sourcePath)}</code>` : ''}
         </div>
-        ${renderValueList(group.items, listCount)}
+        ${renderValueList(group.items, listCount, getGroupMoreButtonId(uniqueId, sectionKey, group.title))}
       </div>
     `)
     .join('');
 }
 
-function renderValueList(items: string[], listCount: number): string {
+function renderValueList(items: string[], listCount: number, moreButtonId: string): string {
   const visible = items.slice(0, listCount);
   const hidden = items.slice(listCount);
 
@@ -557,40 +560,7 @@ function renderValueList(items: string[], listCount: number): string {
     <ul class="gt-chem-list">
       ${visible.map(item => `<li>${escapeHTML(item)}</li>`).join('')}
     </ul>
-    ${hidden.length > 0 ? `
-      <details class="gt-chem-more">
-        <summary>and ${hidden.length} more</summary>
-        <ul class="gt-chem-list">
-          ${hidden.map(item => `<li>${escapeHTML(item)}</li>`).join('')}
-        </ul>
-      </details>
-    ` : ''}
-  `;
-}
-
-function renderLimitedList(label: string, items: string[], count: number): string {
-  if (items.length === 0) return '';
-
-  return `
-    <div class="gt-chem-synonyms">
-      <strong>${escapeHTML(label)}</strong>
-      ${renderInlineList(items, count)}
-    </div>
-  `;
-}
-
-function renderInlineList(items: string[], count: number): string {
-  const visible = items.slice(0, count);
-  const hidden = items.slice(count);
-
-  return `
-    <span>${visible.map(escapeHTML).join(', ')}</span>
-    ${hidden.length > 0 ? `
-      <details class="gt-chem-more gt-chem-more-inline">
-        <summary>and ${hidden.length} more</summary>
-        <span>${hidden.map(escapeHTML).join(', ')}</span>
-      </details>
-    ` : ''}
+    ${hidden.length > 0 ? renderMoreButton(moreButtonId, `... and ${hidden.length} more`) : ''}
   `;
 }
 
@@ -678,4 +648,85 @@ function renderFooter(data: MyChemInfoResult): string {
       <a href="https://mychem.info/v1/chem/${encodeURIComponent(id)}" target="_blank" rel="noopener noreferrer">View JSON</a>
     </div>
   `;
+}
+
+export function getMyChemNestedTooltipDefinitions(
+  data: MyChemInfoResult,
+  config: MyChemTooltipConfig,
+  uniqueId: string
+): NestedTooltipDefinition[] {
+  const identity = buildChemicalIdentity(data, data.query);
+  const listCount = config.listCount;
+  const synonymCount = config.synonymCount;
+  const definitions: NestedTooltipDefinition[] = [];
+
+  addTextDefinition(definitions, getSynonymsMoreButtonId(uniqueId), identity.synonyms, synonymCount);
+  addGroupedDefinitions(definitions, getClassGroups(data), listCount, uniqueId, 'classes');
+  addGroupedDefinitions(definitions, getPharmacologyGroups(data), listCount, uniqueId, 'pharmacology');
+  addGroupedDefinitions(definitions, getRegulatoryGroups(data), listCount, uniqueId, 'regulatory');
+  addGroupedDefinitions(definitions, getSafetyGroups(data), listCount, uniqueId, 'safety');
+
+  return definitions;
+}
+
+function getSafetyGroups(data: MyChemInfoResult): Group[] {
+  return [
+    {
+      title: 'Reported side effects',
+      items: collectStrings(data, ['sider.side_effect.name', 'sider.side_effect', 'drugbank.toxicity']),
+      sourcePath: 'sider.side_effect',
+    },
+    {
+      title: 'Adverse-event reports',
+      items: collectStrings(data, ['aeolus.outcomes.name', 'aeolus.outcomes', 'aeolus.adverse_events']),
+      sourcePath: 'aeolus.outcomes',
+    },
+  ];
+}
+
+function addGroupedDefinitions(
+  definitions: NestedTooltipDefinition[],
+  groups: Group[],
+  listCount: number,
+  uniqueId: string,
+  sectionKey: string
+): void {
+  groups
+    .map(group => ({ ...group, items: uniqueStrings(group.items) }))
+    .forEach(group => addTextDefinition(
+      definitions,
+      getGroupMoreButtonId(uniqueId, sectionKey, group.title),
+      group.items,
+      listCount
+    ));
+}
+
+function addTextDefinition(
+  definitions: NestedTooltipDefinition[],
+  selectorId: string,
+  items: string[],
+  visibleCount: number
+): void {
+  const uniqueItems = uniqueStrings(items);
+  if (uniqueItems.length <= visibleCount) return;
+
+  definitions.push({
+    selector: `#${selectorId}`,
+    items: uniqueItems.map(name => ({ name })),
+  });
+}
+
+function getSynonymsMoreButtonId(uniqueId: string): string {
+  return `mychem-more-synonyms-${uniqueId}`;
+}
+
+function getGroupMoreButtonId(uniqueId: string, sectionKey: string, title: string): string {
+  return `mychem-more-${sectionKey}-${slugifyId(title)}-${uniqueId}`;
+}
+
+function slugifyId(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '') || 'items';
 }
