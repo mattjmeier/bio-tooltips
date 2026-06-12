@@ -1,4 +1,4 @@
-import { TippyInstanceWithCustoms } from '../lifecycle.js';
+import type { TippyInstanceWithCustoms } from '../core/types.js';
 
 export function attachPushpin(instance: TippyInstanceWithCustoms) {
   // This guard is now the key. If we've already found and initialized the button, do nothing.

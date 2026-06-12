@@ -374,10 +374,6 @@ export function renderTooltipHTML(
     const { isVisible, startCollapsed } = getSectionState(setting, globalCollapsedByDefault);
 
     if (!isVisible) return '';
-
-    console.log("isVisible:", isVisible)
-    console.log("startCollapsed:", startCollapsed)
-    console.log("globalCollapsedByDefault:", globalCollapsedByDefault)
     
     return renderCollapsibleSection(
       title,

@@ -3,7 +3,7 @@ import type { MyGeneInfoResult, MyGeneExon } from './config';
 // import { getSectionBackgroundColor } from './utils'; 
 import TomSelect from 'tom-select';
 import tippy from 'tippy.js';
-import { TippyInstanceWithCustoms } from './lifecycle';
+import type { TippyInstanceWithCustoms } from './core/types';
 // 1. Import the D3 type definitions
 import type * as D3 from 'd3';
 

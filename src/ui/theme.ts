@@ -1,4 +1,4 @@
-import { TippyInstanceWithCustoms } from '../lifecycle.js';
+import type { TippyInstanceWithCustoms } from '../core/types.js';
 
 /**
  * Determines the effective theme to be used for tippy instances.

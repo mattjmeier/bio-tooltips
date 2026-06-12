@@ -1,82 +1,24 @@
-import tippy from 'tippy.js';
-import { type GeneTooltipConfig, mergeConfig, MyGeneInfoResult } from './config.js';
+import { type GeneTooltipConfig, mergeConfig } from './config.js';
 import { findGeneElements } from './parser.js';
-import { runPrefetch } from './prefetch.js';
-import { enableSummaryExpand } from './ui/summaryExpand.js';
-// import { sectionExpand } from './ui/sectionExpand.js';
-import { getIdeogram } from './ideogram.js';
-import { getD3 } from './gene-track.js';
-import { getEffectiveTheme, initializeThemeObserver } from './ui/theme.js';
-import { 
-  createOnShowHandler, 
-  createOnShownHandler, 
-  createOnHideHandler, 
-  TippyInstanceWithCustoms 
-} from './lifecycle.js';
+import { createTooltipEngine } from './core/engine.js';
+import { myGeneProfile } from './providers/mygene/profile.js';
 
-// --- Map to track in-flight requests ---
-const inFlightRequests = new Map<string, Promise<Map<string, MyGeneInfoResult>>>();
-let isSummaryHandlerEnabled = false;
+const geneTooltipEngine = createTooltipEngine({
+  profile: myGeneProfile,
+  mergeConfig,
+  findElements: findGeneElements,
+});
 
 function init(userConfig: Partial<GeneTooltipConfig> = {}): () => void {
-  const config = mergeConfig(userConfig);
-  let instances: TippyInstanceWithCustoms[] = [];
-  
-  const geneElements = findGeneElements(config.selector);
-  if (geneElements.length === 0) {
-    return () => {}; // No elements found, return no-op cleanup
-  }
-
-  const effectiveTheme = getEffectiveTheme(config.theme);
-  const isAutoTheme = config.theme === 'auto' || typeof config.theme === 'undefined';
-
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  instances = tippy(geneElements, {
-    ...config.tippyOptions,
-    animation: prefersReducedMotion ? 'shift-away' : config.tippyOptions.animation,
-    duration: prefersReducedMotion ? [0, 0] : config.tippyOptions.duration,
-    theme: effectiveTheme,
-    maxWidth: config.tooltipWidth ?? config.tippyOptions.maxWidth,
-    onShow: createOnShowHandler(config, inFlightRequests),
-    onShown: createOnShownHandler(config),
-    onHide: createOnHideHandler(),
-  }) as TippyInstanceWithCustoms[];
-
-  instances.forEach(instance => {
-    instance._themeIntent = isAutoTheme ? 'auto' : config.theme;
-  });
-
-  const disconnectThemeObserver = initializeThemeObserver(instances, isAutoTheme);
-
-  runPrefetch(config.prefetch, geneElements, config.prefetchThreshold, inFlightRequests);
-  
-  if (!isSummaryHandlerEnabled) {
-    enableSummaryExpand();
-    isSummaryHandlerEnabled = true;
-  }
-
-  // Return the master cleanup function
-  return () => {
-    instances.forEach(instance => {
-      if (instance && instance.destroy) {
-        instance.destroy();
-      }
-    });
-    disconnectThemeObserver();
-    instances = [];
-  };
+  return geneTooltipEngine.init(userConfig);
 }
 
 /**
  * Preloads the optional heavy dependencies (d3, ideogram) so they
  * are ready when tooltips are first shown.
  */
-function preload(): Promise<[PromiseSettledResult<any>, PromiseSettledResult<any>]> {
-  return Promise.allSettled([
-    getD3(),
-    getIdeogram()
-  ]);
+function preload(): Promise<unknown> {
+  return geneTooltipEngine.preload();
 }
 
 function filterNestedList(query: string, listId: string): void {
@@ -115,7 +57,7 @@ declare global {
   interface Window {
     GeneTooltip: {
       init: (userConfig?: Partial<GeneTooltipConfig>) => void;
-      preload: () => Promise<[PromiseSettledResult<any>, PromiseSettledResult<any>]>;
+      preload: () => Promise<unknown>;
       filterNestedList: (query: string, listId: string) => void;
     };
   }

@@ -1,0 +1,2185 @@
+./src/api.ts
+import type { MyGeneInfoResult } from './config';
+
+/**
+ * Fetches data for multiple genes in a single batch request from mygene.info.
+ * @param geneSymbols - An array of gene symbols.
+ * @param species - The species for all genes in this batch.
+ * @returns A Map of gene symbols to data.
+ */
+export async function fetchMyGeneBatch(geneSymbols: string[], species: string): Promise<Map<string, MyGeneInfoResult>> {
+  if (!geneSymbols || geneSymbols.length === 0) {
+    return new Map();
+  }
+
+  const url = 'https://mygene.info/v3/query';
+  const query = geneSymbols.join(',');
+  
+  // Explicitly list only the fields used by gene-tooltips.
+  const fields = [
+    '_id', 
+    'query', 
+    'symbol', 
+    'name', 
+    'summary', 
+    'taxid', 
+    'genomic_pos',
+    'pathway',
+    'interpro',
+    'exons',
+    'ensembl.gene',
+    'ensembl.protein',
+    'ensembl.transcript',
+    'pdb',
+    'generif',
+    'wikipedia.url_stub'
+  ].join(',');
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `q=${query}&species=${species}&scopes=symbol&fields=${fields}`,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const results: (MyGeneInfoResult & { notfound?: boolean })[] = await response.json();
+    const resultsMap = new Map<string, MyGeneInfoResult>();
+    for (const item of results) {
+      if (item.notfound) continue;
+      resultsMap.set(item.query, item);
+    }
+    return resultsMap;
+
+  } catch (error) {
+    console.error('Batch fetch failed:', error);
+    return new Map(); // Return empty map on failure
+  }
+}./src/cache.ts
+import type { MyGeneInfoResult } from './config';
+
+const cache = new Map<string, MyGeneInfoResult | null>();
+
+export const getCacheKey = (symbol: string, taxid: number): string => `${symbol}_${taxid}`;
+
+export const has = (symbol: string, taxid: number): boolean => cache.has(getCacheKey(symbol, taxid));
+
+export const get = (symbol: string, taxid: number): MyGeneInfoResult | null | undefined => cache.get(getCacheKey(symbol, taxid));
+
+const MAX_CACHE_SIZE = 500;
+
+export const set = (symbol: string, taxid: number, data: MyGeneInfoResult | null): void => {
+  if (cache.size >= MAX_CACHE_SIZE) {
+    // Evict the oldest entry
+    const oldestKey = cache.keys().next().value;
+    if (oldestKey !== undefined) {
+      cache.delete(oldestKey);
+    }
+  }
+  cache.set(getCacheKey(symbol, taxid), data);
+};
+
+export const setBatch = (resultsMap: Map<string, MyGeneInfoResult>): void => {
+  resultsMap.forEach((data, symbol) => {
+    // The taxid is consistent in all results from a batch call
+    if (data.taxid) { 
+        set(symbol, data.taxid, data);
+    }
+  });
+};./src/config.ts
+import type { Props } from 'tippy.js';
+
+export interface GenomicPosition {
+  chr: string;
+  start: number;
+  end: number;
+  strand: number;
+}
+
+export interface MyGenePathway {
+  name: string;
+  id: string;
+}
+
+export interface MyGeneInterproDomain {
+  desc: string;
+  id: string;
+  short_desc: string;
+}
+
+export interface GeneRIF {
+  pubmed: number;
+  text: string;
+}
+
+// Define the shape of the data we expect from mygene.info
+export interface MyGeneInfoResult {
+  _id: string;
+  query: string;
+  symbol: string;
+  name: string;
+  summary?: string;
+  taxid: number;
+  genomic_pos?: GenomicPosition | GenomicPosition[];
+  pathway?: {
+    reactome?: MyGenePathway[] | MyGenePathway;
+    kegg?: MyGenePathway[] | MyGenePathway;
+    wikipathways?: MyGenePathway[] | MyGenePathway;
+  };
+  interpro?: MyGeneInterproDomain[] | MyGeneInterproDomain;
+  exons?: MyGeneExon[];
+  ensembl?: {
+    gene: string;
+    protein?: string[] | string;
+    transcript?: string[] | string;
+  };
+  pdb?: string[] | string;
+  wikipedia?: {
+    url_stub?: string;
+  };
+  generif?: GeneRIF[] | GeneRIF;
+}
+
+// Define the components that can be shown or hidden
+export interface TooltipDisplayConfig {
+  summary: boolean;
+  species: boolean;
+  location: boolean;
+  ideogram: boolean;
+  pathways: boolean;
+  domains: boolean;
+  geneTrack: boolean;
+  transcripts: boolean;
+  structures: boolean;
+  generifs: boolean;
+  collapsible?: boolean;
+  collapsedByDefault?: boolean;
+  links: {
+    ncbi?: boolean;
+    ensembl?: boolean;
+    wikipedia?: boolean;
+  };
+}
+
+// Ideogram configuration
+export interface IdeogramConfig {
+  enabled: boolean;
+  width: number;
+  height: number;
+  showLabels: boolean;
+}
+
+// Define the shape of the library's configuration object
+export interface GeneTooltipConfig {
+  selector: string;
+  api: 'mygene';
+  prefetch: 'smart' | 'all' | 'none';
+  prefetchThreshold: number;
+  truncateSummary: number;
+  theme: 'light' | 'dark' | 'auto' | 'material' | 'translucent'| 'light-border' | undefined;
+  display: Partial<TooltipDisplayConfig>;
+  ideogram: Partial<IdeogramConfig>;
+  tippyOptions: Partial<Props>;
+  nestedTippyOptions: Partial<Props>;
+  pathwaySource: 'reactome' | 'kegg' | 'wikipathways';
+  pathwayCount: number;
+  domainCount: number;
+  transcriptCount: number;
+  structureCount: number;
+  generifCount: number;
+  tooltipWidth?: number;
+  tooltipHeight?: number; // This is an explicit max-height
+  constrainToViewport: boolean;
+}
+
+export interface MyGeneExon {
+  cdsend: number;
+  cdsstart: number;
+  chr: string;
+  strand: number;
+  txend: number;
+  txstart: number;
+  transcript: string;
+  position?: [number, number][];
+  start?: number;                 
+  end?: number;                   
+}
+
+export const defaultConfig: GeneTooltipConfig = {
+  selector: '.gene-tooltip',
+  api: 'mygene',
+  prefetch: 'smart',
+  prefetchThreshold: 15,
+  truncateSummary: 4,
+  theme: 'auto',
+  constrainToViewport: true,
+  display: {
+    species: true,
+    location: true,
+    ideogram: true,
+    pathways: true,
+    domains: true,
+    geneTrack: true,
+    transcripts: true,
+    structures: true,
+    generifs: true,
+    collapsible: true,
+    collapsedByDefault: true,
+    links: {
+      ncbi: true,
+      ensembl: true,
+      wikipedia: true,
+    },
+  },
+  ideogram: {
+    enabled: true,
+    height: 100,
+    showLabels: false,
+  },
+  pathwaySource: 'kegg',
+  pathwayCount: 3,
+  domainCount: 3,
+  transcriptCount: 3,
+  structureCount: 3,
+  generifCount: 3,
+  tippyOptions: {
+    allowHTML: true,
+    interactive: true,
+    placement: 'bottom',
+    appendTo: () => document.body,
+    interactiveDebounce: 75,
+    hideOnClick: false,
+    trigger: 'mouseenter focus',
+    zIndex: 9999,
+    popperOptions: {
+      strategy: 'absolute', 
+      modifiers: [
+        {
+          name: 'preventOverflow',
+          options: {
+            boundary: 'viewport',
+            padding: 8
+          },
+        },
+        {
+          name: 'flip',
+          options: {
+            fallbackPlacements: ['top', 'right', 'left'],
+            boundary: 'viewport',
+            padding: 8
+          },
+        }
+      ],
+    }
+  },
+  nestedTippyOptions: {
+    allowHTML: true,
+    interactive: true,
+    trigger: 'mouseenter focus',
+    hideOnClick: false,
+    interactiveBorder: 20,
+    interactiveDebounce: 75,
+    placement: 'right',
+  }
+};
+
+export function mergeConfig(userConfig: Partial<GeneTooltipConfig> = {}): GeneTooltipConfig {
+    return {
+        ...defaultConfig,
+        ...userConfig,
+        display: {
+            ...defaultConfig.display,
+            ...userConfig.display,
+            links: { ...defaultConfig.display.links, ...userConfig.display?.links },
+        },
+        ideogram: { ...defaultConfig.ideogram, ...userConfig.ideogram },
+        tippyOptions: { ...defaultConfig.tippyOptions, ...userConfig.tippyOptions },
+        nestedTippyOptions: { ...defaultConfig.nestedTippyOptions, ...userConfig.nestedTippyOptions },
+    };
+}
+./src/constants.ts
+// species lookup table
+interface SpeciesInfo {
+  common: string;
+  genus: string;
+  icon: string;
+  ideogramName?: string;
+}
+
+export const speciesMap: Record<number, SpeciesInfo> = {
+  9606: { common: "Human", genus: "Homo sapiens", icon: "🧑", ideogramName: "human" },
+  10090: { common: "Mouse", genus: "Mus musculus", icon: "🐭", ideogramName: "mouse" },
+  10116: { common: "Rat", genus: "Rattus norvegicus", icon: "🐀", ideogramName: "rattus-norvegicus" },
+  7227: { common: "Fruitfly", genus: "Drosophila melanogaster", icon: "🪰", ideogramName: "drosophila-melanogaster" },
+  6239: { common: "Nematode", genus: "Caenorhabditis elegans", icon: "🪱", ideogramName: "caenorhabditis-elegans" },
+  7955: { common: "Zebrafish", genus: "Danio rerio", icon: "🐟", ideogramName: "danio-rerio" },
+  3702: { common: "Thale cress", genus: "Arabidopsis thaliana", icon: "🌱", ideogramName: "arabidopsis-thaliana" },
+  8364: { common: "Frog", genus: "Xenopus tropicalis", icon: "🐸", ideogramName: "xenopus-tropicalis" },
+  9823: { common: "Pig", genus: "Sus scrofa", icon: "🐖", ideogramName: "sus-scrofa" },
+  559292 : { common: "Yeast", genus: "Saccharomyces cerevisiae", icon: "🧫", ideogramName: "saccharomyces-cerevisiae" },
+};
+
+/**
+ * Finds species data by either taxid or common name (case-insensitive).
+ * @param identifier - The taxid (number) or common name (string).
+ * @returns An object with the taxid and the SpeciesInfo, or null if not found.
+ */
+export function findSpecies(identifier: string | number | undefined): { taxid: number; info: SpeciesInfo } | null {
+  if (identifier === undefined || identifier === null) return null;
+
+  const identifierStr = String(identifier).toLowerCase();
+  
+  // First, try to match by taxid if it's a number
+  if (typeof identifier === 'number' && speciesMap[identifier]) {
+    return { taxid: identifier, info: speciesMap[identifier] };
+  }
+
+  // Otherwise, search by common name or taxid string
+  for (const taxidStr in speciesMap) {
+    const taxid = parseInt(taxidStr, 10);
+    const info = speciesMap[taxid];
+    
+    // Check taxid string match OR common name match
+    if (identifierStr === taxidStr || identifierStr === info.common.toLowerCase()) {
+      return { taxid, info };
+    }
+  }
+
+  return null;
+}./src/formatters.ts
+import type { MyGenePathway, MyGeneInterproDomain, GeneRIF } from './config';
+
+// Helper to ensure data is an array
+export function asArray<T>(data: T | T[] | undefined): T[] {
+  if (!data) return [];
+  return Array.isArray(data) ? data : [data];
+}
+
+// Helper to get unique items based on a key
+export function getUniqueItems<T>(items: T[], key: keyof T): T[] {
+  return [...new Map(items.map(item => [item[key], item])).values()];
+}
+
+export type FormattedItem = { name: string; url: string };
+
+export function formatPathways(
+  pathways: MyGenePathway[] | MyGenePathway | undefined,
+  source: 'reactome' | 'kegg' | 'wikipathways'
+): FormattedItem[] {
+  if (!pathways) return [];
+  const uniqueRaw = getUniqueItems(asArray(pathways), 'id');
+  return uniqueRaw.map(p => {
+    let url = '#';
+    if (source === 'reactome') url = `https://reactome.org/content/detail/${p.id}`;
+    if (source === 'kegg') url = `https://www.genome.jp/dbget-bin/www_bget?path:${p.id}`;
+    if (source === 'wikipathways') url = `https://www.wikipathways.org/pathways/${p.id}`;
+    return { name: p.name, url };
+  }).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export function formatDomains(domains: MyGeneInterproDomain[] | MyGeneInterproDomain | undefined): FormattedItem[] {
+  if (!domains) return [];
+  const uniqueRaw = getUniqueItems(asArray(domains), 'id');
+  return uniqueRaw.map(d => ({
+    name: d.short_desc,
+    url: `https://www.ebi.ac.uk/interpro/entry/InterPro/${d.id}`
+  })).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export function formatTranscripts(transcripts: string[] | string | undefined): FormattedItem[] {
+  return asArray(transcripts)
+    .map(id => ({ name: id, url: `https://www.ensembl.org/id/${id}` }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export function formatStructures(pdbs: string[] | string | undefined): FormattedItem[] {
+  return asArray(pdbs)
+    .map(id => ({ name: id, url: `https://www.rcsb.org/structure/${id}` }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+// GeneRIFs are slightly different and require a specific formatter
+export function formatGeneRIFs(generifs: GeneRIF[] | GeneRIF | undefined): FormattedItem[] {
+    return asArray(generifs).map((rif: GeneRIF) => ({
+        name: rif.text,
+        url: `https://pubmed.ncbi.nlm.nih.gov/${rif.pubmed}`
+    }));
+}./src/gene-track.ts
+import type { Instance } from 'tippy.js';
+import type { MyGeneInfoResult, MyGeneExon } from './config';
+// import { getSectionBackgroundColor } from './utils'; 
+import TomSelect from 'tom-select';
+import tippy from 'tippy.js';
+import { TippyInstanceWithCustoms } from './lifecycle';
+// 1. Import the D3 type definitions
+import type * as D3 from 'd3';
+
+let d3ModulePromise: Promise<typeof D3 | null> | null = null;
+
+// 2. Update the function signature to use the imported type
+export async function getD3(): Promise<typeof D3 | null> {
+    if (d3ModulePromise) {
+        return d3ModulePromise;
+    }
+
+    // Check for D3 as a global variable first
+    if ((window as any).d3) {
+        // We cast here to tell TS that the global d3 matches the D3 module type
+        d3ModulePromise = Promise.resolve((window as any).d3 as typeof D3);
+        return d3ModulePromise;
+    }
+
+    // For ESM/CJS builds, use dynamic import
+    d3ModulePromise = import('d3')
+        .catch(error => {
+            const errorMsg = `[GeneTooltip] Failed to load d3.js. 
+Please ensure 'd3' is installed (it's a peer dependency) or the script is loaded on the page.`;
+            console.error(errorMsg, error);
+            return Promise.reject(new Error(errorMsg));
+        });
+
+    return d3ModulePromise;
+}
+
+/**
+ * The core D3 drawing logic, now simplified to accept a SINGLE transcript object.
+ * @param svg - The D3 selection for the SVG group element.
+ * @param transcript - A single transcript object from the API's "exons" array.
+ * @param xScale - The D3 scale for the x-axis.
+ * @param instance - The parent tippy instance for theme propagation.
+ */
+function drawTranscript(
+    svg: D3.Selection<SVGGElement, unknown, null, undefined>,
+    transcript: MyGeneExon,
+    xScale: D3.ScaleLinear<number, number>,
+    instance: Instance
+) {
+    // Clear any previous drawing
+    svg.selectAll('*').remove();
+
+    if (!transcript?.position) return;
+
+    // Define constants for drawing from the transcript object
+    const height = 20;
+    const exonHeight = 10;
+    const yCenter = height / 2;
+    const exonY = yCenter - (exonHeight / 2);
+    const { strand, txstart: geneStart, txend: geneEnd, position: exonSegments } = transcript;
+
+    // Draw the main intron line for this transcript
+    svg.append("line")
+        .attr("x1", xScale(geneStart)).attr("y1", yCenter)
+        .attr("x2", xScale(geneEnd)).attr("y2", yCenter)
+        .attr("stroke", "#555").attr("stroke-width", 2);
+    
+    // Define the shape for our drawing data
+    type ExonDrawingData = {
+        coords: [number, number];
+        exonNumber: number;
+    };
+    
+    const totalExons = exonSegments.length;
+
+    // Create a flat array for D3, assigning the correct exon number
+    const drawingData: ExonDrawingData[] = exonSegments.map((pos, index) => {
+        const exonNumber = (strand === -1) ? totalExons - index : index + 1;
+        return { coords: pos, exonNumber };
+    });
+
+    // Draw the exon rectangles
+    svg.selectAll<SVGRectElement, ExonDrawingData>(".exon-rect")
+        .data(drawingData)
+        .enter().append("rect")
+        .attr("class", "exon-rect")
+        .attr("x", d => xScale(d.coords[0]))
+        .attr("y", exonY)
+        .attr("width", d => Math.max(1, xScale(d.coords[1]) - xScale(d.coords[0])))
+        .attr("height", exonHeight)
+        .each(function(this: SVGRectElement, d) {
+            tippy(this, {
+                content: `<strong>Exon ${d.exonNumber}:</strong> ${d.coords[0].toLocaleString()} - ${d.coords[1].toLocaleString()}`,
+                placement: 'top', allowHTML: true, arrow: true, animation: 'scale-subtle',
+                onShow(nestedInstance) {
+                    const currentParentTheme = (instance.props as any).theme || 'auto';
+                    nestedInstance.setProps({ theme: currentParentTheme });
+                }
+            });
+        });
+}
+
+/**
+ * Main rendering function
+ */
+export async function renderGeneTrack(
+  instance: TippyInstanceWithCustoms, 
+  data: MyGeneInfoResult, 
+  uniqueId: string,
+) {
+    const container = instance.popper.querySelector<HTMLElement>(`#gene-tooltip-track-${uniqueId}`);
+    const selectorEl = instance.popper.querySelector<HTMLSelectElement>(`#transcript-selector-${uniqueId}`);
+
+    if (!container || !selectorEl ) return;
+
+    if (instance._tomselect) {
+        instance._tomselect.destroy();
+        instance._tomselect = null;
+    }
+
+    const existingSvg = container.querySelector('svg');
+    if (existingSvg) {
+        const exonRects = existingSvg.querySelectorAll('.exon-rect');
+        exonRects.forEach(rect => {
+            const tippyInstance = (rect as any)._tippy;
+            if (tippyInstance) {
+                tippyInstance.destroy();
+            }
+        });
+    }
+
+    try {
+        const d3 = await getD3();
+        if (!d3) throw new Error("D3 library not loaded.");
+
+        const transcripts = data.exons;
+
+        if (!transcripts || transcripts.length === 0) {
+            container.innerHTML = `<small>Transcript data not available.</small>`;
+            return;
+        }
+
+        const longestTranscript = transcripts.reduce((longest, current) => {
+            return (current.position?.length || 0) > (longest.position?.length || 0) ? current : longest;
+        }, transcripts[0]);
+
+        // --- D3 Setup ---
+        const margin = { top: 20, right: 10, bottom: 5, left: 10 };
+        const availableWidth = container.getBoundingClientRect().width;
+        const width = availableWidth - margin.left - margin.right;
+        const height = 20;
+
+        container.innerHTML = ''; // Clear the loader
+        const svgRoot = d3.select(container).append("svg")
+            .attr("width", availableWidth)
+            .attr("height", height + margin.top + margin.bottom);
+        
+        const g = svgRoot.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+        
+        const allTxStarts = transcripts.map(tx => tx.txstart);
+        const allTxEnds = transcripts.map(tx => tx.txend);
+        const geneStart = Math.min(...allTxStarts);
+        const geneEnd = Math.max(...allTxEnds);
+        const xScale = d3.scaleLinear().domain([geneStart, geneEnd]).range([0, width]);
+        
+        const directionArrow = longestTranscript.strand === -1 ? '←' : '→';
+        svgRoot.append("text")
+            .attr("x", margin.left).attr("y", 12)
+            .attr("font-family", "sans-serif").attr("font-size", "12px")
+            .html(`<tspan font-weight="bold">${data.symbol}</tspan> <tspan>${directionArrow}</tspan>`);
+
+        // --- Initial Draw (common to all cases) ---
+        drawTranscript(g, longestTranscript, xScale, instance);
+        
+        // --- Conditionally Initialize Dropdown ---
+        if (transcripts.length > 1) {
+            const sortedTranscripts = [...transcripts].sort((a, b) => a.transcript.localeCompare(b.transcript));
+
+            const tomSelectOptions = sortedTranscripts.map(tx => {
+                const exonCount = tx.position?.length || 0;
+                return {
+                    value: tx.transcript,
+                    text: `${tx.transcript} (${exonCount} exons)`
+                };
+            });
+
+            // Initialize TomSelect
+            const tomselect = new TomSelect(`#${selectorEl.id}`, {
+                options: tomSelectOptions,
+                items: [longestTranscript.transcript], // Pre-select the longest
+                create: false,
+                // dropdownParent: `#${instance.popper.id}`,
+                plugins: ['dropdown_input'],
+                onChange: (selectedValue: string) => {
+                    const selectedTranscript = transcripts.find(tx => tx.transcript === selectedValue);
+                    if (selectedTranscript) {
+                        drawTranscript(g, selectedTranscript, xScale, instance);
+                    }
+                }
+            });
+            // Store the instance for the onHide handler to clean up
+            instance._tomselect = tomselect;
+
+        } else {
+            // If there's only one transcript, just hide the selector dropdown
+            selectorEl.style.display = 'none';
+        }
+
+    } catch (error) {
+        console.error("Error during gene track rendering:", error);
+        if (container) container.innerHTML = `<small>Error rendering gene track.</small>`;
+    }
+}
+./src/ideogram.ts
+import type { Instance } from 'tippy.js';
+import type { MyGeneInfoResult, IdeogramConfig } from './config';
+import { speciesMap } from './constants';
+import tippy from 'tippy.js';
+
+let ideogramModulePromise: Promise<any> | null = null;
+
+//  Checking for module or global mode
+export async function getIdeogram() {
+  // 1. Check for the cached promise first.
+  if (ideogramModulePromise) {
+    return ideogramModulePromise;
+  }
+
+  // 2. Check for the global variable.
+  // If found, cache the resolved promise and return it.
+  if ((window as any).Ideogram) {
+    ideogramModulePromise = Promise.resolve((window as any).Ideogram);
+    return ideogramModulePromise;
+  }
+  
+  // 3. If no global and no cache, fall back to dynamic import.
+  // The import will either work (in module environments)
+  // or fail gracefully.
+  ideogramModulePromise = import('ideogram')
+    .then(module => {
+      // Ideogram often exports as a default property
+      return module.default || module;
+    })
+    .catch(error => {
+      const errorMsg = `[GeneTooltip] Failed to load Ideogram. Please ensure 'ideogram' is installed or the script is loaded on the page.`;
+      console.error(errorMsg, error);
+      // Set promise to null so a retry is possible
+      ideogramModulePromise = null; 
+      return Promise.reject(new Error(errorMsg));
+    });
+  return ideogramModulePromise;
+}
+
+// The render function with unique ID parameter
+export async function renderIdeogram(
+  instance: Instance, 
+  data: MyGeneInfoResult, 
+  ideogramConfig: Partial<IdeogramConfig>,
+  uniqueId: string
+) {
+  const ideogramContainerSelector = `#gene-tooltip-ideo-${uniqueId}`;
+  const ideoDiv = instance.popper.querySelector(ideogramContainerSelector) as HTMLElement;
+
+  if (!ideoDiv) {
+    console.error(`[GeneTooltip] CRITICAL: Ideogram container '${ideogramContainerSelector}' not found.`);
+    return;
+  }
+  
+  // Loading message should already be set by the renderTooltipHTML function by this point.
+
+  try {
+    // Wait for the library to load.
+    const Ideogram = await getIdeogram();
+    
+    if (!Ideogram) {
+      const ideoDivInPopper = instance.popper.querySelector(`.gene-tooltip-ideo`) as HTMLElement;
+      if (ideoDivInPopper) ideoDivInPopper.innerHTML = '<small>Ideogram unavailable</small>';
+      return;
+    }
+
+    const genomicPos = Array.isArray(data.genomic_pos) ? data.genomic_pos[0] : data.genomic_pos!;
+    if (!genomicPos) {
+      ideoDiv.innerHTML = '<small>No genomic position</small>';
+      return;
+    }
+
+    let chromosome = String(genomicPos.chr);
+    if (chromosome.toLowerCase().startsWith('chr')) {
+      chromosome = chromosome.substring(3);
+    }
+
+    const organism = speciesMap[data.taxid]?.ideogramName;
+    if (!organism) {
+        ideoDiv.innerHTML = '<small>Ideogram not available for this species.</small>';
+        return;
+    }
+
+    // Get the theme from the main instance
+    const parentInstance = instance;
+    let hasAttachedTippy = false;
+
+    // Also get the current text color
+    const computedStyle = window.getComputedStyle(instance.popper);
+    const labelColor = computedStyle.getPropertyValue('--gt-text-color').trim();
+
+    const configForIdeogram = {
+      container: ideogramContainerSelector,
+      organism,
+      chrLabelColor: labelColor,
+      annotationsColor: labelColor,
+      chromosome: chromosome,
+      chrHeight: ideogramConfig.height ?? 100,
+      orientation: 'horizontal',
+      showChromosomeLabels: false,
+      chrMargin: 1,
+      showBandLabels: ideogramConfig.showLabels ?? true,
+      annotations: [{
+        name: data.symbol,
+        chr: chromosome,
+        start: genomicPos.start,
+        stop: genomicPos.end
+      }],
+      showAnnotTooltip: false,
+      onClickAnnot: function() {},
+      onDrawAnnots: function() {
+        // If we've already run successfully, don't do anything on subsequent calls.
+        if (hasAttachedTippy) {
+          return;
+        }
+
+        setTimeout(() => {
+          if (hasAttachedTippy) return;
+
+          const containerElement = instance.popper.querySelector(ideogramContainerSelector);
+          if (!containerElement) return;
+
+          const annotElements = containerElement.querySelectorAll('.annot');
+
+          // We only proceed and set the flag if we actually find the elements.
+          if (annotElements.length > 0) {
+            // This is our "one-shot" trigger.
+            hasAttachedTippy = true;
+
+            tippy(annotElements, {
+              content: `<b>${data.symbol}</b><br>chr${chromosome}:${genomicPos.start.toLocaleString()}-${genomicPos.end.toLocaleString()}`,
+              allowHTML: true,
+              placement: 'top',
+              appendTo: instance.popper,
+              animation: 'scale-subtle',
+              zIndex: 99999,
+              onShow(nestedInstance){
+                const currentParentTheme = (parentInstance.props as any).theme || 'auto';
+                nestedInstance.setProps({ theme: currentParentTheme });
+              }
+            });
+          }
+        }, 0);
+      },
+    };
+    // Before drawing, clear the container of the spinner.
+    // This gives the Ideogram library a clean slate.
+    ideoDiv.innerHTML = '';
+
+    new Ideogram(configForIdeogram);
+
+  } catch (error) {
+    console.error('[GeneTooltip] Ideogram failed to render:', error);
+    const ideoDivInPopper = instance.popper.querySelector(`.gene-tooltip-ideo`) as HTMLElement;
+    if (ideoDivInPopper) {
+      ideoDivInPopper.innerHTML = '<small>Ideogram not installed or failed to load.</small>';
+    }
+  }
+}
+./src/index.ts
+import tippy from 'tippy.js';
+import { type GeneTooltipConfig, mergeConfig, MyGeneInfoResult } from './config.js';
+import { findGeneElements } from './parser.js';
+import { runPrefetch } from './prefetch.js';
+import { enableSummaryExpand } from './ui/summaryExpand.js';
+// import { sectionExpand } from './ui/sectionExpand.js';
+import { getIdeogram } from './ideogram.js';
+import { getD3 } from './gene-track.js';
+import { getEffectiveTheme, initializeThemeObserver } from './ui/theme.js';
+import { 
+  createOnShowHandler, 
+  createOnShownHandler, 
+  createOnHideHandler, 
+  TippyInstanceWithCustoms 
+} from './lifecycle.js';
+
+// --- Map to track in-flight requests ---
+const inFlightRequests = new Map<string, Promise<Map<string, MyGeneInfoResult>>>();
+let isSummaryHandlerEnabled = false;
+
+function init(userConfig: Partial<GeneTooltipConfig> = {}): () => void {
+  const config = mergeConfig(userConfig);
+  let instances: TippyInstanceWithCustoms[] = [];
+  
+  const geneElements = findGeneElements(config.selector);
+  if (geneElements.length === 0) {
+    return () => {}; // No elements found, return no-op cleanup
+  }
+
+  const effectiveTheme = getEffectiveTheme(config.theme);
+  const isAutoTheme = config.theme === 'auto' || typeof config.theme === 'undefined';
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  instances = tippy(geneElements, {
+    ...config.tippyOptions,
+    animation: prefersReducedMotion ? 'shift-away' : config.tippyOptions.animation,
+    duration: prefersReducedMotion ? [0, 0] : config.tippyOptions.duration,
+    theme: effectiveTheme,
+    maxWidth: config.tooltipWidth ?? config.tippyOptions.maxWidth,
+    onShow: createOnShowHandler(config, inFlightRequests),
+    onShown: createOnShownHandler(config),
+    onHide: createOnHideHandler(),
+  }) as TippyInstanceWithCustoms[];
+
+  instances.forEach(instance => {
+    instance._themeIntent = isAutoTheme ? 'auto' : config.theme;
+  });
+
+  const disconnectThemeObserver = initializeThemeObserver(instances, isAutoTheme);
+
+  runPrefetch(config.prefetch, geneElements, config.prefetchThreshold, inFlightRequests);
+  
+  if (!isSummaryHandlerEnabled) {
+    enableSummaryExpand();
+    isSummaryHandlerEnabled = true;
+  }
+
+  // Return the master cleanup function
+  return () => {
+    instances.forEach(instance => {
+      if (instance && instance.destroy) {
+        instance.destroy();
+      }
+    });
+    disconnectThemeObserver();
+    instances = [];
+  };
+}
+
+/**
+ * Preloads the optional heavy dependencies (d3, ideogram) so they
+ * are ready when tooltips are first shown. This is useful to call
+ * once in your application's entry point.
+ */
+function preload(): Promise<[PromiseSettledResult<any>, PromiseSettledResult<any>]> {
+  return Promise.allSettled([
+    getD3(),
+    getIdeogram()
+  ]);
+}
+
+function filterNestedList(query: string, listId: string): void {
+  const list = document.getElementById(listId);
+  if (!list) return;
+
+  const items = list.getElementsByTagName('li');
+  const normalizedQuery = query.toLowerCase();
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const text = item.textContent || '';
+    if (text.toLowerCase().includes(normalizedQuery)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  }
+}
+
+// Attach it to the window object so the inline oninput handler can find it.
+// We do this inside an if-check to avoid errors in non-browser environments (like testing).
+if (typeof window !== 'undefined') {
+  if (!(window as any).GeneTooltip) {
+    (window as any).GeneTooltip = {};
+  }
+  (window as any).GeneTooltip.filterNestedList = filterNestedList;
+}
+
+export default {
+  init,
+  preload,
+};
+
+declare global {
+  interface Window {
+    GeneTooltip: {
+      init: (userConfig?: Partial<GeneTooltipConfig>) => void;
+      preload: () => Promise<[PromiseSettledResult<any>, PromiseSettledResult<any>]>;
+      filterNestedList: (query: string, listId: string) => void;
+    };
+  }
+}
+./src/lifecycle.ts
+import { type Instance, Props } from 'tippy.js';
+import { type GeneTooltipConfig, MyGeneInfoResult } from './config.js';
+import TomSelect from 'tom-select'; 
+import * as cache from './cache.js';
+import { fetchMyGeneBatch } from './api.js';
+import { renderTooltipHTML } from './renderer.js';
+import { getGeneInfoFromElement } from './parser.js';
+import { generateUniqueTooltipId, createNestedContent } from './utils.js';
+import { renderIdeogram } from './ideogram.js';
+import { renderGeneTrack } from './gene-track.js';
+import { formatPathways, formatDomains, formatTranscripts, formatStructures, formatGeneRIFs } from './formatters.js';
+import { attachPushpin } from './ui/pushpin.js';
+import tippy from 'tippy.js';
+
+export interface TippyInstanceWithCustoms extends Instance {
+  _nestedTippys?: Instance[];
+  _geneData?: MyGeneInfoResult | null;
+  _isFetching?: boolean;
+  _uniqueId?: string;
+  _themeIntent?: 'auto' | string;
+  _isChildTippyVisible?: boolean;
+  _isFullyShown?: boolean;
+  _tomselect?: TomSelect | null;
+  _sectionToggleHandler?: (event: Event) => void;
+  _sectionKeydownHandler?: (event: KeyboardEvent) => void;
+  _visualsRendered?: boolean;
+  _isPinned?: boolean;
+  _pinButton?: HTMLElement | null;
+}
+
+/**
+ * Handles rendering visualizations (Ideogram, Gene Track) and initializing
+ * all nested tooltips after the main tooltip is shown and has data.
+ */
+async function renderVisualsAndNestedTippys(instance: TippyInstanceWithCustoms, config: GeneTooltipConfig) {
+    try {
+        const data = instance._geneData;
+        if (!data || !instance._uniqueId) return;
+
+        // Create promises for both rendering tasks
+        const renderPromises = [];
+        const locationSection = instance.popper.querySelector('[data-section="location"]');
+        const isLocationCollapsed = locationSection?.getAttribute('data-collapsed') === 'true';
+        
+        const geneModelSection = instance.popper.querySelector('[data-section="gene-model"]');
+        const isGeneModelCollapsed = geneModelSection?.getAttribute('data-collapsed') === 'true';
+        
+        if (config.display.geneTrack && data.exons && !isGeneModelCollapsed) {
+          renderPromises.push(renderGeneTrack(instance, data, instance._uniqueId));
+        }
+        
+        if (config.ideogram?.enabled && data.genomic_pos && !isLocationCollapsed) {
+          renderPromises.push(renderIdeogram(instance, data, config.ideogram, instance._uniqueId));
+        }
+
+        await Promise.allSettled(renderPromises);
+
+        if (!instance.state.isShown) {
+          return;
+        }
+        // Mark that we've attempted to render (even if sections were collapsed)
+        instance._visualsRendered = true;
+
+        // --- All the nested tippy logic from your onShown goes here ---
+        instance._nestedTippys = [];
+        const baseNestedOptions = { ...config.nestedTippyOptions };
+
+        const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+        const defaultPlacement = isMobile ? 'bottom' : 'right';
+
+        const finalNestedTippyOptions: Partial<Props> = {
+          ...baseNestedOptions, // User options are the base
+          placement: baseNestedOptions.placement ?? defaultPlacement,
+
+          // --- Required/Dynamic Properties (cannot be overridden) ---
+          appendTo: instance.popper,
+          popperOptions: config.tippyOptions.popperOptions, // Inherit from parent
+          zIndex: (config.tippyOptions.zIndex || 9999) + 1,
+
+          // --- Safe Callback Handling ---
+          onShow(childInstance: Instance) {
+              instance._isChildTippyVisible = true;
+              const currentParentTheme = instance.props.theme || 'auto';
+              childInstance.setProps({ theme: currentParentTheme });
+
+              if (config.constrainToViewport) {
+                const content = childInstance.popper.querySelector('.tippy-content');
+                if (content) {
+                    const padding = config.tippyOptions?.popperOptions?.modifiers?.find(
+                    m => m.name === 'preventOverflow'
+                    )?.options?.padding ?? 8;
+                    const availableHeight = window.visualViewport?.height || window.innerHeight;
+                    (content as HTMLElement).style.maxHeight = `${availableHeight - (padding * 2)}px`;
+                }
+              }
+              
+              // Now, call the user's custom onShow, if they provided one.
+              baseNestedOptions.onShow?.(childInstance);
+          },
+          onHide(childInstance: Instance) {
+              // Our essential logic:
+              instance._isChildTippyVisible = false;
+              
+              // Call the user's custom onHide.
+              baseNestedOptions.onHide?.(childInstance);
+          }
+        };
+
+        // Pass the final, merged options to the function
+        const createNestedTippy = (
+          currentInstance: TippyInstanceWithCustoms,
+          options: Partial<Props>,
+          selector: string,
+          items: { name: string; url: string }[]
+        ) => {
+          const button = currentInstance.popper.querySelector<HTMLElement>(selector);
+          if (button && items.length > 0) {
+              const nestedInstance = tippy(button, {
+              ...options, // Use the passed-in options
+              content: createNestedContent(items),
+              });
+              currentInstance._nestedTippys?.push(nestedInstance as Instance);
+          }
+        };
+
+        
+        const uniqueId = instance._uniqueId;
+        const pathwayItems = formatPathways(data.pathway?.[config.pathwaySource], config.pathwaySource);
+        createNestedTippy(instance, finalNestedTippyOptions, `#pathways-more-${uniqueId}`, pathwayItems);
+        
+        const domainItems = formatDomains(data.interpro);
+        createNestedTippy(instance, finalNestedTippyOptions, `#domains-more-${uniqueId}`, domainItems);
+        
+        const transcriptItems = formatTranscripts(data.ensembl?.transcript);
+        createNestedTippy(instance, finalNestedTippyOptions, `#transcripts-more-${uniqueId}`, transcriptItems);
+        
+        const structureItems = formatStructures(data.pdb);
+        createNestedTippy(instance, finalNestedTippyOptions, `#structures-more-${uniqueId}`, structureItems);
+        
+        const generifItems = formatGeneRIFs(data.generif);
+        createNestedTippy(instance, finalNestedTippyOptions, `#generifs-more-${uniqueId}`, generifItems);
+
+    } catch (error) {
+        console.error('[GeneTooltip] A critical error occurred during post-render lifecycle.', error);
+        if (instance.state.isShown) {
+            instance.setContent('An error occurred rendering this tooltip.');
+        }
+    }
+}
+
+
+/**
+ * Creates the onShow callback for the main tippy instance.
+ * This handles data fetching, caching, and initial content rendering.
+ */
+export function createOnShowHandler(
+  config: GeneTooltipConfig, 
+  inFlightRequests: Map<string, Promise<Map<string, MyGeneInfoResult>>>
+) {
+  return function onShow(instance: TippyInstanceWithCustoms) {
+    instance._isFullyShown = false; // Reset the flag
+    
+    // Viewport constraint logic
+    constrainTooltipHeight(instance, config);
+
+    // Add a resize listener to handle orientation changes or virtual keyboard
+    const resizeHandler = () => constrainTooltipHeight(instance, config);
+    (instance as any)._visualViewportResizeHandler = resizeHandler;
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', resizeHandler);
+    } else {
+      window.addEventListener('resize', resizeHandler); // Fallback for older browsers
+    }
+
+    // Async data fetching logic
+    (async () => {
+        if (!instance._uniqueId) {
+          instance._uniqueId = generateUniqueTooltipId();
+        }
+        if (instance._geneData !== undefined) return;
+
+        const info = getGeneInfoFromElement(instance.reference as HTMLElement);
+        if (!info) {
+          instance.setContent('Invalid gene element');
+          return;
+        }
+
+        const { symbol, taxid } = info;
+        const cacheKey = cache.getCacheKey(symbol, taxid);
+
+        const renderOptions = {
+          truncate: config.truncateSummary,
+          display: config.display,
+          pathwaySource: config.pathwaySource,
+          pathwayCount: config.pathwayCount,
+          domainCount: config.domainCount,
+          transcriptCount: config.transcriptCount,
+          structureCount: config.structureCount,
+          generifCount: config.generifCount,
+          tooltipHeight: config.tooltipHeight,
+          uniqueId: instance._uniqueId,
+        };
+
+        const renderContent = (data: MyGeneInfoResult | null) => {
+          instance._geneData = data;
+          instance.setContent(renderTooltipHTML(data, renderOptions));
+          if (instance._isFullyShown) {
+            renderVisualsAndNestedTippys(instance, config);
+          }
+        };
+
+        const cachedData = cache.get(symbol, taxid);
+        if (typeof cachedData !== 'undefined') {
+          renderContent(cachedData);
+          return;
+        }
+
+        instance.setContent('Loading...');
+        
+        let fetchPromise = inFlightRequests.get(cacheKey);
+        if (!fetchPromise) {
+            fetchPromise = fetchMyGeneBatch([symbol], String(taxid));
+            inFlightRequests.set(cacheKey, fetchPromise);
+        }
+
+        try {
+            const resultsMap = await fetchPromise;
+            const data = resultsMap.get(symbol) || null;
+            cache.set(symbol, taxid, data);
+            renderContent(data);
+        } catch (error) {
+            console.error(`Failed to fetch data for ${symbol}`, error);
+            instance.setContent('Error loading data.');
+        } finally {
+            inFlightRequests.delete(cacheKey);
+        }
+    })();
+  };
+}
+
+/**
+ * Creates the onShown callback. This is triggered after the tooltip is fully visible.
+ */
+export function createOnShownHandler(config: GeneTooltipConfig) {
+  return function onShown(instance: TippyInstanceWithCustoms) {
+    instance._isFullyShown = true;
+    // If data is already present, trigger the async rendering.
+    // This handles cases where data was fetched quickly before the animation finished.
+    if (instance._geneData !== undefined) {
+      renderVisualsAndNestedTippys(instance, config);
+    }
+    if (config.display.collapsible) {
+      const popper = instance.popper; // This is the tooltip element
+
+      // Define one handler for both click and keydown
+      instance._sectionToggleHandler = (event: Event) => {
+        const target = event.target as HTMLElement;
+        const header = target.closest<HTMLElement>(".gt-collapsible-header");
+        if (!header) return;
+
+        if (event.type === 'keydown') {
+          event.preventDefault();
+        }
+
+        const section = header.closest(".gene-tooltip-section-container");
+        if (!section) return;
+
+        const isCollapsed = section.getAttribute('data-collapsed') === 'true';
+        const newCollapsedState = !isCollapsed;
+
+        section.setAttribute('data-collapsed', String(newCollapsedState));
+        header.setAttribute('aria-expanded', String(!newCollapsedState));
+
+        const arrow = header.querySelector('.gt-section-arrow');
+        if (arrow) {
+          arrow.classList.toggle('collapsed', newCollapsedState);
+        }
+
+        // NEW: Trigger visualization rendering when expanding specific sections
+        if (!newCollapsedState && instance._geneData) { // Expanding and data is available
+          const sectionName = section.getAttribute('data-section');
+          
+          if (sectionName === 'location' && config.ideogram?.enabled && instance._geneData.genomic_pos) {
+            renderIdeogram(instance, instance._geneData, config.ideogram, instance._uniqueId!);
+          }
+          
+          if (sectionName === 'gene-model' && config.display.geneTrack && instance._geneData.exons) {
+            renderGeneTrack(instance, instance._geneData, instance._uniqueId!);
+          }
+        }
+      };
+
+      // 2. The keydown wrapper
+      instance._sectionKeydownHandler = (e: KeyboardEvent) => {
+        if ((e.key === 'Enter' || e.key === ' ') && instance._sectionToggleHandler) {
+          // Forward the event to the main handler
+          instance._sectionToggleHandler(e);
+        }
+      };
+
+      // --- Attach the stored handlers ---
+      popper.addEventListener('click', instance._sectionToggleHandler);
+      popper.addEventListener('keydown', instance._sectionKeydownHandler);
+    }
+    attachPushpin(instance);
+  };
+}
+
+/**
+ * Creates the onHide callback.
+ */
+export function createOnHideHandler() {
+  return function onHide(instance: TippyInstanceWithCustoms) {
+    instance._isFullyShown = false; // Reset flag
+    
+    // If a child tippy is visible, prevent the parent from hiding.
+    if (instance._isChildTippyVisible) {
+      return false;
+    }
+
+    // maybe we should add considerations in onHide for ideogram and d3 too??
+    if (instance._tomselect) {
+      instance._tomselect.destroy();
+      instance._tomselect = null; 
+    }
+
+    if (instance._sectionToggleHandler) {
+      instance.popper.removeEventListener('click', instance._sectionToggleHandler);
+      instance._sectionToggleHandler = undefined; 
+    }
+    
+    if (instance._sectionKeydownHandler) {
+      instance.popper.removeEventListener('keydown', instance._sectionKeydownHandler);
+      instance._sectionKeydownHandler = undefined;
+    }
+
+    if (instance._pinButton) {
+      instance._pinButton.remove();
+      instance._pinButton = null;
+    }
+    
+    // Cleanup viewport resize handler
+    const resizeHandler = (instance as any)._visualViewportResizeHandler;
+    if (resizeHandler) {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', resizeHandler);
+      } else {
+        window.removeEventListener('resize', resizeHandler);
+      }
+      delete (instance as any)._visualViewportResizeHandler;
+    }
+    
+    // Destroy nested tippys
+    if (instance._nestedTippys) {
+      instance._nestedTippys.forEach(nested => nested.destroy());
+      instance._nestedTippys = [];
+    }
+  };
+}
+
+/**
+ * Calculates and applies the max-height to a tippy instance's content
+ * to ensure it doesn't overflow the visual viewport.
+ */
+function constrainTooltipHeight(instance: TippyInstanceWithCustoms, config: GeneTooltipConfig) {
+  if (!config.constrainToViewport) return;
+
+  const content = instance.popper.querySelector('.tippy-content');
+  if (!content) return;
+
+  // Use the padding value from your popperOptions for accurate calculation
+  const padding = config.tippyOptions?.popperOptions?.modifiers?.find(
+    m => m.name === 'preventOverflow'
+  )?.options?.padding ?? 8;
+
+  // visualViewport is more accurate on mobile than window.innerHeight
+  const availableHeight = window.visualViewport?.height || window.innerHeight;
+  
+  (content as HTMLElement).style.maxHeight = `${availableHeight - (padding * 2)}px`;
+}./src/parser.ts
+import { findSpecies } from './constants'; 
+
+/**
+ * Defines the structure for gene information extracted from an element.
+ */
+export interface GeneInfo {
+  symbol: string;
+  taxid: number;
+}
+
+/**
+ * Finds all elements matching the selector and expands gene lists.
+ * @param selector - The CSS selector for gene elements.
+ * @returns An array of elements to attach tooltips to.
+ */
+export function findGeneElements(selector: string): HTMLElement[] {
+    const elements = Array.from(document.querySelectorAll<HTMLElement>(selector));
+    const finalElements: HTMLElement[] = [];
+    const listDelimiterRegex = /[,\s;]+/;
+
+    elements.forEach(el => {
+        const textContent = el.textContent || '';
+        const geneSymbols = textContent.trim().split(listDelimiterRegex).filter(Boolean);
+
+        if (geneSymbols.length > 1) {
+            const species = el.dataset.species;
+            if (!species) {
+                console.warn('Gene list container found without a data-species attribute. Skipping.', el);
+                return;
+            }
+
+            el.innerHTML = ''; // Clear the original container
+
+            geneSymbols.forEach((symbol, index) => {
+                const newSpan = document.createElement('span');
+                newSpan.textContent = symbol;
+                newSpan.dataset.species = species;
+
+                const className = selector.startsWith('.') ? selector.substring(1) : selector;
+                newSpan.classList.add(className);
+
+                el.appendChild(newSpan);
+                finalElements.push(newSpan);
+
+                if (index < geneSymbols.length - 1) {
+                    el.appendChild(document.createTextNode(', '));
+                }
+            });
+        } else if (geneSymbols.length === 1) {
+            el.textContent = geneSymbols[0];
+            finalElements.push(el);
+        }
+    });
+
+    return finalElements;
+}
+
+/**
+ * Extracts gene information from a DOM element.
+ * @param el - The DOM element.
+ * @returns An object with symbol and taxid, or null.
+ */
+export function getGeneInfoFromElement(el: HTMLElement): GeneInfo | null {
+    const symbol = el.textContent?.trim();
+    const speciesIdentifier = el.dataset.species;
+
+    if (!symbol || !speciesIdentifier) {
+        return null;
+    }
+
+    const speciesData = findSpecies(speciesIdentifier);
+    if (!speciesData) {
+        console.warn(`[GeneTooltip] Unknown species identifier: "${speciesIdentifier}"`, el);
+        return null;
+    }
+    
+    return { symbol, taxid: speciesData.taxid };
+}./src/prefetch.ts
+import * as cache from './cache.js';
+import { fetchMyGeneBatch } from './api.js';
+import { getGeneInfoFromElement } from './parser.js';
+import type { MyGeneInfoResult } from './config.js';
+
+// The 'inFlightRequests' map is now a required parameter
+function groupGenesByTaxid(
+  elements: HTMLElement[],
+  inFlightRequests: Map<string, Promise<any>>
+): Map<number, Set<string>> {
+  const genesByTaxid = new Map<number, Set<string>>();
+  elements.forEach(el => {
+    const info = getGeneInfoFromElement(el);
+    if (!info) return;
+
+    const cacheKey = cache.getCacheKey(info.symbol, info.taxid);
+    // Check cache AND in-flight requests before adding to the group
+    if (cache.has(info.symbol, info.taxid) || inFlightRequests.has(cacheKey)) {
+      return;
+    }
+
+    if (!genesByTaxid.has(info.taxid)) {
+      genesByTaxid.set(info.taxid, new Set());
+    }
+    genesByTaxid.get(info.taxid)!.add(info.symbol);
+  });
+  return genesByTaxid;
+}
+
+async function fetchAndCache(
+  genesByTaxid: Map<number, Set<string>>,
+  inFlightRequests: Map<string, Promise<Map<string, MyGeneInfoResult>>>
+): Promise<void> {
+  const fetchPromises = Array.from(genesByTaxid.entries()).map(([taxid, geneSet]) => {
+    const symbols = Array.from(geneSet);
+    const fetchPromise = fetchMyGeneBatch(symbols, String(taxid))
+      .then(resultsMap => {
+        cache.setBatch(resultsMap);
+        return resultsMap;
+      })
+      .finally(() => {
+        // Always clean up the in-flight map for this batch
+        symbols.forEach(symbol => inFlightRequests.delete(cache.getCacheKey(symbol, taxid)));
+      });
+
+    // Add the single promise to the in-flight map for each gene in the batch
+    symbols.forEach(symbol => {
+      inFlightRequests.set(cache.getCacheKey(symbol, taxid), fetchPromise);
+    });
+
+    return fetchPromise;
+  });
+  await Promise.allSettled(fetchPromises);
+}
+
+function prefetchAll(elements: HTMLElement[], inFlightRequests: Map<string, Promise<any>>): void {
+  // Pass the map to groupGenesByTaxid
+  const genesByTaxid = groupGenesByTaxid(elements, inFlightRequests);
+  if (genesByTaxid.size > 0) {
+    fetchAndCache(genesByTaxid, inFlightRequests);
+  }
+}
+
+function prefetchSmart(elements: HTMLElement[], inFlightRequests: Map<string, Promise<any>>): void {
+  const fetchQueue = new Set<Element>();
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const processQueue = () => {
+    if (fetchQueue.size === 0) return;
+    // Pass the map to groupGenesByTaxid
+    const genesByTaxid = groupGenesByTaxid(Array.from(fetchQueue) as HTMLElement[], inFlightRequests);
+    if (genesByTaxid.size > 0) {
+      fetchAndCache(genesByTaxid, inFlightRequests);
+    }
+    fetchQueue.clear();
+  };
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        fetchQueue.add(entry.target);
+        obs.unobserve(entry.target);
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(processQueue, 200);
+      }
+    });
+  }, { rootMargin: "200px" });
+
+  elements.forEach(el => observer.observe(el));
+}
+
+export function runPrefetch(
+  strategy: 'smart' | 'all' | 'none',
+  elements: HTMLElement[],
+  threshold: number,
+  inFlightRequests: Map<string, Promise<any>>
+): void {
+  const geneCount = elements.length;
+  if (strategy === 'none') return;
+
+  const shouldPrefetchAll = strategy === 'all' || (strategy === 'smart' && geneCount <= threshold);
+
+  if (shouldPrefetchAll) {
+    prefetchAll(elements, inFlightRequests);
+  } else if (strategy === 'smart' && geneCount > threshold) {
+    prefetchSmart(elements, inFlightRequests);
+  }
+}./src/renderer.ts
+import type { MyGeneInfoResult, GenomicPosition, TooltipDisplayConfig } from './config';
+import { speciesMap } from './constants';
+import { formatPathways, formatDomains, formatTranscripts, formatStructures, formatGeneRIFs } from './formatters';
+export type FormattedItem = { name: string; url: string };
+
+import NCBILogoText from "./assets/NLM-square-logo.svg";
+const NCBILogo = `data:image/svg+xml,${encodeURIComponent(NCBILogoText)}`;
+import EnsemblLogo from "./assets/ebang-400dpi.png";
+import WikiLogoText from "./assets/Wikipedia-logo.svg";
+const WikiLogo = `data:image/svg+xml,${encodeURIComponent(WikiLogoText)}`;
+
+interface RenderOptions {
+  truncate?: number;
+  display?: Partial<TooltipDisplayConfig>;
+  pathwaySource?: 'reactome' | 'kegg' | 'wikipathways';
+  pathwayCount?: number;
+  domainCount?: number;
+  transcriptCount?: number;
+  structureCount?: number;
+  generifCount?: number;
+  tooltipWidth?: number;
+  tooltipHeight?: number;
+  uniqueId?: string; // Add this parameter
+}
+
+const loaderHTML = `<div class="gt-loader-container"><div class="gt-spinner"></div><span>Loading...</span></div>`;
+
+function renderCollapsibleSection(
+  title: string,
+  innerHTML: string,
+  uniqueId: string,
+  collapsible: boolean,
+  collapsedByDefault: boolean,
+  headerRightHTML: string = ''
+): string {
+  const isCollapsed = collapsible && collapsedByDefault;
+  const arrow = collapsible
+    ? `<span class="gt-section-arrow ${isCollapsed ? 'collapsed' : ''}" aria-hidden="true"></span>`
+    : '';
+
+  // Add ARIA attributes for accessibility
+  const contentId = `gt-content-${uniqueId}-${title.replace(/\s+/g, '-').toLowerCase()}`;
+  let headerClasses = 'gene-tooltip-section-header gt-collapsible-header';
+  if (collapsible) {
+    headerClasses += ' gt-is-collapsible';
+  }
+
+  return `
+    <div class="gene-tooltip-section-container ${collapsible ? 'gt-collapsible' : ''}" 
+        data-collapsed="${isCollapsed ? 'true' : 'false'}"
+        data-section="${title.replace(/\s+/g, '-').toLowerCase()}">
+
+      <div class="${headerClasses}" 
+          role="${collapsible ? 'button' : 'heading'}"
+          tabindex="${collapsible ? '0' : '-1'}"
+          aria-expanded="${collapsible ? !isCollapsed : 'true'}"
+          aria-controls="${contentId}">
+        <div class="gt-section-left">
+          ${arrow}
+          <span class="gt-section-title">${title}</span>
+        </div>
+          ${headerRightHTML}
+        </div>
+
+        <div class="gt-collapsible-content" id="${contentId}">
+          ${innerHTML}
+        </div>
+      </div>
+  `;
+}
+
+
+// Generate a unique ID for this tooltip instance
+function generateUniqueId(): string {
+  // Use crypto.randomUUID() if available (modern browsers), fallback for older browsers
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // Fallback for older browsers or environments without crypto.randomUUID
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+}
+
+function renderSpecies(taxid: number): string {
+  const species = speciesMap[taxid] ?? { common: "Unknown", genus: "", icon: "❓" };
+  return `
+    <div class="gene-tooltip-section gene-tooltip-species">
+      <span class="gene-tooltip-species-icon">${species.icon}</span>
+      <span>${species.common}, <em>${species.genus}</em></span>
+    </div>
+  `;
+}
+
+function renderLocation(
+  genomic_pos: GenomicPosition | GenomicPosition[] | undefined, 
+  showIdeogram: boolean = false, 
+  uniqueId: string = ''
+): string {
+  if (!genomic_pos) return '';
+
+  const pos = Array.isArray(genomic_pos) ? genomic_pos[0] : genomic_pos;
+  if (!pos) return '';
+  
+  const start = pos.start.toLocaleString();
+  const end = pos.end.toLocaleString();
+
+  return `
+    <div class="gene-tooltip-location">
+      <div class="gene-tooltip-location-coords">
+        <span class="gene-tooltip-location-chr">chr${pos.chr}</span>
+        <span class="gene-tooltip-location-pos">${start}-${end}</span>
+      </div>
+      ${showIdeogram ? `<div class="gene-tooltip-ideo" id="gene-tooltip-ideo-${uniqueId}">${loaderHTML}</div>` : ""}
+    </div>
+  `;
+}
+
+// Gene Track
+function renderGeneTrackContent(uniqueId: string): string {
+  return `
+    <div class="gene-tooltip-track-controls">
+      <select class="gt-transcript-selector form-select-sm" id="transcript-selector-${uniqueId}"></select>
+    </div>
+    <div class="gene-tooltip-track" id="gene-tooltip-track-${uniqueId}">${loaderHTML}</div>
+  `;
+}
+
+function renderSummaryContent(summaryText: string | undefined, truncate: number, uniqueId: string): string {
+  const summary = summaryText || "";
+
+  if (!summary) {
+    return '';
+  }
+
+  // Case 2: Truncation is active
+  const summaryClass = 'gene-tooltip-summary';
+  const summaryStyle = `style="--line-clamp: ${truncate};"`;
+  
+  const lessButtonId = `summary-less-${uniqueId}`;
+  const lessButton = renderCollapseButton(lessButtonId, 'Show less');
+
+  // Return *only* the inner content
+  return `
+    <p class="${summaryClass}" ${summaryStyle}>${summary}</p>
+    ${lessButton}
+  `;
+}
+
+// Rendering external links
+function renderLinksContent(data: MyGeneInfoResult, display: Partial<TooltipDisplayConfig>): string {
+    const linksToShow = [];
+    
+    // Build NCBI links
+    if (display.links?.ncbi !== false) {
+      linksToShow.push(`
+        <a href="https://www.ncbi.nlm.nih.gov/gene/${data._id}"
+           target="_blank" rel="noopener noreferrer" title="View on NCBI Gene">
+          <span class="gene-tooltip-link-icon-wrapper">
+            <img src="${NCBILogo}" alt="NCBI Gene link" class="gene-tooltip-link-icon" />
+          </span>
+          <span>NCBI</span>
+        </a>
+      `);
+    }
+
+    // Build Ensembl ID links
+    if (display.links?.ensembl !== false && data.ensembl?.gene) {
+      linksToShow.push(`
+        <a href="https://www.ensembl.org/id/${data.ensembl.gene}"
+           target="_blank" rel="noopener noreferrer" title="View on Ensembl">
+          <span class="gene-tooltip-link-icon-wrapper">
+            <img src="${EnsemblLogo}" alt="Ensembl link" class="gene-tooltip-link-icon" />
+          </span>
+          <span>Ensembl</span>
+        </a>
+      `);
+    }
+
+    // Build Wikipedia links
+    if (display.links?.wikipedia !== false && data.wikipedia?.url_stub) {
+      const wikiStub = data.wikipedia.url_stub.replace(/\s+/g, '_');
+      linksToShow.push(`
+        <a href="https://en.wikipedia.org/wiki/${wikiStub}"
+           target="_blank" rel="noopener noreferrer" title="View on Wikipedia">
+          <span class="gene-tooltip-link-icon-wrapper">
+            <img src="${WikiLogo}" alt="Wikipedia link" class="gene-tooltip-link-icon" />
+          </span>
+          <span>Wikipedia</span>
+        </a>
+      `);
+    }
+
+    // If no links, return "Not available" for consistency
+    if (linksToShow.length === 0) {
+      return '';
+    }
+
+    // Return *only* the inner content wrapper
+    return `
+      <div class="gene-tooltip-links-container">
+        ${linksToShow.join('')}
+      </div>
+    `;
+}
+
+function renderParagraphContent(
+  items: { name: string; url: string }[],
+  initialCount: number,
+  moreButtonId: string
+): string {
+  if (!items || items.length === 0) {
+    return '';
+  }
+
+  const visibleItems = items.slice(0, initialCount);
+  const hiddenItemCount = items.length - initialCount;
+
+  const itemLinks = visibleItems
+    .map(item => `<a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.name}</a>`)
+    .join(', ');
+
+  const moreButton = hiddenItemCount > 0
+    ? renderMoreButton(moreButtonId, `... and ${hiddenItemCount} more`)
+    : '';
+
+  return `
+    <p class="gene-tooltip-p-content">
+      ${itemLinks}${hiddenItemCount > 0 ? ',' : ''} ${moreButton}
+    </p>
+  `;
+}
+
+
+function renderMoreButton(id: string, text: string): string {
+  // We can add accessibility attributes here too
+  return `
+    <span id="${id}" class="gene-tooltip-more-btn" role="button" tabindex="0">
+      ${text}
+    </span>
+  `;
+}
+
+function renderCollapseButton(id: string, text: string): string {
+  return `
+    <span id="${id}" class="gene-tooltip-more-btn" role="button" tabindex="0">
+      ${text}
+    </span>
+  `;
+}
+
+function renderListContent(
+  items: FormattedItem[],
+  initialCount: number,
+  moreButtonId: string
+): string {
+  if (!items || items.length === 0) {
+    return '';
+  }
+
+  const visibleItems = items.slice(0, initialCount);
+  const hiddenItemCount = items.length - initialCount;
+
+  const itemLinks = visibleItems.map(item =>
+    `<li>
+       <a href="${item.url}" target="_blank" rel="noopener noreferrer" title="${item.name}">
+          ${item.name}
+       </a>
+     </li>`
+  ).join('');
+
+  const moreButton = hiddenItemCount > 0
+    ? renderMoreButton(moreButtonId, `... and ${hiddenItemCount} more`)
+    : '';
+
+  return `
+    <div class="gene-tooltip-list-wrapper">
+      <ul class="gene-tooltip-list-section">${itemLinks}</ul>
+      ${moreButton}
+    </div>
+  `;
+}
+
+function renderPathways(data: MyGeneInfoResult, source: 'reactome' | 'kegg' | 'wikipathways', count: number, uniqueId: string): string {
+    const pathways = formatPathways(data.pathway?.[source], source);
+    // Use the new content function
+    return renderParagraphContent(pathways, count, `pathways-more-${uniqueId}`);
+}
+
+function renderDomains(data: MyGeneInfoResult, count: number, uniqueId: string): string {
+  const domains = formatDomains(data.interpro);
+  return renderParagraphContent(domains, count, `domains-more-${uniqueId}`);
+}
+
+function renderTranscripts(data: MyGeneInfoResult, count: number, uniqueId: string): string {
+  const transcripts = formatTranscripts(data.ensembl?.transcript);
+  return renderParagraphContent(transcripts, count, `transcripts-more-${uniqueId}`);
+}
+
+function renderStructures(data: MyGeneInfoResult, count: number, uniqueId: string): string {
+  const structures = formatStructures(data.pdb);
+  return renderParagraphContent(structures, count, `structures-more-${uniqueId}`);
+}
+
+function renderGeneRIFs(data: MyGeneInfoResult, count: number, uniqueId: string): string {
+  const generifs = formatGeneRIFs(data.generif);
+  const moreButtonId = `generifs-more-${uniqueId}`;
+  // Use the new content function
+  return renderListContent(generifs, count, moreButtonId);
+}
+
+export function renderTooltipHTML(
+  data: MyGeneInfoResult | null | undefined,
+  options: RenderOptions = {}
+): string {
+  if (!data) return '<p>Gene not found.</p>';
+
+  const uniqueId = options.uniqueId || generateUniqueId();
+  
+  const {
+    truncate = 4,
+    display = {},
+    pathwaySource = 'reactome',
+    pathwayCount = 3,
+    domainCount = 3,
+    transcriptCount = 3,
+    structureCount = 3,
+    generifCount = 3,
+    tooltipWidth,
+    tooltipHeight
+  } = options;
+
+  // These flags will be passed to renderCollapsibleSection
+  const collapsible = display.collapsible ?? false;
+  const collapsedByDefault = display.collapsedByDefault ?? false;
+  
+  const styleParts: string[] = [];
+  if (tooltipWidth) styleParts.push(`max-width: ${tooltipWidth}px`);
+  if (tooltipHeight) styleParts.push(`max-height: ${tooltipHeight}px`, `overflow-y: auto`);
+  const inlineStyle = styleParts.length > 0 ? `style="${styleParts.join('; ')}"` : '';
+  
+  // Helper to decide whether to render a section
+  const shouldRender = (key: keyof TooltipDisplayConfig) => display[key] !== false;
+
+  const summaryContent = shouldRender('summary') 
+    ? renderSummaryContent(data.summary, truncate, uniqueId) 
+    : '';
+
+  const locationContent = shouldRender('location')
+    ? renderLocation(data.genomic_pos, display.ideogram, uniqueId)
+    : '';
+  
+  const geneTrackContent = shouldRender('geneTrack') && data.exons && data.exons.length > 0
+    ? renderGeneTrackContent(uniqueId)
+    : '';
+
+  const pathwayContent = shouldRender('pathways')
+    ? renderPathways(data, pathwaySource, pathwayCount, uniqueId)
+    : '';
+
+  const domainContent = shouldRender('domains')
+    ? renderDomains(data, domainCount, uniqueId)
+    : '';
+    
+  const transcriptContent = shouldRender('transcripts')
+    ? renderTranscripts(data, transcriptCount, uniqueId)
+    : '';
+
+  const structureContent = shouldRender('structures')
+    ? renderStructures(data, structureCount, uniqueId)
+    : '';
+
+  const generifContent = shouldRender('generifs')
+    ? renderGeneRIFs(data, generifCount, uniqueId)
+    : '';
+
+  const linksContent = shouldRender('links')
+    ? renderLinksContent(data, display)
+    : '';
+
+  return `
+    <div class="gene-tooltip-content" ${inlineStyle} data-tooltip-id="${uniqueId}">
+      <div class="gene-tooltip-header">
+        <div class="gene-tooltip-title">
+          <strong>${data.symbol}</strong>
+          <span class="gene-tooltip-name">(${data.name})</span>
+        </div>
+      </div>
+
+      ${shouldRender('species') && data.taxid ? renderSpecies(data.taxid) : ''}
+
+      ${summaryContent ? renderCollapsibleSection(
+            'Summary',
+            summaryContent,
+            uniqueId,
+            collapsible,
+            collapsedByDefault
+          ) : ''}
+
+      ${locationContent ? renderCollapsibleSection(
+            'Location',
+            locationContent,
+            uniqueId,
+            collapsible,
+            collapsedByDefault
+          ) : ''}
+      
+      ${geneTrackContent ? renderCollapsibleSection(
+        'Gene Model',
+        `<div class="gene-tooltip-track" id="gene-tooltip-track-${uniqueId}">${loaderHTML}</div>`,
+        uniqueId,
+        collapsible,
+        collapsedByDefault,
+        `<div class="gene-tooltip-track-controls">
+          <select class="gt-transcript-selector form-select-sm" id="transcript-selector-${uniqueId}"></select>
+        </div>`
+      ) : ''}
+
+      ${pathwayContent ? renderCollapsibleSection(
+            'Pathways',
+            pathwayContent,
+            uniqueId,
+            collapsible,
+            collapsedByDefault
+          ) : ''}
+
+      ${domainContent ? renderCollapsibleSection(
+            'Protein Domains',
+            domainContent,
+            uniqueId,
+            collapsible,
+            collapsedByDefault
+          ) : ''}
+        
+      ${transcriptContent ? renderCollapsibleSection(
+            'Transcripts',
+            transcriptContent,
+            uniqueId,
+            collapsible,
+            collapsedByDefault
+          ) : ''}
+
+      ${structureContent ? renderCollapsibleSection(
+            'PDB Structures',
+            structureContent,
+            uniqueId,
+            collapsible,
+            collapsedByDefault
+          ) : ''}
+
+      ${generifContent ? renderCollapsibleSection(
+            'GeneRIFs',
+            generifContent,
+            uniqueId,
+            collapsible,
+            collapsedByDefault
+          ) : ''}
+
+       ${linksContent ? renderCollapsibleSection(
+            'Links',
+            linksContent,
+            uniqueId,
+            collapsible,
+            collapsedByDefault
+          ) : ''}
+    </div>
+  `;
+}./src/types/assets.d.ts
+declare module "*.svg" {
+  const content: string;
+  export default content;
+}
+
+declare module "*.svg?url" {
+  const content: string;
+  export default content;
+}
+
+declare module "*.svg?raw" {
+  const content: string;
+  export default content;
+}
+
+declare module "*.png" {
+  const content: string;
+  export default content;
+}
+
+declare module "*.webp" {
+  const content: string;
+  export default content;
+}./src/types/ideogram.d.ts
+declare module 'ideogram' {
+  interface IdeogramOptions {
+    container?: HTMLElement | string;
+    organism?: string;
+    chromosomes?: string[];
+    annotationTracks?: Array<any>;
+    chrHeight?: number;
+    chrWidth?: number;
+    [key: string]: any; // For untyped options
+  }
+  class IdeogramClass {
+    constructor(options: IdeogramOptions);
+    // more methods if needed
+  }
+  const Ideogram: typeof IdeogramClass;
+  export default Ideogram;
+}./src/ui/pushpin.ts
+import { TippyInstanceWithCustoms } from '../lifecycle.js';
+
+export function attachPushpin(instance: TippyInstanceWithCustoms) {
+  const popper = instance.popper;
+  if (!popper || instance._pinButton) return;
+
+  // Ideally attach inside a header area if available
+  const header = popper.querySelector('.gene-tooltip-header') || popper.querySelector('.tippy-content');
+  if (!header) return;
+
+  const btn = document.createElement('button');
+  btn.className = 'gt-pin-button';
+  btn.setAttribute('aria-label', 'Pin tooltip');
+  btn.innerHTML = `
+    <svg class="gt-pin-icon" viewBox="0 0 24 24" width="16" height="16">
+      <!-- replace this path with your preferred SVG -->
+      <path d="M12 2L10 8H8l2 8h4l2-8h-2zM11 22v-4h2v4h-2z"/>
+    </svg>
+  `;
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    togglePin(instance, btn);
+  });
+
+  instance._pinButton = btn;
+  header.appendChild(btn);
+}
+
+function togglePin(instance: TippyInstanceWithCustoms, btn: HTMLElement) {
+  instance._isPinned = !instance._isPinned;
+
+  if (instance._isPinned) {
+    // Lock tooltip open
+    instance.setProps({
+      trigger: 'manual',
+      hideOnClick: false,
+    //   interactive: true,
+    });
+    btn.classList.add('gt-pin-active');
+    instance.show();
+  } else {
+    // Restore default behavior
+    instance.setProps({
+      trigger: 'mouseenter focus',
+    //   hideOnClick: true,
+    });
+    btn.classList.remove('gt-pin-active');
+  }
+}
+./src/ui/summaryExpand.ts
+/**
+ * Enables click/keyboard expand/collapse for summary sections in Gene Tooltips.
+ * It listens for events on the document and targets the specific 'Show more' button.
+ */
+export function enableSummaryExpand(): void {
+  const handleSummaryToggle = (target: HTMLElement) => {
+    let summaryP: HTMLElement | null = null;
+    let shouldExpand: boolean | null = null;
+
+    // Case 1: Clicked "Show more"
+    if (target.matches('[id^="summary-more-"]')) {
+      summaryP = target.previousElementSibling as HTMLElement;
+      shouldExpand = true;
+    }
+    // Case 2: Clicked "Show less"
+    else if (target.matches('[id^="summary-less-"]')) {
+      summaryP = target.closest('.gene-tooltip-section-container')?.querySelector('.gene-tooltip-summary') as HTMLElement;
+      shouldExpand = false;
+    }
+
+    // Case 3: Clicked the truncated summary paragraph itself
+    else if (target.matches('.gene-tooltip-summary:not(.expanded)')) {
+      summaryP = target;
+      shouldExpand = true; // Tell it to expand
+    }
+    // Case 4: Clicked the expanded summary paragraph itself
+    else if (target.matches('.gene-tooltip-summary.expanded')) {
+      summaryP = target;
+      shouldExpand = false;
+    }
+    
+    // If a relevant element was clicked, perform the action
+    if (summaryP && shouldExpand !== null) {
+      summaryP.classList.toggle('expanded', shouldExpand);
+    }
+  };
+
+  // --- Click Handler ---
+  document.addEventListener("click", e => {
+    handleSummaryToggle(e.target as HTMLElement);
+  });
+
+  // --- Keyboard Handler ---
+  document.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") {
+      const target = e.target as HTMLElement;
+      // Also update the keyboard handler to allow expanding via text focus
+      if (target.matches('[id^="summary-more-"]') || target.matches('[id^="summary-less-"]') || target.matches('.gene-tooltip-summary')) {
+        e.preventDefault();
+        handleSummaryToggle(target);
+      }
+    }
+  });
+}./src/ui/theme.ts
+import { TippyInstanceWithCustoms } from '../lifecycle.js';
+
+/**
+ * Determines the effective theme to be used for tippy instances.
+ */
+export function getEffectiveTheme(configTheme: 'light' | 'dark' | 'auto' | 'material' | 'translucent'| 'light-border' | undefined): string {
+    const isAutoTheme = configTheme === 'auto' || typeof configTheme === 'undefined';
+    if (isAutoTheme) {
+        const isDark = document.documentElement.classList.contains('dark');
+        return isDark ? 'dark' : 'light';
+    }
+    return configTheme;
+}
+
+
+type ThemeObserverCleanup = () => void;
+
+/**
+ * Sets up a MutationObserver to watch for theme changes on the `<html>` element
+ * and updates the tippy instances accordingly.
+ * @returns A cleanup function to disconnect the observer.
+ */
+export function initializeThemeObserver(
+    instances: TippyInstanceWithCustoms[], 
+    isAutoTheme: boolean
+): ThemeObserverCleanup {
+    if (!isAutoTheme) {
+        // If not auto, there's nothing to observe. Return a no-op cleanup.
+        return () => {};
+    }
+
+    const setTippyTheme = (theme: string): void => {
+        instances.forEach(instance => {
+            if (instance._themeIntent === 'auto' && instance.props.theme !== theme) {
+                instance.setProps({ theme });
+            }
+        });
+    };
+
+    const observer = new MutationObserver(() => {
+        const isNowDark = document.documentElement.classList.contains('dark');
+        const newTheme = isNowDark ? 'dark' : 'light';
+        setTippyTheme(newTheme);
+    });
+
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class'],
+    });
+
+    // Return the function that will be called on destroy
+    return () => observer.disconnect();
+}
+./src/utils.ts
+import type { Instance } from 'tippy.js';
+
+// Generate a unique ID for each tooltip instance
+export function generateUniqueTooltipId(): string {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `tooltip-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+}
+
+// Helper to create list items with a search box
+export function createNestedContent(items: { name: string; url: string }[]): string {
+  const listId = `nested-list-${generateUniqueTooltipId()}`;
+  
+  const listItems = items
+    .map(item => `<li><a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.name}</a></li>`)
+    .join('');
+
+  // The 'oninput' handler directly calls our filtering function, passing the input's value and the target list's ID.
+  return `
+    <div class="gene-tooltip-nested-container">
+      <input 
+        type="search" 
+        class="gene-tooltip-nested-search" 
+        placeholder="Filter..." 
+        oninput="window.GeneTooltip.filterNestedList(this.value, '${listId}')" 
+      />
+      <ul id="${listId}" class="gene-tooltip-nested-list">${listItems}</ul>
+    </div>
+  `;
+}
+
+/**
+ * Gets the computed background color from a Tippy instance's popper.
+ * @param instance The Tippy instance to inspect.
+ * @returns The background color string (e.g., 'rgb(255, 255, 255)') or null if not found.
+ */
+export function getSectionBackgroundColor(instance: Instance): string | null {
+  const section = instance.popper.querySelector<HTMLElement>('.gene-tooltip-section-container');
+  if (section) {
+    return window.getComputedStyle(section).backgroundColor;
+  }
+  return null;
+}
