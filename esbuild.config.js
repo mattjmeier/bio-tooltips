@@ -1,4 +1,5 @@
 import esbuild from 'esbuild';
+import path from 'node:path';
 
 // Determine if we're in "watch" mode
 const isWatching = process.argv.includes('--watch');
@@ -17,9 +18,11 @@ const sharedConfig = {
   logLevel: 'info',
 };
 
+const normalizeEntryPoint = (entryPoint) => path.resolve(entryPoint);
+
 const createConfig = (entryPoint, outfile, format, platform) => ({
   ...sharedConfig,
-  entryPoints: [entryPoint],
+  entryPoints: [normalizeEntryPoint(entryPoint)],
   platform,
   format,
   outfile,
@@ -31,10 +34,12 @@ const buildJS = () => Promise.all([
   esbuild.build(createConfig('src/index.ts', 'dist/gene-tooltips.esm.js', 'esm', 'browser')),
   esbuild.build(createConfig('src/mygene.ts', 'dist/gene-tooltips.mygene.cjs', 'cjs', 'node')),
   esbuild.build(createConfig('src/mygene.ts', 'dist/gene-tooltips.mygene.esm.js', 'esm', 'browser')),
+  esbuild.build(createConfig('src/mychem.ts', 'dist/gene-tooltips.mychem.cjs', 'cjs', 'node')),
+  esbuild.build(createConfig('src/mychem.ts', 'dist/gene-tooltips.mychem.esm.js', 'esm', 'browser')),
   // UMD/IIFE
   esbuild.build({
     ...sharedConfig,
-    entryPoints: ['src/index.ts'],
+    entryPoints: [path.resolve('src/index.ts')],
     platform: 'browser',
     format: 'iife',
     globalName: 'GeneTooltip',
@@ -46,7 +51,7 @@ const buildJS = () => Promise.all([
 ]);
 
 const buildCSS = () => esbuild.build({
-    entryPoints: ['src/css/main.css'],
+    entryPoints: [path.resolve('src/css/main.css')],
     bundle: true,
     minify: !isWatching,
     outfile: 'dist/gene-tooltips.css',

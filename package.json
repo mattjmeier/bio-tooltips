@@ -32,6 +32,11 @@
       "import": "./dist/gene-tooltips.mygene.esm.js",
       "require": "./dist/gene-tooltips.mygene.cjs"
     },
+    "./mychem": {
+      "types": "./dist/types/src/mychem.d.ts",
+      "import": "./dist/gene-tooltips.mychem.esm.js",
+      "require": "./dist/gene-tooltips.mychem.cjs"
+    },
     "./style.css": "./dist/gene-tooltips.css"
   },
   "license": "MIT",

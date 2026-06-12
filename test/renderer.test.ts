@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderTooltipHTML } from '../src/providers/mygene/renderer';
+import { renderTooltipHTML as renderMyChemTooltipHTML } from '../src/providers/mychem/renderer';
 import type { MyGeneInfoResult } from '../src/providers/mygene/types';
+import type { MyChemInfoResult } from '../src/providers/mychem/types';
 
 // Mock the asset imports
 vi.mock('../src/assets/NLM-square-logo.svg', () => ({
@@ -110,5 +112,76 @@ describe('renderTooltipHTML', () => {
     // Disable both
     html = renderTooltipHTML(mockGeneData, { display: { links: { ncbi: false, ensembl: false } }, uniqueId: MOCK_UNIQUE_ID });
     expect(html).not.toContain('gene-tooltip-links-container');
+  });
+});
+
+describe('renderMyChemTooltipHTML', () => {
+  it('renders source-aware chemical sections without duplicating agreed values', () => {
+    const mockChemicalData: MyChemInfoResult = {
+      _id: '1983',
+      query: 'acetaminophen',
+      name: ['Acetaminophen', 'Paracetamol'],
+      formula: 'C8H9NO2',
+      inchikey: 'RZVAJINKPMORJF-UHFFFAOYSA-N',
+      pubchem: {
+        cid: 1983,
+        molecular_formula: 'C8H9NO2',
+        molecular_weight: 151.16,
+        exact_mass: 151.0633,
+        isomeric_smiles: 'CC(=O)NC1=CC=C(C=C1)O',
+        xlogp: 0.5,
+        tpsa: 49.3,
+        h_bond_donor_count: 2,
+        h_bond_acceptor_count: 2,
+      },
+      chembl: {
+        molecule_chembl_id: 'CHEMBL112',
+        pref_name: 'ACETAMINOPHEN',
+        molecule_type: 'Small molecule',
+        molecule_properties: {
+          full_molformula: 'C8H9NO2',
+          full_mwt: '151.16',
+          alogp: '0.49',
+        },
+        molecule_structures: {
+          canonical_smiles: 'CC(=O)NC1=CC=C(O)C=C1',
+          standard_inchi_key: 'RZVAJINKPMORJF-UHFFFAOYSA-N',
+        },
+      },
+      chebi: {
+        id: 'CHEBI:46195',
+        name: 'paracetamol',
+        definition: 'A member of the class of phenols.',
+        role: ['analgesic', 'antipyretic'],
+      },
+      drugbank: {
+        id: 'DB00316',
+        name: 'Acetaminophen',
+        description: 'A common analgesic and antipyretic drug.',
+        groups: ['approved'],
+        indication: 'Used for temporary relief of pain and fever.',
+        mechanism_of_action: 'Inhibits prostaglandin synthesis.',
+        toxicity: 'Overdose may cause liver injury.',
+      },
+      sider: {
+        side_effect: [{ name: 'Nausea' }],
+      },
+    };
+
+    const html = renderMyChemTooltipHTML(mockChemicalData, {
+      uniqueId: 'mychem-test',
+      display: { sourcePaths: true },
+    });
+
+    expect(html).toContain('<strong>Acetaminophen</strong>');
+    expect(html).toContain('Structure & Properties');
+    expect(html).toContain('C8H9NO2');
+    expect(html).toContain('3 sources');
+    expect(html).toContain('compare sources');
+    expect(html).toContain('Pharmacology & Targets');
+    expect(html).toContain('Reported side effects');
+    expect(html).toContain('Identifiers & External Records');
+    expect(html).toContain('https://pubchem.ncbi.nlm.nih.gov/compound/1983');
+    expect(html).toContain('Data from MyChem.info');
   });
 });
