@@ -8,7 +8,7 @@
 
 > `const` **myGeneSections**: [`MyGeneSectionDefinition`](sections/types.md#mygenesectiondefinition)[]
 
-Defined in: [providers/mygene/sections/index.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mygene/sections/index.ts#L17)
+Defined in: [providers/mygene/sections/index.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mygene/sections/index.ts#L17)
 
 ## Functions
 
@@ -16,7 +16,7 @@ Defined in: [providers/mygene/sections/index.ts:17](https://github.com/mattjmeie
 
 > **createMyGeneSectionContext**(`data`, `config`, `uniqueId`): [`MyGeneSectionContext`](sections/types.md#mygenesectioncontext)
 
-Defined in: [providers/mygene/sections/index.ts:29](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mygene/sections/index.ts#L29)
+Defined in: [providers/mygene/sections/index.ts:29](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mygene/sections/index.ts#L29)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [providers/mygene/sections/index.ts:29](https://github.com/mattjmeie
 
 > **getMyGeneNestedTooltipDefinitions**(`data`, `config`, `uniqueId`): [`NestedTooltipDefinition`](../../core/types.md#nestedtooltipdefinition)[]
 
-Defined in: [providers/mygene/sections/index.ts:58](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mygene/sections/index.ts#L58)
+Defined in: [providers/mygene/sections/index.ts:58](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mygene/sections/index.ts#L58)
 
 #### Parameters
 

@@ -8,7 +8,7 @@
 
 > **getEffectiveTheme**(`configTheme`): `string`
 
-Defined in: [ui/theme.ts:6](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/ui/theme.ts#L6)
+Defined in: [ui/theme.ts:6](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/ui/theme.ts#L6)
 
 Determines the effective theme to be used for tippy instances.
 
@@ -28,7 +28,7 @@ Determines the effective theme to be used for tippy instances.
 
 > **initializeThemeObserver**(`instances`, `isAutoTheme`): `ThemeObserverCleanup`
 
-Defined in: [ui/theme.ts:23](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/ui/theme.ts#L23)
+Defined in: [ui/theme.ts:23](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/ui/theme.ts#L23)
 
 Sets up a MutationObserver to watch for theme changes on the `<html>` element
 and updates the tippy instances accordingly.

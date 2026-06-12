@@ -8,7 +8,7 @@
 
 > **fetchMyChemBatch**(`queries`, `scope`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyChemInfoResult`](types.md#mycheminforesult)\>\>
 
-Defined in: [providers/mychem/client.ts:22](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mychem/client.ts#L22)
+Defined in: [providers/mychem/client.ts:22](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/client.ts#L22)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [providers/mychem/client.ts:22](https://github.com/mattjmeier/gene-t
 
 > **fetchMyChemRefs**(`refs`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyChemInfoResult`](types.md#mycheminforesult)\>\>
 
-Defined in: [providers/mychem/client.ts:58](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mychem/client.ts#L58)
+Defined in: [providers/mychem/client.ts:58](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/client.ts#L58)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [providers/mychem/client.ts:58](https://github.com/mattjmeier/gene-t
 
 > **getMyChemCacheKey**(`query`, `scope`): `string`
 
-Defined in: [providers/mychem/client.ts:82](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mychem/client.ts#L82)
+Defined in: [providers/mychem/client.ts:82](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/client.ts#L82)
 
 #### Parameters
 
@@ -70,7 +70,7 @@ Defined in: [providers/mychem/client.ts:82](https://github.com/mattjmeier/gene-t
 
 > **normalizeMyChemScope**(`scope`): [`MyChemScope`](types.md#mychemscope)
 
-Defined in: [providers/mychem/client.ts:86](https://github.com/mattjmeier/gene-tooltips/blob/baad00fdcebf79c187a1c0cb042d1cfa1bb952f7/src/providers/mychem/client.ts#L86)
+Defined in: [providers/mychem/client.ts:86](https://github.com/mattjmeier/gene-tooltips/blob/935219a3f41469ff6c3a4052652cf1f04712b73a/src/providers/mychem/client.ts#L86)
 
 #### Parameters
 

@@ -3,9 +3,12 @@ import { renderTooltipShell } from '../src/core/renderer';
 import { renderCollapsibleSection } from '../src/core/sections';
 import { myGeneProfile } from '../src/providers/mygene/profile';
 import { myGeneSections } from '../src/providers/mygene/sections';
-import { defaultConfig, mergeConfig, type MyGeneInfoResult } from '../src/config';
+import { defaultConfig, mergeConfig } from '../src/providers/mygene/config';
 import { formatTranscripts } from '../src/providers/mygene';
-import { renderTooltipHTML } from '../src/renderer';
+import { renderTooltipHTML } from '../src/providers/mygene/renderer';
+import { GeneTooltip as RootGeneTooltip } from '../src/index';
+import { GeneTooltip as MyGeneTooltip } from '../src/mygene';
+import type { MyGeneInfoResult } from '../src/providers/mygene/types';
 
 const mockGeneData: MyGeneInfoResult = {
   _id: '7157',
@@ -36,15 +39,17 @@ describe('architecture compatibility', () => {
     expect(key).toBe('mygene:TP53_9606');
   });
 
-  it('top-level compatibility exports still work', () => {
+  it('root and MyGene entries expose the MyGene tooltip API', () => {
     const config = mergeConfig({ truncateSummary: 2 });
     const transcripts = formatTranscripts(['ENST1']);
-    const html = renderTooltipHTML(mockGeneData, { uniqueId: 'compat-test' });
+    const html = renderTooltipHTML(mockGeneData, { uniqueId: 'mygene-test' });
 
     expect(defaultConfig.api).toBe('mygene');
     expect(config.truncateSummary).toBe(2);
     expect(transcripts[0].url).toBe('https://www.ensembl.org/id/ENST1');
     expect(html).toContain('<strong>TP53</strong>');
+    expect(RootGeneTooltip.init).toBe(MyGeneTooltip.init);
+    expect(RootGeneTooltip.preload).toBe(MyGeneTooltip.preload);
   });
 
   it('MyGene sections are registered in render order', () => {

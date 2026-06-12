@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { renderTooltipHTML } from '../src/renderer';
-import type { MyGeneInfoResult } from '../src/config';
+import { renderTooltipHTML } from '../src/providers/mygene/renderer';
+import type { MyGeneInfoResult } from '../src/providers/mygene/types';
 
 // Mock the asset imports
 vi.mock('../src/assets/NLM-square-logo.svg', () => ({

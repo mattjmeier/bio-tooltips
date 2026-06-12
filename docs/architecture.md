@@ -72,7 +72,13 @@ src/providers/mygene/
   visuals/
 ```
 
-The top-level `src` folder should stay reserved for generic core pieces and legacy compatibility modules. Provider-specific code should not be added there.
+The top-level `src` folder should stay reserved for package entry points and generic shared pieces. Provider-specific code should not be added there.
+
+## Removed Compatibility Modules
+
+The former top-level modules `api.ts`, `cache.ts`, `config.ts`, `parser.ts`, `prefetch.ts`, `lifecycle.ts`, and `renderer.ts` were removed during the major-version core/provider refactor.
+
+Provider-specific imports should come from `gene-tooltips/mygene`, and generic tooltip plumbing should live under `src/core`.
 
 ## Adding Sections
 

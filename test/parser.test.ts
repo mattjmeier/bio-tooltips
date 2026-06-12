@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { findGeneElements, getGeneInfoFromElement } from '../src/parser';
+import { findGeneElements, getGeneInfoFromElement } from '../src/providers/mygene/parser';
 
 describe('parser', () => {
   

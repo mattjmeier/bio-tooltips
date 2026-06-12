@@ -4,9 +4,6 @@
 
 ## Modules
 
-- [api](api.md)
-- [cache](cache.md)
-- [config](config.md)
 - [core/cache](core/cache.md)
 - [core/config](core/config.md)
 - [core/engine](core/engine.md)
@@ -16,10 +13,7 @@
 - [core/sections](core/sections.md)
 - [core/types](core/types.md)
 - [index](index.md)
-- [lifecycle](lifecycle.md)
 - [mygene](mygene.md)
-- [parser](parser.md)
-- [prefetch](prefetch.md)
 - [providers/mychem/client](providers/mychem/client.md)
 - [providers/mychem/parser](providers/mychem/parser.md)
 - [providers/mychem/profile](providers/mychem/profile.md)
@@ -47,7 +41,6 @@
 - [providers/mygene/types](providers/mygene/types.md)
 - [providers/mygene/visuals/gene-track](providers/mygene/visuals/gene-track.md)
 - [providers/mygene/visuals/ideogram](providers/mygene/visuals/ideogram.md)
-- [renderer](renderer.md)
 - [ui/pushpin](ui/pushpin.md)
 - [ui/summaryExpand](ui/summaryExpand.md)
 - [ui/theme](ui/theme.md)
