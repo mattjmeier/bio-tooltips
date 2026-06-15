@@ -1,254 +1,82 @@
-# Guide: Adding a New Data Section to the Tooltip
+# Adding a New Tooltip Module
 
-This document outlines the procedure for adding a new data section (e.g., GO Terms, Phenotypes) to the gene tooltip. The package uses a modular pattern involving configuration, data formatting, rendering, and lifecycle management.
+This guide outlines the shape of a new Bio Tooltips module. The existing gene and chemical modules both combine a public entry point with an adapter that knows how to parse elements, fetch records, and render entity-specific sections.
 
-For this guide, we'll use **GO Terms** (`go` field from mygene.info) as the example.
+The internal folder is still named `src/providers` for historical reasons. In public docs, treat each folder there as an adapter implementation.
 
-## The 5-Step Pattern
+## Module Checklist
 
-1.  **Configure:** Define types and defaults in `src/config.ts`.
-2.  **Fetch:** Request data in `src/api.ts`.
-3.  **Format:** Transform raw API data into standard objects in `src/formatters.ts`.
-4.  **Render:** Generate HTML in `src/renderer.ts`.
-5.  **Integrate:** Wire up nested tooltips in `src/lifecycle.ts`.
+1. Add raw API or service types for the entity type.
+2. Add module config and sensible defaults.
+3. Implement element parsing for the module's markup pattern.
+4. Implement adapter fetching and cache keys.
+5. Format raw adapter data into tooltip-ready values.
+6. Render sections through the shared core renderer helpers.
+7. Export a public tooltip module entry point.
+8. Add docs, examples, and package exports.
 
----
+## Example Shape
 
-## Step 1: Configure (src/config.ts)
+A future variant tooltip module might use:
 
-Define the shape of the data and user configuration options.
-
-### A. Define the data interface
-Add the interface for the raw API data.
-
-```typescript
-// src/config.ts
-
-export interface MyGeneGoTerm {
-  id: string;
-  term: string;
-  category: 'CC' | 'BP' | 'MF';
-}
+```text
+src/variant.ts
+src/providers/variant/
+  client.ts
+  config.ts
+  formatters.ts
+  index.ts
+  parser.ts
+  profile.ts
+  renderer.ts
+  types.ts
 ```
 
-### B. Update `MyGeneInfoResult`
-Add the new field to the main result interface.
+and expose:
 
-```typescript
-// src/config.ts
-
-export interface MyGeneInfoResult {
-  // ... existing fields
-  generif?: GeneRIF[] | GeneRIF;
-  go?: MyGeneGoTerm[] | MyGeneGoTerm; // <--- ADD THIS
-}
+```ts
+import { VariantTooltip } from 'bio-tooltips/variant';
 ```
 
-### C. Update `TooltipDisplayConfig`
-Add a visibility flag. Note that sections now use `SectionVisibility` (boolean | 'expanded' | 'collapsed').
+## Adapter Responsibilities
 
-```typescript
-// src/config.ts
+Adapters should keep service-specific details out of the shared core. They own:
 
-export interface TooltipDisplayConfig {
-  // ... existing fields
-  generifs: SectionVisibility;
-  goTerms: SectionVisibility; // <--- ADD THIS
-  // ...
-}
-```
+- parsing module-specific element attributes
+- fetching records from the backing API or service
+- normalizing raw records into display values
+- choosing sections and section order
+- defining optional visuals and nested tooltip content
 
-### D. Update `GeneTooltipConfig` and `defaultConfig`
-Add an item count setting and set defaults.
+## Shared Core Responsibilities
 
-```typescript
-// src/config.ts
+The shared core owns:
 
-export interface GeneTooltipConfig {
-  // ...
-  generifCount: number;
-  goTermCount: number; // <--- ADD THIS
-}
+- Tippy.js initialization and cleanup
+- prefetch strategy
+- cache plumbing
+- viewport constraints
+- theming
+- section wrappers and collapsible behavior
 
-export const defaultConfig: GeneTooltipConfig = {
-  // ...
-  display: {
-    // ...
-    generifs: true,
-    goTerms: true, // <--- SET DEFAULT VISIBILITY
-  },
-  // ...
-  generifCount: 3,
-  goTermCount: 3, // <--- SET DEFAULT COUNT
-};
-```
+## Package Export
 
----
+After adding a module entry file, add a package subpath:
 
-## Step 2: Fetch (src/api.ts)
-
-Add the API field name to the query list.
-
-```typescript
-// src/api.ts
-
-export async function fetchMyGeneBatch(/*...*/) {
-  // ...
-  const fields = [
-    // ...
-    'generif',
-    'wikipedia.url_stub',
-    'go' // <--- ADD API FIELD NAME
-  ].join(',');
-  // ...
-}
-```
-
----
-
-## Step 3: Format (src/formatters.ts)
-
-Create a pure function to transform raw API data into a standard list of items (`{ name, url }`).
-
-```typescript
-// src/formatters.ts
-import type { MyGeneGoTerm } from './config'; // Import your new type
-
-// ... existing functions
-
-export function formatGoTerms(data: MyGeneGoTerm[] | MyGeneGoTerm | undefined): FormattedItem[] {
-  if (!data) return [];
-  
-  // Use asArray helper to handle single objects vs arrays
-  return asArray(data)
-    .map(item => ({
-      name: `${item.term} (${item.category})`,
-      url: `https://www.ebi.ac.uk/QuickGO/term/${item.id}`
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name));
-}
-```
-
----
-
-## Step 4: Render (src/renderer.ts)
-
-Generate the HTML. We use `renderParagraphContent` for comma-separated lists or `renderListContent` for bullet points.
-
-### A. Import the formatter
-```typescript
-import { 
-  // ...
-  formatGoTerms // <--- Import
-} from './formatters';
-```
-
-### B. Create a specific render function
-Use the `uniqueId` to ensure the "Show more" button works correctly.
-
-```typescript
-function renderGoTerms(data: MyGeneInfoResult, count: number, uniqueId: string): string {
-  const items = formatGoTerms(data.go);
-  // Use renderParagraphContent (comma separated) or renderListContent (<ul>)
-  return renderParagraphContent(items, count, `goterms-more-${uniqueId}`);
-}
-```
-
-### C. Update `renderTooltipHTML`
-Update the options interface and the main HTML template.
-
-```typescript
-// Inside src/renderer.ts
-
-// 1. Update RenderOptions interface
-interface RenderOptions {
-  // ...
-  generifCount?: number;
-  goTermCount?: number; // <--- Add
-}
-
-export function renderTooltipHTML(data: MyGeneInfoResult | null | undefined, options: RenderOptions = {}): string {
-  // ...
-  
-  const {
-    // ...
-    generifCount = 3,
-    goTermCount = 3, // <--- Destructure
-  } = options;
-
-  // ...
-
-  // 2. Generate the content
-  const goTermContent = renderGoTerms(data, goTermCount, uniqueId);
-
-  return `
-    <div class="gene-tooltip-content" ...>
-      <!-- ... -->
-      ${buildSection('generifs', 'GeneRIFs', generifContent)}
-      
-      <!-- 3. Add the section using buildSection -->
-      ${buildSection('goTerms', 'GO Terms', goTermContent)}
-      
-      <!-- ... -->
-    </div>
-  `;
-}
-```
-
----
-
-## Step 5: Integrate Lifecycle (src/lifecycle.ts)
-
-This step activates the "Show more" button functionality (nested tooltips).
-
-### A. Update `renderVisualsAndNestedTippys`
-
-```typescript
-// src/lifecycle.ts
-
-import { 
-  // ...
-  formatGoTerms // <--- Import formatter
-} from './formatters.js';
-
-async function renderVisualsAndNestedTippys(instance: TippyInstanceWithCustoms, config: GeneTooltipConfig) {
-    // ... setup code ...
-
-    // 1. Format the data again for the nested tooltip
-    const goItems = formatGoTerms(data.go);
-
-    // 2. Register the nested tooltip
-    // Arguments: instance, options, selector_id, items_array
-    createNestedTippy(
-      instance, 
-      finalNestedTippyOptions, 
-      `#goterms-more-${uniqueId}`, 
-      goItems
-    );
-    
-    // ... existing calls for transcripts, structures, etc.
-}
-```
-
-### B. Update `createOnShowHandler`
-
-Pass the new count configuration to the renderer options.
-
-```typescript
-// src/lifecycle.ts
-
-export function createOnShowHandler(...) {
-  return function onShow(instance: TippyInstanceWithCustoms) {
-     // ...
-     const renderOptions = {
-        // ...
-        generifCount: config.generifCount,
-        goTermCount: config.goTermCount, // <--- Pass from config
-        uniqueId: instance._uniqueId,
-      };
-      // ...
+```json
+{
+  "exports": {
+    "./variant": {
+      "types": "./dist/types/variant.d.ts",
+      "import": "./dist/bio-tooltips.variant.esm.js",
+      "require": "./dist/bio-tooltips.variant.cjs"
+    }
   }
 }
 ```
 
-By following these five steps, you can cleanly and consistently add new sections while maintinaing flexible configuration options.
+The build config should emit matching ESM and CommonJS artifacts.
+
+## Gene Section Extensions
+
+If you are only adding a new section to the existing gene tooltip module, the main integration point is `src/providers/mygene/sections/index.ts`. Add section types, config, fetch fields, formatters, and a section definition, then register it in `myGeneSections`.

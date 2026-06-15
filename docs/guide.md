@@ -1,145 +1,77 @@
 # Getting Started
 
-This guide will walk you through installing and configuring Gene Tooltip JS. Below is an example to illustrate what the library does.
+Bio Tooltips is a framework-agnostic tooltip library with a shared engine and entity-specific biomedical renderers.
 
-Hover over the gene to see the configured tooltip: <GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 400, truncateSummary: 3, pathwayCount: 3, domainCount: 3 }" />
+Hover over a gene: <GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 400, truncateSummary: 3, pathwayCount: 3, domainCount: 3 }" />
 
-## Installation
+Hover over a chemical: <ChemicalDemo query="aspirin" :config="{ tooltipWidth: 430, truncateSummary: 3 }" />
 
-You can install the package via npm:
+## Install
 
 ```bash
-npm install gene-tooltips
+npm install bio-tooltips
 ```
 
-Or include it directly in your HTML from a CDN like unpkg:
+Import the shared CSS once in your app:
 
-```html
-<script src="https://unpkg.com/gene-tooltips/dist/gene-tooltips.global.js"></script>
+```ts
+import 'bio-tooltips/style.css';
 ```
 
-## Basic Usage
+## Choose a Tooltip Module
 
-Once the script is loaded, you can initialize it. Add the class `gene-tooltip` and a `data-species` attribute to any `<span>` element.
+Use the module subpaths for focused bundle entry points.
 
-To use all features, including the ideogram and exon maps, you should include ideogram.js and the d3 library as shown here.
+```ts
+import { GeneTooltip } from 'bio-tooltips/mygene';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import 'bio-tooltips/style.css';
+```
 
-You must also include the CSS for proper styling and theme responsiveness.
+The root import also exposes the current tooltip modules:
+
+```ts
+import { GeneTooltip, ChemicalTooltip } from 'bio-tooltips';
+```
+
+## Gene Tooltips
+
+Gene tooltips read the element text as one or more gene symbols. Add `data-species` to choose the organism.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gene-tooltips/dist/gene-tooltips.css">
+<span class="gene-tooltip" data-species="human">TP53</span>
+<span class="gene-tooltip" data-species="mouse">Trp53</span>
+```
+
+```ts
+GeneTooltip.init({
+  selector: '.gene-tooltip'
+});
+```
+
+For chromosome ideograms and gene model visuals, include the optional peer libraries on pages that need them.
+
+```html
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ideogram@1.53.0/dist/js/ideogram.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gene-tooltips/dist/gene-tooltips.global.js"></script>
-
-<p>
-  Here is a human gene: <span class="gene-tooltip" data-species="human">TP53</span>.
-  And here is a mouse gene: <span class="gene-tooltip" data-species="mouse">Trp53</span>.
-</p>
-
-<script src="https://unpkg.com/gene-tooltips/dist/gene-tooltips.global.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        GeneTooltip.init({
-            // Your optional configuration here
-        });
-    });
-</script>
 ```
 
-# Configuration
+## Chemical Tooltips
 
-You can customize the tooltip by passing a configuration object to `GeneTooltip.init()`. Here are some common examples.
+Prefer stable chemical identifiers in `data-query` and use the element text as the human-readable label. Visible-text name searches are still available as experimental best-guess lookups.
 
-## Changing Displayed Sections
+```html
+<span class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</span>
+<span class="chemical-tooltip" data-query="CHEMBL25" data-scope="chembl">aspirin</span>
+<span class="chemical-tooltip" data-lookup="best-guess">caffeine</span>
+```
 
-Hide the ideogram and protein domains sections.
-
-```javascript
-GeneTooltip.init({
-    display: {
-        ideogram: false,
-        domains: false
-    }
+```ts
+ChemicalTooltip.init({
+  selector: '.chemical-tooltip'
 });
 ```
 
-> [!WARNING] If a section of the tooltip is returned empty from mygene.info, it will simply not be shown, rather than displaying an error (with some exceptions, like the Summary).
+## Next Steps
 
-## Changing Pathway Source
-
-Show pathways from Reactome instead of the default KEGG.
-
-```javascript
-GeneTooltip.init({
-    pathwaySource: 'reactome'
-});
-```
-
-> [!NOTE]
-> The gene must have Reactome pathway data available at mygene.info for this to display.
-
-## Adjusting Tooltip Size and Truncation
-
-Create a wider tooltip and show more of the summary initially.
-
-```javascript
-GeneTooltip.init({
-    tooltipWidth: 400, // in pixels
-    truncateSummary: 6 // number of lines
-});
-```
-
-## Styling
-
-The tooltip is styled with CSS variables that you can easily override. Create your own CSS file and include it after the library's CSS to customize the appearance.
-
-```css
-/* ./src/css/theme.css */
-:root {
-  --gt-color-primary: #d946ef; /* Use a different primary color */
-}
-```
-
-You can also specify any of the built in [Tippy themes](https://atomiks.github.io/tippyjs/v6/themes/):
-
-```javascript
-GeneTooltip.init({
-    // The default theme is auto
-    // Valid options:
-    // theme: 'auto'
-    // theme: 'light'
-    // theme: 'light-border'
-    // theme: 'dark'
-    // theme: 'translucent'
-    // theme: 'material'
-    theme: 'material'
-});
-```
-
-Auto theme (default) will adjust to OS and site settings for light vs. dark: <GeneDemo genes="TP53" species="human" :config="{ theme: 'auto' }" />
-
-Light theme: <GeneDemo genes="TP53" species="human" :config="{ theme: 'light' }" />
-
-Light-border theme:  <GeneDemo genes="TP53" species="human" :config="{ theme: 'light-border' }" />
-
-Dark theme:  <GeneDemo genes="TP53" species="human" :config="{ theme: 'dark' }" />
-
-Translucent theme:  <GeneDemo genes="TP53" species="human" :config="{ theme: 'translucent' }" />
-
-Material theme:  <GeneDemo genes="TP53" species="human" :config="{ theme: 'material' }" />
-
-## How it works
-
-This library leverages the MyGene.info API. Read about it [here](https://mygene.info). The function `fetchMyGeneBatch` in [`./src/api.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/api.ts) makes a POST batch request to the API using the numeric NCBI taxid for each gene requested.
-
-It will dynamically build a query that looks something like this:
-
-[`https://mygene.info/v3/query?q=symbol:tp53&scopes=symbol&fields=_id,query,symbol,name`](https://mygene.info/v3/query?q=symbol:tp53&scopes=symbol&fields=_id,query,symbol,name)
-
-The example above is shortened, since the default is to include more fields of interest. Future improvements to this package could further parameterize the API query generation.
-
-The JSON that is returned from the query is then parsed and put into components by the collection of functions, culminating in `renderTooltipHTML` in [`./src/renderer.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/renderer.ts). The entire process is orchestrated by [`index.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/index.ts) which calls `tippy()` and populates the tooltip with the value returned by `renderTooltipHTML`, and uses all the appropriate props for tooltip settings. 
-
-This pattern could be extended to other APIs, but new sections would most likely need to be written to accomodate differently shaped data structures. I welcome any pull requests on this topic but I am not likely to develop this idea any further, given that MyGene.info is such a rich and fast data source.
+Read [Core Concepts](./core-concepts.md) for shared behavior, [Gene Usage](./gene-usage.md) for MyGene.info adapter details, and [Chemical Usage](./chemical-usage.md) for MyChem.info adapter details.

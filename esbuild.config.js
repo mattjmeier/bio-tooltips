@@ -1,16 +1,15 @@
 import esbuild from 'esbuild';
+import path from 'node:path';
 
 // Determine if we're in "watch" mode
 const isWatching = process.argv.includes('--watch');
 
 // Shared configuration for all builds
 const sharedConfig = {
-  entryPoints: ['src/index.ts'],
   bundle: true,
   minify: !isWatching,
   sourcemap: isWatching,
-  // You already had these, which is perfect. No plugin needed.
-  external: ['d3', 'ideogram'],
+  external: ['d3', 'ideogram', '@rdkit/rdkit'],
   loader: {
     '.svg': 'text',
     '.png': 'dataurl',
@@ -18,40 +17,42 @@ const sharedConfig = {
   logLevel: 'info',
 };
 
+const normalizeEntryPoint = (entryPoint) => path.resolve(entryPoint);
+
+const createConfig = (entryPoint, outfile, format, platform) => ({
+  ...sharedConfig,
+  entryPoints: [normalizeEntryPoint(entryPoint)],
+  platform,
+  format,
+  outfile,
+});
+
 // --- Build Tasks ---
 const buildJS = () => Promise.all([
-  // CJS
-  esbuild.build({
-    ...sharedConfig,
-    platform: 'node',
-    format: 'cjs',
-    outfile: 'dist/gene-tooltips.cjs.js',
-  }),
-  // ESM
-  esbuild.build({
-    ...sharedConfig,
-    platform: 'browser',
-    format: 'esm',
-    outfile: 'dist/gene-tooltips.esm.js',
-  }),
+  esbuild.build(createConfig('src/index.ts', 'dist/bio-tooltips.cjs', 'cjs', 'node')),
+  esbuild.build(createConfig('src/index.ts', 'dist/bio-tooltips.esm.js', 'esm', 'browser')),
+  esbuild.build(createConfig('src/mygene.ts', 'dist/bio-tooltips.mygene.cjs', 'cjs', 'node')),
+  esbuild.build(createConfig('src/mygene.ts', 'dist/bio-tooltips.mygene.esm.js', 'esm', 'browser')),
+  esbuild.build(createConfig('src/mychem.ts', 'dist/bio-tooltips.mychem.cjs', 'cjs', 'node')),
+  esbuild.build(createConfig('src/mychem.ts', 'dist/bio-tooltips.mychem.esm.js', 'esm', 'browser')),
+  esbuild.build(createConfig('src/mychem-rdkit.ts', 'dist/bio-tooltips.mychem-rdkit.cjs', 'cjs', 'node')),
+  esbuild.build(createConfig('src/mychem-rdkit.ts', 'dist/bio-tooltips.mychem-rdkit.esm.js', 'esm', 'browser')),
   // UMD/IIFE
   esbuild.build({
     ...sharedConfig,
+    entryPoints: [path.resolve('src/index.ts')],
     platform: 'browser',
     format: 'iife',
-    globalName: 'GeneTooltip',
-    outfile: 'dist/gene-tooltips.global.js',
-    footer: {
-      js: 'window.GeneTooltip = window.GeneTooltip.default;',
-    },
+    globalName: 'BioTooltips',
+    outfile: 'dist/bio-tooltips.global.js',
   }),
 ]);
 
 const buildCSS = () => esbuild.build({
-    entryPoints: ['src/css/main.css'],
+    entryPoints: [path.resolve('src/css/main.css')],
     bundle: true,
     minify: !isWatching,
-    outfile: 'dist/gene-tooltips.css',
+    outfile: 'dist/bio-tooltips.css',
 });
 
 // --- Main Execution ---

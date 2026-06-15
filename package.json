@@ -1,21 +1,26 @@
 {
-  "name": "gene-tooltips",
-  "version": "0.12.1",
-  "description": "A framework-agnostic library for showing gene information as a tooltip",
+  "name": "bio-tooltips",
+  "version": "1.0.0",
+  "description": "Framework-agnostic biomedical entity tooltips for genes, chemicals, and other biological data.",
   "keywords": [
-    "genetics",
     "bioinformatics",
-    "gene",
-    "genomics"
+    "biomedical",
+    "tooltip",
+    "genes",
+    "chemicals",
+    "mygene",
+    "mychem",
+    "biothings"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mattjmeier/gene-tooltips.git"
+    "url": "git+https://github.com/mattjmeier/bio-tooltips.git"
   },
-  "main": "dist/gene-tooltips.cjs.js",
-  "module": "dist/gene-tooltips.esm.js",
-  "global": "dist/gene-tooltips.global.js",
-  "types": "dist/index.d.ts",
+  "homepage": "https://mattjmeier.github.io/bio-tooltips/",
+  "main": "dist/bio-tooltips.cjs",
+  "module": "dist/bio-tooltips.esm.js",
+  "global": "dist/bio-tooltips.global.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist",
     "README.md",
@@ -23,11 +28,26 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/gene-tooltips.esm.js",
-      "require": "./dist/gene-tooltips.cjs.js"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/bio-tooltips.esm.js",
+      "require": "./dist/bio-tooltips.cjs"
     },
-    "./style.css": "./dist/gene-tooltips.css"
+    "./mygene": {
+      "types": "./dist/types/mygene.d.ts",
+      "import": "./dist/bio-tooltips.mygene.esm.js",
+      "require": "./dist/bio-tooltips.mygene.cjs"
+    },
+    "./mychem": {
+      "types": "./dist/types/mychem.d.ts",
+      "import": "./dist/bio-tooltips.mychem.esm.js",
+      "require": "./dist/bio-tooltips.mychem.cjs"
+    },
+    "./mychem/rdkit": {
+      "types": "./dist/types/mychem-rdkit.d.ts",
+      "import": "./dist/bio-tooltips.mychem-rdkit.esm.js",
+      "require": "./dist/bio-tooltips.mychem-rdkit.cjs"
+    },
+    "./style.css": "./dist/bio-tooltips.css"
   },
   "license": "MIT",
   "author": "Matthew J. Meier",
@@ -54,6 +74,7 @@
     "test:watch": "vitest --watch"
   },
   "devDependencies": {
+    "@rdkit/rdkit": "^2025.3.4-1.0.0",
     "@types/d3": "^7.4.3",
     "@types/node": "^20.14.12",
     "@types/tippy.js": "^6.0.0",
@@ -78,10 +99,14 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
+    "@rdkit/rdkit": ">=2025.3.4-1.0.0",
     "d3": "^7.0.0",
     "ideogram": "^1.53.0"
   },
   "peerDependenciesMeta": {
+    "@rdkit/rdkit": {
+      "optional": true
+    },
     "d3": {
       "optional": true
     },

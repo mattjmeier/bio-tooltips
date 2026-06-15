@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { findGeneElements, getGeneInfoFromElement } from '../src/parser';
+import { findGeneElements, getGeneInfoFromElement } from '../src/providers/mygene/parser';
+import { parseChemicalElement } from '../src/providers/mychem/parser';
 
 describe('parser', () => {
   
@@ -78,5 +79,55 @@ describe('parser', () => {
       const info = getGeneInfoFromElement(el);
       expect(info).toBeNull();
     });
+  });
+});
+
+describe('chemical parser', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it('treats visible chemical names as experimental best-guess lookups', () => {
+    const el = document.createElement('span');
+    el.textContent = ' aspirin ';
+
+    const ref = parseChemicalElement(el);
+
+    expect(ref).toEqual({
+      query: 'aspirin',
+      context: {
+        lookup: 'best-guess',
+        scope: 'name',
+      },
+    });
+  });
+
+  it('uses data-query for ID-backed markup while preserving visible text', () => {
+    const el = document.createElement('span');
+    el.textContent = 'aspirin';
+    el.dataset.query = '2244';
+    el.dataset.scope = 'pubchem';
+
+    const ref = parseChemicalElement(el);
+
+    expect(ref).toEqual({
+      query: '2244',
+      context: {
+        lookup: 'id',
+        scope: 'pubchem.cid',
+      },
+    });
+  });
+
+  it('keeps visible identifier markup compatible with older examples', () => {
+    const el = document.createElement('span');
+    el.textContent = 'CHEMBL25';
+    el.dataset.scope = 'chembl';
+
+    const ref = parseChemicalElement(el);
+
+    expect(ref?.query).toBe('CHEMBL25');
+    expect(ref?.context?.lookup).toBe('id');
+    expect(ref?.context?.scope).toBe('chembl.molecule_chembl_id');
   });
 });

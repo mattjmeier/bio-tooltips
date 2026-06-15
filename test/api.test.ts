@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { fetchMyGeneBatch } from '../src/api';
-import type { MyGeneInfoResult } from '../src/config';
+import { fetchMyGeneBatch } from '../src/providers/mygene/client';
+import type { MyGeneInfoResult } from '../src/providers/mygene/types';
 
 // Define a type for the not-found result to keep things clean
 type MyGeneNotFoundResult = {

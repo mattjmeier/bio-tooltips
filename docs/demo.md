@@ -1,50 +1,43 @@
-# Live demo
+# Demo Overview
 
-Hover over the gene names below to see the library in action.
+Hover over the terms below to see multiple tooltip modules using the same shared engine.
 
-## Example genes
+## Gene Tooltips
 
-The protein encoded by <GeneDemo genes="TP53" species="human" /> is a tumor suppressor. In mice, the ortholog is <GeneDemo genes="Trp53" species="mouse" />. This is a well-known gene from the fruit fly: <GeneDemo genes="dib" species="7227" />. Here is one from yeast: <GeneDemo genes="RAD51" species="559292" />.
+The protein encoded by <GeneDemo genes="TP53" species="human" /> is a tumor suppressor. In mice, the ortholog is <GeneDemo genes="Trp53" species="mouse" />. Here is one from fruit fly: <GeneDemo genes="dib" species="7227" />.
 
-## Lists of genes
+Lists work too: <GeneDemo genes="TP53, GADD45A, BRCA1, BRCA2, RAD51, ATM, XPA, NOTAGENE" species="human" />
 
-You can also use delimiters (space, comma, semicolon) to separate lists of genes and use only one class tag for all of them.
+[Open the dedicated gene demo](./demos/gene.md)
 
-::: details Show code
-```html
-<p style="font-size: 1.2em; line-height: 1.8;">
-    Here are a bunch of human genes, separated by commas:
-    <div class="gene-tooltip" data-species="human">
-        TP53, GADD45A, BRCA1, BRCA2, RAD51, ATM, XPA, NOTAGENE
-    </div>
+## Chemical Tooltips
+
+Common-name queries can resolve familiar compounds like <ChemicalDemo query="aspirin" />, <ChemicalDemo query="caffeine" />, and <ChemicalDemo query="imatinib" />.
+
+Identifier scopes work when the visible text is not a name: PubChem CID <ChemicalDemo query="2244" scope="pubchem" /> and ChEMBL ID <ChemicalDemo query="CHEMBL25" scope="chembl" />.
+
+[Open the dedicated chemical demo](./demos/chemical.md)
+
+## Mixed Entity Demo
+
+Gene and chemical tooltip modules can run on the same page.
+
+<p>
+  <GeneDemo genes="TP53" species="human" />
+  is involved in cellular stress responses that may be relevant when interpreting
+  compounds such as
+  <ChemicalDemo query="2336" scope="pubchem" label="benzo[a]pyrene" />.
 </p>
+
+[Open the mixed entity demo](./demos/mixed.md)
+
+## Code Shape
+
+```ts
+import { GeneTooltip } from 'bio-tooltips/mygene';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import 'bio-tooltips/style.css';
+
+GeneTooltip.init({ selector: '.gene-tooltip' });
+ChemicalTooltip.init({ selector: '.chemical-tooltip' });
 ```
-
-:::
-
-Here are a bunch of human genes, separated by commas: <GeneDemo genes="TP53, GADD45A, BRCA1, BRCA2, RAD51, ATM, XPA, NOTAGENE" species="human" />
-
-## Supported species
-
-The species in [`src/constants.ts`](https://github.com/mattjmeier/gene-tooltips/blob/main/src/constants.ts) are supported. The MyGene.info API supports ~22K species via the taxid, so the data retrieval will work for many species. This is also true for `ideogram.js`. I only built in icons and common names for convenience for popular species, but using the taxid should be an option for many model organisms.
-
-### Human
-<GeneDemo genes="TP53, BRCA1, MYC" species="human" />
-### Mouse
-<GeneDemo genes="Trp53, Mdm2, Gadd45a" species="mouse" />
-### Rat
-<GeneDemo genes="Tp53, Alb, Il6" species="rat" />
-### Fruitfly
-<GeneDemo genes="boss, Antp, dib" species="fruitfly" />
-### Nematode
-<GeneDemo genes="ced-3, ced-9, lin-4" species="nematode" />
-### Zebrafish
-<GeneDemo genes="noto, wnt5b, sox2" species="zebrafish" />
-### Thale cress
-<GeneDemo genes="AG, AP1, FLC" species="thale cress" />
-### Frog
-<GeneDemo genes="Nodal, Foxd3, Sox2" species="frog" />
-### Pig
-<GeneDemo genes="ADCY4, APOE, GGTA1" species="pig" />
-### Yeast
-<GeneDemo genes="PHO5, GAL1, CDC28" species="yeast" />

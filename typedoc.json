@@ -8,6 +8,7 @@
   "outputFileStrategy": "modules",
 
   "out": "docs/api", // The directory where the single file will be created
+  "sourceLinkTemplate": "https://github.com/mattjmeier/bio-tooltips/blob/{gitRevision}/{path}#L{line}",
 
   "plugin": [
     "typedoc-plugin-markdown",

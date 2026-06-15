@@ -1,4 +1,4 @@
-[**gene-tooltips**](../README.md)
+[**bio-tooltips**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **getEffectiveTheme**(`configTheme`): `string`
 
-Defined in: [ui/theme.ts:6](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/ui/theme.ts#L6)
+Defined in: [ui/theme.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/ui/theme.ts#L6)
 
 Determines the effective theme to be used for tippy instances.
 
@@ -28,7 +28,7 @@ Determines the effective theme to be used for tippy instances.
 
 > **initializeThemeObserver**(`instances`, `isAutoTheme`): `ThemeObserverCleanup`
 
-Defined in: [ui/theme.ts:23](https://github.com/mattjmeier/gene-tooltips/blob/547536637276ecddcde4082e6f81e07f2bdbbbf9/src/ui/theme.ts#L23)
+Defined in: [ui/theme.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/ui/theme.ts#L23)
 
 Sets up a MutationObserver to watch for theme changes on the `<html>` element
 and updates the tippy instances accordingly.
@@ -37,7 +37,7 @@ and updates the tippy instances accordingly.
 
 ##### instances
 
-[`TippyInstanceWithCustoms`](../lifecycle.md#tippyinstancewithcustoms)[]
+[`TippyInstanceWithCustoms`](../core/types.md#tippyinstancewithcustoms)\<`unknown`\>[]
 
 ##### isAutoTheme
 

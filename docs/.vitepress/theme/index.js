@@ -1,4 +1,6 @@
 import DefaultTheme from 'vitepress/theme'
+import ChemicalDemo from './components/ChemicalDemo.vue'
+import ChemicalRDKitDemo from './components/ChemicalRDKitDemo.vue'
 import GeneDemo from './components/GeneDemo.vue'
 
 export default {
@@ -7,6 +9,8 @@ export default {
 
   enhanceApp({ app }) {
     // Register custom global components
+    app.component('ChemicalDemo', ChemicalDemo);
+    app.component('ChemicalRDKitDemo', ChemicalRDKitDemo);
     app.component('GeneDemo', GeneDemo);
   }
 }

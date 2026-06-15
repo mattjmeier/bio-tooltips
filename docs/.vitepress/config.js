@@ -1,11 +1,13 @@
+import { fileURLToPath, URL } from 'node:url';
+
 export default {
-  title: 'Gene Tooltips JS',
-  description: 'A lightweight library for creating gene information tooltips.',
-  base: '/gene-tooltips/',
+  title: 'Bio Tooltips',
+  description: 'Framework-agnostic biomedical entity tooltips for genes, chemicals, and other biological data.',
+  base: '/bio-tooltips/',
   head: [
     [
       'link',
-      { rel: 'icon', type: 'image/png', href: '/gene-tooltips/favicon.png' }
+      { rel: 'icon', type: 'image/png', href: '/bio-tooltips/favicon.png' }
     ],
     [
       'script',
@@ -22,44 +24,104 @@ export default {
   ],
   themeConfig: {
     nav: [
-      { text: 'Guide', link: '/guide' },
-      { text: 'Demo', link: '/demo' },
-      { text: 'GitHub', link: 'https://github.com/mattjmeier/gene-tooltips' }
+      { text: 'Start Here', link: '/' },
+      { text: 'Modules', link: '/gene-overview' },
+      { text: 'Demos', link: '/demo' },
+      { text: 'API', link: '/api' },
+      { text: 'GitHub', link: 'https://github.com/mattjmeier/bio-tooltips' }
     ],
     sidebar: [
       {
-        text: 'Documentation',
+        text: 'Introduction',
         items: [
-          { text: 'Getting started', link: '/guide' },
-          { text: 'Advanced configuration', link: '/configuration.md'},
-          { text: 'Integration with various frameworks', link: '/integration.md'},
-          { text: 'Adding new sections to tooltips', link: '/add-modules.md'} 
+          { text: 'Quick Start', link: '/guide' },
+          { text: 'Core Concepts', link: '/core-concepts' },
+          { text: 'Markup Patterns', link: '/markup-patterns' },
+          { text: 'Configuration', link: '/configuration' },
+          { text: 'Styling & Theming', link: '/styling-theming' }
         ]
       },
       {
-        text: 'Live Example',
+        text: 'Tooltip Modules',
         items: [
-            { text: 'Demo Page', link: '/demo' },
+          {
+            text: 'Gene Tooltips',
+            items: [
+              { text: 'Overview', link: '/gene-overview' },
+              { text: 'Usage', link: '/gene-usage' },
+              { text: 'Configuration', link: '/gene-configuration' },
+              { text: 'Data Fields', link: '/gene-data-fields' },
+              { text: 'API', link: '/gene-api' },
+              { text: 'Examples', link: '/gene-examples' }
+            ]
+          },
+          {
+            text: 'Chemical Tooltips',
+            items: [
+              { text: 'Overview', link: '/chemical-overview' },
+              { text: 'Usage', link: '/chemical-usage' },
+              { text: 'Configuration', link: '/chemical-configuration' },
+              { text: 'Data Fields', link: '/chemical-data-fields' },
+              { text: 'Source Comparison', link: '/chemical-source-comparison' },
+              { text: 'API', link: '/chemical-api' },
+              { text: 'Examples', link: '/chemical-examples' }
+            ]
+          },
+          {
+            text: 'Variant Tooltips',
+            items: [
+              { text: 'Roadmap', link: '/variant-roadmap' }
+            ]
+          }
         ]
       },
       {
-        text: "API Reference",
+        text: 'Demos',
         items: [
-          { text: "Description of props", link: '/api.md'},
-          { text: "Full API", link: '/api/modules'}
+          { text: 'Demo Overview', link: '/demo' },
+          { text: 'Gene Demo', link: '/demos/gene' },
+          { text: 'Chemical Demo', link: '/demos/chemical' },
+          { text: 'Mixed Entity Demo', link: '/demos/mixed' }
+        ]
+      },
+      {
+        text: 'Reference',
+        items: [
+          { text: 'Installation', link: '/installation' },
+          { text: 'Browser / Bundler Usage', link: '/browser-bundler-usage' },
+          { text: 'CSS', link: '/css' },
+          { text: 'Core API', link: '/reference/core' },
+          { text: 'Adapter API', link: '/reference/adapters' },
+          { text: 'Generated API Reference', link: '/api/modules' },
+          { text: 'Adding a New Tooltip Module', link: '/add-modules' }
         ]
       }
     ]
   },
-  // build: {
-  //   rollupOptions: {
-  //     external: ['d3', 'ideogram'],
-  //     output: {
-  //       globals: {
-  //         d3: 'd3',
-  //         Ideogram: 'Ideogram'
-  //       }
-  //     }
-  //   }
-  // }
+  vite: {
+    resolve: {
+      alias: [
+        {
+          find: /^bio-tooltips$/,
+          replacement: fileURLToPath(new URL('../../src/index.ts', import.meta.url))
+        },
+        {
+          find: /^bio-tooltips\/mygene$/,
+          replacement: fileURLToPath(new URL('../../src/mygene.ts', import.meta.url))
+        },
+        {
+          find: /^bio-tooltips\/mychem$/,
+          replacement: fileURLToPath(new URL('../../src/mychem.ts', import.meta.url))
+        },
+        {
+          find: /^bio-tooltips\/mychem\/rdkit$/,
+          replacement: fileURLToPath(new URL('../../src/mychem-rdkit.ts', import.meta.url))
+        },
+        {
+          find: /^bio-tooltips\/style\.css$/,
+          replacement: fileURLToPath(new URL('../../src/css/main.css', import.meta.url))
+        }
+      ]
+    }
+  }
 }
