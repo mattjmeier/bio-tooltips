@@ -1,5 +1,21 @@
 # gene-tooltips
 
+> **Moved:** This package has moved to [`bio-tooltips`](https://www.npmjs.com/package/bio-tooltips).
+>
+> `gene-tooltips` is retained for legacy use only. New projects should install `bio-tooltips`.
+
+```bash
+npm install bio-tooltips
+````
+
+```ts
+import { GeneTooltip } from 'bio-tooltips/mygene';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import 'bio-tooltips/style.css';
+```
+
+# Legacy package
+
 A framework-agnostic JavaScript/TypeScript library for displaying interactive gene information tooltips.
 
 ## Context
