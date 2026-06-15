@@ -1,167 +1,82 @@
-# Guide: Adding a New MyGene Section
+# Adding a New Tooltip Module
 
-This document outlines the procedure for adding a new data section, such as GO Terms or phenotypes, to the MyGene tooltip provider.
+This guide outlines the shape of a new Bio Tooltips module. The existing gene and chemical modules both combine a public entry point with an adapter that knows how to parse elements, fetch records, and render entity-specific sections.
 
-For this guide, we'll use **GO Terms** (`go` field from mygene.info) as the example.
+The internal folder is still named `src/providers` for historical reasons. In public docs, treat each folder there as an adapter implementation.
 
-## The Pattern
+## Module Checklist
 
-1. **Types:** Add raw API types in `src/providers/mygene/types.ts`.
-2. **Config:** Add display and count options in `src/providers/mygene/config.ts`.
-3. **Fetch:** Request the field in `src/providers/mygene/client.ts`.
-4. **Format:** Transform API data in `src/providers/mygene/formatters.ts`.
-5. **Section:** Add a section file in `src/providers/mygene/sections/`.
-6. **Register:** Add the section to `myGeneSections` in `src/providers/mygene/sections/index.ts`.
+1. Add raw API or service types for the entity type.
+2. Add module config and sensible defaults.
+3. Implement element parsing for the module's markup pattern.
+4. Implement adapter fetching and cache keys.
+5. Format raw adapter data into tooltip-ready values.
+6. Render sections through the shared core renderer helpers.
+7. Export a public tooltip module entry point.
+8. Add docs, examples, and package exports.
 
-## Step 1: Types
+## Example Shape
 
-Add the raw API data shape.
+A future variant tooltip module might use:
 
-```ts
-// src/providers/mygene/types.ts
-
-export interface MyGeneGoTerm {
-  id: string;
-  term: string;
-  category: 'CC' | 'BP' | 'MF';
-}
-
-export interface MyGeneInfoResult {
-  // ... existing fields
-  go?: MyGeneGoTerm[] | MyGeneGoTerm;
-}
+```text
+src/variant.ts
+src/providers/variant/
+  client.ts
+  config.ts
+  formatters.ts
+  index.ts
+  parser.ts
+  profile.ts
+  renderer.ts
+  types.ts
 ```
 
-## Step 2: Config
-
-Add a visibility flag, an item count, and include that count in the section context.
+and expose:
 
 ```ts
-// src/providers/mygene/config.ts
-
-export interface TooltipDisplayConfig {
-  // ... existing fields
-  goTerms: SectionVisibility;
-}
-
-export interface GeneTooltipConfig {
-  // ... existing fields
-  goTermCount: number;
-}
-
-export const defaultConfig: GeneTooltipConfig = {
-  // ...
-  display: {
-    // ...
-    goTerms: true,
-  },
-  goTermCount: 3,
-};
+import { VariantTooltip } from 'bio-tooltips/variant';
 ```
 
-```ts
-// src/providers/mygene/sections/types.ts
+## Adapter Responsibilities
 
-export interface MyGeneSectionContext {
-  // ... existing fields
-  goTermCount: number;
-}
-```
+Adapters should keep service-specific details out of the shared core. They own:
 
-```ts
-// src/providers/mygene/sections/index.ts
+- parsing module-specific element attributes
+- fetching records from the backing API or service
+- normalizing raw records into display values
+- choosing sections and section order
+- defining optional visuals and nested tooltip content
 
-export function createMyGeneSectionContext(/* ... */): MyGeneSectionContext {
-  return {
-    // ... existing fields
-    goTermCount: config.goTermCount,
-  };
+## Shared Core Responsibilities
+
+The shared core owns:
+
+- Tippy.js initialization and cleanup
+- prefetch strategy
+- cache plumbing
+- viewport constraints
+- theming
+- section wrappers and collapsible behavior
+
+## Package Export
+
+After adding a module entry file, add a package subpath:
+
+```json
+{
+  "exports": {
+    "./variant": {
+      "types": "./dist/types/variant.d.ts",
+      "import": "./dist/bio-tooltips.variant.esm.js",
+      "require": "./dist/bio-tooltips.variant.cjs"
+    }
+  }
 }
 ```
 
-## Step 3: Fetch
+The build config should emit matching ESM and CommonJS artifacts.
 
-Add the API field name to the MyGene query.
+## Gene Section Extensions
 
-```ts
-// src/providers/mygene/client.ts
-
-const fields = [
-  // ...
-  'generif',
-  'wikipedia.url_stub',
-  'go',
-].join(',');
-```
-
-## Step 4: Format
-
-Create a pure function that transforms raw API data into `{ name, url }` items.
-
-```ts
-// src/providers/mygene/formatters.ts
-import type { MyGeneGoTerm } from './types.js';
-
-export function formatGoTerms(data: MyGeneGoTerm[] | MyGeneGoTerm | undefined): FormattedItem[] {
-  if (!data) return [];
-
-  return asArray(data)
-    .map(item => ({
-      name: `${item.term} (${item.category})`,
-      url: `https://www.ebi.ac.uk/QuickGO/term/${item.id}`,
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name));
-}
-```
-
-## Step 5: Section
-
-Add a section module. The section owns its visible HTML and, if needed, the nested tooltip metadata for its "more" button.
-
-```ts
-// src/providers/mygene/sections/go-terms.ts
-import { renderParagraphContent } from '../../../core/renderer.js';
-import { formatGoTerms } from '../formatters.js';
-import type { MyGeneSectionDefinition } from './types.js';
-
-export const goTermsSection: MyGeneSectionDefinition = {
-  key: 'goTerms',
-  title: 'GO Terms',
-  render({ data, goTermCount, uniqueId }) {
-    const items = formatGoTerms(data.go);
-    return renderParagraphContent(items, goTermCount, `goterms-more-${uniqueId}`);
-  },
-  getNestedTooltipDefinition({ data, uniqueId }) {
-    return {
-      selector: `#goterms-more-${uniqueId}`,
-      items: formatGoTerms(data.go),
-    };
-  },
-};
-```
-
-If your section needs a visual after the tooltip is shown, put the visual code in `src/providers/mygene/visuals/` and trigger it from the provider profile.
-
-## Step 6: Register
-
-Add the section to the registry in the order it should appear.
-
-```ts
-// src/providers/mygene/sections/index.ts
-import { goTermsSection } from './go-terms.js';
-
-export const myGeneSections: MyGeneSectionDefinition[] = [
-  summarySection,
-  locationSection,
-  geneModelSection,
-  pathwaysSection,
-  domainsSection,
-  transcriptsSection,
-  structuresSection,
-  generifsSection,
-  goTermsSection,
-  linksSection,
-];
-```
-
-That is the main integration point. The MyGene renderer loops over `myGeneSections`, and the provider profile asks those sections for nested tooltip definitions.
+If you are only adding a new section to the existing gene tooltip module, the main integration point is `src/providers/mygene/sections/index.ts`. Add section types, config, fetch fields, formatters, and a section definition, then register it in `myGeneSections`.

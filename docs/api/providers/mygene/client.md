@@ -1,4 +1,4 @@
-[**gene-tooltips**](../../README.md)
+[**bio-tooltips**](../../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **fetchMyGeneBatch**(`geneSymbols`, `species`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyGeneInfoResult`](types.md#mygeneinforesult)\>\>
 
-Defined in: [providers/mygene/client.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mygene/client.ts#L10)
+Defined in: [providers/mygene/client.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mygene/client.ts#L10)
 
 Fetches data for multiple genes in a single batch request from mygene.info.
 
@@ -38,7 +38,7 @@ A Map of gene symbols to data.
 
 > **fetchMyGeneRefs**(`refs`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyGeneInfoResult`](types.md#mygeneinforesult)\>\>
 
-Defined in: [providers/mygene/client.ts:64](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mygene/client.ts#L64)
+Defined in: [providers/mygene/client.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mygene/client.ts#L64)
 
 #### Parameters
 
@@ -56,7 +56,7 @@ Defined in: [providers/mygene/client.ts:64](https://github.com/mattjmeier/gene-t
 
 > **getMyGeneCacheKey**(`symbol`, `taxid`): `string`
 
-Defined in: [providers/mygene/client.ts:91](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mygene/client.ts#L91)
+Defined in: [providers/mygene/client.ts:91](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mygene/client.ts#L91)
 
 #### Parameters
 

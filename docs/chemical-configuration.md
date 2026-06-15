@@ -69,8 +69,8 @@ RDKit is a better fit when you want crisp, theme-independent SVGs generated from
 
 ```ts
 // npm install @rdkit/rdkit
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-import { createRDKitStructureRenderer } from 'gene-tooltips/mychem/rdkit';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import { createRDKitStructureRenderer } from 'bio-tooltips/mychem/rdkit';
 
 const structureRenderer = await createRDKitStructureRenderer();
 
@@ -82,8 +82,8 @@ ChemicalTooltip.init({
 For apps without top-level `await`, initialize the tooltip from an async function:
 
 ```ts
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-import { createRDKitStructureRenderer } from 'gene-tooltips/mychem/rdkit';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import { createRDKitStructureRenderer } from 'bio-tooltips/mychem/rdkit';
 
 async function initChemicalTooltips() {
   const structureRenderer = await createRDKitStructureRenderer();

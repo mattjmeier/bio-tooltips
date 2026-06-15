@@ -1,4 +1,4 @@
-[**gene-tooltips**](../README.md)
+[**bio-tooltips**](../README.md)
 
 ***
 

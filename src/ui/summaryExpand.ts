@@ -1,5 +1,5 @@
 /**
- * Enables click/keyboard expand/collapse for summary sections in Gene Tooltips.
+ * Enables click/keyboard expand/collapse for summary sections in Bio Tooltips.
  * It listens for events on the document and targets the specific 'Show more' button.
  */
 export function enableSummaryExpand(): void {

@@ -1,4 +1,4 @@
-[**gene-tooltips**](README.md)
+[**bio-tooltips**](README.md)
 
 ***
 
@@ -14,6 +14,7 @@
 - [core/types](core/types.md)
 - [index](index.md)
 - [mychem](mychem.md)
+- [mychem-rdkit](mychem-rdkit.md)
 - [mygene](mygene.md)
 - [providers/mychem](providers/mychem.md)
 - [providers/mychem/client](providers/mychem/client.md)

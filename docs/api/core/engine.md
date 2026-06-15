@@ -1,4 +1,4 @@
-[**gene-tooltips**](../README.md)
+[**bio-tooltips**](../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **createTooltipEngine**\<`TData`, `TConfig`\>(`options`): `object`
 
-Defined in: [core/engine.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/core/engine.ts#L17)
+Defined in: [core/engine.ts:17](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/core/engine.ts#L17)
 
 #### Type Parameters
 

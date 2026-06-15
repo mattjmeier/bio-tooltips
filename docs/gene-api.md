@@ -3,7 +3,7 @@
 ## Entry Point
 
 ```ts
-import { GeneTooltip } from 'gene-tooltips/mygene';
+import { GeneTooltip } from 'bio-tooltips/mygene';
 ```
 
 ## Methods
@@ -20,11 +20,11 @@ import { GeneTooltip } from 'gene-tooltips/mygene';
 
 | Option | Default | Description |
 | --- | --- | --- |
-| `api` | `mygene` | Provider identifier. |
+| `api` | `mygene` | Adapter identifier. |
 | `selector` | `.gene-tooltip` | Elements to attach gene tooltips to. |
 | `truncateSummary` | `4` | Summary line clamp. |
-| `display` | Provider defaults | Section visibility and collapse state. |
-| `ideogram` | Provider defaults | Ideogram dimensions and labels. |
+| `display` | Module defaults | Section visibility and collapse state. |
+| `ideogram` | Module defaults | Ideogram dimensions and labels. |
 | `pathwaySource` | `kegg` | Pathway source: `reactome`, `kegg`, or `wikipathways`. |
 | `pathwayCount` | `3` | Number of pathways shown before overflow UI. |
 | `domainCount` | `3` | Number of protein domains shown before overflow UI. |

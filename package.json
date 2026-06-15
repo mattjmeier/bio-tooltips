@@ -1,21 +1,25 @@
 {
-  "name": "gene-tooltips",
+  "name": "bio-tooltips",
   "version": "1.0.0",
-  "description": "A framework-agnostic library for showing gene information as a tooltip",
+  "description": "Framework-agnostic biomedical entity tooltips for genes, chemicals, and other biological data.",
   "keywords": [
-    "genetics",
     "bioinformatics",
-    "gene",
-    "genomics"
+    "biomedical",
+    "tooltip",
+    "genes",
+    "chemicals",
+    "mygene",
+    "mychem",
+    "biothings"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mattjmeier/gene-tooltips.git"
+    "url": "git+https://github.com/mattjmeier/bio-tooltips.git"
   },
-  "main": "dist/gene-tooltips.cjs",
-  "module": "dist/gene-tooltips.esm.js",
-  "global": "dist/gene-tooltips.global.js",
-  "types": "dist/types/src/index.d.ts",
+  "main": "dist/bio-tooltips.cjs",
+  "module": "dist/bio-tooltips.esm.js",
+  "global": "dist/bio-tooltips.global.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist",
     "README.md",
@@ -23,26 +27,26 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/types/src/index.d.ts",
-      "import": "./dist/gene-tooltips.esm.js",
-      "require": "./dist/gene-tooltips.cjs"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/bio-tooltips.esm.js",
+      "require": "./dist/bio-tooltips.cjs"
     },
     "./mygene": {
-      "types": "./dist/types/src/mygene.d.ts",
-      "import": "./dist/gene-tooltips.mygene.esm.js",
-      "require": "./dist/gene-tooltips.mygene.cjs"
+      "types": "./dist/types/mygene.d.ts",
+      "import": "./dist/bio-tooltips.mygene.esm.js",
+      "require": "./dist/bio-tooltips.mygene.cjs"
     },
     "./mychem": {
-      "types": "./dist/types/src/mychem.d.ts",
-      "import": "./dist/gene-tooltips.mychem.esm.js",
-      "require": "./dist/gene-tooltips.mychem.cjs"
+      "types": "./dist/types/mychem.d.ts",
+      "import": "./dist/bio-tooltips.mychem.esm.js",
+      "require": "./dist/bio-tooltips.mychem.cjs"
     },
     "./mychem/rdkit": {
-      "types": "./dist/types/src/mychem-rdkit.d.ts",
-      "import": "./dist/gene-tooltips.mychem-rdkit.esm.js",
-      "require": "./dist/gene-tooltips.mychem-rdkit.cjs"
+      "types": "./dist/types/mychem-rdkit.d.ts",
+      "import": "./dist/bio-tooltips.mychem-rdkit.esm.js",
+      "require": "./dist/bio-tooltips.mychem-rdkit.cjs"
     },
-    "./style.css": "./dist/gene-tooltips.css"
+    "./style.css": "./dist/bio-tooltips.css"
   },
   "license": "MIT",
   "author": "Matthew J. Meier",

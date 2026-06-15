@@ -1,4 +1,4 @@
-[**gene-tooltips**](README.md)
+[**bio-tooltips**](README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > `const` **GeneTooltip**: `object`
 
-Defined in: [mygene.ts:27](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/mygene.ts#L27)
+Defined in: [mygene.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/mygene.ts#L27)
 
 #### Type Declaration
 
@@ -65,7 +65,7 @@ are ready when tooltips are first shown.
 
 > **filterNestedList**(`query`, `listId`): `void`
 
-Defined in: [utils.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/utils.ts#L24)
 
 #### Parameters
 
@@ -87,7 +87,7 @@ Defined in: [utils.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/869fb
 
 > **init**(`userConfig`): () => `void`
 
-Defined in: [mygene.ts:15](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/mygene.ts#L15)
+Defined in: [mygene.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/mygene.ts#L15)
 
 #### Parameters
 
@@ -109,7 +109,7 @@ Defined in: [mygene.ts:15](https://github.com/mattjmeier/gene-tooltips/blob/869f
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mygene.ts:23](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/mygene.ts#L23)
+Defined in: [mygene.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/mygene.ts#L23)
 
 Preloads the optional heavy dependencies (d3, ideogram) so they
 are ready when tooltips are first shown.

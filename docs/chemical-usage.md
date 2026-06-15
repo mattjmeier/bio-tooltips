@@ -1,12 +1,12 @@
 # Chemical Usage
 
-The chemical provider uses MyChem.info to resolve chemical names and identifiers.
+The chemical tooltip module uses the MyChem.info adapter to resolve chemical names and identifiers.
 
 ## Import
 
 ```ts
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-import 'gene-tooltips/style.css';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import 'bio-tooltips/style.css';
 ```
 
 ## Markup

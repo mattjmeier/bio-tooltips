@@ -1,6 +1,6 @@
 # Gene Demo
 
-Hover over the gene names below to see the MyGene.info provider in action.
+Hover over the gene names below to see the MyGene.info adapter in action.
 
 ## Example Genes
 

@@ -8,8 +8,8 @@
 
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
-import 'gene-tooltips/style.css';
-import GeneTooltip from 'gene-tooltips';
+import 'bio-tooltips/style.css';
+import { GeneTooltip } from 'bio-tooltips/mygene';
 
 const props = defineProps({
   genes: { type: String, required: true },

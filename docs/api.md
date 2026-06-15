@@ -1,36 +1,38 @@
 # API Overview
 
-The public API is split into a shared engine layer and provider-specific entry points.
+The public API is split into a shared engine layer and tooltip module entry points.
 
 ## Entry Points
 
 ```ts
-import { GeneTooltip } from 'gene-tooltips/mygene';
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-import 'gene-tooltips/style.css';
+import { GeneTooltip } from 'bio-tooltips/mygene';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import 'bio-tooltips/style.css';
 ```
 
-The root entry remains gene-oriented for backward compatibility:
+The root entry also exposes the current tooltip modules:
 
 ```ts
-import GeneTooltip from 'gene-tooltips';
+import { GeneTooltip, ChemicalTooltip } from 'bio-tooltips';
 ```
+
+The default root export remains available for backward-compatible gene usage.
 
 ## Shared Methods
 
-Both providers expose the same lifecycle shape.
+Both tooltip modules expose the same lifecycle shape.
 
 | Method | Description |
 | --- | --- |
 | `init(config?)` | Finds matching elements, attaches Tippy instances, and returns a cleanup function. |
-| `preload()` | Preloads optional provider dependencies when available. |
+| `preload()` | Preloads optional module dependencies when available. |
 
 ## Shared Config
 
 Shared options include `selector`, `prefetch`, `prefetchThreshold`, `theme`, `tooltipWidth`, `tooltipHeight`, `constrainToViewport`, `tippyOptions`, and `nestedTippyOptions`.
 
-Read the [Core Reference](./reference/core.md) for shared behavior, [Gene API](./gene-api.md) for `GeneTooltipConfig`, and [Chemical API](./chemical-api.md) for `MyChemTooltipConfig`.
+Read the [Core API](./reference/core.md) for shared behavior, [Gene API](./gene-api.md) for `GeneTooltipConfig`, and [Chemical API](./chemical-api.md) for `MyChemTooltipConfig`.
 
 ## Generated Reference
 
-The generated TypeDoc output is available as the [Full Generated Reference](./api/modules.md). It is useful for exact exported types, lower-level helpers, and provider internals.
+The generated TypeDoc output is available as the [Generated API Reference](./api/modules.md). It is useful for exact exported types, lower-level helpers, and adapter internals.

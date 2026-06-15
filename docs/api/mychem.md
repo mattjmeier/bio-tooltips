@@ -1,4 +1,4 @@
-[**gene-tooltips**](README.md)
+[**bio-tooltips**](README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > `const` **ChemicalTooltip**: `object`
 
-Defined in: [mychem.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/mychem.ts#L20)
+Defined in: [mychem.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/mychem.ts#L20)
 
 #### Type Declaration
 
@@ -44,7 +44,7 @@ Defined in: [mychem.ts:20](https://github.com/mattjmeier/gene-tooltips/blob/869f
 
 > **init**(`userConfig`): () => `void`
 
-Defined in: [mychem.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/mychem.ts#L12)
+Defined in: [mychem.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/mychem.ts#L12)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [mychem.ts:12](https://github.com/mattjmeier/gene-tooltips/blob/869f
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mychem.ts:16](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/mychem.ts#L16)
+Defined in: [mychem.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/mychem.ts#L16)
 
 #### Returns
 
@@ -269,6 +269,18 @@ Re-exports [MyChemScope](providers/mychem/types.md#mychemscope)
 ### MyChemSectionVisibility
 
 Re-exports [MyChemSectionVisibility](providers/mychem/config.md#mychemsectionvisibility)
+
+***
+
+### MyChemStructureRenderContext
+
+Re-exports [MyChemStructureRenderContext](providers/mychem/config.md#mychemstructurerendercontext)
+
+***
+
+### MyChemStructureRenderer
+
+Re-exports [MyChemStructureRenderer](providers/mychem/config.md#mychemstructurerenderer)
 
 ***
 
