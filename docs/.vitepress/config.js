@@ -90,6 +90,10 @@ export default {
           replacement: fileURLToPath(new URL('../../src/mychem.ts', import.meta.url))
         },
         {
+          find: /^gene-tooltips\/mychem\/rdkit$/,
+          replacement: fileURLToPath(new URL('../../src/mychem-rdkit.ts', import.meta.url))
+        },
+        {
           find: /^gene-tooltips\/style\.css$/,
           replacement: fileURLToPath(new URL('../../src/css/main.css', import.meta.url))
         }

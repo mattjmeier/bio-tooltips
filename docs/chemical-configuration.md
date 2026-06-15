@@ -58,3 +58,43 @@ These are useful while developing a tooltip, but they are usually too verbose fo
 Compact chemical tooltip: <ChemicalDemo query="caffeine" :config="{ tooltipWidth: 360, display: { pharmacology: false, regulatory: false, safety: false, identifiers: 'collapsed' } }" />
 
 Source-aware tooltip: <ChemicalDemo query="aspirin" :config="{ display: { sourcePaths: true, identifiers: 'expanded' } }" />
+
+## Optional RDKit Structure SVGs
+
+Live RDKit SVG tooltip: <ChemicalRDKitDemo query="aspirin" :config="{ display: { identifiers: 'collapsed' } }" />
+
+The default structure figure uses PubChem PNG URLs. RDKit SVG rendering is available through a separate entry point so it is not loaded unless your app imports it.
+
+RDKit is a better fit when you want crisp, theme-independent SVGs generated from the SMILES already returned by MyChem. It is kept optional because `@rdkit/rdkit` includes a WebAssembly payload and currently reports an unpacked package size of about 14 MB, while the default renderer is just a PubChem image URL.
+
+```ts
+// npm install @rdkit/rdkit
+import { ChemicalTooltip } from 'gene-tooltips/mychem';
+import { createRDKitStructureRenderer } from 'gene-tooltips/mychem/rdkit';
+
+const structureRenderer = await createRDKitStructureRenderer();
+
+ChemicalTooltip.init({
+  structureRenderer,
+});
+```
+
+For apps without top-level `await`, initialize the tooltip from an async function:
+
+```ts
+import { ChemicalTooltip } from 'gene-tooltips/mychem';
+import { createRDKitStructureRenderer } from 'gene-tooltips/mychem/rdkit';
+
+async function initChemicalTooltips() {
+  const structureRenderer = await createRDKitStructureRenderer();
+
+  return ChemicalTooltip.init({
+    selector: '.chemical-tooltip',
+    structureRenderer,
+  });
+}
+
+initChemicalTooltips();
+```
+
+Install `@rdkit/rdkit` in applications that use this option. Tooltips fall back to the default PubChem PNG when RDKit cannot render a SMILES string.

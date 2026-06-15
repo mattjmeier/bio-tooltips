@@ -2,6 +2,7 @@ import {
   defaultMyChemConfig,
   type MyChemTooltipConfig,
   type MyChemDisplayConfig,
+  type MyChemStructureRenderer,
   type MyChemSectionVisibility,
 } from './config.js';
 import type { MyChemInfoResult, ResolvedField, SourceValue } from './types.js';
@@ -36,6 +37,7 @@ interface RenderOptions {
   tooltipWidth?: number;
   tooltipHeight?: number;
   display?: Partial<MyChemDisplayConfig>;
+  structureRenderer?: MyChemStructureRenderer;
 }
 
 interface Group {
@@ -124,7 +126,7 @@ export function renderTooltipHTML(
     buildSection(
       'structureProperties',
       'Structure & Properties',
-      renderStructureProperties(data, propertyFields, visibleIdentity, showSourcePaths),
+      renderStructureProperties(data, propertyFields, visibleIdentity, showSourcePaths, options.structureRenderer),
       renderIdentityHeaderMeta(visibleIdentity)
     ),
     buildSection('summary', 'Summary', renderSummarySection(data, truncate)),
@@ -162,6 +164,7 @@ export function renderMyChemTooltipFromConfig(
     tooltipWidth: config.tooltipWidth,
     tooltipHeight: config.tooltipHeight,
     display: config.display,
+    structureRenderer: config.structureRenderer,
   });
 }
 
@@ -196,7 +199,8 @@ function renderStructureProperties(
   data: MyChemInfoResult,
   fields: ResolvedField<string>[],
   identity: ReturnType<typeof buildChemicalIdentity> | undefined,
-  showSourcePaths: boolean
+  showSourcePaths: boolean,
+  structureRenderer: MyChemStructureRenderer | undefined
 ): string {
   const compactLabels = new Set(['Formula', 'Molecular weight', 'Exact mass']);
   const identifierLabels = new Set(['SMILES', 'InChIKey']);
@@ -209,7 +213,8 @@ function renderStructureProperties(
     .map(field => renderResolvedField(field, showSourcePaths))
     .join('');
   const structure = getBestStructureInput(data);
-  const figure = renderStructureFigure(structure);
+  const smiles = getBestStructureSmiles(data);
+  const figure = renderStructureFigure(structure, data, smiles, structureRenderer);
   const identityMeta = renderIdentityMeta(identity);
 
   if (!compactRows && !identifierRows && !structure) return '';
@@ -267,10 +272,13 @@ function compactLabel(label: string): string {
 }
 
 function renderStructureFigure(
-  structure: { kind: 'cid' | 'smiles' | 'inchi'; value: string } | undefined
+  structure: { kind: 'cid' | 'smiles' | 'inchi'; value: string } | undefined,
+  data: MyChemInfoResult,
+  smiles: string | undefined,
+  structureRenderer: MyChemStructureRenderer | undefined
 ): string {
   const image = structure
-    ? renderStructureImage(structure)
+    ? renderStructureImage(structure, data, smiles, structureRenderer)
     : '<div class="gt-chem-structure-empty">Structure unavailable</div>';
 
   return `
@@ -282,7 +290,16 @@ function renderStructureFigure(
   `;
 }
 
-function renderStructureImage(structure: { kind: 'cid' | 'smiles' | 'inchi'; value: string }): string {
+function renderStructureImage(
+  structure: { kind: 'cid' | 'smiles' | 'inchi'; value: string },
+  data: MyChemInfoResult,
+  smiles: string | undefined,
+  structureRenderer: MyChemStructureRenderer | undefined
+): string {
+  const alt = '2D chemical structure';
+  const rendered = renderCustomStructureImage(structure, data, smiles, alt, structureRenderer);
+  if (rendered) return rendered;
+
   const encoded = encodeURIComponent(structure.value);
   const path = structure.kind === 'cid'
     ? `cid/${encoded}`
@@ -290,8 +307,34 @@ function renderStructureImage(structure: { kind: 'cid' | 'smiles' | 'inchi'; val
   const src = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/${path}/PNG?image_size=large`;
 
   return `
-    <img src="${escapeAttr(src)}" alt="2D chemical structure" loading="lazy" />
+    <img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="lazy" />
   `;
+}
+
+function renderCustomStructureImage(
+  structure: { kind: 'cid' | 'smiles' | 'inchi'; value: string },
+  data: MyChemInfoResult,
+  smiles: string | undefined,
+  alt: string,
+  structureRenderer: MyChemStructureRenderer | undefined
+): string | undefined {
+  if (!structureRenderer) return undefined;
+
+  try {
+    return structureRenderer({ structure, smiles, data, alt }) || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function getBestStructureSmiles(data: MyChemInfoResult): string | undefined {
+  return getFirstString(data, [
+    'pubchem.isomeric_smiles',
+    'pubchem.canonical_smiles',
+    'chembl.molecule_structures.canonical_smiles',
+    'chebi.smiles',
+    'smiles',
+  ]);
 }
 
 function renderSummarySection(

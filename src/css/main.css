@@ -783,6 +783,23 @@ ul.gene-tooltip-nested-list {
   object-fit: contain;
 }
 
+.gt-chem-structure-rdkit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 184px;
+  max-height: 148px;
+  background: #fff;
+}
+
+.gt-chem-structure-rdkit svg,
+.gt-chem-structure-art svg {
+  display: block;
+  max-width: 100%;
+  max-height: 148px;
+}
+
 .gt-chem-structure-empty {
   color: #58606a;
   font-size: 0.86em;
