@@ -16,6 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/mattjmeier/bio-tooltips.git"
   },
+  "homepage": "https://mattjmeier.github.io/bio-tooltips/",
   "main": "dist/bio-tooltips.cjs",
   "module": "dist/bio-tooltips.esm.js",
   "global": "dist/bio-tooltips.global.js",
