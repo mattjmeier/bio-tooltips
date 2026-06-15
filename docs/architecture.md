@@ -1,6 +1,6 @@
 # Architecture
 
-`gene-tooltips` uses a core/provider architecture.
+Bio Tooltips uses a shared core plus adapter architecture.
 
 ## Core
 
@@ -15,40 +15,42 @@ The core owns generic tooltip behavior:
 
 Core code lives under `src/core` and `src/ui`.
 
-## Providers
+## Adapters
 
-Providers own domain-specific behavior:
+Adapters own entity-specific behavior:
 
 - data fetching
 - DOM parsing
 - result types
-- provider config
+- module config
 - section rendering
 - visuals and formatters
 
-Provider code lives under `src/providers`.
+Adapter code currently lives under the internal `src/providers` folder.
 
 ## Public Entry Points
 
 ```ts
-import { GeneTooltip } from 'gene-tooltips/mygene';
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
+import { GeneTooltip } from 'bio-tooltips/mygene';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
 ```
 
-The root entry remains available for backward-compatible gene usage:
+The root entry exposes both current tooltip modules:
 
 ```ts
-import GeneTooltip from 'gene-tooltips';
+import { GeneTooltip, ChemicalTooltip } from 'bio-tooltips';
 ```
 
-## Current Providers
+The default root export remains available for backward-compatible gene usage.
 
-MyGene-specific code lives under `src/providers/mygene`. It renders gene summaries, species context, locations, pathways, domains, transcripts, structures, GeneRIFs, and external links.
+## Current Adapters
 
-MyChem-specific code lives under `src/providers/mychem`. It renders chemical identity, structure and properties, summaries, classes, pharmacology, regulatory/product information, safety annotations, identifiers, and MyChem source details.
+The MyGene.info adapter lives under `src/providers/mygene`. It renders gene summaries, species context, locations, pathways, domains, transcripts, structures, GeneRIFs, and external links.
+
+The MyChem.info adapter lives under `src/providers/mychem`. It renders chemical identity, structure and properties, summaries, classes, pharmacology, regulatory/product information, safety annotations, identifiers, and MyChem source details.
 
 ## Extending the System
 
-Future providers should get a provider folder under `src/providers` and a package subpath similar to `gene-tooltips/mygene` or `gene-tooltips/mychem`.
+Future tooltip modules should get an adapter folder under `src/providers` and a package subpath similar to `bio-tooltips/mygene` or `bio-tooltips/mychem`.
 
-For gene section extensions, see [Adding New Sections](./add-modules.md).
+For new entity types, see [Adding a New Tooltip Module](./add-modules.md).

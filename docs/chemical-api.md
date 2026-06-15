@@ -3,7 +3,7 @@
 ## Entry Point
 
 ```ts
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
 ```
 
 ## Methods
@@ -11,7 +11,7 @@ import { ChemicalTooltip } from 'gene-tooltips/mychem';
 | Method | Description |
 | --- | --- |
 | `ChemicalTooltip.init(config?)` | Initializes chemical tooltips and returns a cleanup function. |
-| `ChemicalTooltip.preload()` | Matches the shared provider lifecycle shape. |
+| `ChemicalTooltip.preload()` | Matches the shared tooltip module lifecycle shape. |
 
 ## Config Type
 
@@ -19,7 +19,7 @@ import { ChemicalTooltip } from 'gene-tooltips/mychem';
 
 | Option | Default | Description |
 | --- | --- | --- |
-| `api` | `mychem` | Provider identifier. |
+| `api` | `mychem` | Adapter identifier. |
 | `selector` | `.chemical-tooltip` | Elements to attach chemical tooltips to. |
 | `truncateSummary` | `4` | Summary line clamp. |
 | `synonymCount` | `6` | Synonyms shown before overflow UI. |
@@ -52,8 +52,8 @@ import { ChemicalTooltip } from 'gene-tooltips/mychem';
 RDKit rendering is not part of the default MyChem bundle. Install `@rdkit/rdkit`, import the optional entry point, and pass the renderer into `ChemicalTooltip.init`.
 
 ```ts
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-import { createRDKitStructureRenderer } from 'gene-tooltips/mychem/rdkit';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import { createRDKitStructureRenderer } from 'bio-tooltips/mychem/rdkit';
 
 const structureRenderer = await createRDKitStructureRenderer();
 

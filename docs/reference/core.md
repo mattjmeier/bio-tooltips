@@ -1,18 +1,18 @@
 # Core Reference
 
-Core config is shared by all providers.
+Core config is shared by all tooltip modules.
 
 | Option | Default | Description |
 | --- | --- | --- |
-| `selector` | Provider-specific | CSS selector used to find tooltip targets. |
+| `selector` | Module-specific | CSS selector used to find tooltip targets. |
 | `prefetch` | `smart` | Data fetch strategy: `smart`, `all`, or `none`. |
 | `prefetchThreshold` | `15` | Element count used by smart prefetch behavior. |
 | `theme` | `auto` | Tippy theme: `auto`, `light`, `dark`, `material`, `translucent`, or `light-border`. |
-| `tooltipWidth` | Provider-specific | Optional fixed max width in pixels. |
+| `tooltipWidth` | Module-specific | Optional fixed max width in pixels. |
 | `tooltipHeight` | None | Optional fixed max height in pixels. |
 | `constrainToViewport` | `true` | Keeps large tooltips within the visible viewport. |
-| `tippyOptions` | Provider defaults | Options passed to the main Tippy instance. |
-| `nestedTippyOptions` | Provider defaults | Options passed to nested popovers. |
+| `tippyOptions` | Module defaults | Options passed to the main Tippy instance. |
+| `nestedTippyOptions` | Module defaults | Options passed to nested popovers. |
 
 ## Tippy Options
 

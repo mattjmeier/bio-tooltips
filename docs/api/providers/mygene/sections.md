@@ -1,4 +1,4 @@
-[**gene-tooltips**](../../README.md)
+[**bio-tooltips**](../../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > `const` **myGeneSections**: [`MyGeneSectionDefinition`](sections/types.md#mygenesectiondefinition)[]
 
-Defined in: [providers/mygene/sections/index.ts:17](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mygene/sections/index.ts#L17)
+Defined in: [providers/mygene/sections/index.ts:17](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/providers/mygene/sections/index.ts#L17)
 
 ## Functions
 
@@ -16,7 +16,7 @@ Defined in: [providers/mygene/sections/index.ts:17](https://github.com/mattjmeie
 
 > **createMyGeneSectionContext**(`data`, `config`, `uniqueId`): [`MyGeneSectionContext`](sections/types.md#mygenesectioncontext)
 
-Defined in: [providers/mygene/sections/index.ts:29](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mygene/sections/index.ts#L29)
+Defined in: [providers/mygene/sections/index.ts:29](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/providers/mygene/sections/index.ts#L29)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [providers/mygene/sections/index.ts:29](https://github.com/mattjmeie
 
 > **getMyGeneNestedTooltipDefinitions**(`data`, `config`, `uniqueId`): [`NestedTooltipDefinition`](../../core/types.md#nestedtooltipdefinition)[]
 
-Defined in: [providers/mygene/sections/index.ts:58](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mygene/sections/index.ts#L58)
+Defined in: [providers/mygene/sections/index.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/providers/mygene/sections/index.ts#L58)
 
 #### Parameters
 

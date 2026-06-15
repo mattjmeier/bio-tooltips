@@ -1,6 +1,6 @@
 # Chemical Demo
 
-Hover over the chemical names and identifiers below to see the MyChem.info provider in action.
+Hover over the chemical names and identifiers below to see the MyChem.info adapter in action.
 
 ## Common Names
 

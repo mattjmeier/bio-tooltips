@@ -1,80 +1,97 @@
-# gene-tooltips
+# Bio Tooltips
 
-A framework-agnostic JavaScript/TypeScript library for displaying interactive gene information tooltips.
+Framework-agnostic biomedical entity tooltips for HTML documents.
 
-## Context
+Bio Tooltips provides shared tooltip behavior plus entity-specific tooltip modules for genes, chemicals, and future biomedical entities such as variants.
 
-This library can be used to enrich any text within an HTML document to provide a 'glimpse' of information on a gene using the [MyGene.info]( https://mygene.info) API, providing an immediate definition alongside links to further reading for genes of interest.
+Currently supported modules:
 
-The library is similar in principle to [Gene Hints](https://broadinstitute.github.io/gene-hints/), but does not require an ideogram as the 'launching point'.
+- Gene tooltips via MyGene.info
+- Chemical tooltips via MyChem.info
 
-## Features
-- Display rich tooltips based on [Tippy.js](https://atomiks.github.io/tippyjs/) for genes in any HTML file
-- Framework-agnostic: works with vanilla JS, React, Vue, etc.
-- Optional integration with [D3.js](https://d3js.org) and [Ideogram](https://github.com/eweitz/ideogram)
-- Configure what sections of information is displayed, height/width of the tooltip, and use Tippy.js themes to style the `gene-tooltips`.
-- Can be easily extended to show more data from the MyGene.info API
+## Install
 
-## Installation
 ```bash
-npm install gene-tooltips
+npm install bio-tooltips
 ```
 
-## Usage
+Import the shared stylesheet once:
 
-At minimum, you must include the javascript code for this project (either installed via NPM or built locally). For all features, you will also need to include [ideogram.js](https://eweitz.github.io/ideogram/) and the [D3](https://d3js.org/) libraries.
+```ts
+import 'bio-tooltips/style.css';
+```
 
-The file `examples/index.html` shows a working example - simply clone this repository, run `npm install` and `npm run build`, then open `index.html` in a browser.
+## Gene Tooltips
 
-To initialize gene tooltip object, add something like this (with configurable options) to your HTML:
+Use the MyGene.info adapter for gene symbols, species-aware lookup, summaries, pathways, transcripts, structures, and gene model visuals.
 
 ```html
-<p>
-  Here is a human gene: <span class="gene-tooltip" data-species="human">TP53</span>.
-  And here is a mouse gene: <span class="gene-tooltip" data-species="mouse">Trp53</span>.
-</p>
-
-<script src="https://unpkg.com/gene-tooltips/dist/gene-tooltips.global.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        GeneTooltip.init({
-            // Your optional configuration here
-        });
-    });
-</script>
+<span class="gene-tooltip" data-species="human">TP53</span>
+<span class="gene-tooltip" data-species="mouse">Trp53</span>
 ```
-
-You can also add the class to a list of consistently delimited gene names (as long as they belong to the same species)
-
-For module-based applications, the preferred MyGene entry point is:
 
 ```ts
-import { GeneTooltip } from 'gene-tooltips/mygene';
-import 'gene-tooltips/style.css';
+import { GeneTooltip } from 'bio-tooltips/mygene';
 
-GeneTooltip.init();
+GeneTooltip.init({
+  selector: '.gene-tooltip'
+});
 ```
 
-The root import remains available for backward compatibility:
+## Chemical Tooltips
+
+Use the MyChem.info adapter for chemical names, stable identifiers, structures, properties, pharmacology, safety notes, and source-aware records.
+
+```html
+<span class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</span>
+<span class="chemical-tooltip" data-query="CHEMBL25" data-scope="chembl">aspirin</span>
+```
 
 ```ts
-import GeneTooltip from 'gene-tooltips';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+
+ChemicalTooltip.init({
+  selector: '.chemical-tooltip'
+});
 ```
+
+## Root Import
+
+The root package exports the current tooltip modules:
+
+```ts
+import { GeneTooltip, ChemicalTooltip } from 'bio-tooltips';
+```
+
+Subpath imports remain preferred when an application wants to load only one tooltip module.
 
 ## Documentation
 
-Full documentation and examples are available in the docs
- folder or at the [project site](https://mattjmeier.github.io/gene-tooltips/).
+Full documentation and examples are available in the `docs` folder and at the project site:
 
-## Development
+https://mattjmeier.github.io/bio-tooltips/
 
-You can run a development server with this command:
+## Migrating From gene-tooltips
 
-```bash
-npm run docs:dev
+Replace package imports:
+
+```ts
+import { GeneTooltip } from 'gene-tooltips/mygene';
 ```
 
-## Contributing
+with:
 
-Issues and pull requests are welcome. Please open a discussion if you’d like to propose a new feature or bug fix.
+```ts
+import { GeneTooltip } from 'bio-tooltips/mygene';
+```
+
+Browser CDN paths also move to the new package and artifact names:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@latest/dist/bio-tooltips.css">
+<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@latest/dist/bio-tooltips.global.js"></script>
+```
+
+## Package History
+
+This package was originally developed as `gene-tooltips` and renamed to `bio-tooltips` as chemical and future biomedical entity modules were added.

@@ -1,4 +1,4 @@
-[**gene-tooltips**](README.md)
+[**bio-tooltips**](README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **filterNestedList**(`query`, `listId`): `void`
 
-Defined in: [utils.ts:24](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/utils.ts#L24)
 
 #### Parameters
 

@@ -1,4 +1,4 @@
-[**gene-tooltips**](../../../README.md)
+[**bio-tooltips**](../../../README.md)
 
 ***
 
@@ -8,7 +8,7 @@
 
 > **getIdeogram**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`any`\>
 
-Defined in: [providers/mygene/visuals/ideogram.ts:10](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mygene/visuals/ideogram.ts#L10)
+Defined in: [providers/mygene/visuals/ideogram.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/providers/mygene/visuals/ideogram.ts#L10)
 
 #### Returns
 
@@ -20,7 +20,7 @@ Defined in: [providers/mygene/visuals/ideogram.ts:10](https://github.com/mattjme
 
 > **renderIdeogram**(`instance`, `data`, `ideogramConfig`, `uniqueId`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [providers/mygene/visuals/ideogram.ts:42](https://github.com/mattjmeier/gene-tooltips/blob/869fb86d6c8f0ebd3fd4001b2549752203f62eaf/src/providers/mygene/visuals/ideogram.ts#L42)
+Defined in: [providers/mygene/visuals/ideogram.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/providers/mygene/visuals/ideogram.ts#L42)
 
 #### Parameters
 

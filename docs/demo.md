@@ -1,6 +1,6 @@
-# Live Demos
+# Demo Overview
 
-Hover over the terms below to see both providers using the same tooltip engine.
+Hover over the terms below to see multiple tooltip modules using the same shared engine.
 
 ## Gene Tooltips
 
@@ -18,12 +18,25 @@ Identifier scopes work when the visible text is not a name: PubChem CID <Chemica
 
 [Open the dedicated chemical demo](./demos/chemical.md)
 
+## Mixed Entity Demo
+
+Gene and chemical tooltip modules can run on the same page.
+
+<p>
+  <GeneDemo genes="TP53" species="human" />
+  is involved in cellular stress responses that may be relevant when interpreting
+  compounds such as
+  <ChemicalDemo query="2244" scope="pubchem" label="aspirin" />.
+</p>
+
+[Open the mixed entity demo](./demos/mixed.md)
+
 ## Code Shape
 
 ```ts
-import { GeneTooltip } from 'gene-tooltips/mygene';
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-import 'gene-tooltips/style.css';
+import { GeneTooltip } from 'bio-tooltips/mygene';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import 'bio-tooltips/style.css';
 
 GeneTooltip.init({ selector: '.gene-tooltip' });
 ChemicalTooltip.init({ selector: '.chemical-tooltip' });

@@ -1,6 +1,6 @@
 # Core Concepts
 
-`gene-tooltips` separates generic tooltip behavior from provider-specific biomedical data.
+Bio Tooltips separates generic tooltip behavior from entity-specific biomedical data.
 
 ## Shared Engine
 
@@ -13,16 +13,16 @@ The core engine owns:
 - viewport constraints
 - shared section wrappers and collapsible state
 
-Provider packages supply the domain-specific parts: how to parse an element, how to fetch records, and how to render the tooltip body.
+Tooltip modules supply the entity-specific parts: how to parse an element, how to fetch records, and how to render the tooltip body.
 
-## Provider Entry Points
+## Tooltip Module Entry Points
 
 ```ts
-import { GeneTooltip } from 'gene-tooltips/mygene';
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
+import { GeneTooltip } from 'bio-tooltips/mygene';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
 ```
 
-Each provider exposes `init()` and `preload()`. `init()` returns a cleanup function, which is useful in component lifecycles.
+Each tooltip module exposes `init()` and `preload()`. `init()` returns a cleanup function, which is useful in component lifecycles.
 
 ```ts
 const cleanup = GeneTooltip.init({ selector: '.gene-tooltip' });
@@ -33,7 +33,7 @@ cleanup();
 
 ## Element Parsing
 
-The visible text inside a matched element usually becomes the lookup query. Providers can also support data attributes for stable identifiers.
+The visible text inside a matched element usually becomes the lookup query. Tooltip modules can also support data attributes for stable identifiers.
 
 Gene tooltips use `data-species`:
 
@@ -61,12 +61,12 @@ When `data-query` is omitted, chemical tooltips use visible text as an experimen
 
 ## Display State
 
-Providers use `display` objects to control rendered sections. Section values generally support:
+Tooltip modules use `display` objects to control rendered sections. Section values generally support:
 
 | Value | Behavior |
 | --- | --- |
 | `false` | Hide the section. |
-| `true` | Show the section using the provider default collapse state. |
+| `true` | Show the section using the module default collapse state. |
 | `expanded` | Show the section and start open. |
 | `collapsed` | Show the section and start closed. |
 
@@ -74,7 +74,7 @@ Providers use `display` objects to control rendered sections. Section values gen
 
 ## Styling
 
-Import `gene-tooltips/style.css` once. The stylesheet includes Tippy base styling, provider section styling, and CSS variables that can be overridden by site CSS.
+Import `bio-tooltips/style.css` once. The stylesheet includes Tippy base styling, module section styling, and CSS variables that can be overridden by site CSS.
 
 ```css
 :root {

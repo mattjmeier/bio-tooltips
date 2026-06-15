@@ -1,4 +1,4 @@
-[**gene-tooltips**](../README.md)
+[**bio-tooltips**](../README.md)
 
 ***
 
@@ -193,6 +193,18 @@ Re-exports [MyChemScope](mychem/types.md#mychemscope)
 ### MyChemSectionVisibility
 
 Re-exports [MyChemSectionVisibility](mychem/config.md#mychemsectionvisibility)
+
+***
+
+### MyChemStructureRenderContext
+
+Re-exports [MyChemStructureRenderContext](mychem/config.md#mychemstructurerendercontext)
+
+***
+
+### MyChemStructureRenderer
+
+Re-exports [MyChemStructureRenderer](mychem/config.md#mychemstructurerenderer)
 
 ***
 

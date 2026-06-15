@@ -1,7 +1,7 @@
 <template>
   <span class="chemical-demo-container chemical-rdkit-demo-container">
-    <span ref="tooltipElement" class="chemical-tooltip" :data-scope="scope">
-      {{ query }}
+    <span ref="tooltipElement" class="chemical-tooltip" :data-query="query" :data-scope="scope">
+      {{ label || query }}
     </span>
     <span v-if="status === 'loading'" class="chemical-rdkit-demo-status">loading RDKit</span>
     <span v-else-if="status === 'error'" class="chemical-rdkit-demo-status">RDKit unavailable</span>
@@ -10,13 +10,14 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
-import 'gene-tooltips/style.css';
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-import { createRDKitStructureRenderer } from 'gene-tooltips/mychem/rdkit';
+import 'bio-tooltips/style.css';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import { createRDKitStructureRenderer } from 'bio-tooltips/mychem/rdkit';
 import rdkitWasmURL from '@rdkit/rdkit/dist/RDKit_minimal.wasm?url';
 
 const props = defineProps({
   query: { type: String, required: true },
+  label: { type: String, default: '' },
   scope: { type: String, default: 'name' },
   config: { type: Object, default: () => ({}) },
 });

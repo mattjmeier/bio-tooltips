@@ -1,6 +1,6 @@
 # Getting Started
 
-`gene-tooltips` is a framework-agnostic tooltip library with a shared engine and provider-specific biomedical data renderers.
+Bio Tooltips is a framework-agnostic tooltip library with a shared engine and entity-specific biomedical renderers.
 
 Hover a gene: <GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 400, truncateSummary: 3, pathwayCount: 3, domainCount: 3 }" />
 
@@ -9,29 +9,29 @@ Hover a chemical: <ChemicalDemo query="aspirin" :config="{ tooltipWidth: 430, tr
 ## Install
 
 ```bash
-npm install gene-tooltips
+npm install bio-tooltips
 ```
 
 Import the shared CSS once in your app:
 
 ```ts
-import 'gene-tooltips/style.css';
+import 'bio-tooltips/style.css';
 ```
 
-## Choose a Provider
+## Choose a Tooltip Module
 
-Use the provider-specific entry points for new integrations.
+Use the module subpaths for focused bundle entry points.
 
 ```ts
-import { GeneTooltip } from 'gene-tooltips/mygene';
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-import 'gene-tooltips/style.css';
+import { GeneTooltip } from 'bio-tooltips/mygene';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import 'bio-tooltips/style.css';
 ```
 
-The root import remains gene-oriented for backward compatibility:
+The root import also exposes the current tooltip modules:
 
 ```ts
-import GeneTooltip from 'gene-tooltips';
+import { GeneTooltip, ChemicalTooltip } from 'bio-tooltips';
 ```
 
 ## Gene Tooltips
@@ -74,4 +74,4 @@ ChemicalTooltip.init({
 
 ## Next Steps
 
-Read [Core Concepts](./core-concepts.md) for shared behavior, [Gene Usage](./gene-usage.md) for MyGene.info details, and [Chemical Usage](./chemical-usage.md) for MyChem.info details.
+Read [Core Concepts](./core-concepts.md) for shared behavior, [Gene Usage](./gene-usage.md) for MyGene.info adapter details, and [Chemical Usage](./chemical-usage.md) for MyChem.info adapter details.

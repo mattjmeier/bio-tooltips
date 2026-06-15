@@ -1,14 +1,14 @@
 # Framework Integration
 
-`gene-tooltips` is framework-agnostic. Initialize a provider after the DOM elements exist, and call the cleanup function when the component or page is torn down.
+Bio Tooltips is framework-agnostic. Initialize a tooltip module after the DOM elements exist, and call the cleanup function when the component or page is torn down.
 
 ## React
 
 ```jsx
 import { useEffect } from 'react';
-import { GeneTooltip } from 'gene-tooltips/mygene';
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-import 'gene-tooltips/style.css';
+import { GeneTooltip } from 'bio-tooltips/mygene';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import 'bio-tooltips/style.css';
 
 export function BiomedicalText() {
   useEffect(() => {
@@ -44,9 +44,9 @@ export function BiomedicalText() {
 
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
-import { GeneTooltip } from 'gene-tooltips/mygene';
-import { ChemicalTooltip } from 'gene-tooltips/mychem';
-import 'gene-tooltips/style.css';
+import { GeneTooltip } from 'bio-tooltips/mygene';
+import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import 'bio-tooltips/style.css';
 
 let cleanup = () => {};
 
@@ -66,11 +66,11 @@ onUnmounted(() => cleanup());
 
 ## Vanilla HTML
 
-For a direct browser integration, include the CSS and global bundle, then initialize the providers you need.
+For a direct browser integration, include the CSS and global bundle, then initialize the tooltip modules you need.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gene-tooltips@latest/dist/gene-tooltips.css">
-<script src="https://cdn.jsdelivr.net/npm/gene-tooltips@latest/dist/gene-tooltips.global.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@latest/dist/bio-tooltips.css">
+<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@latest/dist/bio-tooltips.global.js"></script>
 
 <p>
   <span class="gene-tooltip" data-species="human">TP53</span>
@@ -95,6 +95,6 @@ Gene visuals that use chromosome ideograms also need D3 and Ideogram on the page
 
 ## Reports and Notebooks
 
-RMarkdown, Jupyter, MyST, and other static report systems follow the same pattern: include the CSS and bundle in the rendered HTML, emit spans with provider-specific classes and data attributes, then initialize after the document is ready.
+RMarkdown, Jupyter, MyST, and other static report systems follow the same pattern: include the CSS and bundle in the rendered HTML, emit spans with module-specific classes and data attributes, then initialize after the document is ready.
 
 See the repository `examples` folder for working starting points.
