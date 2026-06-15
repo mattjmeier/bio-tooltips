@@ -19,6 +19,7 @@ import {
   getPathValues,
   getPropertyValue,
   resolveField,
+  sanitizeInlineHTML,
   uniqueStrings,
 } from './formatters.js';
 import {
@@ -348,7 +349,7 @@ function renderSummarySection(
     'drugbank.pharmacodynamics',
   ]);
   const summaryHTML = summary
-    ? `<p class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${escapeHTML(summary)}</p>`
+    ? `<p class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${sanitizeInlineHTML(summary)}</p>`
     : '';
 
   return summaryHTML;

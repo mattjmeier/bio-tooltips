@@ -26,7 +26,7 @@ Gene and chemical tooltip modules can run on the same page.
   <GeneDemo genes="TP53" species="human" />
   is involved in cellular stress responses that may be relevant when interpreting
   compounds such as
-  <ChemicalDemo query="2244" scope="pubchem" label="aspirin" />.
+  <ChemicalDemo query="2336" scope="pubchem" label="benzo[a]pyrene" />.
 </p>
 
 [Open the mixed entity demo](./demos/mixed.md)

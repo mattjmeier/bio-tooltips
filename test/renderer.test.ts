@@ -214,6 +214,43 @@ describe('renderMyChemTooltipHTML', () => {
     expect(html.indexOf('XLogP / LogP')).toBeGreaterThan(html.indexOf('Detailed Properties'));
   });
 
+  it('renders safe ChEBI inline emphasis in summaries', () => {
+    const mockChemicalData: MyChemInfoResult = {
+      _id: 'CHEBI:12345',
+      query: 'pentacene',
+      name: 'Pentacene',
+      chebi: {
+        id: 'CHEBI:12345',
+        name: 'pentacene',
+        definition: 'An <em>ortho</em>- and <em>peri</em>-fused polycyclic arene.',
+      },
+    };
+
+    const html = renderMyChemTooltipHTML(mockChemicalData, { uniqueId: 'mychem-chebi-emphasis' });
+
+    expect(html).toContain('An <em>ortho</em>- and <em>peri</em>-fused polycyclic arene.');
+    expect(html).not.toContain('&lt;em&gt;ortho&lt;/em&gt;');
+  });
+
+  it('sanitizes non-allowlisted chemical summary markup', () => {
+    const mockChemicalData: MyChemInfoResult = {
+      _id: 'CHEBI:67890',
+      query: 'example',
+      name: 'Example',
+      chebi: {
+        id: 'CHEBI:67890',
+        definition: '<em onclick="alert(1)">safe emphasis</em> <script>alert(2)</script>',
+      },
+    };
+
+    const html = renderMyChemTooltipHTML(mockChemicalData, { uniqueId: 'mychem-summary-sanitize' });
+
+    expect(html).toContain('<em>safe emphasis</em>');
+    expect(html).toContain('&lt;script&gt;alert(2)&lt;/script&gt;');
+    expect(html).not.toContain('onclick');
+    expect(html).not.toContain('<script>');
+  });
+
   it('uses an opt-in structure renderer without changing the default PubChem PNG path', () => {
     const mockChemicalData: MyChemInfoResult = {
       _id: '2244',

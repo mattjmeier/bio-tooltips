@@ -32,10 +32,9 @@ export default {
     ],
     sidebar: [
       {
-        text: 'Start Here',
+        text: 'Introduction',
         items: [
-          { text: 'Overview', link: '/' },
-          { text: 'Getting Started', link: '/guide' },
+          { text: 'Quick Start', link: '/guide' },
           { text: 'Core Concepts', link: '/core-concepts' },
           { text: 'Markup Patterns', link: '/markup-patterns' },
           { text: 'Configuration', link: '/configuration' },

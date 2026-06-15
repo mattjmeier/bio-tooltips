@@ -35,6 +35,23 @@ export function escapeAttr(value: unknown): string {
   return escapeHTML(value).replace(/`/g, '&#96;');
 }
 
+export function sanitizeInlineHTML(value: unknown): string {
+  const allowedTags = new Set(['b', 'em', 'i', 'strong', 'sub', 'sup']);
+
+  return String(value)
+    .split(/(<[^>]*>)/g)
+    .map(part => {
+      const tag = part.match(/^<\s*(\/?)\s*([a-z][a-z0-9]*)(?:\s+[^>]*)?\s*>$/i);
+      if (!tag) return escapeHTML(part);
+
+      const tagName = tag[2].toLowerCase();
+      if (!allowedTags.has(tagName)) return escapeHTML(part);
+
+      return tag[1] ? `</${tagName}>` : `<${tagName}>`;
+    })
+    .join('');
+}
+
 export function asArray<T>(value: T | T[] | null | undefined): T[] {
   if (value === null || typeof value === 'undefined') return [];
   return Array.isArray(value) ? value : [value];
