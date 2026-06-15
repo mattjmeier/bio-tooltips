@@ -3,6 +3,8 @@ import type { IdeogramConfig } from '../config.js';
 import type { MyGeneInfoResult } from '../types.js';
 import { speciesMap } from '../species.js';
 import tippy from 'tippy.js';
+import type { CoreTooltipConfig } from '../../../core/config.js';
+import { logTooltipTiming } from '../../../core/timing.js';
 
 let ideogramModulePromise: Promise<any> | null = null;
 
@@ -43,8 +45,10 @@ export async function renderIdeogram(
   instance: Instance, 
   data: MyGeneInfoResult, 
   ideogramConfig: Partial<IdeogramConfig>,
-  uniqueId: string
+  uniqueId: string,
+  timingConfig: CoreTooltipConfig
 ) {
+  logTooltipTiming(instance, timingConfig, 'ideogram render start');
   const ideogramContainerSelector = `#gene-tooltip-ideo-${uniqueId}`;
   const ideoDiv = instance.popper.querySelector(ideogramContainerSelector) as HTMLElement;
 
@@ -57,17 +61,21 @@ export async function renderIdeogram(
 
   try {
     // Wait for the library to load.
+    logTooltipTiming(instance, timingConfig, 'ideogram library load start');
     const Ideogram = await getIdeogram();
+    logTooltipTiming(instance, timingConfig, 'ideogram library load complete');
     
     if (!Ideogram) {
       const ideoDivInPopper = instance.popper.querySelector(`.gene-tooltip-ideo`) as HTMLElement;
       if (ideoDivInPopper) ideoDivInPopper.innerHTML = '<small>Ideogram unavailable</small>';
+      logTooltipTiming(instance, timingConfig, 'ideogram unavailable');
       return;
     }
 
     const genomicPos = Array.isArray(data.genomic_pos) ? data.genomic_pos[0] : data.genomic_pos!;
     if (!genomicPos) {
       ideoDiv.innerHTML = '<small>No genomic position</small>';
+      logTooltipTiming(instance, timingConfig, 'ideogram skipped', { reason: 'no-genomic-position' });
       return;
     }
 
@@ -79,6 +87,7 @@ export async function renderIdeogram(
     const organism = speciesMap[data.taxid]?.ideogramName;
     if (!organism) {
         ideoDiv.innerHTML = '<small>Ideogram not available for this species.</small>';
+        logTooltipTiming(instance, timingConfig, 'ideogram skipped', { reason: 'unsupported-organism' });
         return;
     }
 
@@ -110,6 +119,7 @@ export async function renderIdeogram(
       showAnnotTooltip: false,
       onClickAnnot: function() {},
       onDrawAnnots: function() {
+        logTooltipTiming(parentInstance, timingConfig, 'ideogram onDrawAnnots');
         // If we've already run successfully, don't do anything on subsequent calls.
         if (hasAttachedTippy) {
           return;
@@ -140,6 +150,9 @@ export async function renderIdeogram(
                 nestedInstance.setProps({ theme: currentParentTheme });
               }
             });
+            logTooltipTiming(parentInstance, timingConfig, 'ideogram annot tippy attached', {
+              count: annotElements.length,
+            });
           }
         }, 0);
       },
@@ -147,8 +160,10 @@ export async function renderIdeogram(
     // Before drawing, clear the container of the spinner.
     // This gives the Ideogram library a clean slate.
     ideoDiv.innerHTML = '';
+    logTooltipTiming(instance, timingConfig, 'ideogram container cleared');
 
     new Ideogram(configForIdeogram);
+    logTooltipTiming(instance, timingConfig, 'ideogram constructor called');
 
   } catch (error) {
     console.error('[GeneTooltip] Ideogram failed to render:', error);
@@ -156,5 +171,6 @@ export async function renderIdeogram(
     if (ideoDivInPopper) {
       ideoDivInPopper.innerHTML = '<small>Ideogram not installed or failed to load.</small>';
     }
+    logTooltipTiming(instance, timingConfig, 'ideogram render failed');
   }
 }

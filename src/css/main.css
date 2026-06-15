@@ -475,7 +475,7 @@ ul.gene-tooltip-nested-list {
 
 .tippy-box .gene-tooltip-track {
   margin: 0.75em 0;
-  min-height: 40px;
+  min-height: 45px;
   overflow: hidden;
 }
 
@@ -493,7 +493,15 @@ ul.gene-tooltip-nested-list {
 .gene-tooltip-track-controls {
   display: flex;
   align-items: center;
+  flex: 0 0 min(100%, 13rem);
+  min-width: 0;
   z-index: 2;
+
+  .gt-transcript-selector,
+  .ts-wrapper {
+    width: 100%;
+  }
+
   .ts-wrapper {
     font-size: 0.8em;
     

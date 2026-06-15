@@ -2,11 +2,14 @@ import type { Props } from 'tippy.js';
 
 export type PrefetchMode = 'smart' | 'all' | 'none';
 export type TooltipTheme = 'light' | 'dark' | 'auto' | 'material' | 'translucent' | 'light-border' | undefined;
+export type VisualPreloadMode = 'none' | 'hover' | 'init';
 
 export interface CoreTooltipConfig {
   selector: string;
   prefetch: PrefetchMode;
   prefetchThreshold: number;
+  visualPreload: VisualPreloadMode;
+  debugTimings: boolean;
   theme: TooltipTheme;
   tippyOptions: Partial<Props>;
   nestedTippyOptions: Partial<Props>;
@@ -20,6 +23,8 @@ export const defaultCoreConfig: CoreTooltipConfig = {
   selector: '.gene-tooltip',
   prefetch: 'smart',
   prefetchThreshold: 15,
+  visualPreload: 'hover',
+  debugTimings: false,
   theme: 'auto',
   constrainToViewport: true,
   tippyOptions: {

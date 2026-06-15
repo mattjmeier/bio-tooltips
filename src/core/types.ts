@@ -37,6 +37,8 @@ export interface TippyInstanceWithCustoms<TData = unknown> extends Instance {
   _sectionToggleHandler?: (event: Event) => void;
   _sectionKeydownHandler?: (event: KeyboardEvent) => void;
   _visualsRendered?: boolean;
+  _visualRenderPromise?: Promise<void>;
+  _timingStart?: number;
   _isPinned?: boolean;
   _originalTrigger?: string;
   _pinButton?: HTMLElement | null;
