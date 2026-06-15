@@ -31,6 +31,21 @@ Gene and chemical tooltip modules can run on the same page.
 
 [Open the mixed entity demo](./demos/mixed.md)
 
+## Demo Debugging
+
+The VitePress demo components support URL toggles for timing diagnostics:
+
+| URL parameter | Behavior |
+| --- | --- |
+| `?btDebug=1` | Enables tooltip timing logs in the browser console and persists the setting in local storage. |
+| `?btDebug=0` | Disables persisted timing logs. |
+| `?btVisualPreload=init` | Warms visual dependencies immediately after tooltip initialization. |
+| `?btVisualPreload=hover` | Uses first-hover visual warmup. |
+| `?btVisualPreload=none` | Disables visual warmup. |
+| `?btVisualPreload=reset` | Clears the persisted demo visual preload override. |
+
+These toggles are docs-only conveniences for testing the local demos. Library users can configure the same behavior with `debugTimings` and `visualPreload`.
+
 ## Code Shape
 
 ```ts

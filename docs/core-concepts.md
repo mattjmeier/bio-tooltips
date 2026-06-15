@@ -59,6 +59,33 @@ When `data-query` is omitted, chemical tooltips use visible text as an experimen
 | `all` | Fetches all matched tooltip data after initialization. |
 | `none` | Fetches only when the user opens a tooltip. |
 
+## Visual Dependency Warmup
+
+Some tooltip modules have optional visual dependencies. For example, MyGene gene tooltips can use D3 for gene tracks and Ideogram.js for chromosome context.
+
+`visualPreload` controls when those visual libraries are warmed:
+
+| Value | Behavior |
+| --- | --- |
+| `hover` | Default. Starts warming visual dependencies on the first hover or focus. |
+| `init` | Starts warming visual dependencies immediately after initialization. |
+| `none` | Loads visual dependencies only when the visual section renders. |
+
+This is intentionally separate from `prefetch`: data prefetch answers "do we already have the record?", while visual preload answers "are the optional drawing libraries ready?"
+
+## Timing Debug
+
+`debugTimings: true` logs lifecycle checkpoints to the browser console. It is useful for investigating whether time is being spent fetching data, rendering HTML, drawing visuals, waiting on optional libraries, or attaching nested tooltips.
+
+```ts
+GeneTooltip.init({
+  debugTimings: true,
+  visualPreload: 'init'
+});
+```
+
+Keep timing logs disabled for normal production use.
+
 ## Display State
 
 Tooltip modules use `display` objects to control rendered sections. Section values generally support:

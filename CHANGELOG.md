@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 ### Added
-- Added the `bio-tooltips` package identity for biomedical tooltip modules.
+- Added the `bio-tooltips` package identity for bioinformatic/cheminformatic tooltip modules.
 - Added module-specific `bio-tooltips/mygene` and `bio-tooltips/mychem` package entry points.
 - Added architecture documentation for the core/adapter split and future module subpaths.
 - Added mixed entity demo documentation for gene and chemical tooltips on the same page.
