@@ -1,7 +1,19 @@
 import type { CoreTooltipConfig } from '../../core/config.js';
 import { defaultCoreConfig } from '../../core/config.js';
+import type { MyChemInfoResult } from './types.js';
 
 export type MyChemSectionVisibility = boolean | 'expanded' | 'collapsed';
+
+export interface MyChemStructureRenderContext {
+  structure: { kind: 'cid' | 'smiles' | 'inchi'; value: string };
+  smiles?: string;
+  data: MyChemInfoResult;
+  alt: string;
+}
+
+export type MyChemStructureRenderer = (
+  context: MyChemStructureRenderContext
+) => string | null | undefined;
 
 export interface MyChemDisplayConfig {
   identity: MyChemSectionVisibility;
@@ -27,6 +39,7 @@ export interface MyChemTooltipConfig extends CoreTooltipConfig {
   synonymCount: number;
   listCount: number;
   display: Partial<MyChemDisplayConfig>;
+  structureRenderer?: MyChemStructureRenderer;
 }
 
 export const defaultMyChemConfig: MyChemTooltipConfig = {

@@ -9,8 +9,7 @@ const sharedConfig = {
   bundle: true,
   minify: !isWatching,
   sourcemap: isWatching,
-  // You already had these, which is perfect. No plugin needed.
-  external: ['d3', 'ideogram'],
+  external: ['d3', 'ideogram', '@rdkit/rdkit'],
   loader: {
     '.svg': 'text',
     '.png': 'dataurl',
@@ -36,6 +35,8 @@ const buildJS = () => Promise.all([
   esbuild.build(createConfig('src/mygene.ts', 'dist/gene-tooltips.mygene.esm.js', 'esm', 'browser')),
   esbuild.build(createConfig('src/mychem.ts', 'dist/gene-tooltips.mychem.cjs', 'cjs', 'node')),
   esbuild.build(createConfig('src/mychem.ts', 'dist/gene-tooltips.mychem.esm.js', 'esm', 'browser')),
+  esbuild.build(createConfig('src/mychem-rdkit.ts', 'dist/gene-tooltips.mychem-rdkit.cjs', 'cjs', 'node')),
+  esbuild.build(createConfig('src/mychem-rdkit.ts', 'dist/gene-tooltips.mychem-rdkit.esm.js', 'esm', 'browser')),
   // UMD/IIFE
   esbuild.build({
     ...sharedConfig,

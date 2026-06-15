@@ -37,6 +37,11 @@
       "import": "./dist/gene-tooltips.mychem.esm.js",
       "require": "./dist/gene-tooltips.mychem.cjs"
     },
+    "./mychem/rdkit": {
+      "types": "./dist/types/src/mychem-rdkit.d.ts",
+      "import": "./dist/gene-tooltips.mychem-rdkit.esm.js",
+      "require": "./dist/gene-tooltips.mychem-rdkit.cjs"
+    },
     "./style.css": "./dist/gene-tooltips.css"
   },
   "license": "MIT",
@@ -88,10 +93,14 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
+    "@rdkit/rdkit": ">=2025.3.4-1.0.0",
     "d3": "^7.0.0",
     "ideogram": "^1.53.0"
   },
   "peerDependenciesMeta": {
+    "@rdkit/rdkit": {
+      "optional": true
+    },
     "d3": {
       "optional": true
     },

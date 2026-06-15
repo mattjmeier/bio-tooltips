@@ -214,6 +214,35 @@ describe('renderMyChemTooltipHTML', () => {
     expect(html.indexOf('XLogP / LogP')).toBeGreaterThan(html.indexOf('Detailed Properties'));
   });
 
+  it('uses an opt-in structure renderer without changing the default PubChem PNG path', () => {
+    const mockChemicalData: MyChemInfoResult = {
+      _id: '2244',
+      query: 'aspirin',
+      name: 'Aspirin',
+      pubchem: {
+        cid: 2244,
+        canonical_smiles: 'CC(=O)OC1=CC=CC=C1C(=O)O',
+      },
+    };
+
+    const defaultHTML = renderMyChemTooltipHTML(mockChemicalData, { uniqueId: 'mychem-default-structure' });
+    expect(defaultHTML).toContain('/compound/cid/2244/PNG?image_size=large');
+
+    const html = renderMyChemTooltipHTML(mockChemicalData, {
+      uniqueId: 'mychem-custom-structure',
+      structureRenderer: ({ smiles, structure }) => `
+        <div class="custom-structure" data-kind="${structure.kind}">
+          <svg data-smiles="${smiles}" />
+        </div>
+      `,
+    });
+
+    expect(html).toContain('class="custom-structure"');
+    expect(html).toContain('data-kind="cid"');
+    expect(html).toContain('data-smiles="CC(=O)OC1=CC=CC=C1C(=O)O"');
+    expect(html).not.toContain('/compound/cid/2244/PNG?image_size=large');
+  });
+
   it('allows structure, summary, and detailed properties sections to be collapsed independently', () => {
     const mockChemicalData: MyChemInfoResult = {
       _id: '2519',

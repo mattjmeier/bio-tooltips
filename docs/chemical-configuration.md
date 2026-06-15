@@ -58,3 +58,20 @@ These are useful while developing a tooltip, but they are usually too verbose fo
 Compact chemical tooltip: <ChemicalDemo query="caffeine" :config="{ tooltipWidth: 360, display: { pharmacology: false, regulatory: false, safety: false, identifiers: 'collapsed' } }" />
 
 Source-aware tooltip: <ChemicalDemo query="aspirin" :config="{ display: { sourcePaths: true, identifiers: 'expanded' } }" />
+
+## Optional RDKit Structure SVGs
+
+The default structure figure uses PubChem PNG URLs. RDKit SVG rendering is available through a separate entry point so it is not loaded unless your app imports it.
+
+```ts
+import { ChemicalTooltip } from 'gene-tooltips/mychem';
+import { createRDKitStructureRenderer } from 'gene-tooltips/mychem/rdkit';
+
+const structureRenderer = await createRDKitStructureRenderer();
+
+ChemicalTooltip.init({
+  structureRenderer,
+});
+```
+
+Install `@rdkit/rdkit` in applications that use this option. Tooltips fall back to the default PubChem PNG when RDKit cannot render a SMILES string.
