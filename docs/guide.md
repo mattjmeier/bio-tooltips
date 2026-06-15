@@ -2,9 +2,9 @@
 
 Bio Tooltips is a framework-agnostic tooltip library with a shared engine and entity-specific biomedical renderers.
 
-Hover a gene: <GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 400, truncateSummary: 3, pathwayCount: 3, domainCount: 3 }" />
+Hover over a gene: <GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 400, truncateSummary: 3, pathwayCount: 3, domainCount: 3 }" />
 
-Hover a chemical: <ChemicalDemo query="aspirin" :config="{ tooltipWidth: 430, truncateSummary: 3 }" />
+Hover over a chemical: <ChemicalDemo query="aspirin" :config="{ tooltipWidth: 430, truncateSummary: 3 }" />
 
 ## Install
 

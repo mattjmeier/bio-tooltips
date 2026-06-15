@@ -6,7 +6,7 @@ Gene and chemical tooltip modules can coexist on the same page. Hover over the e
   <GeneDemo genes="TP53" species="human" />
   is involved in cellular stress responses that may be relevant when interpreting
   compounds such as
-  <ChemicalDemo query="2244" scope="pubchem" label="aspirin" />.
+  <ChemicalDemo query="2336" scope="pubchem" label="benzo[a]pyrene" />.
 </p>
 
 ## HTML Pattern
@@ -16,7 +16,7 @@ Gene and chemical tooltip modules can coexist on the same page. Hover over the e
   <span class="gene-tooltip" data-species="human">TP53</span>
   is involved in cellular stress responses that may be relevant when interpreting
   compounds such as
-  <span class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</span>.
+  <span class="chemical-tooltip" data-query="2336" data-scope="pubchem">benzo[a]pyrene</span>.
 </p>
 ```
 

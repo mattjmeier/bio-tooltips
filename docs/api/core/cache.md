@@ -8,7 +8,7 @@
 
 > **get**\<`TData`\>(`cacheKey`): `TData` \| `null` \| `undefined`
 
-Defined in: [core/cache.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/core/cache.ts#L9)
+Defined in: [core/cache.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/core/cache.ts#L9)
 
 #### Type Parameters
 
@@ -32,7 +32,7 @@ Defined in: [core/cache.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/24
 
 > **has**(`cacheKey`): `boolean`
 
-Defined in: [core/cache.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/core/cache.ts#L5)
+Defined in: [core/cache.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/core/cache.ts#L5)
 
 #### Parameters
 
@@ -50,7 +50,7 @@ Defined in: [core/cache.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/24
 
 > **set**\<`TData`\>(`cacheKey`, `data`): `void`
 
-Defined in: [core/cache.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/core/cache.ts#L13)
+Defined in: [core/cache.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/core/cache.ts#L13)
 
 #### Type Parameters
 
@@ -78,7 +78,7 @@ Defined in: [core/cache.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/2
 
 > **setBatch**\<`TData`\>(`resultsMap`): `void`
 
-Defined in: [core/cache.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/core/cache.ts#L24)
+Defined in: [core/cache.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/core/cache.ts#L24)
 
 #### Type Parameters
 

@@ -1,13 +1,45 @@
-# Bio Tooltips
+---
+layout: home
+hero:
+  name: Bio Tooltips
+  text: Biomedical entity tooltips for the web.
+  tagline: Add rich, contextual gene and chemical tooltips to HTML documents with framework-agnostic JavaScript.
+  actions:
+    - theme: brand
+      text: Get Started
+      link: /guide
+    - theme: alt
+      text: View Demos
+      link: /demo
+features:
+  - title: Gene Tooltips
+    details: MyGene.info-powered summaries, species context, pathways, transcripts, structures, and gene model visuals.
+  - title: Chemical Tooltips
+    details: MyChem.info-powered identifiers, structures, properties, pharmacology, safety notes, and source-aware records.
+  - title: Shared Core
+    details: One tooltip engine for caching, prefetching, theming, viewport behavior, and future biomedical entity modules.
+---
 
-Bio Tooltips is a framework-agnostic JavaScript library for adding rich biomedical entity tooltips to HTML documents.
+## Try It
 
-It provides shared tooltip behavior plus entity-specific modules for genes, chemicals, and future biomedical entities such as variants.
+Hover or focus the highlighted terms:
 
-Currently supported modules:
+<p>
+  Gene tooltip:
+  <GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 420, truncateSummary: 3, pathwayCount: 3, domainCount: 3 }" />
+</p>
 
-- **Gene tooltips** via MyGene.info
-- **Chemical tooltips** via MyChem.info
+<p>
+  Chemical tooltip:
+  <ChemicalDemo query="2244" scope="pubchem" label="aspirin" :config="{ tooltipWidth: 430, truncateSummary: 3 }" />
+</p>
+
+<p>
+  Mixed entities:
+  <GeneDemo genes="BRCA1" species="human" :config="{ tooltipWidth: 420, truncateSummary: 3 }" />
+  is often discussed alongside compounds such as
+  <ChemicalDemo query="CHEMBL25" scope="chembl" label="aspirin" :config="{ tooltipWidth: 430, truncateSummary: 3 }" />.
+</p>
 
 ## Install
 
@@ -17,7 +49,7 @@ npm install bio-tooltips
 
 ## Choose a Tooltip Module
 
-Use the module subpaths when you only need one entity type:
+Use module subpaths when you only need one entity type:
 
 ```ts
 import { GeneTooltip } from 'bio-tooltips/mygene';
@@ -32,18 +64,5 @@ import { GeneTooltip, ChemicalTooltip } from 'bio-tooltips';
 ```
 
 The default root export remains the gene tooltip module for compatibility with early `gene-tooltips` integrations.
-
-## Entity Types
-
-Gene tooltips parse gene symbols and use `data-species` for organism context. Chemical tooltips prefer `data-query` and `data-scope` so visible text can stay readable while the lookup uses stable identifiers.
-
-```html
-<p>
-  <span class="gene-tooltip" data-species="human">TP53</span>
-  is involved in cellular stress responses that may be relevant when interpreting
-  compounds such as
-  <span class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</span>.
-</p>
-```
 
 See [Getting Started](./guide.md) for setup details or open the [mixed entity demo](./demos/mixed.md).

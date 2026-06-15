@@ -8,7 +8,7 @@
 
 > **runPrefetch**\<`TData`\>(`strategy`, `elements`, `threshold`, `inFlightRequests`, `provider`): `void`
 
-Defined in: [core/prefetch.ts:94](https://github.com/mattjmeier/bio-tooltips/blob/2436b839994618bb922d1d5602095884f890c86e/src/core/prefetch.ts#L94)
+Defined in: [core/prefetch.ts:94](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/core/prefetch.ts#L94)
 
 #### Type Parameters
 
