@@ -6,7 +6,7 @@
 
 ### ChemicalIdentity
 
-Defined in: [providers/mychem/formatters.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L15)
+Defined in: [providers/mychem/formatters.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L15)
 
 #### Properties
 
@@ -14,37 +14,37 @@ Defined in: [providers/mychem/formatters.ts:15](https://github.com/mattjmeier/bi
 
 > **badges**: `string`[]
 
-Defined in: [providers/mychem/formatters.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L19)
+Defined in: [providers/mychem/formatters.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L19)
 
 ##### matchLabel?
 
 > `optional` **matchLabel**: `string`
 
-Defined in: [providers/mychem/formatters.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L20)
+Defined in: [providers/mychem/formatters.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L20)
 
 ##### preferredName
 
 > **preferredName**: `string`
 
-Defined in: [providers/mychem/formatters.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L16)
+Defined in: [providers/mychem/formatters.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L16)
 
 ##### secondaryName?
 
 > `optional` **secondaryName**: `string`
 
-Defined in: [providers/mychem/formatters.ts:17](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L17)
+Defined in: [providers/mychem/formatters.ts:17](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L17)
 
 ##### synonyms
 
 > **synonyms**: `string`[]
 
-Defined in: [providers/mychem/formatters.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L18)
+Defined in: [providers/mychem/formatters.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L18)
 
 ***
 
 ### FieldCandidate
 
-Defined in: [providers/mychem/formatters.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L9)
+Defined in: [providers/mychem/formatters.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L9)
 
 #### Properties
 
@@ -52,19 +52,19 @@ Defined in: [providers/mychem/formatters.ts:9](https://github.com/mattjmeier/bio
 
 > **path**: `string`
 
-Defined in: [providers/mychem/formatters.ts:11](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L11)
+Defined in: [providers/mychem/formatters.ts:11](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L11)
 
 ##### source
 
 > **source**: `string`
 
-Defined in: [providers/mychem/formatters.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L10)
+Defined in: [providers/mychem/formatters.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L10)
 
 ##### url?
 
 > `optional` **url**: `string`
 
-Defined in: [providers/mychem/formatters.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L12)
+Defined in: [providers/mychem/formatters.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L12)
 
 ## Functions
 
@@ -72,7 +72,7 @@ Defined in: [providers/mychem/formatters.ts:12](https://github.com/mattjmeier/bi
 
 > **asArray**\<`T`\>(`value`): `T`[]
 
-Defined in: [providers/mychem/formatters.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L38)
+Defined in: [providers/mychem/formatters.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L55)
 
 #### Type Parameters
 
@@ -96,7 +96,7 @@ Defined in: [providers/mychem/formatters.ts:38](https://github.com/mattjmeier/bi
 
 > **buildChemicalIdentity**(`data`, `query?`): [`ChemicalIdentity`](#chemicalidentity)
 
-Defined in: [providers/mychem/formatters.ts:161](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L161)
+Defined in: [providers/mychem/formatters.ts:178](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L178)
 
 #### Parameters
 
@@ -118,7 +118,7 @@ Defined in: [providers/mychem/formatters.ts:161](https://github.com/mattjmeier/b
 
 > **collectSourceValues**(`data`, `candidates`): [`SourceValue`](types.md#sourcevalue)\<`string`\>[]
 
-Defined in: [providers/mychem/formatters.ts:89](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L89)
+Defined in: [providers/mychem/formatters.ts:106](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L106)
 
 #### Parameters
 
@@ -140,7 +140,7 @@ Defined in: [providers/mychem/formatters.ts:89](https://github.com/mattjmeier/bi
 
 > **collectStrings**(`record`, `paths`): `string`[]
 
-Defined in: [providers/mychem/formatters.ts:85](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L85)
+Defined in: [providers/mychem/formatters.ts:102](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L102)
 
 #### Parameters
 
@@ -162,7 +162,7 @@ Defined in: [providers/mychem/formatters.ts:85](https://github.com/mattjmeier/bi
 
 > **escapeAttr**(`value`): `string`
 
-Defined in: [providers/mychem/formatters.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L34)
+Defined in: [providers/mychem/formatters.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L34)
 
 #### Parameters
 
@@ -180,7 +180,7 @@ Defined in: [providers/mychem/formatters.ts:34](https://github.com/mattjmeier/bi
 
 > **escapeHTML**(`value`): `string`
 
-Defined in: [providers/mychem/formatters.ts:25](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L25)
+Defined in: [providers/mychem/formatters.ts:25](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L25)
 
 #### Parameters
 
@@ -198,7 +198,7 @@ Defined in: [providers/mychem/formatters.ts:25](https://github.com/mattjmeier/bi
 
 > **getBestStructureInput**(`data`): \{ `kind`: `"inchi"` \| `"cid"` \| `"smiles"`; `value`: `string`; \} \| `undefined`
 
-Defined in: [providers/mychem/formatters.ts:204](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L204)
+Defined in: [providers/mychem/formatters.ts:221](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L221)
 
 #### Parameters
 
@@ -216,7 +216,7 @@ Defined in: [providers/mychem/formatters.ts:204](https://github.com/mattjmeier/b
 
 > **getExternalUrl**(`kind`, `value`): `string` \| `undefined`
 
-Defined in: [providers/mychem/formatters.ts:228](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L228)
+Defined in: [providers/mychem/formatters.ts:245](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L245)
 
 #### Parameters
 
@@ -238,7 +238,7 @@ Defined in: [providers/mychem/formatters.ts:228](https://github.com/mattjmeier/b
 
 > **getFirstString**(`record`, `paths`): `string` \| `undefined`
 
-Defined in: [providers/mychem/formatters.ts:76](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L76)
+Defined in: [providers/mychem/formatters.ts:93](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L93)
 
 #### Parameters
 
@@ -260,7 +260,7 @@ Defined in: [providers/mychem/formatters.ts:76](https://github.com/mattjmeier/bi
 
 > **getPathValues**(`record`, `path`): `unknown`[]
 
-Defined in: [providers/mychem/formatters.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L59)
+Defined in: [providers/mychem/formatters.ts:76](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L76)
 
 #### Parameters
 
@@ -282,7 +282,7 @@ Defined in: [providers/mychem/formatters.ts:59](https://github.com/mattjmeier/bi
 
 > **getPropertyValue**(`data`, `names`): [`SourceValue`](types.md#sourcevalue)\<`string`\>[]
 
-Defined in: [providers/mychem/formatters.ts:154](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L154)
+Defined in: [providers/mychem/formatters.ts:171](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L171)
 
 #### Parameters
 
@@ -304,7 +304,7 @@ Defined in: [providers/mychem/formatters.ts:154](https://github.com/mattjmeier/b
 
 > **getPubChemCid**(`data`): `string` \| `undefined`
 
-Defined in: [providers/mychem/formatters.ts:200](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L200)
+Defined in: [providers/mychem/formatters.ts:217](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L217)
 
 #### Parameters
 
@@ -322,7 +322,7 @@ Defined in: [providers/mychem/formatters.ts:200](https://github.com/mattjmeier/b
 
 > **resolveField**(`label`, `values`, `options`): [`ResolvedField`](types.md#resolvedfield)\<`string`\> \| `undefined`
 
-Defined in: [providers/mychem/formatters.ts:109](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L109)
+Defined in: [providers/mychem/formatters.ts:126](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L126)
 
 #### Parameters
 
@@ -350,11 +350,29 @@ Defined in: [providers/mychem/formatters.ts:109](https://github.com/mattjmeier/b
 
 ***
 
+### sanitizeInlineHTML()
+
+> **sanitizeInlineHTML**(`value`): `string`
+
+Defined in: [providers/mychem/formatters.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L38)
+
+#### Parameters
+
+##### value
+
+`unknown`
+
+#### Returns
+
+`string`
+
+***
+
 ### uniqueStrings()
 
 > **uniqueStrings**(`values`): `string`[]
 
-Defined in: [providers/mychem/formatters.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/providers/mychem/formatters.ts#L43)
+Defined in: [providers/mychem/formatters.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mychem/formatters.ts#L60)
 
 #### Parameters
 

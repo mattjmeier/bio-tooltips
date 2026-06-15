@@ -256,6 +256,12 @@ Re-exports [resolveField](mychem/formatters.md#resolvefield)
 
 ***
 
+### sanitizeInlineHTML
+
+Re-exports [sanitizeInlineHTML](mychem/formatters.md#sanitizeinlinehtml)
+
+***
+
 ### SourceValue
 
 Re-exports [SourceValue](mychem/types.md#sourcevalue)
