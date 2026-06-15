@@ -1,8 +1,8 @@
 # Bio Tooltips
 
-Framework-agnostic biomedical entity tooltips for HTML documents.
+Framework-agnostic biological & biochemical tooltips for HTML documents.
 
-Bio Tooltips provides shared tooltip behavior plus entity-specific tooltip modules for genes, chemicals, and future biomedical entities such as variants.
+Bio Tooltips provides shared tooltip behavior plus entity-specific tooltip modules for genes, chemicals, and future biology-related entities such as variants.
 
 Currently supported modules:
 
@@ -94,4 +94,4 @@ Browser CDN paths also move to the new package and artifact names:
 
 ## Package History
 
-This package was originally developed as `gene-tooltips` and renamed to `bio-tooltips` as chemical and future biomedical entity modules were added.
+This package was originally developed as `gene-tooltips` and renamed to `bio-tooltips` as chemical and future entity modules were added.

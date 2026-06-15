@@ -10,7 +10,7 @@ import { GeneTooltip } from 'bio-tooltips/mygene';
 import { ChemicalTooltip } from 'bio-tooltips/mychem';
 import 'bio-tooltips/style.css';
 
-export function BiomedicalText() {
+export function BioText() {
   useEffect(() => {
     const cleanupGenes = GeneTooltip.init({ selector: '.gene' });
     const cleanupChemicals = ChemicalTooltip.init({ selector: '.chemical' });

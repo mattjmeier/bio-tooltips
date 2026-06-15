@@ -1,6 +1,6 @@
 # Core Concepts
 
-Bio Tooltips separates generic tooltip behavior from entity-specific biomedical data.
+Bio Tooltips separates generic tooltip behavior from biological feature-specific data.
 
 ## Shared Engine
 

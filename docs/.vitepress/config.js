@@ -2,7 +2,7 @@ import { fileURLToPath, URL } from 'node:url';
 
 export default {
   title: 'Bio Tooltips',
-  description: 'Framework-agnostic biomedical entity tooltips for genes, chemicals, and other biological data.',
+  description: 'Framework-agnostic biological & biochemical tooltips.',
   base: '/bio-tooltips/',
   head: [
     [
