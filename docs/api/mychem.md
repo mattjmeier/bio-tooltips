@@ -8,7 +8,7 @@
 
 > `const` **ChemicalTooltip**: `object`
 
-Defined in: [mychem.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/mychem.ts#L20)
+Defined in: [mychem.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/mychem.ts#L20)
 
 #### Type Declaration
 
@@ -44,7 +44,7 @@ Defined in: [mychem.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/e945c
 
 > **init**(`userConfig`): () => `void`
 
-Defined in: [mychem.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/mychem.ts#L12)
+Defined in: [mychem.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/mychem.ts#L12)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [mychem.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/e945c
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mychem.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/e945c48a9853be325fa1f71fc622d3ab3695de74/src/mychem.ts#L16)
+Defined in: [mychem.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/mychem.ts#L16)
 
 #### Returns
 
@@ -329,6 +329,12 @@ Re-exports [ResolvedField](providers/mychem/types.md#resolvedfield)
 ### resolveField
 
 Re-exports [resolveField](providers/mychem/formatters.md#resolvefield)
+
+***
+
+### sanitizeInlineHTML
+
+Re-exports [sanitizeInlineHTML](providers/mychem/formatters.md#sanitizeinlinehtml)
 
 ***
 
