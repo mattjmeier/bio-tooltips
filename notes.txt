@@ -1,15 +1,5 @@
-Todo:
-
-git checkout main
-git pull
-git tag v1.0.0
-git push origin v1.0.0
-
-npm.cmd publish --dry-run
-npm.cmd publish
-
-
 To do
 
 - consider migrating docs to Astro/Starlight; or adding nav tabs to top of page to switch context
 
+- add variant tooltip module
