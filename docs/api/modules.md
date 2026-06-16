@@ -11,6 +11,7 @@
 - [core/prefetch](core/prefetch.md)
 - [core/renderer](core/renderer.md)
 - [core/sections](core/sections.md)
+- [core/timing](core/timing.md)
 - [core/types](core/types.md)
 - [index](index.md)
 - [mychem](mychem.md)

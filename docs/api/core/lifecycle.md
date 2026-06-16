@@ -8,7 +8,7 @@
 
 > **createOnHideHandler**(): (`instance`) => `false` \| `undefined`
 
-Defined in: [core/lifecycle.ts:238](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/lifecycle.ts#L238)
+Defined in: [core/lifecycle.ts:306](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/lifecycle.ts#L306)
 
 #### Returns
 
@@ -30,7 +30,7 @@ Defined in: [core/lifecycle.ts:238](https://github.com/mattjmeier/bio-tooltips/b
 
 > **createOnShowHandler**\<`TData`, `TConfig`\>(`config`, `profile`, `inFlightRequests`): (`instance`) => `void`
 
-Defined in: [core/lifecycle.ts:103](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/lifecycle.ts#L103)
+Defined in: [core/lifecycle.ts:157](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/lifecycle.ts#L157)
 
 #### Type Parameters
 
@@ -76,7 +76,7 @@ Defined in: [core/lifecycle.ts:103](https://github.com/mattjmeier/bio-tooltips/b
 
 > **createOnShownHandler**\<`TData`, `TConfig`\>(`config`, `profile`): (`instance`) => `void`
 
-Defined in: [core/lifecycle.ts:174](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/lifecycle.ts#L174)
+Defined in: [core/lifecycle.ts:241](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/lifecycle.ts#L241)
 
 #### Type Parameters
 
