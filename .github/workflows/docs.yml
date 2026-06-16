@@ -36,7 +36,7 @@ jobs:
         run: npm run build
 
       - name: Build docs site
-        run: npm run docs:build
+        run: npm run docs:build:fresh
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

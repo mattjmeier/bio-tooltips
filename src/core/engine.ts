@@ -5,6 +5,7 @@ import { runPrefetch } from './prefetch.js';
 import { enableSummaryExpand } from '../ui/summaryExpand.js';
 import { getEffectiveTheme, initializeThemeObserver } from '../ui/theme.js';
 import { installNestedListFilter } from '../utils.js';
+import { logTooltipTiming } from './timing.js';
 
 let isSummaryHandlerEnabled = false;
 
@@ -48,6 +49,11 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
     });
 
     const disconnectThemeObserver = initializeThemeObserver(instances, isAutoTheme);
+    const disconnectVisualPreloadWarmup = initializeVisualPreloadWarmup(
+      elements,
+      config,
+      options.profile
+    );
 
     runPrefetch(
       config.prefetch,
@@ -70,6 +76,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
         }
       });
       disconnectThemeObserver();
+      disconnectVisualPreloadWarmup();
       instances = [];
     };
   }
@@ -81,5 +88,46 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
   return {
     init,
     preload,
+  };
+}
+
+function initializeVisualPreloadWarmup<TData, TConfig extends CoreTooltipConfig>(
+  elements: HTMLElement[],
+  config: TConfig,
+  profile: TooltipProfile<TData, TConfig>
+): () => void {
+  if (!profile.preload || config.visualPreload === 'none') {
+    return () => {};
+  }
+
+  let hasStarted = false;
+  const preloadOnce = () => {
+    if (hasStarted) return;
+    hasStarted = true;
+    logTooltipTiming(undefined, config, 'visual preload start', { mode: config.visualPreload });
+    profile.preload?.()
+      .then(() => {
+        logTooltipTiming(undefined, config, 'visual preload complete', { mode: config.visualPreload });
+      })
+      .catch(error => {
+        console.error(`[${profile.id}] Failed to preload visual dependencies.`, error);
+      });
+  };
+
+  if (config.visualPreload === 'init') {
+    preloadOnce();
+    return () => {};
+  }
+
+  elements.forEach(el => {
+    el.addEventListener('mouseenter', preloadOnce, { capture: true, once: true });
+    el.addEventListener('focus', preloadOnce, { capture: true, once: true });
+  });
+
+  return () => {
+    elements.forEach(el => {
+      el.removeEventListener('mouseenter', preloadOnce, true);
+      el.removeEventListener('focus', preloadOnce, true);
+    });
   };
 }

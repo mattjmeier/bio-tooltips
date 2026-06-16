@@ -8,7 +8,7 @@
 
 > **getIdeogram**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`any`\>
 
-Defined in: [providers/mygene/visuals/ideogram.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mygene/visuals/ideogram.ts#L10)
+Defined in: [providers/mygene/visuals/ideogram.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/providers/mygene/visuals/ideogram.ts#L12)
 
 #### Returns
 
@@ -18,9 +18,9 @@ Defined in: [providers/mygene/visuals/ideogram.ts:10](https://github.com/mattjme
 
 ### renderIdeogram()
 
-> **renderIdeogram**(`instance`, `data`, `ideogramConfig`, `uniqueId`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+> **renderIdeogram**(`instance`, `data`, `ideogramConfig`, `uniqueId`, `timingConfig`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [providers/mygene/visuals/ideogram.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mygene/visuals/ideogram.ts#L42)
+Defined in: [providers/mygene/visuals/ideogram.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/providers/mygene/visuals/ideogram.ts#L44)
 
 #### Parameters
 
@@ -39,6 +39,10 @@ Defined in: [providers/mygene/visuals/ideogram.ts:42](https://github.com/mattjme
 ##### uniqueId
 
 `string`
+
+##### timingConfig
+
+[`CoreTooltipConfig`](../../../core/config.md#coretooltipconfig)
 
 #### Returns
 

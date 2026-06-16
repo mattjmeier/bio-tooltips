@@ -8,7 +8,7 @@
 
 > **FormattedItem** = `object`
 
-Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L1)
+Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L1)
 
 #### Properties
 
@@ -16,13 +16,13 @@ Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **name**: `string`
 
-Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L1)
+Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L1)
 
 ##### url?
 
 > `optional` **url**: `string`
 
-Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L1)
+Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L1)
 
 ## Variables
 
@@ -30,7 +30,7 @@ Defined in: [core/renderer.ts:1](https://github.com/mattjmeier/bio-tooltips/blob
 
 > `const` **loaderHTML**: "\<div class=\"gt-loader-container\"\>\<div class=\"gt-spinner\"\>\</div\>\<span\>Loading...\</span\>\</div\>"
 
-Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L3)
+Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L3)
 
 ## Functions
 
@@ -38,7 +38,7 @@ Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **generateUniqueId**(): `string`
 
-Defined in: [core/renderer.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L5)
+Defined in: [core/renderer.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L5)
 
 #### Returns
 
@@ -50,7 +50,7 @@ Defined in: [core/renderer.ts:5](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **renderCollapseButton**(`id`, `text`): `string`
 
-Defined in: [core/renderer.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L44)
+Defined in: [core/renderer.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L44)
 
 #### Parameters
 
@@ -72,7 +72,7 @@ Defined in: [core/renderer.ts:44](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderListContent**(`items`, `initialCount`, `moreButtonId`): `string`
 
-Defined in: [core/renderer.ts:75](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L75)
+Defined in: [core/renderer.ts:75](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L75)
 
 #### Parameters
 
@@ -98,7 +98,7 @@ Defined in: [core/renderer.ts:75](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderMoreButton**(`id`, `text`): `string`
 
-Defined in: [core/renderer.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L36)
+Defined in: [core/renderer.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L36)
 
 #### Parameters
 
@@ -120,7 +120,7 @@ Defined in: [core/renderer.ts:36](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderParagraphContent**(`items`, `initialCount`, `moreButtonId`): `string`
 
-Defined in: [core/renderer.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L48)
+Defined in: [core/renderer.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L48)
 
 #### Parameters
 
@@ -146,7 +146,7 @@ Defined in: [core/renderer.ts:48](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderTooltipHeader**(`titleHTML`, `actionHTML`): `string`
 
-Defined in: [core/renderer.ts:25](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L25)
+Defined in: [core/renderer.ts:25](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L25)
 
 #### Parameters
 
@@ -168,7 +168,7 @@ Defined in: [core/renderer.ts:25](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderTooltipShell**(`uniqueId`, `innerHTML`, `inlineStyle`): `string`
 
-Defined in: [core/renderer.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/core/renderer.ts#L13)
+Defined in: [core/renderer.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/core/renderer.ts#L13)
 
 #### Parameters
 

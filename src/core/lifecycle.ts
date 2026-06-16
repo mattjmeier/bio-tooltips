@@ -9,6 +9,7 @@ import type {
 } from './types.js';
 import { generateUniqueTooltipId, createNestedContent } from '../utils.js';
 import { attachPushpin } from '../ui/pushpin.js';
+import { logTooltipTiming, startTooltipTiming } from './timing.js';
 
 async function renderVisualsAndNestedTippys<TData, TConfig extends CoreTooltipConfig>(
   instance: TippyInstanceWithCustoms<TData>,
@@ -19,6 +20,8 @@ async function renderVisualsAndNestedTippys<TData, TConfig extends CoreTooltipCo
     const data = instance._entityData;
     if (!data || !instance._uniqueId) return;
 
+    logTooltipTiming(instance, config, 'visuals render start');
+
     await profile.renderVisuals?.({
       instance,
       data,
@@ -26,12 +29,20 @@ async function renderVisualsAndNestedTippys<TData, TConfig extends CoreTooltipCo
       uniqueId: instance._uniqueId,
     });
 
-    if (!instance.state.isShown) {
+    if (instance.state.isDestroyed || !instance.state.isMounted) {
+      logTooltipTiming(instance, config, 'visuals completion skipped', {
+        reason: 'not-mounted',
+        isDestroyed: instance.state.isDestroyed,
+        isMounted: instance.state.isMounted,
+        isShown: instance.state.isShown,
+        isVisible: instance.state.isVisible,
+      });
       return;
     }
 
     instance._visualsRendered = true;
     instance._nestedTippys = [];
+    logTooltipTiming(instance, config, 'visuals render complete');
 
     const baseNestedOptions = { ...config.nestedTippyOptions };
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
@@ -76,11 +87,54 @@ async function renderVisualsAndNestedTippys<TData, TConfig extends CoreTooltipCo
     nestedDefinitions.forEach(definition => {
       createNestedTippy(instance, finalNestedTippyOptions, definition.selector, definition.items);
     });
+    logTooltipTiming(instance, config, 'nested tippys attached', { count: nestedDefinitions.length });
   } catch (error) {
     console.error(`[${profile.id}] A critical error occurred during post-render lifecycle.`, error);
     if (instance.state.isShown) {
       instance.setContent('An error occurred rendering this tooltip.');
     }
+  }
+}
+
+function scheduleVisualsAndNestedTippys<TData, TConfig extends CoreTooltipConfig>(
+  instance: TippyInstanceWithCustoms<TData>,
+  config: TConfig,
+  profile: TooltipProfile<TData, TConfig>,
+  reason: string
+): void {
+  if (instance._visualsRendered || instance._visualRenderPromise) {
+    logTooltipTiming(instance, config, 'visuals schedule skipped', {
+      reason,
+      rendered: Boolean(instance._visualsRendered),
+      pending: Boolean(instance._visualRenderPromise),
+    });
+    return;
+  }
+
+  logTooltipTiming(instance, config, 'visuals scheduled', { reason });
+
+  const run = () => {
+    if (instance.state.isDestroyed || !instance.state.isMounted) {
+      logTooltipTiming(instance, config, 'visuals skipped before run', {
+        reason: 'not-mounted',
+        isDestroyed: instance.state.isDestroyed,
+        isMounted: instance.state.isMounted,
+        isShown: instance.state.isShown,
+        isVisible: instance.state.isVisible,
+      });
+      return;
+    }
+
+    instance._visualRenderPromise = renderVisualsAndNestedTippys(instance, config, profile)
+      .finally(() => {
+        instance._visualRenderPromise = undefined;
+      });
+  };
+
+  if (typeof requestAnimationFrame === 'function') {
+    requestAnimationFrame(run);
+  } else {
+    setTimeout(run, 0);
   }
 }
 
@@ -107,6 +161,8 @@ export function createOnShowHandler<TData, TConfig extends CoreTooltipConfig>(
 ) {
   return function onShow(instance: TippyInstanceWithCustoms<TData>) {
     instance._isFullyShown = false;
+    instance._visualsRendered = false;
+    startTooltipTiming(instance, config, 'onShow');
 
     constrainTooltipHeight(instance, config);
 
@@ -122,8 +178,13 @@ export function createOnShowHandler<TData, TConfig extends CoreTooltipConfig>(
     (async () => {
       if (!instance._uniqueId) {
         instance._uniqueId = generateUniqueTooltipId();
+        logTooltipTiming(instance, config, 'unique id assigned');
       }
-      if (instance._entityData !== undefined) return;
+      if (instance._entityData !== undefined) {
+        logTooltipTiming(instance, config, 'instance data already available');
+        scheduleVisualsAndNestedTippys(instance, config, profile, 'existing-instance-data');
+        return;
+      }
 
       const ref = profile.provider.parseElement(instance.reference as HTMLElement);
       if (!ref) {
@@ -136,28 +197,34 @@ export function createOnShowHandler<TData, TConfig extends CoreTooltipConfig>(
       const renderContent = (data: TData | null) => {
         instance._entityData = data;
         instance._geneData = data;
+        logTooltipTiming(instance, config, 'content render start');
         instance.setContent(profile.renderTooltipHTML(data, { uniqueId: instance._uniqueId! }, config));
-        if (instance._isFullyShown) {
-          renderVisualsAndNestedTippys(instance, config, profile);
-        }
+        logTooltipTiming(instance, config, 'content set');
+        scheduleVisualsAndNestedTippys(instance, config, profile, 'content-set');
       };
 
       const cachedData = cache.get<TData>(cacheKey);
       if (typeof cachedData !== 'undefined') {
+        logTooltipTiming(instance, config, 'cache hit');
         renderContent(cachedData);
         return;
       }
 
       instance.setContent('Loading...');
+      logTooltipTiming(instance, config, 'loading content set');
 
       let fetchPromise = inFlightRequests.get(cacheKey);
       if (!fetchPromise) {
+        logTooltipTiming(instance, config, 'fetch start', { cacheKey });
         fetchPromise = profile.provider.fetchBatch([ref]);
         inFlightRequests.set(cacheKey, fetchPromise);
+      } else {
+        logTooltipTiming(instance, config, 'fetch joined', { cacheKey });
       }
 
       try {
         const resultsMap = await fetchPromise;
+        logTooltipTiming(instance, config, 'fetch complete', { cacheKey });
         const data = resultsMap.get(cacheKey) || null;
         cache.set(cacheKey, data);
         renderContent(data);
@@ -177,9 +244,10 @@ export function createOnShownHandler<TData, TConfig extends CoreTooltipConfig>(
 ) {
   return function onShown(instance: TippyInstanceWithCustoms<TData>) {
     instance._isFullyShown = true;
+    logTooltipTiming(instance, config, 'onShown');
 
     if (instance._entityData !== undefined) {
-      renderVisualsAndNestedTippys(instance, config, profile);
+      scheduleVisualsAndNestedTippys(instance, config, profile, 'onShown-fallback');
     }
 
     const display = config.display as { collapsible?: unknown } | undefined;

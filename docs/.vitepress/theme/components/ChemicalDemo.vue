@@ -10,6 +10,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import 'bio-tooltips/style.css';
 import { ChemicalTooltip } from 'bio-tooltips/mychem';
+import { withDocsTooltipConfig } from '../demoTooltipConfig.js';
 
 const props = defineProps({
   query: { type: String, required: true },
@@ -28,10 +29,10 @@ onMounted(() => {
     const uniqueId = generateUniqueId();
     tooltipElement.value.id = uniqueId;
 
-    cleanupTooltip = ChemicalTooltip.init({
+    cleanupTooltip = ChemicalTooltip.init(withDocsTooltipConfig({
       selector: `#${uniqueId}`,
       ...props.config,
-    });
+    }));
   }
 });
 

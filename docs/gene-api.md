@@ -31,5 +31,6 @@ import { GeneTooltip } from 'bio-tooltips/mygene';
 | `transcriptCount` | `3` | Number of transcripts shown before overflow UI. |
 | `structureCount` | `3` | Number of PDB structures shown before overflow UI. |
 | `generifCount` | `3` | Number of GeneRIFs shown before overflow UI. |
+| `display.footer` | `true` | MyGene attribution and JSON link. |
 
 For exact exported types, see the [generated MyGene reference](./api/providers/mygene.md).

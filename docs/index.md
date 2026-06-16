@@ -2,8 +2,8 @@
 layout: home
 hero:
   name: Bio Tooltips
-  text: Biomedical entity tooltips for the web.
-  tagline: Add rich, contextual gene and chemical tooltips to HTML documents with framework-agnostic JavaScript.
+  text: Biological tooltips for any HTML document.
+  tagline: Add rich, contextual gene and chemical tooltips with framework-agnostic JavaScript.
   actions:
     - theme: brand
       text: Get Started
@@ -17,7 +17,7 @@ features:
   - title: Chemical Tooltips
     details: MyChem.info-powered identifiers, structures, properties, pharmacology, safety notes, and source-aware records.
   - title: Shared Core
-    details: One tooltip engine for caching, prefetching, theming, viewport behavior, and future biomedical entity modules.
+    details: One tooltip engine for caching, prefetching, theming, viewport behavior, and future modules.
 ---
 
 ## Try It

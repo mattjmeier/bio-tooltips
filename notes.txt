@@ -10,11 +10,6 @@ npm.cmd publish
 
 
 To do
-- rdk package as optional dependency
-
-- rename package... Bio Tool Tips? Biochem Tooltips?
 
 - consider migrating docs to Astro/Starlight; or adding nav tabs to top of page to switch context
-
-- "See the repository examples folder for working starting points" - should be a link!
 

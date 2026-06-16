@@ -10,6 +10,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import 'bio-tooltips/style.css';
 import { GeneTooltip } from 'bio-tooltips/mygene';
+import { withDocsTooltipConfig } from '../demoTooltipConfig.js';
 
 const props = defineProps({
   genes: { type: String, required: true },
@@ -39,11 +40,11 @@ onMounted(() => {
     // 5. Now, initialize the library using the guaranteed-to-be-unique selector.
     const selector = `#${uniqueId}`;
     
-    const finalConfig = {
+    const finalConfig = withDocsTooltipConfig({
       selector: selector,
       ideogram: { enabled: true },
       ...props.config
-    };
+    });
 
     cleanupTooltip = GeneTooltip.init(finalConfig);
   }

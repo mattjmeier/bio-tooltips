@@ -2,7 +2,7 @@ import { fileURLToPath, URL } from 'node:url';
 
 export default {
   title: 'Bio Tooltips',
-  description: 'Framework-agnostic biomedical entity tooltips for genes, chemicals, and other biological data.',
+  description: 'Framework-agnostic biological & biochemical tooltips.',
   base: '/bio-tooltips/',
   head: [
     [
@@ -24,7 +24,7 @@ export default {
   ],
   themeConfig: {
     nav: [
-      { text: 'Start Here', link: '/' },
+      { text: 'Start Here', link: '/guide' },
       { text: 'Modules', link: '/gene-overview' },
       { text: 'Demos', link: '/demo' },
       { text: 'API', link: '/api' },
@@ -36,7 +36,9 @@ export default {
         items: [
           { text: 'Quick Start', link: '/guide' },
           { text: 'Core Concepts', link: '/core-concepts' },
+          { text: 'Architecture', link: '/architecture' },
           { text: 'Markup Patterns', link: '/markup-patterns' },
+          { text: 'Framework Integration', link: '/integration' },
           { text: 'Configuration', link: '/configuration' },
           { text: 'Styling & Theming', link: '/styling-theming' }
         ]
@@ -92,6 +94,7 @@ export default {
           { text: 'CSS', link: '/css' },
           { text: 'Core API', link: '/reference/core' },
           { text: 'Adapter API', link: '/reference/adapters' },
+          { text: 'Provider Reference', link: '/reference/providers' },
           { text: 'Generated API Reference', link: '/api/modules' },
           { text: 'Adding a New Tooltip Module', link: '/add-modules' }
         ]

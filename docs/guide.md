@@ -1,6 +1,6 @@
 # Getting Started
 
-Bio Tooltips is a framework-agnostic tooltip library with a shared engine and entity-specific biomedical renderers.
+Bio Tooltips is a framework-agnostic tooltip library with a shared engine and biological feature-specific renderers.
 
 Hover over a gene: <GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 400, truncateSummary: 3, pathwayCount: 3, domainCount: 3 }" />
 

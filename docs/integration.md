@@ -10,7 +10,7 @@ import { GeneTooltip } from 'bio-tooltips/mygene';
 import { ChemicalTooltip } from 'bio-tooltips/mychem';
 import 'bio-tooltips/style.css';
 
-export function BiomedicalText() {
+export function BioText() {
   useEffect(() => {
     const cleanupGenes = GeneTooltip.init({ selector: '.gene' });
     const cleanupChemicals = ChemicalTooltip.init({ selector: '.chemical' });
@@ -97,4 +97,4 @@ Gene visuals that use chromosome ideograms also need D3 and Ideogram on the page
 
 RMarkdown, Jupyter, MyST, and other static report systems follow the same pattern: include the CSS and bundle in the rendered HTML, emit spans with module-specific classes and data attributes, then initialize after the document is ready.
 
-See the repository `examples` folder for working starting points.
+See the repository [examples folder](https://github.com/mattjmeier/bio-tooltips/tree/main/examples) for working starting points.

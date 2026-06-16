@@ -6,7 +6,7 @@
 
 ### GeneInfo
 
-Defined in: [providers/mygene/parser.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mygene/parser.ts#L4)
+Defined in: [providers/mygene/parser.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/providers/mygene/parser.ts#L4)
 
 #### Properties
 
@@ -14,13 +14,13 @@ Defined in: [providers/mygene/parser.ts:4](https://github.com/mattjmeier/bio-too
 
 > **symbol**: `string`
 
-Defined in: [providers/mygene/parser.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mygene/parser.ts#L5)
+Defined in: [providers/mygene/parser.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/providers/mygene/parser.ts#L5)
 
 ##### taxid
 
 > **taxid**: `number`
 
-Defined in: [providers/mygene/parser.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mygene/parser.ts#L6)
+Defined in: [providers/mygene/parser.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/providers/mygene/parser.ts#L6)
 
 ## Functions
 
@@ -28,7 +28,7 @@ Defined in: [providers/mygene/parser.ts:6](https://github.com/mattjmeier/bio-too
 
 > **findGeneElements**(`selector`): [`HTMLElement`](https://developer.mozilla.org/docs/Web/API/HTMLElement)[]
 
-Defined in: [providers/mygene/parser.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mygene/parser.ts#L9)
+Defined in: [providers/mygene/parser.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/providers/mygene/parser.ts#L9)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [providers/mygene/parser.ts:9](https://github.com/mattjmeier/bio-too
 
 > **getGeneInfoFromElement**(`el`): [`GeneInfo`](#geneinfo) \| `null`
 
-Defined in: [providers/mygene/parser.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mygene/parser.ts#L51)
+Defined in: [providers/mygene/parser.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/providers/mygene/parser.ts#L51)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [providers/mygene/parser.ts:51](https://github.com/mattjmeier/bio-to
 
 > **parseGeneElement**(`el`): [`EntityRef`](../../core/types.md#entityref) \| `null`
 
-Defined in: [providers/mygene/parser.ts:68](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mygene/parser.ts#L68)
+Defined in: [providers/mygene/parser.ts:68](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/providers/mygene/parser.ts#L68)
 
 #### Parameters
 

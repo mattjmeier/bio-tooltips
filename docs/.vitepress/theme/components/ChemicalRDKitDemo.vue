@@ -14,6 +14,7 @@ import 'bio-tooltips/style.css';
 import { ChemicalTooltip } from 'bio-tooltips/mychem';
 import { createRDKitStructureRenderer } from 'bio-tooltips/mychem/rdkit';
 import rdkitWasmURL from '@rdkit/rdkit/dist/RDKit_minimal.wasm?url';
+import { withDocsTooltipConfig } from '../demoTooltipConfig.js';
 
 const props = defineProps({
   query: { type: String, required: true },
@@ -47,17 +48,17 @@ onMounted(async () => {
 
   try {
     const structureRenderer = await getStructureRenderer();
-    cleanupTooltip = ChemicalTooltip.init({
+    cleanupTooltip = ChemicalTooltip.init(withDocsTooltipConfig({
       selector: `#${uniqueId}`,
       ...props.config,
       structureRenderer,
-    });
+    }));
     status.value = 'ready';
   } catch {
-    cleanupTooltip = ChemicalTooltip.init({
+    cleanupTooltip = ChemicalTooltip.init(withDocsTooltipConfig({
       selector: `#${uniqueId}`,
       ...props.config,
-    });
+    }));
     status.value = 'error';
   }
 });

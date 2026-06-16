@@ -8,7 +8,7 @@
 
 > **getD3**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`__module` \| `null`\>
 
-Defined in: [providers/mygene/visuals/gene-track.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mygene/visuals/gene-track.ts#L13)
+Defined in: [providers/mygene/visuals/gene-track.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/providers/mygene/visuals/gene-track.ts#L15)
 
 #### Returns
 
@@ -18,9 +18,9 @@ Defined in: [providers/mygene/visuals/gene-track.ts:13](https://github.com/mattj
 
 ### renderGeneTrack()
 
-> **renderGeneTrack**(`instance`, `data`, `uniqueId`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+> **renderGeneTrack**(`instance`, `data`, `uniqueId`, `config`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [providers/mygene/visuals/gene-track.ts:106](https://github.com/mattjmeier/bio-tooltips/blob/d2b7813a9943eda04f9fda0321ab15e93fb3de15/src/providers/mygene/visuals/gene-track.ts#L106)
+Defined in: [providers/mygene/visuals/gene-track.ts:108](https://github.com/mattjmeier/bio-tooltips/blob/4283d4e2636443760fa3c0aaa51ba34ef052cf5e/src/providers/mygene/visuals/gene-track.ts#L108)
 
 Main rendering function
 
@@ -37,6 +37,10 @@ Main rendering function
 ##### uniqueId
 
 `string`
+
+##### config
+
+[`CoreTooltipConfig`](../../../core/config.md#coretooltipconfig)
 
 #### Returns
 
