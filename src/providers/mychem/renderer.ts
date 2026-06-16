@@ -687,7 +687,7 @@ function renderFooter(data: MyChemInfoResult): string {
   const id = sourceValues[0]?.value ?? data._id;
 
   return `
-    <div class="gt-chem-footer">
+    <div class="gt-source-footer gt-chem-footer">
       <span>Data from MyChem.info</span>
       <a href="https://mychem.info/v1/chem/${encodeURIComponent(id)}" target="_blank" rel="noopener noreferrer">View JSON</a>
     </div>

@@ -35,6 +35,7 @@ GeneTooltip.init({
     structures: true,
     generifs: true,
     linksSection: true,
+    footer: true,
     links: {
       ncbi: true,
       ensembl: true,
@@ -45,6 +46,8 @@ GeneTooltip.init({
 ```
 
 Use `false` to hide a section, `true` to show it with default collapse behavior, or `expanded` / `collapsed` to force the initial state.
+
+`footer: true` shows the MyGene.info attribution and a link to the raw JSON record.
 
 ## Ideogram
 

@@ -123,7 +123,18 @@ export function renderTooltipHTML(
       ${display.species !== false && data.taxid ? renderSpecies(data.taxid) : ''}
 
       ${sectionHTML}
+
+      ${display.footer !== false ? renderFooter(data) : ''}
     `,
     inlineStyle
   );
+}
+
+function renderFooter(data: MyGeneInfoResult): string {
+  return `
+    <div class="gt-source-footer gt-gene-footer">
+      <span>Data from MyGene.info</span>
+      <a href="https://mygene.info/v3/gene/${encodeURIComponent(data._id)}" target="_blank" rel="noopener noreferrer">View JSON</a>
+    </div>
+  `;
 }

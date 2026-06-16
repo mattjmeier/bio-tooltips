@@ -15,6 +15,7 @@ export interface TooltipDisplayConfig {
   structures: SectionVisibility;
   generifs: SectionVisibility;
   linksSection: SectionVisibility;
+  footer: boolean;
   collapsible?: boolean;
   collapsedByDefault?: boolean;
   links: {
@@ -60,6 +61,7 @@ export const defaultConfig: GeneTooltipConfig = {
     structures: true,
     generifs: true,
     linksSection: true,
+    footer: true,
     collapsible: true,
     collapsedByDefault: true,
     links: {

@@ -43,6 +43,20 @@ describe('renderTooltipHTML', () => {
     expect(html).toContain('(tumor protein p53)');
     expect(html).toContain('This is a summary');
   });
+
+  it('should render the MyGene JSON footer by default and allow it to be hidden', () => {
+    let html = renderTooltipHTML(mockGeneData, { uniqueId: MOCK_UNIQUE_ID });
+    expect(html).toContain('Data from MyGene.info');
+    expect(html).toContain('href="https://mygene.info/v3/gene/7157"');
+    expect(html).toContain('View JSON');
+
+    html = renderTooltipHTML(mockGeneData, {
+      display: { footer: false },
+      uniqueId: MOCK_UNIQUE_ID,
+    });
+    expect(html).not.toContain('Data from MyGene.info');
+    expect(html).not.toContain('https://mygene.info/v3/gene/7157');
+  });
   
   it('should render species information when enabled', () => {
     const html = renderTooltipHTML(mockGeneData, { display: { species: true }, uniqueId: MOCK_UNIQUE_ID });
