@@ -4,7 +4,13 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [1.0.1] - 2026-06-17
+
+### Changed
+- Performance improvements in the Gene Tooltips (`lifecycle.ts` and `timing.ts`)
+- Updated documentation to make it clearer and more comprehensive
+
+## [1.0.0] - 2026-06-16
 ### Added
 - Added the `bio-tooltips` package identity for bioinformatic/cheminformatic tooltip modules.
 - Added module-specific `bio-tooltips/mygene` and `bio-tooltips/mychem` package entry points.
