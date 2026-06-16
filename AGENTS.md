@@ -15,27 +15,16 @@ On Windows PowerShell, `npm` may be blocked by script execution policy. Use `npm
 
 Publishing to npm and deploying docs are separate workflows:
 
-- `.github/workflows/publish.yml` runs when a `v*.*.*` tag is pushed. It builds, tests, and publishes the package to npm.
+- `.github/workflows/publish.yml` runs when a `v*.*.*` tag is pushed. It builds with Node 22, runs `npm ci`, `npm run build`, `npm test`, and publishes to npm with provenance.
 - `.github/workflows/docs.yml` runs when `main` is pushed. It builds the library, runs `npm run docs:build:fresh`, and deploys the generated VitePress site to GitHub Pages.
 
-For a normal release, prefer this order:
+For a normal patch release, prefer this order:
 
 1. Merge the release branch to `main`.
-2. On `main`, update `CHANGELOG.md` for the release.
-3. Run `npm.cmd run docs:build:fresh` when the generated API markdown should be refreshed for the release, then commit any intended `docs/api/**` changes.
+2. On `main`, update `CHANGELOG.md` for the release and confirm `package.json` and `package-lock.json` are at the expected pre-release version.
+3. Run `npm.cmd run docs:build:fresh` when the generated API markdown should match the release, then commit any intended `docs/api/**` changes.
 4. Run the release checks, usually `npm.cmd test`, `npm.cmd run build:types`, and `npm.cmd run build`.
 5. Run `npm.cmd version patch` from a clean `main` tree. This updates `package.json` and `package-lock.json`, creates the version commit, and creates the matching `vX.Y.Z` tag.
 6. Push `main` first and let CI/docs deploy pass. Then push the tag with `git push origin vX.Y.Z` to publish to npm.
 
-Do not push a release tag from a feature branch unless intentionally publishing that branch. The release tag should point at the exact `main` commit intended for npm so npm provenance, GitHub source, and GitHub Pages documentation line up.
-
-## Release Notes
-
-Publishing to npm is handled by `.github/workflows/publish.yml`. The workflow runs on pushed tags matching `v*.*.*`, builds with Node 22, runs `npm ci`, `npm run build`, `npm test`, and then publishes with provenance.
-
-- Prefer merging the release branch to `main` before publishing. The pushed tag should point at the exact `main` commit intended for npm, so GitHub provenance, the repository state, and npm all line up.
-- For a normal patch release from `main`, verify the tree is clean, run focused tests/builds first, then use `npm.cmd version patch` to update `package.json` and `package-lock.json` and create the matching commit and `vX.Y.Z` tag.
-- Push both the commit and tag: `git push origin main --follow-tags`. Pushing the tag is what triggers npm publish.
-- Do not push a release tag from a feature branch unless intentionally publishing that branch. If preparing a version bump before merge, use `npm.cmd version patch --no-git-tag-version`, commit the package files, merge to `main`, then create the release tag on `main`.
-- Before tagging, check `CHANGELOG.md`, confirm `package.json` and `package-lock.json` have the intended version, and make sure `docs/api/**` was not regenerated unless that was part of the release.
- 
+Do not push a release tag from a feature branch unless intentionally publishing that branch. If preparing a version bump before merge, use `npm.cmd version patch --no-git-tag-version`, commit the package files, merge to `main`, then create the release tag on `main`. The release tag should point at the exact `main` commit intended for npm so npm provenance, GitHub source, and GitHub Pages documentation line up.
