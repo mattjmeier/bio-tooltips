@@ -102,6 +102,14 @@ export default {
     ]
   },
   vite: {
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'esnext'
+      }
+    },
+    build: {
+      target: 'esnext'
+    },
     resolve: {
       alias: [
         {
@@ -123,6 +131,10 @@ export default {
         {
           find: /^bio-tooltips\/style\.css$/,
           replacement: fileURLToPath(new URL('../../src/css/main.css', import.meta.url))
+        },
+        {
+          find: /^ideogram$/,
+          replacement: fileURLToPath(new URL('./ideogram-shim.js', import.meta.url))
         }
       ]
     }

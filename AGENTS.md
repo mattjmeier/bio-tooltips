@@ -11,6 +11,17 @@ This repo keeps generated API reference markdown under `docs/api/**`.
 
 On Windows PowerShell, `npm` may be blocked by script execution policy. Use `npm.cmd` for npm scripts.
 
+## Supply Chain Notes
+
+Keep user-facing dependencies minimal and documented:
+
+- Current runtime npm dependency surface is `tom-select`, plus its transitive npm dependencies `@orchidjs/sifter` and `@orchidjs/unicode-variants`.
+- Current optional peer dependencies are `d3`, `ideogram`, and `@rdkit/rdkit`; keep large visualization/chemistry integrations optional unless there is a strong reason to bundle them.
+- When adding or changing dependencies, update the dependency/source summary in `README.md`.
+- Do not add browser CDN examples that use `@latest`; pin a concrete version instead.
+- For dependency changes, run `npm.cmd audit --omit=dev`, `npm.cmd audit`, `npm.cmd audit signatures`, and `npm.cmd pack --dry-run --json` before finishing when network access is available.
+- Keep GitHub Actions pinned to commit SHAs and let Dependabot update those pins.
+
 ## Release Notes
 
 Publishing to npm and deploying docs are separate workflows:
