@@ -84,7 +84,7 @@
     "bootstrap": "^5.3.8",
     "cpx2": "^8.0.0",
     "d3": "^7.9.0",
-    "esbuild": "^0.23.0",
+    "esbuild": "^0.28.1",
     "esbuild-sass-plugin": "^3.3.1",
     "glob": "^11.0.3",
     "ideogram": "^1.53.0",
@@ -119,5 +119,10 @@
   },
   "dependencies": {
     "tom-select": "^2.4.3"
+  },
+  "overrides": {
+    "@ranfdev/deepobj": "1.0.3",
+    "esbuild": "$esbuild",
+    "vite": "6.4.3"
   }
 }
