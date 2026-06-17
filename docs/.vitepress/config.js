@@ -102,6 +102,11 @@ export default {
     ]
   },
   vite: {
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'esnext'
+      }
+    },
     build: {
       target: 'esnext'
     },
