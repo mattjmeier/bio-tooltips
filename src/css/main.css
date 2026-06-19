@@ -786,6 +786,11 @@ ul.gene-tooltip-nested-list {
   width: min(100%, 184px);
   height: auto;
   max-height: 148px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   background: #fff;
   filter: brightness(1.06) contrast(1.08);
   object-fit: contain;
