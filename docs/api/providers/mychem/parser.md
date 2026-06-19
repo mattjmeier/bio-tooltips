@@ -8,7 +8,7 @@
 
 > **findChemicalElements**(`selector`): [`HTMLElement`](https://developer.mozilla.org/docs/Web/API/HTMLElement)[]
 
-Defined in: [providers/mychem/parser.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/3aa9621bfb943a079e9c714059d8a9e6e92dd484/src/providers/mychem/parser.ts#L4)
+Defined in: [providers/mychem/parser.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/b109d7b2fdb3595b386eb35a7d00474c1c31e07d/src/providers/mychem/parser.ts#L4)
 
 #### Parameters
 
@@ -26,7 +26,7 @@ Defined in: [providers/mychem/parser.ts:4](https://github.com/mattjmeier/bio-too
 
 > **parseChemicalElement**(`el`): [`EntityRef`](../../core/types.md#entityref) \| `null`
 
-Defined in: [providers/mychem/parser.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/3aa9621bfb943a079e9c714059d8a9e6e92dd484/src/providers/mychem/parser.ts#L8)
+Defined in: [providers/mychem/parser.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/b109d7b2fdb3595b386eb35a7d00474c1c31e07d/src/providers/mychem/parser.ts#L8)
 
 #### Parameters
 

@@ -4,6 +4,12 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.0.2] - 2026-06-19
+
+### Changed
+- Reset image spacing, borders, and shadows inside chemical structure tooltips so host-page styles do not leak into rendered structures.
+- Trigger the BioTooltipR vendoring workflow after a successful npm publish.
+
 ## [1.0.1] - 2026-06-17
 
 ### Changed

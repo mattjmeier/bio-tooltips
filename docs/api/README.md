@@ -75,6 +75,17 @@ Full documentation and examples are available in the `docs` folder and at the pr
 
 https://mattjmeier.github.io/bio-tooltips/
 
+## Supply Chain Notes
+
+Bio Tooltips keeps its user-facing dependency surface intentionally small:
+
+- Runtime npm dependencies: `tom-select`, plus its npm dependencies `@orchidjs/sifter` and `@orchidjs/unicode-variants`.
+- Optional peer dependencies: `d3`, `ideogram`, and `@rdkit/rdkit`. These are not bundled into the package and are only needed for optional visual/structure-rendering features.
+- Published package contents: `dist`, `README.md`, `LICENSE`, and `package.json`.
+- External data/API sources used at runtime: MyGene.info for gene records, MyChem.info for chemical records, and PubChem image URLs for chemical structure images.
+
+The release workflow installs from `package-lock.json` with `npm ci` and publishes to npm with provenance. For browser CDN usage, prefer a pinned package version instead of `@latest`.
+
 ## Migrating From gene-tooltips
 
 Replace package imports:
@@ -92,8 +103,8 @@ import { GeneTooltip } from 'bio-tooltips/mygene';
 Browser CDN paths also move to the new package and artifact names:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@latest/dist/bio-tooltips.css">
-<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@latest/dist/bio-tooltips.global.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@1.0.2/dist/bio-tooltips.css">
+<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@1.0.2/dist/bio-tooltips.global.js"></script>
 ```
 
 ## Package History
