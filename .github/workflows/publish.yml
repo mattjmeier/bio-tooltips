@@ -3,16 +3,16 @@ name: Publish to npm
 on:
   push:
     tags:
-      - 'v*.*.*'   # Runs whenever you push a tag like v0.1.0, v1.0.0, etc.
+      - 'v*.*.*'
 
 jobs:
-  build-and-publish:
-    name: Build and Publish
+  publish-npm:
+    name: Build, Test, and Publish to npm
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
-      id-token: write  # Required for npm provenance
+      id-token: write  # Required for npm trusted publishing / provenance
 
     steps:
       - name: Checkout repository
@@ -28,6 +28,18 @@ jobs:
       - name: Update npm for trusted publishing
         run: npm install -g npm@11
 
+      - name: Check tag matches package.json version
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          TAG="${GITHUB_REF_NAME}"
+
+          if [ "$TAG" != "v$VERSION" ]; then
+            echo "::error::Git tag $TAG does not match package.json version v$VERSION"
+            exit 1
+          fi
+
       - name: Install dependencies
         run: npm ci
 
@@ -39,6 +51,40 @@ jobs:
 
       - name: Publish to npm
         run: npm publish --provenance --access public
+
+  github-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: publish-npm
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          gh release create "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --verify-tag \
+            --generate-notes \
+            --notes "Published to npm as \`${GITHUB_REF_NAME#v}\`."
+
+  trigger-vendoring:
+    name: Trigger BioTooltipR vendoring PR
+    runs-on: ubuntu-latest
+    needs: publish-npm
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
 
       - name: Trigger BioTooltipR vendoring PR
         env:
