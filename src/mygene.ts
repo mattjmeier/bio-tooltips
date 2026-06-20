@@ -5,6 +5,7 @@ import { myGeneProfile } from './providers/mygene/profile.js';
 import { filterNestedList } from './utils.js';
 
 export { filterNestedList };
+export type { SectionVariant } from './core/config.js';
 
 const geneTooltipEngine = createTooltipEngine({
   profile: myGeneProfile,

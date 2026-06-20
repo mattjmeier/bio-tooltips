@@ -3,6 +3,7 @@ import type { Props } from 'tippy.js';
 export type PrefetchMode = 'smart' | 'all' | 'none';
 export type TooltipTheme = 'light' | 'dark' | 'auto' | 'material' | 'translucent' | 'light-border' | undefined;
 export type VisualPreloadMode = 'none' | 'hover' | 'init';
+export type SectionVariant = 'cards' | 'dividers';
 
 export interface CoreTooltipConfig {
   selector: string;
@@ -11,6 +12,7 @@ export interface CoreTooltipConfig {
   visualPreload: VisualPreloadMode;
   debugTimings: boolean;
   theme: TooltipTheme;
+  sectionVariant: SectionVariant;
   tippyOptions: Partial<Props>;
   nestedTippyOptions: Partial<Props>;
   tooltipWidth?: number;
@@ -26,6 +28,7 @@ export const defaultCoreConfig: CoreTooltipConfig = {
   visualPreload: 'hover',
   debugTimings: false,
   theme: 'auto',
+  sectionVariant: 'cards',
   constrainToViewport: true,
   tippyOptions: {
     allowHTML: true,

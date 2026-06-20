@@ -3,6 +3,8 @@ import { mergeConfig, type MyChemTooltipConfig } from './providers/mychem/config
 import { findChemicalElements } from './providers/mychem/parser.js';
 import { myChemProfile } from './providers/mychem/profile.js';
 
+export type { SectionVariant } from './core/config.js';
+
 const chemicalTooltipEngine = createTooltipEngine({
   profile: myChemProfile,
   mergeConfig,

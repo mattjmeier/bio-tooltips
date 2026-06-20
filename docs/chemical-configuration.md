@@ -8,6 +8,7 @@ Chemical-specific options extend the shared core config.
 ChemicalTooltip.init({
   selector: '.chemical-tooltip',
   theme: 'auto',
+  sectionVariant: 'cards',
   tooltipWidth: 430,
   truncateSummary: 4,
   synonymCount: 6,
@@ -56,6 +57,8 @@ These are useful while developing a tooltip, but they are usually too verbose fo
 ## Live Examples
 
 Compact chemical tooltip: <ChemicalDemo query="caffeine" :config="{ tooltipWidth: 360, display: { pharmacology: false, regulatory: false, safety: false, identifiers: 'collapsed' } }" />
+
+Divider sections: <ChemicalDemo query="aspirin" :config="{ sectionVariant: 'dividers' }" />
 
 Source-aware tooltip: <ChemicalDemo query="aspirin" :config="{ display: { sourcePaths: true, identifiers: 'expanded' } }" />
 

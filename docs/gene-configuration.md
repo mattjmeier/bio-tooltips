@@ -8,6 +8,7 @@ Gene-specific options extend the shared core config.
 GeneTooltip.init({
   selector: '.gene-tooltip',
   theme: 'auto',
+  sectionVariant: 'cards',
   tooltipWidth: 430,
   truncateSummary: 4,
   pathwaySource: 'reactome',
@@ -66,6 +67,8 @@ GeneTooltip.init({
 ## Live Examples
 
 Material theme: <GeneDemo genes="TP53" species="human" :config="{ theme: 'material' }" />
+
+Divider sections: <GeneDemo genes="TP53" species="human" :config="{ sectionVariant: 'dividers' }" />
 
 Wide tooltip: <GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 600, tooltipHeight: 400, truncateSummary: 6 }" />
 

@@ -4,6 +4,10 @@ import { renderCollapsibleSection } from '../src/core/sections';
 import { myGeneProfile } from '../src/providers/mygene/profile';
 import { myGeneSections } from '../src/providers/mygene/sections';
 import { defaultConfig, mergeConfig } from '../src/providers/mygene/config';
+import {
+  defaultMyChemConfig,
+  mergeConfig as mergeMyChemConfig,
+} from '../src/providers/mychem/config';
 import { formatTranscripts } from '../src/providers/mygene';
 import { renderTooltipHTML } from '../src/providers/mygene/renderer';
 import { GeneTooltip as RootGeneTooltip } from '../src/index';
@@ -26,8 +30,16 @@ describe('architecture compatibility', () => {
     );
 
     expect(html).toContain('data-tooltip-id="core-test"');
+    expect(html).toContain('data-section-variant="cards"');
     expect(html).toContain('data-section="mock-section"');
     expect(html).toContain('<p>Provider content</p>');
+  });
+
+  it('defaults both providers to cards and merges divider overrides', () => {
+    expect(defaultConfig.sectionVariant).toBe('cards');
+    expect(defaultMyChemConfig.sectionVariant).toBe('cards');
+    expect(mergeConfig({ sectionVariant: 'dividers' }).sectionVariant).toBe('dividers');
+    expect(mergeMyChemConfig({ sectionVariant: 'dividers' }).sectionVariant).toBe('dividers');
   });
 
   it('MyGene profile returns provider-keyed cache keys', () => {

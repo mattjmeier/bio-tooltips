@@ -39,9 +39,19 @@ describe('renderTooltipHTML', () => {
 
   it('should render a full gene data object correctly', () => {
     const html = renderTooltipHTML(mockGeneData, { uniqueId: MOCK_UNIQUE_ID });
+    expect(html).toContain('data-section-variant="cards"');
     expect(html).toContain('<strong>TP53</strong>');
     expect(html).toContain('(tumor protein p53)');
     expect(html).toContain('This is a summary');
+  });
+
+  it('should render the divider section variant when requested', () => {
+    const html = renderTooltipHTML(mockGeneData, {
+      sectionVariant: 'dividers',
+      uniqueId: MOCK_UNIQUE_ID,
+    });
+
+    expect(html).toContain('data-section-variant="dividers"');
   });
 
   it('should render the MyGene JSON footer by default and allow it to be hidden', () => {
@@ -130,6 +140,23 @@ describe('renderTooltipHTML', () => {
 });
 
 describe('renderMyChemTooltipHTML', () => {
+  it('renders card sections by default and divider sections when requested', () => {
+    const mockChemicalData: MyChemInfoResult = {
+      _id: '2244',
+      name: 'Aspirin',
+      pubchem: { cid: 2244 },
+    };
+
+    const cardHTML = renderMyChemTooltipHTML(mockChemicalData, { uniqueId: 'mychem-cards' });
+    const dividerHTML = renderMyChemTooltipHTML(mockChemicalData, {
+      uniqueId: 'mychem-dividers',
+      sectionVariant: 'dividers',
+    });
+
+    expect(cardHTML).toContain('data-section-variant="cards"');
+    expect(dividerHTML).toContain('data-section-variant="dividers"');
+  });
+
   it('renders source-aware chemical sections without duplicating agreed values', () => {
     const mockChemicalData: MyChemInfoResult = {
       _id: '1983',

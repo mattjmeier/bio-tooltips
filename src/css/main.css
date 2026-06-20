@@ -188,6 +188,14 @@
   /* isolation: isolate; */
 }
 
+.gene-tooltip-content[data-section-variant='dividers'] .gene-tooltip-section-container {
+  margin-top: 0.75em;
+  padding: 0.75em 0 0;
+  border-top: 1px solid var(--gt-border-color);
+  border-radius: 0;
+  background-color: transparent;
+}
+
 /*
   Selectively create a stacking context for the section container
   that has an active Tom Select dropdown inside it.
@@ -309,6 +317,11 @@ ul.gene-tooltip-nested-list {
 
 .gene-tooltip-ideo {
   min-width: 120px;
+}
+
+.gene-tooltip-ideo #_ideogram {
+  box-sizing: border-box;
+  display: block;
 }
 
 .tippy-box .bandLabel text {
@@ -1035,6 +1048,12 @@ ul.gene-tooltip-nested-list {
   margin-top: 0.8em;
   color: var(--gt-text-color-secondary);
   font-size: 0.82em;
+}
+
+.gene-tooltip-content[data-section-variant='dividers'] .gt-source-footer {
+  margin-top: 0.75em;
+  padding-top: 0.75em;
+  border-top: 1px solid var(--gt-border-color);
 }
 
 @media (max-width: 420px) {

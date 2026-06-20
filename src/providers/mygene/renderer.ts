@@ -1,5 +1,6 @@
 import type { MyGeneInfoResult } from './types.js';
 import type { SectionVisibility, TooltipDisplayConfig } from './config.js';
+import type { SectionVariant } from '../../core/config.js';
 import {
   generateUniqueId,
   renderTooltipHeader,
@@ -23,6 +24,7 @@ interface RenderOptions {
   generifCount?: number;
   tooltipWidth?: number;
   tooltipHeight?: number;
+  sectionVariant?: SectionVariant;
   uniqueId?: string;
 }
 
@@ -55,6 +57,7 @@ export function renderTooltipHTML(
     generifCount = 3,
     tooltipWidth,
     tooltipHeight,
+    sectionVariant = 'cards',
   } = options;
 
   const collapsible = display.collapsible ?? false;
@@ -126,7 +129,8 @@ export function renderTooltipHTML(
 
       ${display.footer !== false ? renderFooter(data) : ''}
     `,
-    inlineStyle
+    inlineStyle,
+    sectionVariant
   );
 }
 

@@ -1,3 +1,5 @@
+import type { SectionVariant } from './config.js';
+
 export type FormattedItem = { name: string; url?: string };
 
 export const loaderHTML = `<div class="gt-loader-container"><div class="gt-spinner"></div><span>Loading...</span></div>`;
@@ -13,10 +15,13 @@ export function generateUniqueId(): string {
 export function renderTooltipShell(
   uniqueId: string,
   innerHTML: string,
-  inlineStyle: string = ''
+  inlineStyle: string = '',
+  sectionVariant: SectionVariant = 'cards'
 ): string {
+  const resolvedSectionVariant = sectionVariant === 'dividers' ? 'dividers' : 'cards';
+
   return `
-    <div class="gene-tooltip-content" ${inlineStyle} data-tooltip-id="${uniqueId}">
+    <div class="gene-tooltip-content" ${inlineStyle} data-tooltip-id="${uniqueId}" data-section-variant="${resolvedSectionVariant}">
       ${innerHTML}
     </div>
   `;

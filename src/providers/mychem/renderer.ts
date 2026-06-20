@@ -7,6 +7,7 @@ import {
 } from './config.js';
 import type { MyChemInfoResult, ResolvedField, SourceValue } from './types.js';
 import type { NestedTooltipDefinition } from '../../core/types.js';
+import type { SectionVariant } from '../../core/config.js';
 import {
   buildChemicalIdentity,
   collectSourceValues,
@@ -37,6 +38,7 @@ interface RenderOptions {
   listCount?: number;
   tooltipWidth?: number;
   tooltipHeight?: number;
+  sectionVariant?: SectionVariant;
   display?: Partial<MyChemDisplayConfig>;
   structureRenderer?: MyChemStructureRenderer;
 }
@@ -148,7 +150,8 @@ export function renderTooltipHTML(
       ${sections}
       ${display.footer !== false ? renderFooter(data) : ''}
     `,
-    inlineStyle
+    inlineStyle,
+    options.sectionVariant
   );
 }
 
@@ -164,6 +167,7 @@ export function renderMyChemTooltipFromConfig(
     listCount: config.listCount,
     tooltipWidth: config.tooltipWidth,
     tooltipHeight: config.tooltipHeight,
+    sectionVariant: config.sectionVariant,
     display: config.display,
     structureRenderer: config.structureRenderer,
   });

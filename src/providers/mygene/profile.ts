@@ -69,6 +69,7 @@ export const myGeneProfile: TooltipProfile<MyGeneInfoResult, GeneTooltipConfig> 
       structureCount: config.structureCount,
       generifCount: config.generifCount,
       tooltipHeight: config.tooltipHeight,
+      sectionVariant: config.sectionVariant,
       uniqueId: options.uniqueId,
     });
   },
