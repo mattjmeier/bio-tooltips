@@ -8,7 +8,7 @@
 
 > **filterNestedList**(`query`, `listId`): `void`
 
-Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/b109d7b2fdb3595b386eb35a7d00474c1c31e07d/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/utils.ts#L24)
 
 #### Parameters
 
@@ -299,6 +299,12 @@ Re-exports [renderSpecies](providers/mygene/sections/species.md#renderspecies)
 ### renderTooltipHTML
 
 Re-exports [renderTooltipHTML](providers/mygene/renderer.md#rendertooltiphtml)
+
+***
+
+### SectionVariant
+
+Re-exports [SectionVariant](core/config.md#sectionvariant-1)
 
 ***
 

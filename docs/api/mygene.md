@@ -8,7 +8,7 @@
 
 > `const` **GeneTooltip**: `object`
 
-Defined in: [mygene.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/b109d7b2fdb3595b386eb35a7d00474c1c31e07d/src/mygene.ts#L27)
+Defined in: [mygene.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/mygene.ts#L28)
 
 #### Type Declaration
 
@@ -65,7 +65,7 @@ are ready when tooltips are first shown.
 
 > **filterNestedList**(`query`, `listId`): `void`
 
-Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/b109d7b2fdb3595b386eb35a7d00474c1c31e07d/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/utils.ts#L24)
 
 #### Parameters
 
@@ -87,7 +87,7 @@ Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/b109d7
 
 > **init**(`userConfig`): () => `void`
 
-Defined in: [mygene.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/b109d7b2fdb3595b386eb35a7d00474c1c31e07d/src/mygene.ts#L15)
+Defined in: [mygene.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/mygene.ts#L16)
 
 #### Parameters
 
@@ -109,7 +109,7 @@ Defined in: [mygene.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/b109d
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mygene.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/b109d7b2fdb3595b386eb35a7d00474c1c31e07d/src/mygene.ts#L23)
+Defined in: [mygene.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/mygene.ts#L24)
 
 Preloads the optional heavy dependencies (d3, ideogram) so they
 are ready when tooltips are first shown.
@@ -351,6 +351,12 @@ Re-exports [renderSpecies](providers/mygene/sections/species.md#renderspecies)
 ### renderTooltipHTML
 
 Re-exports [renderTooltipHTML](providers/mygene/renderer.md#rendertooltiphtml)
+
+***
+
+### SectionVariant
+
+Re-exports [SectionVariant](core/config.md#sectionvariant-1)
 
 ***
 
