@@ -1,4 +1,9 @@
 import { fileURLToPath, URL } from 'node:url';
+import { readFileSync } from 'node:fs';
+
+const { version } = JSON.parse(
+  readFileSync(fileURLToPath(new URL('../../package.json', import.meta.url)), 'utf8')
+);
 
 export default {
   title: 'Bio Tooltips',
@@ -28,6 +33,12 @@ export default {
       { text: 'Modules', link: '/gene-overview' },
       { text: 'Demos', link: '/demo' },
       { text: 'API', link: '/api' },
+      // TODO(next breaking major): replace this release link with a versioned-docs
+      // selector and preserve supported docs under /versions/<major>.<minor>/.
+      {
+        text: `v${version}`,
+        link: `https://www.npmjs.com/package/bio-tooltips/v/${version}`
+      },
       { text: 'GitHub', link: 'https://github.com/mattjmeier/bio-tooltips' }
     ],
     sidebar: [
