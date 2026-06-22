@@ -79,16 +79,16 @@
   "devDependencies": {
     "@rdkit/rdkit": "^2025.3.4-1.0.0",
     "@types/d3": "^7.4.3",
-    "@types/node": "^20.14.12",
+    "@types/node": "^26.0.0",
     "@types/tippy.js": "^6.0.0",
     "bootstrap": "^5.3.8",
-    "cpx2": "^8.0.0",
+    "cpx2": "^9.0.0",
     "d3": "^7.9.0",
     "esbuild": "^0.28.1",
     "esbuild-sass-plugin": "^3.3.1",
-    "glob": "^11.0.3",
+    "glob": "^13.0.6",
     "ideogram": "^1.53.0",
-    "jsdom": "^24.1.1",
+    "jsdom": "^29.1.1",
     "npm-run-all": "^4.1.5",
     "rimraf": "^6.0.1",
     "sass": "^1.93.2",
@@ -97,9 +97,9 @@
     "typedoc-plugin-markdown": "^4.9.0",
     "typedoc-plugin-mdn-links": "^5.0.9",
     "typedoc-plugin-mermaid": "^1.12.0",
-    "typescript": "^5.5.4",
+    "typescript": "^6.0.3",
     "vitepress": "^1.6.4",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.9"
   },
   "peerDependencies": {
     "@rdkit/rdkit": ">=2025.3.4-1.0.0",
