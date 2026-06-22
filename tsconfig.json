@@ -26,6 +26,7 @@
     "emitDeclarationOnly": true,
     "sourceMap": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     // "types": ["vitest/globals"]
   },
   "include": ["src"]
