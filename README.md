@@ -71,6 +71,18 @@ Full documentation and examples are available in the `docs` folder and at the pr
 
 https://mattjmeier.github.io/bio-tooltips/
 
+## Performance Benchmarks
+
+Run the reproducible renderer and controlled cache/prefetch benchmark with:
+
+```powershell
+npm.cmd run benchmark
+```
+
+It produces raw JSON plus publication-ready Markdown tables under
+`benchmark/results/`. See the performance benchmarking guide in `docs/performance.md`
+for methodology and fixture refresh instructions.
+
 ## Supply Chain Notes
 
 Bio Tooltips keeps its user-facing dependency surface intentionally small:

@@ -19,10 +19,12 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
   options: TooltipEngineOptions<TData, TConfig>
 ) {
   const inFlightRequests = new Map<string, Promise<Map<string, TData>>>();
+  let lastPrefetchPromise: Promise<void> = Promise.resolve();
 
   function init(userConfig: Partial<TConfig> = {}): () => void {
     const config = options.mergeConfig(userConfig);
     let instances: TippyInstanceWithCustoms<TData>[] = [];
+    lastPrefetchPromise = Promise.resolve();
 
     const elements = options.findElements(config.selector);
     if (elements.length === 0) {
@@ -55,7 +57,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
       options.profile
     );
 
-    runPrefetch(
+    lastPrefetchPromise = runPrefetch(
       config.prefetch,
       elements,
       config.prefetchThreshold,
@@ -85,9 +87,14 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
     return options.profile.preload?.() ?? Promise.resolve([]);
   }
 
+  function whenPrefetchReady(): Promise<void> {
+    return lastPrefetchPromise;
+  }
+
   return {
     init,
     preload,
+    whenPrefetchReady,
   };
 }
 

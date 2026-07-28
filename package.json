@@ -74,7 +74,9 @@
     "docs:build:fresh": "npm run docs:generate && npm run docs:build",
     "docs:preview": "vitepress preview docs",
     "test": "vitest",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "benchmark": "npm run build:js-css && node benchmark/run.mjs",
+    "benchmark:fixtures": "node benchmark/capture-fixtures.mjs"
   },
   "devDependencies": {
     "@rdkit/rdkit": "^2025.3.4-1.0.0",

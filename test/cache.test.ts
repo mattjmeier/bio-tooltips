@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect } from 'vitest';
 import * as cache from '../src/core/cache';
 import { getMyGeneCacheKey } from '../src/providers/mygene/client';
 import type { MyGeneInfoResult } from '../src/providers/mygene/types';
@@ -13,6 +13,9 @@ const mockGeneData: MyGeneInfoResult = {
 };
 
 describe('cache', () => {
+  beforeEach(() => {
+    cache.clear();
+  });
   
   it('should initially not have a key', () => {
     expect(cache.has(getMyGeneCacheKey('MYC', 9606))).toBe(false);
@@ -39,8 +42,9 @@ describe('cache', () => {
     const mouseKey = getMyGeneCacheKey('Trp53', 10090);
     const notFoundKey = getMyGeneCacheKey('NOTAGENE', 9606);
 
+    cache.set(humanKey, mockGeneData);
     cache.set(mouseKey, mockGeneData); // mouse version
-    expect(cache.has(humanKey)).toBe(true); // From previous test
+    expect(cache.has(humanKey)).toBe(true);
     expect(cache.has(mouseKey)).toBe(true);
     expect(cache.get(humanKey)).not.toEqual(cache.get(notFoundKey));
   });
@@ -57,5 +61,13 @@ describe('cache', () => {
     expect(cache.has(brca1Key)).toBe(true);
     expect(cache.has(brca2Key)).toBe(true);
     expect(cache.get<MyGeneInfoResult>(brca1Key)?.symbol).toBe('BRCA1');
+  });
+
+  it('should expose deterministic size and clear controls', () => {
+    cache.set(getMyGeneCacheKey('TP53', 9606), mockGeneData);
+    expect(cache.size()).toBe(1);
+
+    cache.clear();
+    expect(cache.size()).toBe(0);
   });
 });

@@ -1,0 +1,81 @@
+{
+  "_benchmark": {
+    "provider": "MyChem.info",
+    "entity": "aspirin",
+    "query": "2244",
+    "captured": "2026-07-28",
+    "note": "Representative subset of the PubChem, ChEBI, ChEMBL, and DrugBank annotations rendered for aspirin."
+  },
+  "data": {
+    "_id": "2244",
+    "query": "2244",
+    "name": ["Aspirin", "Acetylsalicylic acid"],
+    "synonyms": ["2-Acetyloxybenzoic acid", "Acetylsalicylate", "ASA", "Aspirin", "o-Acetoxybenzoic acid", "Acetylsalicylic acid", "Polopiryna", "Ecotrin", "Acylpyrin"],
+    "formula": "C9H8O4",
+    "inchikey": "BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
+    "chembl": {
+      "molecule_chembl_id": "CHEMBL25",
+      "pref_name": "ASPIRIN",
+      "molecule_type": "Small molecule",
+      "max_phase": 4,
+      "first_approval": 1950,
+      "molecule_properties": {
+        "full_molformula": "C9H8O4",
+        "full_mwt": "180.16",
+        "alogp": "1.31"
+      },
+      "molecule_structures": {
+        "canonical_smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
+        "standard_inchi_key": "BSYNRYMUTXBXSQ-UHFFFAOYSA-N"
+      }
+    },
+    "chebi": {
+      "id": "CHEBI:15365",
+      "name": "acetylsalicylic acid",
+      "definition": "A member of the class of benzoic acids that is salicylic acid in which the hydrogen attached to the phenolic hydroxy group has been replaced by an acetyl group.",
+      "role": ["non-steroidal anti-inflammatory drug", "antipyretic", "platelet aggregation inhibitor", "cyclooxygenase inhibitor"]
+    },
+    "drugbank": {
+      "id": "DB00945",
+      "name": "Acetylsalicylic acid",
+      "description": "A salicylate used to treat pain, fever, inflammation, and some cardiovascular conditions.",
+      "groups": ["approved"],
+      "categories": ["Analgesics", "Anti-Inflammatory Agents", "Antipyretics", "Platelet Aggregation Inhibitors"],
+      "indication": "Used for relief of pain and fever and for inhibition of platelet aggregation.",
+      "mechanism_of_action": "Irreversibly inhibits cyclooxygenase enzymes, reducing prostaglandin and thromboxane synthesis.",
+      "toxicity": "Overdose may cause salicylate toxicity.",
+      "targets": [
+        {"name": "Prostaglandin G/H synthase 1", "gene_name": "PTGS1"},
+        {"name": "Prostaglandin G/H synthase 2", "gene_name": "PTGS2"}
+      ]
+    },
+    "pubchem": {
+      "cid": 2244,
+      "molecular_formula": "C9H8O4",
+      "molecular_weight": 180.16,
+      "exact_mass": 180.04225873,
+      "canonical_smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
+      "isomeric_smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
+      "inchi": "InChI=1S/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)",
+      "inchikey": "BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
+      "iupac": "2-acetyloxybenzoic acid",
+      "xlogp": 1.2,
+      "tpsa": 63.6,
+      "h_bond_donor_count": 1,
+      "h_bond_acceptor_count": 4,
+      "rotatable_bond_count": 3,
+      "charge": 0
+    },
+    "sider": {
+      "side_effect": [
+        {"name": "Dyspepsia"},
+        {"name": "Nausea"},
+        {"name": "Gastrointestinal haemorrhage"},
+        {"name": "Tinnitus"},
+        {"name": "Urticaria"},
+        {"name": "Bronchospasm"},
+        {"name": "Abdominal pain"}
+      ]
+    }
+  }
+}

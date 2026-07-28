@@ -13,5 +13,8 @@ notes
 # Dist
 dist/
 
+# Generated benchmark reports
+benchmark/results/
+
 # Virtual environment
 .venv/

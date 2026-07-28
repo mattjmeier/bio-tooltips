@@ -26,3 +26,11 @@ export function setBatch<TData>(resultsMap: Map<string, TData>): void {
     set(cacheKey, data);
   });
 }
+
+export function clear(): void {
+  cache.clear();
+}
+
+export function size(): number {
+  return cache.size;
+}
