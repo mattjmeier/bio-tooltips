@@ -2,7 +2,10 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { defaultCoreConfig } from '../src/core/config';
+import { createOnShownHandler } from '../src/core/lifecycle';
 import type { TippyInstanceWithCustoms } from '../src/core/types';
+import { defaultConfig } from '../src/providers/mygene/config';
+import { myGeneProfile } from '../src/providers/mygene/profile';
 import { renderTooltipHTML } from '../src/providers/mygene/renderer';
 import type { MyGeneExon, MyGeneInfoResult } from '../src/providers/mygene/types';
 import { renderGeneTrack } from '../src/providers/mygene/visuals/gene-track';
@@ -144,5 +147,32 @@ describe('native transcript selector', () => {
 
     expect(html).not.toMatch(removedIntegrationPattern);
     expect(runtimeSources.join('\n')).not.toMatch(removedIntegrationPattern);
+  });
+
+  it('does not collapse the gene-model section when the native selector is clicked', () => {
+    const popper = document.createElement('div');
+    popper.innerHTML = renderTooltipHTML(geneData([
+      transcript('ENST000002', 2),
+      transcript('ENST000001', 5),
+    ]), {
+      uniqueId: 'selector-interaction',
+      display: { collapsible: true },
+    });
+    const instance = { popper } as TippyInstanceWithCustoms<MyGeneInfoResult>;
+    const onShown = createOnShownHandler(defaultConfig, myGeneProfile);
+    onShown(instance);
+
+    const section = popper.querySelector<HTMLElement>('[data-section="gene-model"]')!;
+    const selector = section.querySelector<HTMLSelectElement>('select')!;
+    const trigger = section.querySelector<HTMLElement>('.gt-collapsible-header')!;
+
+    expect(selector.closest('.gt-collapsible-header')).toBeNull();
+    expect(section.dataset.collapsed).toBe('false');
+
+    selector.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(section.dataset.collapsed).toBe('false');
+
+    trigger.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(section.dataset.collapsed).toBe('true');
   });
 });

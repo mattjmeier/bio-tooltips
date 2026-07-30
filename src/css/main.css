@@ -210,14 +210,22 @@
    needed to align the (optional) arrow and the title. */
 .gt-collapsible-header {
   display: flex;
+  flex: 1 1 auto;
   align-items: center;
   gap: 0.25em;
+  min-width: 0;
+  border-radius: 3px;
   position: relative;
 }
 
 /* And this rule ONLY applies to INTERACTIVE headers, adding the pointer. */
 .gt-collapsible-header.gt-is-collapsible {
   cursor: pointer;
+}
+
+.gt-collapsible-header.gt-is-collapsible:focus-visible {
+  outline: 2px solid var(--gt-accent-color);
+  outline-offset: 2px;
 }
 
 .gene-tooltip-section {
@@ -460,38 +468,72 @@ ul.gene-tooltip-nested-list {
 }
 
 .gene-tooltip-track-controls {
+  position: relative;
   display: flex;
   align-items: center;
-  flex: 0 0 min(100%, 13rem);
+  flex: 0 1 13rem;
+  max-width: min(100%, 13rem);
   min-width: 0;
 }
 
+.gene-tooltip-track-controls::after {
+  position: absolute;
+  right: 0.7em;
+  top: 50%;
+  width: 0.4em;
+  height: 0.4em;
+  content: '';
+  color: var(--gt-text-color-secondary);
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  pointer-events: none;
+  transform: translateY(-70%) rotate(45deg);
+}
+
 .gene-tooltip-transcript-selector {
+  appearance: none;
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  padding: 0.35em 0.5em;
+  min-height: 2.15em;
+  padding: 0.4em 1.9em 0.4em 0.65em;
   color: var(--gt-text-color);
   font: inherit;
-  font-size: 0.8em;
+  font-size: 0.9em;
+  font-weight: 500;
   line-height: 1.25;
   letter-spacing: normal;
   text-transform: none;
-  background-color: var(--gt-background-color-subtle);
+  text-overflow: ellipsis;
+  cursor: pointer;
+  background-color: var(--gt-background-color-base);
   border: 1px solid var(--gt-border-color);
-  border-radius: 4px;
+  border-radius: 5px;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--gt-text-color) 8%, transparent);
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gene-tooltip-transcript-selector:hover {
+  background-color: color-mix(in srgb, var(--gt-background-color-base) 94%, var(--gt-text-color));
+  border-color: color-mix(in srgb, var(--gt-accent-color) 55%, var(--gt-border-color));
 }
 
 .gene-tooltip-transcript-selector:focus-visible {
   border-color: var(--gt-accent-color);
   outline: 2px solid var(--gt-accent-color);
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gt-accent-color) 18%, transparent);
 }
 
 .gene-tooltip-transcript-selector:disabled {
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+.gene-tooltip-transcript-selector option {
+  color: var(--gt-text-color);
+  background-color: var(--gt-background-color-base);
 }
 
 .exon-rect {

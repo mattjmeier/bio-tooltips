@@ -259,6 +259,9 @@ export function createOnShownHandler<TData, TConfig extends CoreTooltipConfig>(
         const header = target.closest<HTMLElement>('.gt-collapsible-header');
         if (!header) return;
 
+        const nestedControl = target.closest<HTMLElement>('a, button, input, select, textarea');
+        if (nestedControl && nestedControl !== header) return;
+
         if (event.type === 'keydown') {
           event.preventDefault();
         }
