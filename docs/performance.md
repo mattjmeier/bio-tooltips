@@ -35,8 +35,8 @@ median and IQR in manuscripts because network and scheduling outliers can strong
 affect the mean.
 
 The report also records raw and gzip sizes for the root, module-specific, and stylesheet
-artifacts. Output HTML byte counts are included because embedded image data can affect
-allocation and DOM insertion costs even when formatter execution is fast.
+artifacts. Output HTML byte counts are included because large generated strings can
+affect allocation and DOM insertion costs even when formatter execution is fast.
 
 ## What Is Measured
 

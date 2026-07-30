@@ -10,10 +10,6 @@ const sharedConfig = {
   minify: !isWatching,
   sourcemap: isWatching,
   external: ['d3', 'ideogram', '@rdkit/rdkit'],
-  loader: {
-    '.svg': 'text',
-    '.png': 'dataurl',
-  },
   logLevel: 'info',
 };
 
