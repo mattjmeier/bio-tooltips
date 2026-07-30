@@ -315,11 +315,6 @@ export function createOnHideHandler() {
       return false;
     }
 
-    if (instance._tomselect) {
-      instance._tomselect.destroy();
-      instance._tomselect = null;
-    }
-
     if (instance._sectionToggleHandler) {
       instance.popper.removeEventListener('click', instance._sectionToggleHandler);
       instance._sectionToggleHandler = undefined;

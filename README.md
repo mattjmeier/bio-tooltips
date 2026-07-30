@@ -87,7 +87,7 @@ for methodology and fixture refresh instructions.
 
 Bio Tooltips keeps its user-facing dependency surface intentionally small:
 
-- Runtime npm dependencies: `tom-select`, plus its npm dependencies `@orchidjs/sifter` and `@orchidjs/unicode-variants`.
+- Required runtime npm dependencies: none.
 - Optional peer dependencies: `d3`, `ideogram`, and `@rdkit/rdkit`. These are not bundled into the package and are only needed for optional visual/structure-rendering features.
 - Published package contents: `dist`, `README.md`, `LICENSE`, and `package.json`.
 - External data/API sources used at runtime: MyGene.info for gene records, MyChem.info for chemical records, and PubChem image URLs for chemical structure images.

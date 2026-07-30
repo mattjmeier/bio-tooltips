@@ -119,9 +119,6 @@
       "optional": true
     }
   },
-  "dependencies": {
-    "tom-select": "^2.4.3"
-  },
   "overrides": {
     "@ranfdev/deepobj": "1.0.3",
     "esbuild": "$esbuild",
