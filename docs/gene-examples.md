@@ -23,4 +23,16 @@ GeneTooltip.init({
 });
 ```
 
+## Configured Examples
+
+### Wide Tooltip
+
+<GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 600, tooltipHeight: 400, truncateSummary: 6 }" />
+
+### Minimal Sections
+
+<GeneDemo genes="TP53" species="human" :config="{ display: { species: false, location: false, ideogram: false, pathways: false, domains: false, geneTrack: false, transcripts: false, structures: false, generifs: false, linksSection: false } }" />
+
+For visual comparisons of every theme and section variant, see [Styling & Theming](./styling-theming.md).
+
 See the [Gene Demo](./demos/gene.md) for live examples.

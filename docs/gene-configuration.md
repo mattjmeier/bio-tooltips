@@ -64,12 +64,4 @@ GeneTooltip.init({
 
 `display.ideogram` controls whether the ideogram appears inside the location section. `ideogram.enabled` controls whether the optional visual is enabled.
 
-## Live Examples
-
-Material theme: <GeneDemo genes="TP53" species="human" :config="{ theme: 'material' }" />
-
-Divider sections: <GeneDemo genes="TP53" species="human" :config="{ sectionVariant: 'dividers' }" />
-
-Wide tooltip: <GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 600, tooltipHeight: 400, truncateSummary: 6 }" />
-
-Minimal sections: <GeneDemo genes="TP53" species="human" :config="{ display: { species: false, location: false, ideogram: false, pathways: false, domains: false, geneTrack: false, transcripts: false, structures: false, generifs: false, linksSection: false } }" />
+Compare themes and section variants in [Styling & Theming](./styling-theming.md), or see complete configurations in [Gene Examples](./gene-examples.md).

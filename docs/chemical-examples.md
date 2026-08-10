@@ -29,4 +29,22 @@ ChemicalTooltip.init({
 });
 ```
 
+## Configured Examples
+
+### Compact Tooltip
+
+<ChemicalDemo query="caffeine" :config="{ tooltipWidth: 360, display: { pharmacology: false, regulatory: false, safety: false, identifiers: 'collapsed' } }" />
+
+### Source-Aware Tooltip
+
+<ChemicalDemo query="aspirin" :config="{ display: { sourcePaths: true, identifiers: 'expanded' } }" />
+
+### RDKit Structure SVG
+
+<ChemicalRDKitDemo query="aspirin" :config="{ display: { identifiers: 'collapsed' } }" />
+
+The RDKit renderer is optional. See [Chemical Configuration](./chemical-configuration.md#optional-rdkit-structure-svgs) for installation and setup.
+
+For visual comparisons of every theme and section variant, see [Styling & Theming](./styling-theming.md).
+
 See the [Chemical Demo](./demos/chemical.md) for live examples.

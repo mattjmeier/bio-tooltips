@@ -18,6 +18,46 @@ GeneTooltip.init({
 
 Supported theme values include `auto`, `light`, `dark`, `material`, `translucent`, and `light-border`.
 
+### Theme Examples
+
+Each theme is shown with both tooltip modules so you can compare the shared visual treatment across different content.
+
+#### Auto
+
+Gene: <GeneDemo genes="TP53" species="human" :config="{ theme: 'auto' }" />
+
+Chemical: <ChemicalDemo query="aspirin" :config="{ theme: 'auto' }" />
+
+#### Light
+
+Gene: <GeneDemo genes="TP53" species="human" :config="{ theme: 'light' }" />
+
+Chemical: <ChemicalDemo query="aspirin" :config="{ theme: 'light' }" />
+
+#### Dark
+
+Gene: <GeneDemo genes="TP53" species="human" :config="{ theme: 'dark' }" />
+
+Chemical: <ChemicalDemo query="aspirin" :config="{ theme: 'dark' }" />
+
+#### Material
+
+Gene: <GeneDemo genes="TP53" species="human" :config="{ theme: 'material' }" />
+
+Chemical: <ChemicalDemo query="aspirin" :config="{ theme: 'material' }" />
+
+#### Translucent
+
+Gene: <GeneDemo genes="TP53" species="human" :config="{ theme: 'translucent' }" />
+
+Chemical: <ChemicalDemo query="aspirin" :config="{ theme: 'translucent' }" />
+
+#### Light Border
+
+Gene: <GeneDemo genes="TP53" species="human" :config="{ theme: 'light-border' }" />
+
+Chemical: <ChemicalDemo query="aspirin" :config="{ theme: 'light-border' }" />
+
 ## Section Variants
 
 Tooltips use filled, rounded section cards by default. Use the shared `sectionVariant` option for a flatter layout with simple dividers:
@@ -30,9 +70,19 @@ GeneTooltip.init({
 
 Supported values are `cards` and `dividers`. The divider variant keeps the same content, collapse behavior, and theme colors while replacing card backgrounds with separators. To customize it further, target `[data-section-variant='dividers']` in application CSS and use the existing theme variables.
 
-### Live Example
+### Section Variant Examples
 
-Hover over <GeneDemo genes="TP53" species="human" :config="{ sectionVariant: 'dividers', tooltipWidth: 420, truncateSummary: 3 }" /> to see the divider variant in action.
+#### Cards
+
+Gene: <GeneDemo genes="TP53" species="human" :config="{ sectionVariant: 'cards' }" />
+
+Chemical: <ChemicalDemo query="aspirin" :config="{ sectionVariant: 'cards' }" />
+
+#### Dividers
+
+Gene: <GeneDemo genes="TP53" species="human" :config="{ sectionVariant: 'dividers' }" />
+
+Chemical: <ChemicalDemo query="aspirin" :config="{ sectionVariant: 'dividers' }" />
 
 ## CSS Variables
 
