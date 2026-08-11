@@ -175,4 +175,13 @@ describe('native transcript selector', () => {
     trigger.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(section.dataset.collapsed).toBe('true');
   });
+
+  it('progressively themes the native picker while retaining selector override hooks', () => {
+    const stylesheet = readFileSync(resolve('src/css/main.css'), 'utf8');
+
+    expect(stylesheet).toContain('@supports (appearance: base-select)');
+    expect(stylesheet).toContain('.gene-tooltip-transcript-selector::picker(select)');
+    expect(stylesheet).toContain('--gt-transcript-selector-picker-background');
+    expect(stylesheet).toContain('--gt-transcript-selector-option-selected');
+  });
 });

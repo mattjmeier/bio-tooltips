@@ -44,6 +44,32 @@ Override variables in application CSS:
 }
 ```
 
+The MyGene transcript control also exposes focused override hooks. Its opened
+picker uses these values in browsers that support customizable native selects;
+other browsers continue to use their operating-system picker.
+
+```css
+.tippy-box {
+  --gt-transcript-selector-background: var(--gt-background-color-base);
+  --gt-transcript-selector-picker-background: var(--gt-background-color-base);
+  --gt-transcript-selector-border-color: var(--gt-border-color);
+  --gt-transcript-selector-option-hover: color-mix(
+    in srgb,
+    var(--gt-accent-color) 12%,
+    var(--gt-background-color-base)
+  );
+  --gt-transcript-selector-option-selected: color-mix(
+    in srgb,
+    var(--gt-accent-color) 22%,
+    var(--gt-background-color-base)
+  );
+  --gt-transcript-selector-picker-shadow: 0 8px 20px rgb(0 0 0 / 20%);
+}
+```
+
+Applications can also target `.gene-tooltip-transcript-selector` and its
+`::picker(select)` directly when more control is needed.
+
 ## Dimensions
 
 Use `tooltipWidth`, `tooltipHeight`, and `constrainToViewport` for sizing behavior. These options are shared by all tooltip modules.

@@ -507,8 +507,8 @@ ul.gene-tooltip-nested-list {
   text-transform: none;
   text-overflow: ellipsis;
   cursor: pointer;
-  background-color: var(--gt-background-color-base);
-  border: 1px solid var(--gt-border-color);
+  background-color: var(--gt-transcript-selector-background, var(--gt-background-color-base));
+  border: 1px solid var(--gt-transcript-selector-border-color, var(--gt-border-color));
   border-radius: 5px;
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--gt-text-color) 8%, transparent);
   transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
@@ -533,7 +533,80 @@ ul.gene-tooltip-nested-list {
 
 .gene-tooltip-transcript-selector option {
   color: var(--gt-text-color);
-  background-color: var(--gt-background-color-base);
+  background-color: var(--gt-transcript-selector-picker-background, var(--gt-background-color-base));
+}
+
+/*
+  Progressively theme the opened native picker where customizable selects are
+  supported. Other browsers retain their accessible OS-provided picker.
+*/
+@supports (appearance: base-select) {
+  .gene-tooltip-track-controls::after {
+    display: none;
+  }
+
+  .gene-tooltip-transcript-selector,
+  .gene-tooltip-transcript-selector::picker(select) {
+    appearance: base-select;
+  }
+
+  .gene-tooltip-transcript-selector::picker-icon {
+    color: var(--gt-text-color-secondary);
+    transition: transform 0.15s ease;
+  }
+
+  .gene-tooltip-transcript-selector:open::picker-icon {
+    transform: rotate(180deg);
+  }
+
+  .gene-tooltip-transcript-selector::picker(select) {
+    max-height: min(18rem, calc(100dvh - 2rem));
+    margin-block: 0.3em;
+    padding: 0.25em;
+    color: var(--gt-text-color);
+    background-color: var(--gt-transcript-selector-picker-background, var(--gt-background-color-base));
+    border: 1px solid var(--gt-transcript-selector-border-color, var(--gt-border-color));
+    border-radius: 6px;
+    box-shadow: var(--gt-transcript-selector-picker-shadow, 0 8px 20px rgba(0, 0, 0, 0.2));
+    scrollbar-color: var(--gt-border-color) transparent;
+  }
+
+  .gene-tooltip-transcript-selector option {
+    min-height: 2em;
+    padding: 0.45em 0.6em;
+    font: inherit;
+    font-weight: 400;
+    background-color: transparent;
+    border-radius: 4px;
+  }
+
+  .gene-tooltip-transcript-selector option:hover,
+  .gene-tooltip-transcript-selector option:focus-visible {
+    background-color: var(
+      --gt-transcript-selector-option-hover,
+      color-mix(in srgb, var(--gt-accent-color) 12%, var(--gt-background-color-base))
+    );
+    outline: none;
+  }
+
+  .gene-tooltip-transcript-selector option:checked {
+    color: var(--gt-text-color);
+    font-weight: 600;
+    background-color: var(
+      --gt-transcript-selector-option-selected,
+      color-mix(in srgb, var(--gt-accent-color) 22%, var(--gt-background-color-base))
+    );
+  }
+
+  .gene-tooltip-transcript-selector option::checkmark {
+    color: var(--gt-accent-color);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gene-tooltip-transcript-selector::picker-icon {
+    transition: none;
+  }
 }
 
 .exon-rect {
