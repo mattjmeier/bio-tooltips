@@ -71,11 +71,23 @@ Full documentation and examples are available in the `docs` folder and at the pr
 
 https://mattjmeier.github.io/bio-tooltips/
 
+## Performance Benchmarks
+
+Run the reproducible renderer and controlled cache/prefetch benchmark with:
+
+```powershell
+npm.cmd run benchmark
+```
+
+It produces raw JSON plus publication-ready Markdown tables under
+`benchmark/results/`. See the performance benchmarking guide in `docs/performance.md`
+for methodology and fixture refresh instructions.
+
 ## Supply Chain Notes
 
 Bio Tooltips keeps its user-facing dependency surface intentionally small:
 
-- Runtime npm dependencies: `tom-select`, plus its npm dependencies `@orchidjs/sifter` and `@orchidjs/unicode-variants`.
+- Required runtime npm dependencies: none.
 - Optional peer dependencies: `d3`, `ideogram`, and `@rdkit/rdkit`. These are not bundled into the package and are only needed for optional visual/structure-rendering features.
 - Published package contents: `dist`, `README.md`, `LICENSE`, and `package.json`.
 - External data/API sources used at runtime: MyGene.info for gene records, MyChem.info for chemical records, and PubChem image URLs for chemical structure images.

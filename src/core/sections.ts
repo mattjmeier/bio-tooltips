@@ -47,31 +47,31 @@ export function renderCollapsibleSection(
     : '';
 
   const contentId = `gt-content-${uniqueId}-${sectionKey}`;
-  let headerClasses = 'gene-tooltip-section-header gt-collapsible-header';
+  let triggerClasses = 'gt-section-left gt-collapsible-header';
   if (collapsible) {
-    headerClasses += ' gt-is-collapsible';
+    triggerClasses += ' gt-is-collapsible';
   }
+
+  const triggerAttributes = collapsible
+    ? `role="button" tabindex="0" aria-expanded="${!collapsedState}" aria-controls="${contentId}"`
+    : 'role="heading" aria-level="3"';
 
   return `
     <div class="gene-tooltip-section-container ${collapsible ? 'gt-collapsible' : ''}" 
         data-collapsed="${collapsedState ? 'true' : 'false'}"
         data-section="${sectionKey}">
 
-      <div class="${headerClasses}" 
-          role="${collapsible ? 'button' : 'heading'}"
-          tabindex="${collapsible ? '0' : '-1'}"
-          aria-expanded="${collapsible ? !collapsedState : 'true'}"
-          aria-controls="${contentId}">
-        <div class="gt-section-left">
+      <div class="gene-tooltip-section-header">
+        <div class="${triggerClasses}" ${triggerAttributes}>
           ${arrow}
           <span class="gt-section-title">${title}</span>
         </div>
-          ${headerRightHTML}
-        </div>
-
-        <div class="gt-collapsible-content" id="${contentId}">
-          ${innerHTML}
-        </div>
+        ${headerRightHTML}
       </div>
+
+      <div class="gt-collapsible-content" id="${contentId}">
+        ${innerHTML}
+      </div>
+    </div>
   `;
 }

@@ -1,0 +1,59 @@
+{
+  "_benchmark": {
+    "provider": "MyGene.info",
+    "entity": "BRCA1",
+    "query": "672",
+    "captured": "2026-07-28",
+    "note": "Representative subset of the real human BRCA1 annotation with a larger transcript collection."
+  },
+  "data": {
+    "_id": "672",
+    "query": "BRCA1",
+    "symbol": "BRCA1",
+    "name": "BRCA1 DNA repair associated",
+    "summary": "This gene encodes a nuclear phosphoprotein that has a role in maintaining genomic stability and acts as a tumor suppressor. The encoded protein combines with other tumor suppressors, DNA damage sensors, and signal transducers to form a large multi-subunit protein complex.",
+    "taxid": 9606,
+    "genomic_pos": {
+      "chr": "17",
+      "start": 43044295,
+      "end": 43125483,
+      "strand": -1
+    },
+    "ensembl": {
+      "gene": "ENSG00000012048",
+      "protein": ["ENSP00000350283", "ENSP00000357115", "ENSP00000357256", "ENSP00000417241"],
+      "transcript": ["ENST00000357654", "ENST00000352993", "ENST00000354071", "ENST00000461574", "ENST00000468300", "ENST00000471181", "ENST00000473961", "ENST00000476777", "ENST00000478531", "ENST00000484087", "ENST00000586385", "ENST00000618469"]
+    },
+    "pathway": {
+      "kegg": [
+        {"id": "hsa03440", "name": "Homologous recombination"},
+        {"id": "hsa03460", "name": "Fanconi anemia pathway"},
+        {"id": "hsa04110", "name": "Cell cycle"},
+        {"id": "hsa05200", "name": "Pathways in cancer"},
+        {"id": "hsa05224", "name": "Breast cancer"}
+      ],
+      "reactome": [
+        {"id": "R-HSA-5693532", "name": "DNA Double-Strand Break Repair"},
+        {"id": "R-HSA-5693567", "name": "HDR through Homologous Recombination"},
+        {"id": "R-HSA-73894", "name": "DNA Repair"},
+        {"id": "R-HSA-5685942", "name": "HDR through Single Strand Annealing"}
+      ]
+    },
+    "interpro": [
+      {"id": "IPR001357", "desc": "BRCA1, RING finger", "short_desc": "BRCA1_RING"},
+      {"id": "IPR018957", "desc": "Zinc finger, C3HC4 RING-type", "short_desc": "Znf_RING"},
+      {"id": "IPR025994", "desc": "BRCA1, serine-rich domain", "short_desc": "BRCA1_Ser-rich"},
+      {"id": "IPR035940", "desc": "BRCT domain superfamily", "short_desc": "BRCT_sf"}
+    ],
+    "pdb": ["1JM7", "1JNX", "1T15", "1T29", "1Y98", "3K0K", "4IFI", "4OFB", "4Y18"],
+    "generif": [
+      {"pubmed": 38987633, "text": "BRCA1 variants influence homologous recombination repair capacity."},
+      {"pubmed": 38622145, "text": "Functional analysis of BRCA1 missense variants."},
+      {"pubmed": 38190514, "text": "BRCA1 participates in replication fork protection."},
+      {"pubmed": 37798201, "text": "BRCA1-associated complexes coordinate DNA damage responses."}
+    ],
+    "wikipedia": {
+      "url_stub": "BRCA1"
+    }
+  }
+}

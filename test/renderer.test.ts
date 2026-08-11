@@ -1,20 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { renderTooltipHTML } from '../src/providers/mygene/renderer';
 import { renderTooltipHTML as renderMyChemTooltipHTML } from '../src/providers/mychem/renderer';
 import type { MyGeneInfoResult } from '../src/providers/mygene/types';
 import type { MyChemInfoResult } from '../src/providers/mychem/types';
-
-// Mock the asset imports
-vi.mock('../src/assets/NLM-square-logo.svg', () => ({
-  default: 'mock-ncbi-logo-svg-content',
-}));
-vi.mock('../src/assets/ebang-400dpi.png', () => ({
-  default: 'mock-ensembl-logo.png',
-}));
-// vi.mock('../src/assets/Wikipedia-logo.svg', () => ({
-//   default: 'mock-wiki-logo.png',
-// }));
-// TODO - finish adding wikipedia tests
 
 // A complete mock object for thorough testing
 const mockGeneData: MyGeneInfoResult = {
@@ -119,9 +107,8 @@ describe('renderTooltipHTML', () => {
     // Default: both should be visible
     let html = renderTooltipHTML(mockGeneData, { uniqueId: MOCK_UNIQUE_ID });
     expect(html).toContain('href="https://www.ncbi.nlm.nih.gov/gene/7157"');
-    expect(html).toContain('src="data:image/svg+xml,mock-ncbi-logo-svg-content"');
     expect(html).toContain('href="https://www.ensembl.org/id/ENSG00000141510"');
-    expect(html).toContain('src="mock-ensembl-logo.png"');
+    expect(html).not.toContain('<img');
 
     // Disable NCBI
     html = renderTooltipHTML(mockGeneData, { display: { links: { ncbi: false } }, uniqueId: MOCK_UNIQUE_ID });

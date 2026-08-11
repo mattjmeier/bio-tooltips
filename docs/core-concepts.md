@@ -86,6 +86,19 @@ GeneTooltip.init({
 
 Keep timing logs disabled for normal production use.
 
+For structured measurements, use `onTiming` without enabling console output:
+
+```ts
+GeneTooltip.init({
+  onTiming(event) {
+    measurements.push(event);
+  }
+});
+```
+
+See [Performance Benchmarking](./performance.md) for the reproducible benchmark command,
+fixture workflow, and cache/prefetch measurement controls.
+
 ## Display State
 
 Tooltip modules use `display` objects to control rendered sections. Section values generally support:

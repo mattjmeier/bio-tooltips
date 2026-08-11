@@ -7,9 +7,6 @@
 @import 'tippy.js/themes/material.css';
 @import 'tippy.js/themes/translucent.css';
 
-/* Import Tom Select CSS classes */
-@import "tom-select/dist/css/tom-select.css";
-
 /* Import gene-tooltip's theme variables/styles (global) */
 @import './theme.css';
 
@@ -21,7 +18,6 @@
     scrollbar-width: thin;
     scrollbar-color: var(--gt-border-color) transparent;
 }
-
 /* --- Summary --- */
 .gene-tooltip-summary {
   display: -webkit-box;
@@ -196,18 +192,6 @@
   background-color: transparent;
 }
 
-/*
-  Selectively create a stacking context for the section container
-  that has an active Tom Select dropdown inside it.
-*/
-.gene-tooltip-section-container:has(.ts-wrapper.dropdown-active) {
-  /* position: relative is needed to establish the context for z-index */
-  position: relative; 
-  
-  /* A z-index > 0 lifts this section above its siblings */
-  z-index: 2;
-}
-
 .gene-tooltip-section-header {
   font-weight: bold;
   font-size: 0.9em;
@@ -226,14 +210,22 @@
    needed to align the (optional) arrow and the title. */
 .gt-collapsible-header {
   display: flex;
+  flex: 1 1 auto;
   align-items: center;
   gap: 0.25em;
+  min-width: 0;
+  border-radius: 3px;
   position: relative;
 }
 
 /* And this rule ONLY applies to INTERACTIVE headers, adding the pointer. */
 .gt-collapsible-header.gt-is-collapsible {
   cursor: pointer;
+}
+
+.gt-collapsible-header.gt-is-collapsible:focus-visible {
+  outline: 2px solid var(--gt-accent-color);
+  outline-offset: 2px;
 }
 
 .gene-tooltip-section {
@@ -436,30 +428,6 @@ ul.gene-tooltip-nested-list {
     opacity: 1;
 }
 
-.gene-tooltip-link-icon-wrapper {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.3em;
-  height: 1.3em;
-  flex-shrink: 0;
-}
-
-.gene-tooltip-link-icon {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  vertical-align: middle;
-  border: 0;
-  filter: grayscale(1) opacity(0.7);
-  transition: filter 0.2s ease-in-out;
-}
-
-.gene-tooltip-links-container a:hover .gene-tooltip-link-icon {
-    /* Restore the icon's color on hover */
-    filter: none;
-}
-
 /* Paragraph content within tooltip sections */
 .tippy-box .gene-tooltip-p-content {
   margin: 0;
@@ -499,170 +467,146 @@ ul.gene-tooltip-nested-list {
   width: 100%;
 }
 
-/* 
-  Tom Select Overrides
-  Scoped within the tippy-box to avoid affecting other Tom Select instances on the page.
-*/
 .gene-tooltip-track-controls {
+  position: relative;
   display: flex;
   align-items: center;
-  flex: 0 0 min(100%, 13rem);
+  flex: 0 1 13rem;
+  max-width: min(100%, 13rem);
   min-width: 0;
-  z-index: 2;
+}
 
-  .gt-transcript-selector,
-  .ts-wrapper {
-    width: 100%;
+.gene-tooltip-track-controls::after {
+  position: absolute;
+  right: 0.7em;
+  top: 50%;
+  width: 0.4em;
+  height: 0.4em;
+  content: '';
+  color: var(--gt-text-color-secondary);
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  pointer-events: none;
+  transform: translateY(-70%) rotate(45deg);
+}
+
+.gene-tooltip-transcript-selector {
+  appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 2.15em;
+  padding: 0.4em 1.9em 0.4em 0.65em;
+  color: var(--gt-text-color);
+  font: inherit;
+  font-size: 0.9em;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: normal;
+  text-transform: none;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  background-color: var(--gt-transcript-selector-background, var(--gt-background-color-base));
+  border: 1px solid var(--gt-transcript-selector-border-color, var(--gt-border-color));
+  border-radius: 5px;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--gt-text-color) 8%, transparent);
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gene-tooltip-transcript-selector:hover {
+  background-color: color-mix(in srgb, var(--gt-background-color-base) 94%, var(--gt-text-color));
+  border-color: color-mix(in srgb, var(--gt-accent-color) 55%, var(--gt-border-color));
+}
+
+.gene-tooltip-transcript-selector:focus-visible {
+  border-color: var(--gt-accent-color);
+  outline: 2px solid var(--gt-accent-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gt-accent-color) 18%, transparent);
+}
+
+.gene-tooltip-transcript-selector:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.gene-tooltip-transcript-selector option {
+  color: var(--gt-text-color);
+  background-color: var(--gt-transcript-selector-picker-background, var(--gt-background-color-base));
+}
+
+/*
+  Progressively theme the opened native picker where customizable selects are
+  supported. Other browsers retain their accessible OS-provided picker.
+*/
+@supports (appearance: base-select) {
+  .gene-tooltip-track-controls::after {
+    display: none;
   }
 
-  .ts-wrapper {
-    font-size: 0.8em;
-    
-    /* ===== CONTROL STYLING ===== */
-    .ts-control {
-      background-color: var(--gt-background-color-subtle);
-      color: var(--gt-text-color);
-      border: 1px solid var(--gt-border-color);
-      border-radius: 4px;
-      padding: 6px 28px 6px 12px; /* Combined padding with right space for arrow */
-      
-      /* Dropdown arrow */
-      &::after {
-        content: '▼';
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--gt-text-color-secondary);
-        font-size: 0.75em;
-        pointer-events: none;
-        transition: transform 0.2s ease, color 0.2s ease;
-      }
-      
-      /* Focus state */
-      &:focus {
-        border-color: var(--gt-accent-color);
-        outline: none;
-        box-shadow: 0 0 0 2px color-mix(in srgb, var(--gt-accent-color) 20%, transparent);
-      }
-    }
-    
-    /* Fix white background for all active states */
-    &.focus .ts-control,
-    &.input-active .ts-control,
-    &.dropdown-active .ts-control {
-      background-color: var(--gt-background-color-subtle) !important;
-      border-color: var(--gt-accent-color);
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--gt-accent-color) 20%, transparent);
-    }
+  .gene-tooltip-transcript-selector,
+  .gene-tooltip-transcript-selector::picker(select) {
+    appearance: base-select;
+  }
 
-    /* Rotate arrow when dropdown is open */
-    &.dropdown-active .ts-control::after {
-      transform: translateY(-50%) rotate(180deg);
-      color: var(--gt-accent-color);
-    }
-    
-    /* ===== INPUT STYLING ===== */
-    .ts-input {
-      color: var(--gt-text-color);
-      
-      &::placeholder {
-        color: var(--gt-text-color-secondary);
-      }
-    }
-    
-    /* ===== DROPDOWN STYLING ===== */
-    .ts-dropdown {
-      background-color: var(--gt-background-color-subtle);
-      border: 1px solid var(--gt-border-color);
-      border-radius: 4px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      margin-top: 4px;
-      position: absolute !important;
-      z-index: 10;
-      /* z-index: 10005 !important; */
+  .gene-tooltip-transcript-selector::picker-icon {
+    color: var(--gt-text-color-secondary);
+    transition: transform 0.15s ease;
+  }
 
-      .ts-dropdown-content {
-        /* z-index: 10001; */
-        max-height: 300px;
-        overflow-y: auto;
-        
-        /* Style scrollbar */
-        scrollbar-width: thin;
-        scrollbar-color: var(--gt-border-color) transparent;
-        
-        &::-webkit-scrollbar {
-          width: 8px;
-        }
-        
-        &::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        
-        &::-webkit-scrollbar-thumb {
-          background-color: var(--gt-border-color);
-          border-radius: 4px;
-        }
-      }
-      
-      /* Option items */
-      .option {
-        /* z-index: 10001; */
-        padding: 8px 12px;
-        color: var(--gt-text-color);
-        cursor: pointer;
-        
-        &:hover,
-        &.active {
-          background-color: color-mix(in srgb, var(--gt-background-color-subtle) 90%, var(--gt-text-color));
-        }
-        
-        /* Selected state */
-        &.selected {
-          background-color: var(--gt-background-color-subtle);
-          color: var(--gt-accent-color);
-          font-weight: 500;
-          border-left: 2px solid var(--gt-accent-color);
-          padding-left: 10px;
-        }
-      }
-    }
-    
-    /* ===== MULTI-SELECT ITEMS (TAGS) ===== */
-    .item {
-      background-color: var(--gt-background-color-subtle);
-      color: var(--gt-text-color);
-      border-radius: 3px;
-      padding: 2px 8px;
-      margin-right: 4px;
-      
-      .remove {
-        border-left: 1px solid var(--gt-border-color);
-        padding-left: 6px;
-        margin-left: 6px;
-        
-        &:hover {
-          background-color: color-mix(in srgb, var(--gt-background-color-subtle) 80%, var(--gt-text-color));
-        }
-      }
-    }
-    
-    /* ===== STATE VARIATIONS ===== */
-    &.disabled .ts-control {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    
-    &.loading .ts-control::after {
-      content: '⟳';
-      animation: spin 1s linear infinite;
-    }
+  .gene-tooltip-transcript-selector:open::picker-icon {
+    transform: rotate(180deg);
+  }
+
+  .gene-tooltip-transcript-selector::picker(select) {
+    max-height: min(18rem, calc(100dvh - 2rem));
+    margin-block: 0.3em;
+    padding: 0.25em;
+    color: var(--gt-text-color);
+    background-color: var(--gt-transcript-selector-picker-background, var(--gt-background-color-base));
+    border: 1px solid var(--gt-transcript-selector-border-color, var(--gt-border-color));
+    border-radius: 6px;
+    box-shadow: var(--gt-transcript-selector-picker-shadow, 0 8px 20px rgba(0, 0, 0, 0.2));
+    scrollbar-color: var(--gt-border-color) transparent;
+  }
+
+  .gene-tooltip-transcript-selector option {
+    min-height: 2em;
+    padding: 0.45em 0.6em;
+    font: inherit;
+    font-weight: 400;
+    background-color: transparent;
+    border-radius: 4px;
+  }
+
+  .gene-tooltip-transcript-selector option:hover,
+  .gene-tooltip-transcript-selector option:focus-visible {
+    background-color: var(
+      --gt-transcript-selector-option-hover,
+      color-mix(in srgb, var(--gt-accent-color) 12%, var(--gt-background-color-base))
+    );
+    outline: none;
+  }
+
+  .gene-tooltip-transcript-selector option:checked {
+    color: var(--gt-text-color);
+    font-weight: 600;
+    background-color: var(
+      --gt-transcript-selector-option-selected,
+      color-mix(in srgb, var(--gt-accent-color) 22%, var(--gt-background-color-base))
+    );
+  }
+
+  .gene-tooltip-transcript-selector option::checkmark {
+    color: var(--gt-accent-color);
   }
 }
 
-@keyframes spin {
-  from { transform: translateY(-50%) rotate(0deg); }
-  to { transform: translateY(-50%) rotate(360deg); }
+@media (prefers-reduced-motion: reduce) {
+  .gene-tooltip-transcript-selector::picker-icon {
+    transition: none;
+  }
 }
 
 .exon-rect {

@@ -62,6 +62,9 @@ describe('architecture compatibility', () => {
     expect(html).toContain('<strong>TP53</strong>');
     expect(RootGeneTooltip.init).toBe(MyGeneTooltip.init);
     expect(RootGeneTooltip.preload).toBe(MyGeneTooltip.preload);
+    expect(RootGeneTooltip.whenPrefetchReady).toBe(MyGeneTooltip.whenPrefetchReady);
+    expect(typeof RootGeneTooltip.clearCache).toBe('function');
+    expect(typeof RootGeneTooltip.cacheSize).toBe('function');
   });
 
   it('MyGene sections are registered in render order', () => {

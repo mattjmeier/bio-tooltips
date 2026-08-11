@@ -5,12 +5,23 @@ export type TooltipTheme = 'light' | 'dark' | 'auto' | 'material' | 'translucent
 export type VisualPreloadMode = 'none' | 'hover' | 'init';
 export type SectionVariant = 'cards' | 'dividers';
 
+export interface TooltipTimingEvent {
+  label: string;
+  elapsedMs: number;
+  timestampMs: number;
+  tooltipId?: string;
+  details?: Record<string, unknown>;
+}
+
+export type TooltipTimingObserver = (event: TooltipTimingEvent) => void;
+
 export interface CoreTooltipConfig {
   selector: string;
   prefetch: PrefetchMode;
   prefetchThreshold: number;
   visualPreload: VisualPreloadMode;
   debugTimings: boolean;
+  onTiming?: TooltipTimingObserver;
   theme: TooltipTheme;
   sectionVariant: SectionVariant;
   tippyOptions: Partial<Props>;

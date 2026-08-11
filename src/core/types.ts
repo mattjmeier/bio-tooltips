@@ -1,5 +1,4 @@
 import type { Instance } from 'tippy.js';
-import type TomSelect from 'tom-select';
 import type { CoreTooltipConfig } from './config.js';
 export type { CoreTooltipConfig } from './config.js';
 
@@ -33,7 +32,6 @@ export interface TippyInstanceWithCustoms<TData = unknown> extends Instance {
   _themeIntent?: 'auto' | string;
   _isChildTippyVisible?: boolean;
   _isFullyShown?: boolean;
-  _tomselect?: TomSelect | null;
   _sectionToggleHandler?: (event: Event) => void;
   _sectionKeydownHandler?: (event: KeyboardEvent) => void;
   _visualsRendered?: boolean;

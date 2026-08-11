@@ -48,6 +48,7 @@ export default {
           { text: 'Quick Start', link: '/guide' },
           { text: 'Core Concepts', link: '/core-concepts' },
           { text: 'Architecture', link: '/architecture' },
+          { text: 'Performance', link: '/performance' },
           { text: 'Markup Patterns', link: '/markup-patterns' },
           { text: 'Framework Integration', link: '/integration' },
           { text: 'Configuration', link: '/configuration' },

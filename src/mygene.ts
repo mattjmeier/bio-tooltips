@@ -3,9 +3,14 @@ import { mergeConfig, type GeneTooltipConfig } from './providers/mygene/config.j
 import { findGeneElements } from './providers/mygene/parser.js';
 import { myGeneProfile } from './providers/mygene/profile.js';
 import { filterNestedList } from './utils.js';
+import { clear as clearTooltipCache, size as getTooltipCacheSize } from './core/cache.js';
 
 export { filterNestedList };
-export type { SectionVariant } from './core/config.js';
+export type {
+  SectionVariant,
+  TooltipTimingEvent,
+  TooltipTimingObserver,
+} from './core/config.js';
 
 const geneTooltipEngine = createTooltipEngine({
   profile: myGeneProfile,
@@ -25,9 +30,24 @@ export function preload(): Promise<unknown> {
   return geneTooltipEngine.preload();
 }
 
+export function whenPrefetchReady(): Promise<void> {
+  return geneTooltipEngine.whenPrefetchReady();
+}
+
+export function clearCache(): void {
+  clearTooltipCache();
+}
+
+export function cacheSize(): number {
+  return getTooltipCacheSize();
+}
+
 export const GeneTooltip = {
   init,
   preload,
+  whenPrefetchReady,
+  clearCache,
+  cacheSize,
   filterNestedList,
 };
 
@@ -37,6 +57,9 @@ if (typeof window !== 'undefined') {
   }
   (window as any).GeneTooltip.init = init;
   (window as any).GeneTooltip.preload = preload;
+  (window as any).GeneTooltip.whenPrefetchReady = whenPrefetchReady;
+  (window as any).GeneTooltip.clearCache = clearCache;
+  (window as any).GeneTooltip.cacheSize = cacheSize;
   (window as any).GeneTooltip.filterNestedList = filterNestedList;
 }
 
@@ -48,6 +71,9 @@ declare global {
     GeneTooltip: {
       init: (userConfig?: Partial<GeneTooltipConfig>) => void;
       preload: () => Promise<unknown>;
+      whenPrefetchReady: () => Promise<void>;
+      clearCache: () => void;
+      cacheSize: () => number;
       filterNestedList: (query: string, listId: string) => void;
     };
   }

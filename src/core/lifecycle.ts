@@ -259,6 +259,9 @@ export function createOnShownHandler<TData, TConfig extends CoreTooltipConfig>(
         const header = target.closest<HTMLElement>('.gt-collapsible-header');
         if (!header) return;
 
+        const nestedControl = target.closest<HTMLElement>('a, button, input, select, textarea');
+        if (nestedControl && nestedControl !== header) return;
+
         if (event.type === 'keydown') {
           event.preventDefault();
         }
@@ -313,11 +316,6 @@ export function createOnHideHandler() {
 
     if (instance._isChildTippyVisible) {
       return false;
-    }
-
-    if (instance._tomselect) {
-      instance._tomselect.destroy();
-      instance._tomselect = null;
     }
 
     if (instance._sectionToggleHandler) {

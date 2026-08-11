@@ -9,6 +9,7 @@ Core config is shared by all tooltip modules.
 | `prefetchThreshold` | `15` | Element count used by smart prefetch behavior. |
 | `visualPreload` | `hover` | Optional visual dependency warmup strategy: `hover`, `init`, or `none`. |
 | `debugTimings` | `false` | Logs tooltip lifecycle timing checkpoints to the browser console. |
+| `onTiming` | `undefined` | Receives structured timing checkpoints for diagnostics and benchmarking. |
 | `theme` | `auto` | Tippy theme: `auto`, `light`, `dark`, `material`, `translucent`, or `light-border`. |
 | `tooltipWidth` | Module-specific | Optional fixed max width in pixels. |
 | `tooltipHeight` | None | Optional fixed max height in pixels. |
@@ -43,6 +44,20 @@ GeneTooltip.init({
 ```
 
 When enabled, Bio Tooltips logs relative timing checkpoints for events such as `onShow`, cache hits, content rendering, visual rendering, D3/Ideogram loading, and nested tooltip attachment. Leave this disabled in production unless you are actively debugging.
+
+`onTiming` receives the same checkpoints as structured objects and operates independently
+of `debugTimings`. Observer errors are isolated from tooltip behavior.
+
+Each module also exposes:
+
+| Method | Purpose |
+| --- | --- |
+| `whenPrefetchReady()` | Wait for eager prefetch work started by the latest `init()` call. |
+| `clearCache()` | Clear the shared in-memory provider cache. Primarily for benchmarks and diagnostics. |
+| `cacheSize()` | Return the number of entries in the shared in-memory cache. |
+
+See [Performance Benchmarking](../performance.md) for measurement guidance and the
+benchmark report command.
 
 ## Tippy Options
 

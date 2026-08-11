@@ -1,11 +1,15 @@
 import type { Instance } from 'tippy.js';
 import type { MyGeneExon, MyGeneInfoResult } from '../types.js';
 // import { getSectionBackgroundColor } from './utils'; 
-import TomSelect from 'tom-select';
 import tippy from 'tippy.js';
 import type { TippyInstanceWithCustoms } from '../../../core/types.js';
 import type { CoreTooltipConfig } from '../../../core/config.js';
 import { logTooltipTiming } from '../../../core/timing.js';
+import {
+    getLongestTranscript,
+    getUsableTranscripts,
+    initializeNativeTranscriptSelector,
+} from './transcript-selector.js';
 // 1. Import the D3 type definitions
 import type * as D3 from 'd3';
 
@@ -117,26 +121,26 @@ export async function renderGeneTrack(
 
     if (!container) return;
 
-    const transcripts = data.exons;
+    const transcripts = getUsableTranscripts(data.exons);
 
-    if (!transcripts || transcripts.length === 0) {
+    if (transcripts.length === 0) {
         container.innerHTML = `<small>Transcript data not available.</small>`;
-        if (selectorEl) selectorEl.style.display = 'none';
+        if (selectorEl) {
+            selectorEl.replaceChildren();
+            selectorEl.onchange = null;
+            selectorEl.hidden = true;
+        }
         logTooltipTiming(instance, config, 'gene track skipped', { reason: 'no-transcripts' });
         return;
     }
 
-    const longestTranscript = transcripts.reduce((longest, current) => {
-        return (current.position?.length || 0) > (longest.position?.length || 0) ? current : longest;
-    }, transcripts[0]);
+    const longestTranscript = getLongestTranscript(transcripts);
 
     let selectedTranscriptId = selectorEl?.value || longestTranscript.transcript;
-    let drawSelectedTranscript: ((transcriptId: string) => void) | null = null;
-
-    if (instance._tomselect) {
-        instance._tomselect.destroy();
-        instance._tomselect = null;
+    if (!transcripts.some(tx => tx.transcript === selectedTranscriptId)) {
+        selectedTranscriptId = longestTranscript.transcript;
     }
+    let drawSelectedTranscript: ((transcriptId: string) => void) | null = null;
 
     const existingSvg = container.querySelector('svg');
     if (existingSvg) {
@@ -151,40 +155,28 @@ export async function renderGeneTrack(
 
     try {
         if (transcripts.length > 1 && selectorEl) {
-            logTooltipTiming(instance, config, 'tomselect init start', {
+            logTooltipTiming(instance, config, 'transcript selector init start', {
                 transcripts: transcripts.length,
                 selected: selectedTranscriptId,
             });
-            const sortedTranscripts = [...transcripts].sort((a, b) => a.transcript.localeCompare(b.transcript));
-            const tomSelectOptions = sortedTranscripts.map(tx => {
-                const exonCount = tx.position?.length || 0;
-                return {
-                    value: tx.transcript,
-                    text: `${tx.transcript} (${exonCount} exons)`
-                };
-            });
-
-            // Initialize the header control before D3 loads so it does not pop in after the SVG.
-            const tomselect = new TomSelect(`#${selectorEl.id}`, {
-                options: tomSelectOptions,
-                items: [selectedTranscriptId],
-                create: false,
-                controlInput: null as any, // This is what the docs say to do, but the TomSettings types don't have `null` here.
-                plugins: [], 
-                onChange: (selectedValue: string) => {
-                    selectedTranscriptId = selectedValue || longestTranscript.transcript;
-                    logTooltipTiming(instance, config, 'tomselect change', { selected: selectedTranscriptId });
+            // Initialize the header control before D3 loads so it does not appear after the SVG.
+            selectedTranscriptId = initializeNativeTranscriptSelector(selectorEl, transcripts, {
+                selectedTranscriptId,
+                onChange: selectedValue => {
+                    selectedTranscriptId = selectedValue;
+                    logTooltipTiming(instance, config, 'transcript selector change', { selected: selectedTranscriptId });
                     drawSelectedTranscript?.(selectedTranscriptId);
-                }
-            });
-            
-            instance._tomselect = tomselect;
-            logTooltipTiming(instance, config, 'tomselect init complete');
+                },
+            }) ?? longestTranscript.transcript;
+            logTooltipTiming(instance, config, 'transcript selector init complete');
 
         } else if (selectorEl) {
-            // If there's only one transcript, just hide the selector dropdown
-            selectorEl.style.display = 'none';
-            logTooltipTiming(instance, config, 'tomselect skipped', { reason: 'single-transcript' });
+            // A single transcript does not need a selection control.
+            initializeNativeTranscriptSelector(selectorEl, transcripts, {
+                selectedTranscriptId,
+                onChange: () => undefined,
+            });
+            logTooltipTiming(instance, config, 'transcript selector skipped', { reason: 'single-transcript' });
         }
 
         logTooltipTiming(instance, config, 'd3 load start');

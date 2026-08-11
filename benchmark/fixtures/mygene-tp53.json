@@ -1,0 +1,60 @@
+{
+  "_benchmark": {
+    "provider": "MyGene.info",
+    "entity": "TP53",
+    "query": "7157",
+    "captured": "2026-07-28",
+    "note": "Representative subset of the real human TP53 annotation used by the tooltip renderer."
+  },
+  "data": {
+    "_id": "7157",
+    "query": "TP53",
+    "symbol": "TP53",
+    "name": "tumor protein p53",
+    "summary": "This gene encodes a tumor suppressor protein containing transcriptional activation, DNA binding, and oligomerization domains. The encoded protein responds to diverse cellular stresses to regulate expression of target genes, thereby inducing cell cycle arrest, apoptosis, senescence, DNA repair, or changes in metabolism.",
+    "taxid": 9606,
+    "genomic_pos": {
+      "chr": "17",
+      "start": 7661779,
+      "end": 7687538,
+      "strand": -1
+    },
+    "ensembl": {
+      "gene": "ENSG00000141510",
+      "protein": ["ENSP00000269305", "ENSP00000410739", "ENSP00000481179"],
+      "transcript": ["ENST00000269305", "ENST00000420246", "ENST00000445888", "ENST00000504290", "ENST00000509690", "ENST00000610292"]
+    },
+    "pathway": {
+      "kegg": [
+        {"id": "hsa01522", "name": "Endocrine resistance"},
+        {"id": "hsa01524", "name": "Platinum drug resistance"},
+        {"id": "hsa04010", "name": "MAPK signaling pathway"},
+        {"id": "hsa04110", "name": "Cell cycle"},
+        {"id": "hsa04115", "name": "p53 signaling pathway"},
+        {"id": "hsa04210", "name": "Apoptosis"}
+      ],
+      "reactome": [
+        {"id": "R-HSA-109581", "name": "Apoptosis"},
+        {"id": "R-HSA-212436", "name": "Generic Transcription Pathway"},
+        {"id": "R-HSA-2559580", "name": "Oxidative Stress Induced Senescence"},
+        {"id": "R-HSA-5633007", "name": "Regulation of TP53 Activity"}
+      ]
+    },
+    "interpro": [
+      {"id": "IPR002117", "desc": "p53, DNA-binding domain", "short_desc": "p53_DNA-bd"},
+      {"id": "IPR008967", "desc": "p53-like transcription factor, DNA-binding domain superfamily", "short_desc": "p53-like_TF_DNA-bd"},
+      {"id": "IPR010991", "desc": "p53, tetramerisation domain", "short_desc": "p53_tetrameristn"},
+      {"id": "IPR011615", "desc": "p53, transactivation domain", "short_desc": "p53_transactivation"}
+    ],
+    "pdb": ["1A1U", "1AIE", "1GZH", "1KZY", "1TUP", "2AC0", "2FEJ", "2J1X", "2OCJ", "3D05"],
+    "generif": [
+      {"pubmed": 39049108, "text": "TP53 status influences the cellular response to DNA damage."},
+      {"pubmed": 38749941, "text": "Analysis identifies context-dependent p53 transcriptional programs."},
+      {"pubmed": 38291035, "text": "Mutant p53 proteins alter tumor cell signaling and survival."},
+      {"pubmed": 37612590, "text": "p53 pathway activity is associated with cell-cycle arrest."}
+    ],
+    "wikipedia": {
+      "url_stub": "P53"
+    }
+  }
+}

@@ -56,16 +56,16 @@ function prefetchAll<TData>(
   elements: HTMLElement[],
   provider: DataProvider<TData>,
   inFlightRequests: Map<string, Promise<Map<string, TData>>>
-): void {
+): Promise<void> {
   const refs = getUncachedRefs(elements, provider, inFlightRequests);
-  fetchAndCache(refs, provider, inFlightRequests);
+  return fetchAndCache(refs, provider, inFlightRequests);
 }
 
 function prefetchSmart<TData>(
   elements: HTMLElement[],
   provider: DataProvider<TData>,
   inFlightRequests: Map<string, Promise<Map<string, TData>>>
-): void {
+): Promise<void> {
   const fetchQueue = new Set<Element>();
   let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -89,6 +89,7 @@ function prefetchSmart<TData>(
   }, { rootMargin: '200px' });
 
   elements.forEach(el => observer.observe(el));
+  return Promise.resolve();
 }
 
 export function runPrefetch<TData>(
@@ -97,15 +98,17 @@ export function runPrefetch<TData>(
   threshold: number,
   inFlightRequests: Map<string, Promise<Map<string, TData>>>,
   provider: DataProvider<TData>
-): void {
+): Promise<void> {
   const elementCount = elements.length;
-  if (strategy === 'none') return;
+  if (strategy === 'none') return Promise.resolve();
 
   const shouldPrefetchAll = strategy === 'all' || (strategy === 'smart' && elementCount <= threshold);
 
   if (shouldPrefetchAll) {
-    prefetchAll(elements, provider, inFlightRequests);
+    return prefetchAll(elements, provider, inFlightRequests);
   } else if (strategy === 'smart' && elementCount > threshold) {
-    prefetchSmart(elements, provider, inFlightRequests);
+    return prefetchSmart(elements, provider, inFlightRequests);
   }
+
+  return Promise.resolve();
 }
