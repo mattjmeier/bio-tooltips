@@ -8,7 +8,7 @@
 
 > **getMyChemNestedTooltipDefinitions**(`data`, `config`, `uniqueId`): [`NestedTooltipDefinition`](../../core/types.md#nestedtooltipdefinition)[]
 
-Defined in: [providers/mychem/renderer.ts:701](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mychem/renderer.ts#L701)
+Defined in: [providers/mychem/renderer.ts:701](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mychem/renderer.ts#L701)
 
 #### Parameters
 
@@ -34,13 +34,13 @@ Defined in: [providers/mychem/renderer.ts:701](https://github.com/mattjmeier/bio
 
 > **renderMyChemTooltipFromConfig**(`data`, `uniqueId`, `config`): `string`
 
-Defined in: [providers/mychem/renderer.ts:158](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mychem/renderer.ts#L158)
+Defined in: [providers/mychem/renderer.ts:158](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mychem/renderer.ts#L158)
 
 #### Parameters
 
 ##### data
 
-[`MyChemInfoResult`](types.md#mycheminforesult) | `null` | `undefined`
+[`MyChemInfoResult`](types.md#mycheminforesult) \| `null` \| `undefined`
 
 ##### uniqueId
 
@@ -58,17 +58,17 @@ Defined in: [providers/mychem/renderer.ts:158](https://github.com/mattjmeier/bio
 
 ### renderTooltipHTML()
 
-> **renderTooltipHTML**(`data`, `options`): `string`
+> **renderTooltipHTML**(`data`, `options?`): `string`
 
-Defined in: [providers/mychem/renderer.ts:70](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mychem/renderer.ts#L70)
+Defined in: [providers/mychem/renderer.ts:70](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mychem/renderer.ts#L70)
 
 #### Parameters
 
 ##### data
 
-[`MyChemInfoResult`](types.md#mycheminforesult) | `null` | `undefined`
+[`MyChemInfoResult`](types.md#mycheminforesult) \| `null` \| `undefined`
 
-##### options
+##### options?
 
 `RenderOptions` = `{}`
 

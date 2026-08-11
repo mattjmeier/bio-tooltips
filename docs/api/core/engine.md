@@ -8,7 +8,7 @@
 
 > **createTooltipEngine**\<`TData`, `TConfig`\>(`options`): `object`
 
-Defined in: [core/engine.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/engine.ts#L18)
+Defined in: [core/engine.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/engine.ts#L18)
 
 #### Type Parameters
 
@@ -30,28 +30,32 @@ Defined in: [core/engine.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/
 
 `object`
 
-##### init()
+##### init
 
 > **init**: (`userConfig`) => () => `void`
 
 ###### Parameters
 
-###### userConfig
+###### userConfig?
 
 [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<`TConfig`\> = `{}`
 
 ###### Returns
 
-> (): `void`
+() => `void`
 
-###### Returns
-
-`void`
-
-##### preload()
+##### preload
 
 > **preload**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
 ###### Returns
 
 [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
+
+##### whenPrefetchReady
+
+> **whenPrefetchReady**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+
+###### Returns
+
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>

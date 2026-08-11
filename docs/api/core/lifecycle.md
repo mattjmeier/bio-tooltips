@@ -8,21 +8,11 @@
 
 > **createOnHideHandler**(): (`instance`) => `false` \| `undefined`
 
-Defined in: [core/lifecycle.ts:306](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/lifecycle.ts#L306)
+Defined in: [core/lifecycle.ts:309](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/lifecycle.ts#L309)
 
 #### Returns
 
-> (`instance`): `false` \| `undefined`
-
-##### Parameters
-
-###### instance
-
-[`TippyInstanceWithCustoms`](types.md#tippyinstancewithcustoms)
-
-##### Returns
-
-`false` \| `undefined`
+(`instance`) => `false` \| `undefined`
 
 ***
 
@@ -30,7 +20,7 @@ Defined in: [core/lifecycle.ts:306](https://github.com/mattjmeier/bio-tooltips/b
 
 > **createOnShowHandler**\<`TData`, `TConfig`\>(`config`, `profile`, `inFlightRequests`): (`instance`) => `void`
 
-Defined in: [core/lifecycle.ts:157](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/lifecycle.ts#L157)
+Defined in: [core/lifecycle.ts:157](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/lifecycle.ts#L157)
 
 #### Type Parameters
 
@@ -58,17 +48,7 @@ Defined in: [core/lifecycle.ts:157](https://github.com/mattjmeier/bio-tooltips/b
 
 #### Returns
 
-> (`instance`): `void`
-
-##### Parameters
-
-###### instance
-
-[`TippyInstanceWithCustoms`](types.md#tippyinstancewithcustoms)\<`TData`\>
-
-##### Returns
-
-`void`
+(`instance`) => `void`
 
 ***
 
@@ -76,7 +56,7 @@ Defined in: [core/lifecycle.ts:157](https://github.com/mattjmeier/bio-tooltips/b
 
 > **createOnShownHandler**\<`TData`, `TConfig`\>(`config`, `profile`): (`instance`) => `void`
 
-Defined in: [core/lifecycle.ts:241](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/lifecycle.ts#L241)
+Defined in: [core/lifecycle.ts:241](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/lifecycle.ts#L241)
 
 #### Type Parameters
 
@@ -100,14 +80,4 @@ Defined in: [core/lifecycle.ts:241](https://github.com/mattjmeier/bio-tooltips/b
 
 #### Returns
 
-> (`instance`): `void`
-
-##### Parameters
-
-###### instance
-
-[`TippyInstanceWithCustoms`](types.md#tippyinstancewithcustoms)\<`TData`\>
-
-##### Returns
-
-`void`
+(`instance`) => `void`

@@ -8,11 +8,27 @@
 
 > `const` **GeneTooltip**: `object`
 
-Defined in: [mygene.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/mygene.ts#L28)
+Defined in: [mygene.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L45)
 
 #### Type Declaration
 
-##### filterNestedList()
+##### cacheSize
+
+> **cacheSize**: () => `number`
+
+###### Returns
+
+`number`
+
+##### clearCache
+
+> **clearCache**: () => `void`
+
+###### Returns
+
+`void`
+
+##### filterNestedList
 
 > **filterNestedList**: (`query`, `listId`) => `void`
 
@@ -30,25 +46,21 @@ Defined in: [mygene.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/4dee9
 
 `void`
 
-##### init()
+##### init
 
 > **init**: (`userConfig`) => () => `void`
 
 ###### Parameters
 
-###### userConfig
+###### userConfig?
 
 [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`GeneTooltipConfig`](providers/mygene/config.md#genetooltipconfig)\> = `{}`
 
 ###### Returns
 
-> (): `void`
+() => `void`
 
-###### Returns
-
-`void`
-
-##### preload()
+##### preload
 
 > **preload**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
@@ -59,13 +71,45 @@ are ready when tooltips are first shown.
 
 [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
+##### whenPrefetchReady
+
+> **whenPrefetchReady**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+
+###### Returns
+
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+
 ## Functions
+
+### cacheSize()
+
+> **cacheSize**(): `number`
+
+Defined in: [mygene.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L41)
+
+#### Returns
+
+`number`
+
+***
+
+### clearCache()
+
+> **clearCache**(): `void`
+
+Defined in: [mygene.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L37)
+
+#### Returns
+
+`void`
+
+***
 
 ### filterNestedList()
 
 > **filterNestedList**(`query`, `listId`): `void`
 
-Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/utils.ts#L24)
 
 #### Parameters
 
@@ -85,23 +129,19 @@ Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/4dee91
 
 ### init()
 
-> **init**(`userConfig`): () => `void`
+> **init**(`userConfig?`): () => `void`
 
-Defined in: [mygene.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/mygene.ts#L16)
+Defined in: [mygene.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L21)
 
 #### Parameters
 
-##### userConfig
+##### userConfig?
 
 [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`GeneTooltipConfig`](providers/mygene/config.md#genetooltipconfig)\> = `{}`
 
 #### Returns
 
-> (): `void`
-
-##### Returns
-
-`void`
+() => `void`
 
 ***
 
@@ -109,7 +149,7 @@ Defined in: [mygene.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/4dee9
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mygene.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/mygene.ts#L24)
+Defined in: [mygene.ts:29](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L29)
 
 Preloads the optional heavy dependencies (d3, ideogram) so they
 are ready when tooltips are first shown.
@@ -117,6 +157,18 @@ are ready when tooltips are first shown.
 #### Returns
 
 [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
+
+***
+
+### whenPrefetchReady()
+
+> **whenPrefetchReady**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+
+Defined in: [mygene.ts:33](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L33)
+
+#### Returns
+
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
 ## References
 
@@ -375,3 +427,15 @@ Re-exports [speciesMap](providers/mygene/species.md#speciesmap)
 ### TooltipDisplayConfig
 
 Re-exports [TooltipDisplayConfig](providers/mygene/config.md#tooltipdisplayconfig)
+
+***
+
+### TooltipTimingEvent
+
+Re-exports [TooltipTimingEvent](core/config.md#tooltiptimingevent)
+
+***
+
+### TooltipTimingObserver
+
+Re-exports [TooltipTimingObserver](core/config.md#tooltiptimingobserver)

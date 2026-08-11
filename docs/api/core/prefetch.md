@@ -6,9 +6,9 @@
 
 ### runPrefetch()
 
-> **runPrefetch**\<`TData`\>(`strategy`, `elements`, `threshold`, `inFlightRequests`, `provider`): `void`
+> **runPrefetch**\<`TData`\>(`strategy`, `elements`, `threshold`, `inFlightRequests`, `provider`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [core/prefetch.ts:94](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/prefetch.ts#L94)
+Defined in: [core/prefetch.ts:95](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/prefetch.ts#L95)
 
 #### Type Parameters
 
@@ -20,7 +20,7 @@ Defined in: [core/prefetch.ts:94](https://github.com/mattjmeier/bio-tooltips/blo
 
 ##### strategy
 
-`"smart"` | `"all"` | `"none"`
+`"smart"` \| `"all"` \| `"none"`
 
 ##### elements
 
@@ -40,4 +40,4 @@ Defined in: [core/prefetch.ts:94](https://github.com/mattjmeier/bio-tooltips/blo
 
 #### Returns
 
-`void`
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>

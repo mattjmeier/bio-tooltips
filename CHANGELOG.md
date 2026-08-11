@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-08-11
+
 ### Changed
 - Render MyGene external-record links as compact text controls without embedded provider logos, substantially reducing the MyGene bundle and generated tooltip HTML.
 - Replace the MyGene transcript picker with an accessible, theme-aware native HTML select and remove the Tom Select runtime dependency.

@@ -6,7 +6,7 @@
 
 ### MyGeneSectionContext
 
-Defined in: [providers/mygene/sections/types.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L5)
+Defined in: [providers/mygene/sections/types.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L5)
 
 #### Properties
 
@@ -14,75 +14,75 @@ Defined in: [providers/mygene/sections/types.ts:5](https://github.com/mattjmeier
 
 > **data**: [`MyGeneInfoResult`](../types.md#mygeneinforesult)
 
-Defined in: [providers/mygene/sections/types.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L6)
+Defined in: [providers/mygene/sections/types.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L6)
 
 ##### display
 
 > **display**: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`TooltipDisplayConfig`](../config.md#tooltipdisplayconfig)\>
 
-Defined in: [providers/mygene/sections/types.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L8)
+Defined in: [providers/mygene/sections/types.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L8)
 
 ##### domainCount
 
 > **domainCount**: `number`
 
-Defined in: [providers/mygene/sections/types.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L12)
+Defined in: [providers/mygene/sections/types.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L12)
 
 ##### generifCount
 
 > **generifCount**: `number`
 
-Defined in: [providers/mygene/sections/types.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L15)
+Defined in: [providers/mygene/sections/types.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L15)
 
 ##### pathwayCount
 
 > **pathwayCount**: `number`
 
-Defined in: [providers/mygene/sections/types.ts:11](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L11)
+Defined in: [providers/mygene/sections/types.ts:11](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L11)
 
 ##### pathwaySource
 
 > **pathwaySource**: `"reactome"` \| `"kegg"` \| `"wikipathways"`
 
-Defined in: [providers/mygene/sections/types.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L10)
+Defined in: [providers/mygene/sections/types.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L10)
 
 ##### structureCount
 
 > **structureCount**: `number`
 
-Defined in: [providers/mygene/sections/types.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L14)
+Defined in: [providers/mygene/sections/types.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L14)
 
 ##### transcriptCount
 
 > **transcriptCount**: `number`
 
-Defined in: [providers/mygene/sections/types.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L13)
+Defined in: [providers/mygene/sections/types.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L13)
 
 ##### truncate
 
 > **truncate**: `number`
 
-Defined in: [providers/mygene/sections/types.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L9)
+Defined in: [providers/mygene/sections/types.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L9)
 
 ##### uniqueId
 
 > **uniqueId**: `string`
 
-Defined in: [providers/mygene/sections/types.ts:7](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L7)
+Defined in: [providers/mygene/sections/types.ts:7](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L7)
 
 ***
 
 ### MyGeneSectionDefinition
 
-Defined in: [providers/mygene/sections/types.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L18)
+Defined in: [providers/mygene/sections/types.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L18)
 
 #### Properties
 
-##### getNestedTooltipDefinition()?
+##### getNestedTooltipDefinition?
 
-> `optional` **getNestedTooltipDefinition**: (`context`) => [`NestedTooltipDefinition`](../../../core/types.md#nestedtooltipdefinition)
+> `optional` **getNestedTooltipDefinition?**: (`context`) => [`NestedTooltipDefinition`](../../../core/types.md#nestedtooltipdefinition)
 
-Defined in: [providers/mygene/sections/types.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L23)
+Defined in: [providers/mygene/sections/types.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L23)
 
 ###### Parameters
 
@@ -98,13 +98,13 @@ Defined in: [providers/mygene/sections/types.ts:23](https://github.com/mattjmeie
 
 > **key**: keyof [`TooltipDisplayConfig`](../config.md#tooltipdisplayconfig)
 
-Defined in: [providers/mygene/sections/types.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L19)
+Defined in: [providers/mygene/sections/types.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L19)
 
-##### render()
+##### render
 
 > **render**: (`context`) => `string`
 
-Defined in: [providers/mygene/sections/types.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L21)
+Defined in: [providers/mygene/sections/types.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L21)
 
 ###### Parameters
 
@@ -116,11 +116,11 @@ Defined in: [providers/mygene/sections/types.ts:21](https://github.com/mattjmeie
 
 `string`
 
-##### renderHeader()?
+##### renderHeader?
 
-> `optional` **renderHeader**: (`context`) => `string`
+> `optional` **renderHeader?**: (`context`) => `string`
 
-Defined in: [providers/mygene/sections/types.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L22)
+Defined in: [providers/mygene/sections/types.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L22)
 
 ###### Parameters
 
@@ -136,4 +136,4 @@ Defined in: [providers/mygene/sections/types.ts:22](https://github.com/mattjmeie
 
 > **title**: `string`
 
-Defined in: [providers/mygene/sections/types.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mygene/sections/types.ts#L20)
+Defined in: [providers/mygene/sections/types.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/types.ts#L20)

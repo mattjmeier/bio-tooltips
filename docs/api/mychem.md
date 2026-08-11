@@ -8,29 +8,41 @@
 
 > `const` **ChemicalTooltip**: `object`
 
-Defined in: [mychem.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/mychem.ts#L22)
+Defined in: [mychem.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L39)
 
 #### Type Declaration
 
-##### init()
+##### cacheSize
 
-> **init**: (`userConfig`) => () => `void`
-
-###### Parameters
-
-###### userConfig
-
-[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`MyChemTooltipConfig`](providers/mychem/config.md#mychemtooltipconfig)\> = `{}`
+> **cacheSize**: () => `number`
 
 ###### Returns
 
-> (): `void`
+`number`
+
+##### clearCache
+
+> **clearCache**: () => `void`
 
 ###### Returns
 
 `void`
 
-##### preload()
+##### init
+
+> **init**: (`userConfig`) => () => `void`
+
+###### Parameters
+
+###### userConfig?
+
+[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`MyChemTooltipConfig`](providers/mychem/config.md#mychemtooltipconfig)\> = `{}`
+
+###### Returns
+
+() => `void`
+
+##### preload
 
 > **preload**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
@@ -38,27 +50,55 @@ Defined in: [mychem.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/4dee9
 
 [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
+##### whenPrefetchReady
+
+> **whenPrefetchReady**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+
+###### Returns
+
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+
 ## Functions
+
+### cacheSize()
+
+> **cacheSize**(): `number`
+
+Defined in: [mychem.ts:35](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L35)
+
+#### Returns
+
+`number`
+
+***
+
+### clearCache()
+
+> **clearCache**(): `void`
+
+Defined in: [mychem.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L31)
+
+#### Returns
+
+`void`
+
+***
 
 ### init()
 
-> **init**(`userConfig`): () => `void`
+> **init**(`userConfig?`): () => `void`
 
-Defined in: [mychem.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/mychem.ts#L14)
+Defined in: [mychem.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L19)
 
 #### Parameters
 
-##### userConfig
+##### userConfig?
 
 [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`MyChemTooltipConfig`](providers/mychem/config.md#mychemtooltipconfig)\> = `{}`
 
 #### Returns
 
-> (): `void`
-
-##### Returns
-
-`void`
+() => `void`
 
 ***
 
@@ -66,11 +106,23 @@ Defined in: [mychem.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/4dee9
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mychem.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/mychem.ts#L18)
+Defined in: [mychem.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L23)
 
 #### Returns
 
 [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
+
+***
+
+### whenPrefetchReady()
+
+> **whenPrefetchReady**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+
+Defined in: [mychem.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L27)
+
+#### Returns
+
+[`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
 ## References
 
@@ -347,6 +399,18 @@ Re-exports [SectionVariant](core/config.md#sectionvariant-1)
 ### SourceValue
 
 Re-exports [SourceValue](providers/mychem/types.md#sourcevalue)
+
+***
+
+### TooltipTimingEvent
+
+Re-exports [TooltipTimingEvent](core/config.md#tooltiptimingevent)
+
+***
+
+### TooltipTimingObserver
+
+Re-exports [TooltipTimingObserver](core/config.md#tooltiptimingobserver)
 
 ***
 

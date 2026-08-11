@@ -48,6 +48,7 @@
 - [providers/mygene/types](providers/mygene/types.md)
 - [providers/mygene/visuals/gene-track](providers/mygene/visuals/gene-track.md)
 - [providers/mygene/visuals/ideogram](providers/mygene/visuals/ideogram.md)
+- [providers/mygene/visuals/transcript-selector](providers/mygene/visuals/transcript-selector.md)
 - [ui/pushpin](ui/pushpin.md)
 - [ui/summaryExpand](ui/summaryExpand.md)
 - [ui/theme](ui/theme.md)

@@ -8,7 +8,7 @@
 
 > **fetchMyChemAnnotationBatch**(`ids`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyChemInfoResult`](types.md#mycheminforesult)\>\>
 
-Defined in: [providers/mychem/client.ts:132](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mychem/client.ts#L132)
+Defined in: [providers/mychem/client.ts:132](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mychem/client.ts#L132)
 
 #### Parameters
 
@@ -24,9 +24,9 @@ Defined in: [providers/mychem/client.ts:132](https://github.com/mattjmeier/bio-t
 
 ### fetchMyChemBatch()
 
-> **fetchMyChemBatch**(`queries`, `scope`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyChemInfoResult`](types.md#mycheminforesult)\>\>
+> **fetchMyChemBatch**(`queries`, `scope?`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyChemInfoResult`](types.md#mycheminforesult)\>\>
 
-Defined in: [providers/mychem/client.ts:90](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mychem/client.ts#L90)
+Defined in: [providers/mychem/client.ts:90](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mychem/client.ts#L90)
 
 #### Parameters
 
@@ -34,7 +34,7 @@ Defined in: [providers/mychem/client.ts:90](https://github.com/mattjmeier/bio-to
 
 `string`[]
 
-##### scope
+##### scope?
 
 [`MyChemScope`](types.md#mychemscope) = `'name'`
 
@@ -48,7 +48,7 @@ Defined in: [providers/mychem/client.ts:90](https://github.com/mattjmeier/bio-to
 
 > **fetchMyChemBestGuessBatch**(`queries`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyChemInfoResult`](types.md#mycheminforesult)\>\>
 
-Defined in: [providers/mychem/client.ts:173](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mychem/client.ts#L173)
+Defined in: [providers/mychem/client.ts:173](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mychem/client.ts#L173)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [providers/mychem/client.ts:173](https://github.com/mattjmeier/bio-t
 
 > **fetchMyChemRefs**(`refs`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyChemInfoResult`](types.md#mycheminforesult)\>\>
 
-Defined in: [providers/mychem/client.ts:194](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mychem/client.ts#L194)
+Defined in: [providers/mychem/client.ts:194](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mychem/client.ts#L194)
 
 #### Parameters
 
@@ -82,9 +82,9 @@ Defined in: [providers/mychem/client.ts:194](https://github.com/mattjmeier/bio-t
 
 ### getMyChemCacheKey()
 
-> **getMyChemCacheKey**(`query`, `scope`, `lookup`): `string`
+> **getMyChemCacheKey**(`query`, `scope?`, `lookup?`): `string`
 
-Defined in: [providers/mychem/client.ts:226](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mychem/client.ts#L226)
+Defined in: [providers/mychem/client.ts:226](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mychem/client.ts#L226)
 
 #### Parameters
 
@@ -92,11 +92,11 @@ Defined in: [providers/mychem/client.ts:226](https://github.com/mattjmeier/bio-t
 
 `string`
 
-##### scope
+##### scope?
 
 [`MyChemScope`](types.md#mychemscope) = `'name'`
 
-##### lookup
+##### lookup?
 
 [`MyChemLookupMode`](types.md#mychemlookupmode) = `...`
 
@@ -108,9 +108,9 @@ Defined in: [providers/mychem/client.ts:226](https://github.com/mattjmeier/bio-t
 
 ### normalizeMyChemLookupMode()
 
-> **normalizeMyChemLookupMode**(`lookup`, `scope`): [`MyChemLookupMode`](types.md#mychemlookupmode)
+> **normalizeMyChemLookupMode**(`lookup`, `scope?`): [`MyChemLookupMode`](types.md#mychemlookupmode)
 
-Defined in: [providers/mychem/client.ts:264](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mychem/client.ts#L264)
+Defined in: [providers/mychem/client.ts:264](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mychem/client.ts#L264)
 
 #### Parameters
 
@@ -118,7 +118,7 @@ Defined in: [providers/mychem/client.ts:264](https://github.com/mattjmeier/bio-t
 
 `unknown`
 
-##### scope
+##### scope?
 
 [`MyChemScope`](types.md#mychemscope) = `'name'`
 
@@ -132,7 +132,7 @@ Defined in: [providers/mychem/client.ts:264](https://github.com/mattjmeier/bio-t
 
 > **normalizeMyChemScope**(`scope`): [`MyChemScope`](types.md#mychemscope)
 
-Defined in: [providers/mychem/client.ts:234](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/providers/mychem/client.ts#L234)
+Defined in: [providers/mychem/client.ts:234](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mychem/client.ts#L234)
 
 #### Parameters
 

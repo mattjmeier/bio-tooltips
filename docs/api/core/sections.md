@@ -6,7 +6,7 @@
 
 ### SectionState
 
-Defined in: [core/sections.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/sections.ts#L3)
+Defined in: [core/sections.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/sections.ts#L3)
 
 #### Properties
 
@@ -14,13 +14,13 @@ Defined in: [core/sections.ts:3](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **isVisible**: `boolean`
 
-Defined in: [core/sections.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/sections.ts#L4)
+Defined in: [core/sections.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/sections.ts#L4)
 
 ##### startCollapsed
 
 > **startCollapsed**: `boolean`
 
-Defined in: [core/sections.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/sections.ts#L5)
+Defined in: [core/sections.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/sections.ts#L5)
 
 ## Type Aliases
 
@@ -28,7 +28,7 @@ Defined in: [core/sections.ts:5](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **CoreSectionVisibility** = `boolean` \| `"expanded"` \| `"collapsed"`
 
-Defined in: [core/sections.ts:1](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/sections.ts#L1)
+Defined in: [core/sections.ts:1](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/sections.ts#L1)
 
 ## Functions
 
@@ -36,7 +36,7 @@ Defined in: [core/sections.ts:1](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **getSectionKey**(`title`): `string`
 
-Defined in: [core/sections.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/sections.ts#L30)
+Defined in: [core/sections.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/sections.ts#L30)
 
 #### Parameters
 
@@ -54,13 +54,13 @@ Defined in: [core/sections.ts:30](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **getSectionState**(`setting`, `globalCollapsedByDefault`): [`SectionState`](#sectionstate)
 
-Defined in: [core/sections.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/sections.ts#L8)
+Defined in: [core/sections.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/sections.ts#L8)
 
 #### Parameters
 
 ##### setting
 
-[`CoreSectionVisibility`](#coresectionvisibility) | `undefined`
+[`CoreSectionVisibility`](#coresectionvisibility) \| `undefined`
 
 ##### globalCollapsedByDefault
 
@@ -74,9 +74,9 @@ Defined in: [core/sections.ts:8](https://github.com/mattjmeier/bio-tooltips/blob
 
 ### renderCollapsibleSection()
 
-> **renderCollapsibleSection**(`title`, `innerHTML`, `uniqueId`, `collapsible`, `isCollapsed`, `headerRightHTML`): `string`
+> **renderCollapsibleSection**(`title`, `innerHTML`, `uniqueId`, `collapsible`, `isCollapsed`, `headerRightHTML?`): `string`
 
-Defined in: [core/sections.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/core/sections.ts#L34)
+Defined in: [core/sections.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/sections.ts#L34)
 
 #### Parameters
 
@@ -100,7 +100,7 @@ Defined in: [core/sections.ts:34](https://github.com/mattjmeier/bio-tooltips/blo
 
 `boolean`
 
-##### headerRightHTML
+##### headerRightHTML?
 
 `string` = `''`
 

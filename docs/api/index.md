@@ -8,7 +8,7 @@
 
 > **filterNestedList**(`query`, `listId`): `void`
 
-Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/4dee91626011e1d0d5ac80e107dbf48b9bfb4e42/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/utils.ts#L24)
 
 #### Parameters
 
@@ -32,9 +32,21 @@ Re-exports [asArray](providers/mygene/formatters.md#asarray)
 
 ***
 
+### cacheSize
+
+Re-exports [cacheSize](mygene.md#cachesize-1)
+
+***
+
 ### ChemicalTooltip
 
 Re-exports [ChemicalTooltip](mychem.md#chemicaltooltip)
+
+***
+
+### clearCache
+
+Re-exports [clearCache](mygene.md#clearcache-1)
 
 ***
 
@@ -323,3 +335,21 @@ Re-exports [speciesMap](providers/mygene/species.md#speciesmap)
 ### TooltipDisplayConfig
 
 Re-exports [TooltipDisplayConfig](providers/mygene/config.md#tooltipdisplayconfig)
+
+***
+
+### TooltipTimingEvent
+
+Re-exports [TooltipTimingEvent](core/config.md#tooltiptimingevent)
+
+***
+
+### TooltipTimingObserver
+
+Re-exports [TooltipTimingObserver](core/config.md#tooltiptimingobserver)
+
+***
+
+### whenPrefetchReady
+
+Re-exports [whenPrefetchReady](mygene.md#whenprefetchready-1)
