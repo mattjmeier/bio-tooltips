@@ -18,7 +18,8 @@ async function renderMyGeneVisuals(
   uniqueId: string,
   sectionKey?: string
 ): Promise<void> {
-  const renderPromises: Promise<void>[] = [];
+  const renderPromises: Array<{ sectionKey: string; promise: Promise<void> }> = [];
+  const renderedSections = instance._renderedVisualSections ??= new Set();
 
   const locationSection = instance.popper.querySelector('[data-section="location"]');
   const isLocationCollapsed = locationSection?.getAttribute('data-collapsed') === 'true';
@@ -27,22 +28,33 @@ async function renderMyGeneVisuals(
   const isGeneModelCollapsed = geneModelSection?.getAttribute('data-collapsed') === 'true';
 
   const shouldRenderGeneTrack = sectionKey
-    ? sectionKey === 'gene-model'
-    : !isGeneModelCollapsed;
+    ? sectionKey === 'gene-model' && !renderedSections.has('gene-model')
+    : !isGeneModelCollapsed && !renderedSections.has('gene-model');
 
   const shouldRenderIdeogram = sectionKey
-    ? sectionKey === 'location'
-    : !isLocationCollapsed;
+    ? sectionKey === 'location' && !renderedSections.has('location')
+    : !isLocationCollapsed && !renderedSections.has('location');
 
   if (config.display.geneTrack && data.exons && shouldRenderGeneTrack) {
-    renderPromises.push(renderGeneTrack(instance, data, uniqueId, config));
+    renderPromises.push({
+      sectionKey: 'gene-model',
+      promise: renderGeneTrack(instance, data, uniqueId, config),
+    });
   }
 
   if (config.ideogram?.enabled && data.genomic_pos && shouldRenderIdeogram) {
-    renderPromises.push(renderIdeogram(instance, data, config.ideogram, uniqueId, config));
+    renderPromises.push({
+      sectionKey: 'location',
+      promise: renderIdeogram(instance, data, config.ideogram, uniqueId, config),
+    });
   }
 
-  await Promise.allSettled(renderPromises);
+  const results = await Promise.allSettled(renderPromises.map(({ promise }) => promise));
+  results.forEach((result, index) => {
+    if (result.status === 'fulfilled') {
+      renderedSections.add(renderPromises[index].sectionKey);
+    }
+  });
   logTooltipTiming(instance, config, 'mygene visual promises settled', { count: renderPromises.length });
 }
 

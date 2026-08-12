@@ -155,17 +155,18 @@
 .gt-collapsible-content {
   margin-top: 0.4em;
   overflow: hidden;
-  transition: max-height 0.25s ease-out, opacity 0.2s ease-out, margin-top 0.25s ease-out;
+  height: auto;
+  transition: height 0.25s ease-out, opacity 0.2s ease-out, margin-top 0.25s ease-out;
   opacity: 1;
 }
 
 .gt-collapsible[data-collapsed="false"] .gt-collapsible-content {
-  max-height: 1200px;
+  height: var(--gt-collapsible-content-height, auto);
 }
 
 /* collapsed state */
 .gt-collapsible[data-collapsed="true"] .gt-collapsible-content {
-  max-height: 0;
+  height: 0;
   opacity: 0;
   margin-top: 0;
   /* No more display: none; */
