@@ -197,6 +197,8 @@ export function createOnShowHandler<TData, TConfig extends CoreTooltipConfig>(
       const renderContent = (data: TData | null) => {
         instance._entityData = data;
         instance._geneData = data;
+        instance._renderedVisualSections = new Set();
+        instance._renderingVisualSections = new Set();
         logTooltipTiming(instance, config, 'content render start');
         instance.setContent(profile.renderTooltipHTML(data, { uniqueId: instance._uniqueId! }, config));
         logTooltipTiming(instance, config, 'content set');
@@ -282,13 +284,34 @@ export function createOnShownHandler<TData, TConfig extends CoreTooltipConfig>(
 
         if (!newCollapsedState && instance._entityData) {
           const sectionKey = section.getAttribute('data-section') ?? undefined;
-          profile.renderVisuals?.({
+          const renderedSections = instance._renderedVisualSections ??= new Set();
+          const renderingSections = instance._renderingVisualSections ??= new Set();
+
+          if (sectionKey && (renderedSections.has(sectionKey) || renderingSections.has(sectionKey))) {
+            logTooltipTiming(instance, config, 'section visuals render skipped', {
+              sectionKey,
+              reason: renderedSections.has(sectionKey) ? 'already-rendered' : 'already-rendering',
+            });
+            return;
+          }
+
+          if (sectionKey) renderingSections.add(sectionKey);
+          void Promise.resolve(profile.renderVisuals?.({
             instance,
             data: instance._entityData,
             config,
             uniqueId: instance._uniqueId!,
             sectionKey,
-          });
+          }))
+            .then(() => {
+              if (sectionKey) renderedSections.add(sectionKey);
+            })
+            .catch(error => {
+              console.error(`[${profile.id}] Failed to render section visuals.`, error);
+            })
+            .finally(() => {
+              if (sectionKey) renderingSections.delete(sectionKey);
+            });
         }
       };
 

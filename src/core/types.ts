@@ -36,6 +36,8 @@ export interface TippyInstanceWithCustoms<TData = unknown> extends Instance {
   _sectionKeydownHandler?: (event: KeyboardEvent) => void;
   _visualsRendered?: boolean;
   _visualRenderPromise?: Promise<void>;
+  _renderedVisualSections?: Set<string>;
+  _renderingVisualSections?: Set<string>;
   _timingStart?: number;
   _isPinned?: boolean;
   _originalTrigger?: string;

@@ -176,6 +176,39 @@ describe('native transcript selector', () => {
     expect(section.dataset.collapsed).toBe('true');
   });
 
+  it('renders section visuals only once across repeated expansions', async () => {
+    const uniqueId = 'cached-section-visual';
+    const data = geneData([transcript('ENST000001', 2)]);
+    const popper = document.createElement('div');
+    popper.innerHTML = renderTooltipHTML(data, {
+      uniqueId,
+      display: { collapsible: true },
+    });
+    const renderVisuals = vi.fn().mockResolvedValue(undefined);
+    const profile = { ...myGeneProfile, renderVisuals };
+    const instance = {
+      popper,
+      _entityData: data,
+      _uniqueId: uniqueId,
+    } as TippyInstanceWithCustoms<MyGeneInfoResult>;
+    const onShown = createOnShownHandler(defaultConfig, profile);
+    onShown(instance);
+
+    const trigger = popper.querySelector<HTMLElement>(
+      '[data-section="gene-model"] .gt-collapsible-header'
+    )!;
+
+    trigger.click(); // Collapse.
+    trigger.click(); // First expansion renders the visual.
+    await Promise.resolve();
+    expect(renderVisuals).toHaveBeenCalledTimes(1);
+
+    trigger.click();
+    trigger.click(); // Later expansions reuse the existing visual.
+    await Promise.resolve();
+    expect(renderVisuals).toHaveBeenCalledTimes(1);
+  });
+
   it('progressively themes the native picker while retaining selector override hooks', () => {
     const stylesheet = readFileSync(resolve('src/css/main.css'), 'utf8');
 
