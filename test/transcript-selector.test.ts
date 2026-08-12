@@ -176,6 +176,31 @@ describe('native transcript selector', () => {
     expect(section.dataset.collapsed).toBe('true');
   });
 
+  it('animates collapsible content using its measured height', () => {
+    const popper = document.createElement('div');
+    popper.innerHTML = renderTooltipHTML(geneData([]), {
+      uniqueId: 'measured-height',
+      display: { collapsible: true },
+    });
+    const instance = { popper } as TippyInstanceWithCustoms<MyGeneInfoResult>;
+    createOnShownHandler(defaultConfig, myGeneProfile)(instance);
+
+    const section = popper.querySelector<HTMLElement>('[data-section="gene-model"]')!;
+    const trigger = section.querySelector<HTMLElement>('.gt-collapsible-header')!;
+    const content = section.querySelector<HTMLElement>('.gt-collapsible-content')!;
+    Object.defineProperty(content, 'scrollHeight', { configurable: true, value: 187 });
+
+    trigger.click();
+    expect(content.style.getPropertyValue('--gt-collapsible-content-height')).toBe('187px');
+    expect(section.dataset.collapsed).toBe('true');
+
+    trigger.click();
+    const transitionEnd = new Event('transitionend');
+    Object.defineProperty(transitionEnd, 'propertyName', { value: 'height' });
+    content.dispatchEvent(transitionEnd);
+    expect(content.style.getPropertyValue('--gt-collapsible-content-height')).toBe('');
+  });
+
   it('renders section visuals only once across repeated expansions', async () => {
     const uniqueId = 'cached-section-visual';
     const data = geneData([transcript('ENST000001', 2)]);

@@ -273,6 +273,29 @@ export function createOnShownHandler<TData, TConfig extends CoreTooltipConfig>(
 
         const isCollapsed = section.getAttribute('data-collapsed') === 'true';
         const newCollapsedState = !isCollapsed;
+        const content = section.querySelector<HTMLElement>('.gt-collapsible-content');
+
+        if (content) {
+          const measuredHeight = Math.ceil(content.scrollHeight);
+          content.style.setProperty('--gt-collapsible-content-height', `${measuredHeight}px`);
+
+          if (!newCollapsedState) {
+            const clearMeasuredHeight = (transitionEvent: TransitionEvent) => {
+              if (
+                transitionEvent.target === content &&
+                transitionEvent.propertyName === 'height' &&
+                section.getAttribute('data-collapsed') === 'false'
+              ) {
+                content.style.removeProperty('--gt-collapsible-content-height');
+              }
+              content.removeEventListener('transitionend', clearMeasuredHeight);
+            };
+            content.addEventListener('transitionend', clearMeasuredHeight);
+          } else {
+            // Establish the measured height before changing to zero so the browser can animate from it.
+            void content.offsetHeight;
+          }
+        }
 
         section.setAttribute('data-collapsed', String(newCollapsedState));
         header.setAttribute('aria-expanded', String(!newCollapsedState));
