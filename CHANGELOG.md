@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-08-13
+
+### Changed
+- Cache rendered collapsible visual sections and prevent duplicate concurrent renders, improving tooltip expansion performance.
+- Smooth collapsible section animations by measuring their actual content height and restoring natural sizing after transitions.
+
 ## [1.1.2] - 2026-08-11
 
 ### Changed
