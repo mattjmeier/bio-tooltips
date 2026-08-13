@@ -5,6 +5,11 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # TypeDoc 0.28 currently declares peer support through TypeScript 6 only.
+    # Keep Dependabot from creating an unresolvable group until TypeDoc supports 7.
+    ignore:
+      - dependency-name: typescript
+        versions: [">=7.0.0"]
     groups:
       dev-tooling:
         dependency-type: development
