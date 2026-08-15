@@ -4,6 +4,14 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.1] - 2026-08-15
+
+### Fixed
+- Ideogram renders now serialize through a render queue to prevent concurrent initializations from corrupting the SVG container.
+- Guard against rendering into destroyed or unmounted tooltip instances after async library load.
+- Handle missing or empty `genomicPos.chr` values gracefully with a "No chromosome data" fallback instead of passing invalid input to the Ideogram constructor.
+- Await the Ideogram `onLoad` callback so render completion timing reflects the library's actual async initialization.
+
 ## [2.0.0] - 2026-08-15
 
 **Breaking release.** The Tippy.js foundation is replaced by an owned tooltip controller and `@floating-ui/dom` positioning. Data providers, rendered biological content, themes, dimensions, caching, prefetch, timing, and the cleanup function returned by `init()` remain available. See [Migrating to v2](docs/migrating-to-v2.md) for the full config and CSS selector translation.
