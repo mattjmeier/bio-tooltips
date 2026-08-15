@@ -2,6 +2,10 @@
 
 Framework-agnostic biological & biochemical tooltips for HTML documents.
 
+<p align="center">
+  <img src="assets/preview.png" alt="Bio Tooltips preview: gene and chemical tooltips" width="900">
+</p>
+
 Bio Tooltips provides shared tooltip behavior plus entity-specific tooltip modules for genes, chemicals, and future biology-related entities such as variants.
 
 Currently supported modules:
