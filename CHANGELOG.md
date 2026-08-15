@@ -4,6 +4,11 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.2] - 2026-08-15
+
+### Fixed
+- Ideogram mounting bug that persisted in BioTooltipR; the tooltip controller now correctly manages the Ideogram mount lifecycle.
+
 ## [2.0.1] - 2026-08-15
 
 ### Fixed
