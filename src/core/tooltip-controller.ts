@@ -66,6 +66,7 @@ export class TooltipController<TData = unknown> {
   private positioner?: ActivePositioner;
   private parent?: TooltipController<any>;
   private pointerBridgeCleanup?: () => void;
+  private preservedInteractiveRect?: DOMRect;
 
   constructor(reference: Element, options: TooltipControllerOptions<TData>) {
     this.reference = reference;
@@ -257,6 +258,7 @@ export class TooltipController<TData = unknown> {
 
   private mount(): void {
     if (this.state.isMounted) return;
+    this.preservedInteractiveRect = undefined;
     const appendTo = this.options.tooltip.appendTo;
     const target = typeof appendTo === 'function'
       ? appendTo()
@@ -310,16 +312,35 @@ export class TooltipController<TData = unknown> {
     this.listen(this.reference, 'focus', () => this.show());
     this.listen(this.reference, 'blur', () => this.handleFocusLeave());
     this.listen(this.reference, 'touchstart', () => this.show(), { passive: true });
-    this.listen(this.root, 'mouseenter', () => this.clearHideTimers());
+    this.listen(this.root, 'mouseenter', () => {
+      this.preservedInteractiveRect = undefined;
+      this.clearHideTimers();
+    });
     this.listen(this.root, 'mouseleave', (event: Event) => this.handlePointerLeave(event as MouseEvent));
     this.listen(this.root, 'focusin', () => this.clearHideTimers());
     this.listen(this.root, 'focusout', () => this.handleFocusLeave());
+    this.listen(this.root, 'gt:content-resize', () => this.handleContentResize());
+  }
+
+  private handleContentResize(): void {
+    if (!this.state.isMounted) return;
+    this.preservedInteractiveRect = this.root.getBoundingClientRect();
+    this.clearHideTimers();
+    queueMicrotask(() => {
+      void this.updatePosition();
+    });
   }
 
   private handlePointerLeave(event: MouseEvent): void {
     const next = event.relatedTarget;
     if (next instanceof Node && (this.reference.contains(next) || this.root.contains(next))) return;
     this.startPointerBridge();
+    if (this.preservedInteractiveRect && this.isWithinRect(
+      event.clientX,
+      event.clientY,
+      this.preservedInteractiveRect,
+      this.options.interactiveBorder ?? 2
+    )) return;
     this.hide();
   }
 
@@ -345,11 +366,19 @@ export class TooltipController<TData = unknown> {
     if (!this.state.isMounted) return false;
     const referenceRect = this.reference.getBoundingClientRect();
     const tooltipRect = this.root.getBoundingClientRect();
+    const preservedRect = this.preservedInteractiveRect;
     const padding = this.options.interactiveBorder ?? 2;
-    return x >= Math.min(referenceRect.left, tooltipRect.left) - padding
-      && x <= Math.max(referenceRect.right, tooltipRect.right) + padding
-      && y >= Math.min(referenceRect.top, tooltipRect.top) - padding
-      && y <= Math.max(referenceRect.bottom, tooltipRect.bottom) + padding;
+    return x >= Math.min(referenceRect.left, tooltipRect.left, preservedRect?.left ?? Infinity) - padding
+      && x <= Math.max(referenceRect.right, tooltipRect.right, preservedRect?.right ?? -Infinity) + padding
+      && y >= Math.min(referenceRect.top, tooltipRect.top, preservedRect?.top ?? Infinity) - padding
+      && y <= Math.max(referenceRect.bottom, tooltipRect.bottom, preservedRect?.bottom ?? -Infinity) + padding;
+  }
+
+  private isWithinRect(x: number, y: number, rect: DOMRect, padding: number): boolean {
+    return x >= rect.left - padding
+      && x <= rect.right + padding
+      && y >= rect.top - padding
+      && y <= rect.bottom + padding;
   }
 
   private handleFocusLeave(): void {

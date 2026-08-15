@@ -32,6 +32,7 @@ export function enableSummaryExpand(): void {
     // If a relevant element was clicked, perform the action
     if (summaryP && shouldExpand !== null) {
       summaryP.classList.toggle('expanded', shouldExpand);
+      summaryP.dispatchEvent(new CustomEvent('gt:content-resize', { bubbles: true }));
     }
   };
 

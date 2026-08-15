@@ -12,6 +12,9 @@ import { generateUniqueTooltipId, createNestedContent } from '../utils.js';
 import { attachPushpin } from '../ui/pushpin.js';
 import { logTooltipTiming, startTooltipTiming } from './timing.js';
 
+const COLLAPSIBLE_HEIGHT_CLEANUP_DELAY = 300;
+const pendingCollapsibleHeightCleanups = new WeakMap<HTMLElement, () => void>();
+
 async function renderVisualsAndNestedTooltips<TData, TConfig extends CoreTooltipConfig>(
   instance: TooltipController<TData>,
   config: TConfig,
@@ -267,21 +270,30 @@ export function createShownHandler<TData, TConfig extends CoreTooltipConfig>(
         const content = section.querySelector<HTMLElement>('.gt-collapsible-content');
 
         if (content) {
+          pendingCollapsibleHeightCleanups.get(content)?.();
           const measuredHeight = Math.ceil(content.scrollHeight);
           content.style.setProperty('--gt-collapsible-content-height', `${measuredHeight}px`);
 
           if (!newCollapsedState) {
-            const clearMeasuredHeight = (transitionEvent: TransitionEvent) => {
-              if (
-                transitionEvent.target === content &&
-                transitionEvent.propertyName === 'height' &&
-                section.getAttribute('data-collapsed') === 'false'
-              ) {
+            let cleanupTimer: ReturnType<typeof setTimeout> | undefined;
+            const finishHeightTransition = (releaseHeight: boolean) => {
+              content.removeEventListener('transitionend', clearMeasuredHeight);
+              if (cleanupTimer) clearTimeout(cleanupTimer);
+              if (releaseHeight && section.getAttribute('data-collapsed') === 'false') {
                 content.style.removeProperty('--gt-collapsible-content-height');
               }
-              content.removeEventListener('transitionend', clearMeasuredHeight);
+              pendingCollapsibleHeightCleanups.delete(content);
+            };
+            const clearMeasuredHeight = (transitionEvent: TransitionEvent) => {
+              if (transitionEvent.target !== content || transitionEvent.propertyName !== 'height') return;
+              finishHeightTransition(true);
             };
             content.addEventListener('transitionend', clearMeasuredHeight);
+            cleanupTimer = setTimeout(
+              () => finishHeightTransition(true),
+              COLLAPSIBLE_HEIGHT_CLEANUP_DELAY
+            );
+            pendingCollapsibleHeightCleanups.set(content, () => finishHeightTransition(false));
           } else {
             // Establish the measured height before changing to zero so the browser can animate from it.
             void content.offsetHeight;

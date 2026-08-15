@@ -112,6 +112,33 @@ describe('TooltipController', () => {
     expect(controller.status).toBe('open');
   });
 
+  it('repositions resized interactive content and keeps its previous pointer bridge', async () => {
+    const { controller } = createController();
+    controller.show();
+    vi.runAllTimers();
+
+    Object.defineProperty(controller.root, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => ({ left: 100, right: 300, top: 100, bottom: 300, width: 200, height: 200, x: 100, y: 100, toJSON() {} }),
+    });
+    controller.content.dispatchEvent(new CustomEvent('gt:content-resize', { bubbles: true }));
+    await Promise.resolve();
+    expect(updatePosition).toHaveBeenCalled();
+
+    Object.defineProperty(controller.root, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => ({ left: 100, right: 300, top: -120, bottom: 80, width: 200, height: 200, x: 100, y: -120, toJSON() {} }),
+    });
+    controller.root.dispatchEvent(new MouseEvent('mouseleave', {
+      clientX: 180,
+      clientY: 180,
+      relatedTarget: document.body,
+    }));
+    vi.runAllTimers();
+
+    expect(controller.status).toBe('open');
+  });
+
   it('keeps a parent open while a nested tooltip is visible', () => {
     const { controller: parent } = createController();
     parent.show();

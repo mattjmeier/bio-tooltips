@@ -195,9 +195,35 @@ describe('native transcript selector', () => {
     expect(section.dataset.collapsed).toBe('true');
 
     trigger.click();
+    const opacityTransitionEnd = new Event('transitionend');
+    Object.defineProperty(opacityTransitionEnd, 'propertyName', { value: 'opacity' });
+    content.dispatchEvent(opacityTransitionEnd);
+    expect(content.style.getPropertyValue('--gt-collapsible-content-height')).toBe('187px');
+
     const transitionEnd = new Event('transitionend');
     Object.defineProperty(transitionEnd, 'propertyName', { value: 'height' });
     content.dispatchEvent(transitionEnd);
+    expect(content.style.getPropertyValue('--gt-collapsible-content-height')).toBe('');
+  });
+
+  it('releases a measured height when a transition is interrupted', async () => {
+    const tooltipRoot = document.createElement('div');
+    tooltipRoot.innerHTML = renderTooltipHTML(geneData([]), {
+      uniqueId: 'interrupted-height',
+      display: { collapsible: true },
+    });
+    const instance = { root: tooltipRoot } as TooltipController<MyGeneInfoResult>;
+    createShownHandler(defaultConfig, myGeneProfile)(instance);
+
+    const section = tooltipRoot.querySelector<HTMLElement>('[data-section="gene-model"]')!;
+    const trigger = section.querySelector<HTMLElement>('.gt-collapsible-header')!;
+    const content = section.querySelector<HTMLElement>('.gt-collapsible-content')!;
+    Object.defineProperty(content, 'scrollHeight', { configurable: true, value: 187 });
+
+    trigger.click();
+    trigger.click();
+    await new Promise(resolve => setTimeout(resolve, 320));
+
     expect(content.style.getPropertyValue('--gt-collapsible-content-height')).toBe('');
   });
 
