@@ -6,6 +6,24 @@ import type { TooltipController } from '../../../core/tooltip-controller.js';
 import { logTooltipTiming } from '../../../core/timing.js';
 
 let ideogramModulePromise: Promise<any> | null = null;
+let ideogramRenderQueue: Promise<void> = Promise.resolve();
+
+function isActiveIdeogramTarget(
+  instance: TooltipController<any>,
+  container: HTMLElement
+): boolean {
+  return !instance.state.isDestroyed
+    && instance.state.isMounted
+    && container.isConnected
+    && instance.root.contains(container);
+}
+
+function enqueueIdeogramRender(task: () => Promise<void>): Promise<void> {
+  const render = ideogramRenderQueue.then(task);
+  // A failed render must not prevent later tooltips from initializing.
+  ideogramRenderQueue = render.catch(() => undefined);
+  return render;
+}
 
 //  Checking for module or global mode
 export async function getIdeogram() {
@@ -63,6 +81,8 @@ export async function renderIdeogram(
     logTooltipTiming(instance, timingConfig, 'ideogram library load start');
     const Ideogram = await getIdeogram();
     logTooltipTiming(instance, timingConfig, 'ideogram library load complete');
+
+    if (!isActiveIdeogramTarget(instance, ideoDiv)) return;
     
     if (!Ideogram) {
       const ideoDivInTooltip = instance.root.querySelector(`.gene-tooltip-ideo`) as HTMLElement;
@@ -78,9 +98,21 @@ export async function renderIdeogram(
       return;
     }
 
-    let chromosome = String(genomicPos.chr);
+    if (genomicPos.chr == null || String(genomicPos.chr).trim() === '') {
+      ideoDiv.innerHTML = '<small>No chromosome data</small>';
+      logTooltipTiming(instance, timingConfig, 'ideogram skipped', { reason: 'no-chromosome' });
+      return;
+    }
+
+    let chromosome = String(genomicPos.chr).trim();
     if (chromosome.toLowerCase().startsWith('chr')) {
       chromosome = chromosome.substring(3);
+    }
+
+    if (!chromosome) {
+      ideoDiv.innerHTML = '<small>No chromosome data</small>';
+      logTooltipTiming(instance, timingConfig, 'ideogram skipped', { reason: 'no-chromosome' });
+      return;
     }
 
     const organism = speciesMap[data.taxid]?.ideogramName;
@@ -114,18 +146,38 @@ export async function renderIdeogram(
       showAnnotTooltip: false,
       onClickAnnot: function() {},
     };
-    // Before drawing, clear the container of the spinner.
-    // This gives the Ideogram library a clean slate.
-    ideoDiv.innerHTML = '';
-    logTooltipTiming(instance, timingConfig, 'ideogram container cleared');
+    await enqueueIdeogramRender(() => new Promise<void>((resolve, reject) => {
+      // The tooltip may have disappeared while another Ideogram was initializing.
+      if (!isActiveIdeogramTarget(instance, ideoDiv)) {
+        resolve();
+        return;
+      }
 
-    new Ideogram(configForIdeogram);
-    logTooltipTiming(instance, timingConfig, 'ideogram constructor called');
+      // Before drawing, clear the container of the spinner.
+      // This gives the Ideogram library a clean slate.
+      ideoDiv.innerHTML = '';
+      logTooltipTiming(instance, timingConfig, 'ideogram container cleared');
+
+      try {
+        new Ideogram({
+          ...configForIdeogram,
+          // Ideogram performs chromosome and band initialization asynchronously.
+          // Keep this render in flight until that work has completed.
+          onLoad: resolve,
+        });
+        logTooltipTiming(instance, timingConfig, 'ideogram constructor called');
+      } catch (error) {
+        reject(error);
+      }
+    }));
+
+    if (!isActiveIdeogramTarget(instance, ideoDiv)) return;
+    logTooltipTiming(instance, timingConfig, 'ideogram render complete');
 
   } catch (error) {
     console.error('[GeneTooltip] Ideogram failed to render:', error);
-    const ideoDivInTooltip = instance.root.querySelector(`.gene-tooltip-ideo`) as HTMLElement;
-    if (ideoDivInTooltip) {
+    const ideoDivInTooltip = instance.root.querySelector(`.gene-tooltip-ideo`) as HTMLElement | null;
+    if (ideoDivInTooltip && isActiveIdeogramTarget(instance, ideoDivInTooltip)) {
       ideoDivInTooltip.innerHTML = '<small>Ideogram not installed or failed to load.</small>';
     }
     logTooltipTiming(instance, timingConfig, 'ideogram render failed');
