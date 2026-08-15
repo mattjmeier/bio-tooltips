@@ -5,7 +5,10 @@ import { myChemProfile } from './providers/mychem/profile.js';
 import { clear as clearTooltipCache, size as getTooltipCacheSize } from './core/cache.js';
 
 export type {
+  FixedPlacement,
   SectionVariant,
+  TooltipOptions,
+  TooltipPlacementOptions,
   TooltipTimingEvent,
   TooltipTimingObserver,
 } from './core/config.js';

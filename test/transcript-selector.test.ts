@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { defaultCoreConfig } from '../src/core/config';
-import { createOnShownHandler } from '../src/core/lifecycle';
-import type { TippyInstanceWithCustoms } from '../src/core/types';
+import { createShownHandler } from '../src/core/lifecycle';
+import type { TooltipController } from '../src/core/tooltip-controller';
 import { defaultConfig } from '../src/providers/mygene/config';
 import { myGeneProfile } from '../src/providers/mygene/profile';
 import { renderTooltipHTML } from '../src/providers/mygene/renderer';
@@ -107,17 +107,17 @@ describe('native transcript selector', () => {
 
   it('hides the selector and retains the transcript-data fallback when no transcript is usable', async () => {
     const uniqueId = 'missing-transcripts';
-    const popper = document.createElement('div');
-    popper.innerHTML = `
+    const tooltipRoot = document.createElement('div');
+    tooltipRoot.innerHTML = `
       <select id="transcript-selector-${uniqueId}"></select>
       <div id="gene-tooltip-track-${uniqueId}"></div>
     `;
-    const instance = { popper } as TippyInstanceWithCustoms;
+    const instance = { root: tooltipRoot } as TooltipController;
 
     await renderGeneTrack(instance, geneData([]), uniqueId, defaultCoreConfig);
 
-    expect(popper.querySelector<HTMLSelectElement>('select')?.hidden).toBe(true);
-    expect(popper.querySelector('#gene-tooltip-track-missing-transcripts')?.textContent)
+    expect(tooltipRoot.querySelector<HTMLSelectElement>('select')?.hidden).toBe(true);
+    expect(tooltipRoot.querySelector('#gene-tooltip-track-missing-transcripts')?.textContent)
       .toContain('Transcript data not available.');
     expect(getUsableTranscripts([{
       ...transcript('', 2),
@@ -150,19 +150,19 @@ describe('native transcript selector', () => {
   });
 
   it('does not collapse the gene-model section when the native selector is clicked', () => {
-    const popper = document.createElement('div');
-    popper.innerHTML = renderTooltipHTML(geneData([
+    const tooltipRoot = document.createElement('div');
+    tooltipRoot.innerHTML = renderTooltipHTML(geneData([
       transcript('ENST000002', 2),
       transcript('ENST000001', 5),
     ]), {
       uniqueId: 'selector-interaction',
       display: { collapsible: true },
     });
-    const instance = { popper } as TippyInstanceWithCustoms<MyGeneInfoResult>;
-    const onShown = createOnShownHandler(defaultConfig, myGeneProfile);
+    const instance = { root: tooltipRoot } as TooltipController<MyGeneInfoResult>;
+    const onShown = createShownHandler(defaultConfig, myGeneProfile);
     onShown(instance);
 
-    const section = popper.querySelector<HTMLElement>('[data-section="gene-model"]')!;
+    const section = tooltipRoot.querySelector<HTMLElement>('[data-section="gene-model"]')!;
     const selector = section.querySelector<HTMLSelectElement>('select')!;
     const trigger = section.querySelector<HTMLElement>('.gt-collapsible-header')!;
 
@@ -177,15 +177,15 @@ describe('native transcript selector', () => {
   });
 
   it('animates collapsible content using its measured height', () => {
-    const popper = document.createElement('div');
-    popper.innerHTML = renderTooltipHTML(geneData([]), {
+    const tooltipRoot = document.createElement('div');
+    tooltipRoot.innerHTML = renderTooltipHTML(geneData([]), {
       uniqueId: 'measured-height',
       display: { collapsible: true },
     });
-    const instance = { popper } as TippyInstanceWithCustoms<MyGeneInfoResult>;
-    createOnShownHandler(defaultConfig, myGeneProfile)(instance);
+    const instance = { root: tooltipRoot } as TooltipController<MyGeneInfoResult>;
+    createShownHandler(defaultConfig, myGeneProfile)(instance);
 
-    const section = popper.querySelector<HTMLElement>('[data-section="gene-model"]')!;
+    const section = tooltipRoot.querySelector<HTMLElement>('[data-section="gene-model"]')!;
     const trigger = section.querySelector<HTMLElement>('.gt-collapsible-header')!;
     const content = section.querySelector<HTMLElement>('.gt-collapsible-content')!;
     Object.defineProperty(content, 'scrollHeight', { configurable: true, value: 187 });
@@ -195,31 +195,63 @@ describe('native transcript selector', () => {
     expect(section.dataset.collapsed).toBe('true');
 
     trigger.click();
+    const opacityTransitionEnd = new Event('transitionend');
+    Object.defineProperty(opacityTransitionEnd, 'propertyName', { value: 'opacity' });
+    content.dispatchEvent(opacityTransitionEnd);
+    expect(content.style.getPropertyValue('--gt-collapsible-content-height')).toBe('187px');
+
     const transitionEnd = new Event('transitionend');
     Object.defineProperty(transitionEnd, 'propertyName', { value: 'height' });
     content.dispatchEvent(transitionEnd);
     expect(content.style.getPropertyValue('--gt-collapsible-content-height')).toBe('');
   });
 
+  it('releases a measured height when a transition is interrupted', async () => {
+    const tooltipRoot = document.createElement('div');
+    tooltipRoot.innerHTML = renderTooltipHTML(geneData([]), {
+      uniqueId: 'interrupted-height',
+      display: { collapsible: true },
+    });
+    const instance = { root: tooltipRoot } as TooltipController<MyGeneInfoResult>;
+    createShownHandler(defaultConfig, myGeneProfile)(instance);
+
+    const section = tooltipRoot.querySelector<HTMLElement>('[data-section="gene-model"]')!;
+    const trigger = section.querySelector<HTMLElement>('.gt-collapsible-header')!;
+    const content = section.querySelector<HTMLElement>('.gt-collapsible-content')!;
+    Object.defineProperty(content, 'scrollHeight', { configurable: true, value: 187 });
+
+    trigger.click();
+    trigger.click();
+    await new Promise(resolve => setTimeout(resolve, 320));
+
+    expect(content.style.getPropertyValue('--gt-collapsible-content-height')).toBe('');
+  });
+
   it('renders section visuals only once across repeated expansions', async () => {
     const uniqueId = 'cached-section-visual';
     const data = geneData([transcript('ENST000001', 2)]);
-    const popper = document.createElement('div');
-    popper.innerHTML = renderTooltipHTML(data, {
+    const tooltipRoot = document.createElement('div');
+    tooltipRoot.innerHTML = renderTooltipHTML(data, {
       uniqueId,
       display: { collapsible: true },
     });
     const renderVisuals = vi.fn().mockResolvedValue(undefined);
     const profile = { ...myGeneProfile, renderVisuals };
     const instance = {
-      popper,
+      root: tooltipRoot,
       _entityData: data,
       _uniqueId: uniqueId,
-    } as TippyInstanceWithCustoms<MyGeneInfoResult>;
-    const onShown = createOnShownHandler(defaultConfig, profile);
+      state: {
+        isDestroyed: false,
+        isMounted: false,
+        isShown: false,
+        isVisible: false,
+      },
+    } as TooltipController<MyGeneInfoResult>;
+    const onShown = createShownHandler(defaultConfig, profile);
     onShown(instance);
 
-    const trigger = popper.querySelector<HTMLElement>(
+    const trigger = tooltipRoot.querySelector<HTMLElement>(
       '[data-section="gene-model"] .gt-collapsible-header'
     )!;
 

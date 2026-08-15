@@ -7,7 +7,10 @@ import { clear as clearTooltipCache, size as getTooltipCacheSize } from './core/
 
 export { filterNestedList };
 export type {
+  FixedPlacement,
   SectionVariant,
+  TooltipOptions,
+  TooltipPlacementOptions,
   TooltipTimingEvent,
   TooltipTimingObserver,
 } from './core/config.js';

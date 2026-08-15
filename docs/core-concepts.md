@@ -7,7 +7,8 @@ Bio Tooltips separates generic tooltip behavior from biological feature-specific
 The core engine owns:
 
 - DOM element discovery through `selector`
-- Tippy.js lifecycle setup and cleanup
+- owned tooltip lifecycle and DOM cleanup
+- Floating UI positioning and viewport collision handling
 - caching and prefetch behavior
 - theme resolution
 - viewport constraints
@@ -114,7 +115,7 @@ Tooltip modules use `display` objects to control rendered sections. Section valu
 
 ## Styling
 
-Import `bio-tooltips/style.css` once. The stylesheet includes Tippy base styling, module section styling, and CSS variables that can be overridden by site CSS.
+Import `bio-tooltips/style.css` once. The stylesheet includes the Bio Tooltips shell, module section styling, themes, motion, and CSS variables that can be overridden by site CSS.
 
 ```css
 :root {

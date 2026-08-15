@@ -1,22 +1,65 @@
-/* 1. Import Tippy's structural styles FIRST */
-@import 'tippy.js/dist/tippy.css';
-
-/* 2. Import tippy themes */
-@import 'tippy.js/themes/light.css';
-@import 'tippy.js/themes/light-border.css';
-@import 'tippy.js/themes/material.css';
-@import 'tippy.js/themes/translucent.css';
-
-/* Import gene-tooltip's theme variables/styles (global) */
+/* Bio Tooltips owns its shell, motion, and themes. */
 @import './theme.css';
 
-.tippy-content {
+[data-gt-tooltip-root] {
+  width: max-content;
+  max-width: calc(100vw - 10px);
+  inset: 0 auto auto 0;
+}
+
+.gt-tooltip-box {
+  position: relative;
+  box-sizing: border-box;
+  background: var(--gt-background-color-base, #333);
+  color: var(--gt-text-color, #fff);
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: normal;
+  outline: 0;
+  opacity: 0;
+  transform: translateY(0);
+  transition:
+    opacity var(--gt-hide-duration, 250ms) ease-in-out,
+    transform var(--gt-hide-duration, 250ms) ease-in-out;
+}
+
+.gt-tooltip-box[data-state='visible'] {
+  opacity: 1;
+  transition-duration: var(--gt-show-duration, 300ms);
+}
+
+.gt-tooltip-box[data-placement^='top'][data-state='hidden'] { transform: translateY(5px); }
+.gt-tooltip-box[data-placement^='bottom'][data-state='hidden'] { transform: translateY(-5px); }
+.gt-tooltip-box[data-placement^='left'][data-state='hidden'] { transform: translateX(5px); }
+.gt-tooltip-box[data-placement^='right'][data-state='hidden'] { transform: translateX(-5px); }
+
+.gt-tooltip-arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.gt-tooltip-content {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    padding: 5px 9px;
     /* Set the max-height using the dynamic viewport height unit */
     /* We use calc() to subtract a bit of padding (e.g., 16px total) */
     max-height: calc(100dvh - 16px);
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--gt-border-color) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gt-tooltip-box {
+    transition: none;
+  }
 }
 /* --- Summary --- */
 .gene-tooltip-summary {
@@ -317,7 +360,12 @@ ul.gene-tooltip-nested-list {
   display: block;
 }
 
-.tippy-box .bandLabel text {
+/* The location marker is visual only; coordinates are already shown beside it. */
+.gene-tooltip-ideo .annot {
+  pointer-events: none;
+}
+
+.gt-tooltip-box .bandLabel text {
   /* Use the theme's text color, with a fallback. Unfortunately, we need to use important */
   /* because ideogram.js doesn't have an API method for setting these colors */
   fill: var(--gt-text-color, #222) !important;
@@ -330,7 +378,7 @@ ul.gene-tooltip-nested-list {
   margin-left: 0;
 }
 
-.tippy-box .gene-tooltip-list-section ul {
+.gt-tooltip-box .gene-tooltip-list-section ul {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -430,7 +478,7 @@ ul.gene-tooltip-nested-list {
 }
 
 /* Paragraph content within tooltip sections */
-.tippy-box .gene-tooltip-p-content {
+.gt-tooltip-box .gene-tooltip-p-content {
   margin: 0;
   padding: 0;
   line-height: 1.5;
@@ -439,13 +487,13 @@ ul.gene-tooltip-nested-list {
 }
 
 /* Links within paragraph sections */
-.tippy-box .gene-tooltip-p-content a {
+.gt-tooltip-box .gene-tooltip-p-content a {
   color: var(--gt-accent-color);
   text-decoration: none;
   transition: color 0.2s ease-in-out;
 }
 
-.tippy-box .gene-tooltip-p-content a:hover {
+.gt-tooltip-box .gene-tooltip-p-content a:hover {
   text-decoration: underline;
 }
 
@@ -455,7 +503,7 @@ ul.gene-tooltip-nested-list {
 
 /* Gene exon track */
 
-.tippy-box .gene-tooltip-track {
+.gt-tooltip-box .gene-tooltip-track {
   margin: 0.75em 0;
   min-height: 45px;
   overflow: hidden;

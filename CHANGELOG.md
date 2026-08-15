@@ -4,7 +4,26 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [2.0.0] - 2026-08-15
+
+**Breaking release.** The Tippy.js foundation is replaced by an owned tooltip controller and `@floating-ui/dom` positioning. Data providers, rendered biological content, themes, dimensions, caching, prefetch, timing, and the cleanup function returned by `init()` remain available. See [Migrating to v2](docs/migrating-to-v2.md) for the full config and CSS selector translation.
+
+### Added
+- First-class `placement: 'auto'` form with `allowedPlacements` for most-space placement.
+- `viewportPadding` and `fallbackPlacements` as direct tooltip options.
+- Bundled `@floating-ui/dom` positioning; consumers do not install or configure it separately.
+- Focused test coverage for positioning, the tooltip controller, the tooltip engine, ideogram visuals, and summary expansion, plus a browser smoke-test fixture.
+
+### Changed
+- **Config option renames:** `tippyOptions` → `tooltipOptions`, `nestedTippyOptions` → `nestedTooltipOptions`, `delay: [show, hide]` → `showDelay` / `hideDelay`, `duration: [show, hide]` → `showDuration` / `hideDuration`, `preventOverflow.options.padding` → `viewportPadding`, `flip.options.fallbackPlacements` → `fallbackPlacements`.
+- **CSS selector renames:** `[data-tippy-root]` → `[data-gt-tooltip-root]`, `.tippy-box` → `.gt-tooltip-box`, `.tippy-content` → `.gt-tooltip-content`, `.tippy-arrow` → `.gt-tooltip-arrow`. Theme names and `--gt-*` customization variables are unchanged.
+
+### Removed
+- The Tippy.js runtime and its option surface. Arbitrary Tippy lifecycle hooks, plugins, trigger strings, animations, and raw Popper modifiers are no longer accepted; Bio Tooltips now owns hover, focus, touch, interactive traversal, pinning, nested tooltips, reduced-motion, and cleanup behavior.
+
+### Fixed
+- Summary section collapse inconsistency.
+- Stray extra popover rendered on ideogram tooltips.
 
 ## [1.2.0] - 2026-08-13
 

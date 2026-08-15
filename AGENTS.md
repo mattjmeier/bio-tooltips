@@ -15,7 +15,7 @@ On Windows PowerShell, `npm` may be blocked by script execution policy. Use `npm
 
 Keep user-facing dependencies minimal and documented:
 
-- Current runtime npm dependency surface is `tom-select`, plus its transitive npm dependencies `@orchidjs/sifter` and `@orchidjs/unicode-variants`.
+- There are currently no npm runtime dependencies.
 - Current optional peer dependencies are `d3`, `ideogram`, and `@rdkit/rdkit`; keep large visualization/chemistry integrations optional unless there is a strong reason to bundle them.
 - When adding or changing dependencies, update the dependency/source summary in `README.md`.
 - Do not add browser CDN examples that use `@latest`; pin a concrete version instead.

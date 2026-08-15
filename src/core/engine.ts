@@ -1,6 +1,6 @@
-import tippy from 'tippy.js';
-import type { CoreTooltipConfig, TippyInstanceWithCustoms, TooltipProfile } from './types.js';
-import { createOnHideHandler, createOnShowHandler, createOnShownHandler } from './lifecycle.js';
+import type { CoreTooltipConfig, TooltipProfile } from './types.js';
+import { TooltipController } from './tooltip-controller.js';
+import { cleanupTooltipLifecycle, createHideHandler, createShowHandler, createShownHandler } from './lifecycle.js';
 import { runPrefetch } from './prefetch.js';
 import { enableSummaryExpand } from '../ui/summaryExpand.js';
 import { getEffectiveTheme, initializeThemeObserver } from '../ui/theme.js';
@@ -23,7 +23,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
 
   function init(userConfig: Partial<TConfig> = {}): () => void {
     const config = options.mergeConfig(userConfig);
-    let instances: TippyInstanceWithCustoms<TData>[] = [];
+    let instances: TooltipController<TData>[] = [];
     lastPrefetchPromise = Promise.resolve();
 
     const elements = options.findElements(config.selector);
@@ -35,16 +35,29 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
     const isAutoTheme = config.theme === 'auto' || typeof config.theme === 'undefined';
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    instances = tippy(elements, {
-      ...config.tippyOptions,
-      animation: prefersReducedMotion ? 'shift-away' : config.tippyOptions.animation,
-      duration: prefersReducedMotion ? [0, 0] : config.tippyOptions.duration,
+    const showHandler = createShowHandler(config, options.profile, inFlightRequests);
+    const shownHandler = createShownHandler(config, options.profile);
+    const hideHandler = createHideHandler<TData>();
+    const tooltipOptions = {
+      ...config.tooltipOptions,
+      ...(prefersReducedMotion ? { showDuration: 0, hideDuration: 0 } : {}),
+    } as TConfig['tooltipOptions'];
+
+    instances = elements.map(element => new TooltipController<TData>(element, {
+      tooltip: tooltipOptions,
       theme: effectiveTheme,
-      maxWidth: config.tooltipWidth ?? config.tippyOptions.maxWidth,
-      onShow: createOnShowHandler(config, options.profile, inFlightRequests),
-      onShown: createOnShownHandler(config, options.profile),
-      onHide: createOnHideHandler(),
-    }) as TippyInstanceWithCustoms<TData>[];
+      maxWidth: config.tooltipWidth,
+      maxHeight: config.tooltipHeight,
+      constrainToViewport: config.constrainToViewport,
+      interactiveBorder: 2,
+      interactiveDebounce: 75,
+      hooks: {
+        onShow: showHandler,
+        onShown: shownHandler,
+        onHide: hideHandler,
+        onDestroy: cleanupTooltipLifecycle,
+      },
+    }));
 
     instances.forEach(instance => {
       instance._themeIntent = isAutoTheme ? 'auto' : config.theme;
@@ -73,9 +86,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
 
     return () => {
       instances.forEach(instance => {
-        if (instance && instance.destroy) {
-          instance.destroy();
-        }
+        instance.destroy();
       });
       disconnectThemeObserver();
       disconnectVisualPreloadWarmup();

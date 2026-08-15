@@ -8,7 +8,7 @@
 
 > `const` **ChemicalTooltip**: `object`
 
-Defined in: [mychem.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L39)
+Defined in: [mychem.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mychem.ts#L42)
 
 #### Type Declaration
 
@@ -64,7 +64,7 @@ Defined in: [mychem.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/515b4
 
 > **cacheSize**(): `number`
 
-Defined in: [mychem.ts:35](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L35)
+Defined in: [mychem.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mychem.ts#L38)
 
 #### Returns
 
@@ -76,7 +76,7 @@ Defined in: [mychem.ts:35](https://github.com/mattjmeier/bio-tooltips/blob/515b4
 
 > **clearCache**(): `void`
 
-Defined in: [mychem.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L31)
+Defined in: [mychem.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mychem.ts#L34)
 
 #### Returns
 
@@ -88,7 +88,7 @@ Defined in: [mychem.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/515b4
 
 > **init**(`userConfig?`): () => `void`
 
-Defined in: [mychem.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L19)
+Defined in: [mychem.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mychem.ts#L22)
 
 #### Parameters
 
@@ -106,7 +106,7 @@ Defined in: [mychem.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/515b4
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mychem.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L23)
+Defined in: [mychem.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mychem.ts#L26)
 
 #### Returns
 
@@ -118,7 +118,7 @@ Defined in: [mychem.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/515b4
 
 > **whenPrefetchReady**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [mychem.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mychem.ts#L27)
+Defined in: [mychem.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mychem.ts#L30)
 
 #### Returns
 
@@ -213,6 +213,12 @@ Re-exports [FieldCandidate](providers/mychem/formatters.md#fieldcandidate)
 ### findChemicalElements
 
 Re-exports [findChemicalElements](providers/mychem/parser.md#findchemicalelements)
+
+***
+
+### FixedPlacement
+
+Re-exports [FixedPlacement](core/config.md#fixedplacement)
 
 ***
 
@@ -399,6 +405,18 @@ Re-exports [SectionVariant](core/config.md#sectionvariant-1)
 ### SourceValue
 
 Re-exports [SourceValue](providers/mychem/types.md#sourcevalue)
+
+***
+
+### TooltipOptions
+
+Re-exports [TooltipOptions](core/config.md#tooltipoptions-1)
+
+***
+
+### TooltipPlacementOptions
+
+Re-exports [TooltipPlacementOptions](core/config.md#tooltipplacementoptions)
 
 ***
 

@@ -1,9 +1,6 @@
-import type { Instance } from 'tippy.js';
 import type { MyGeneExon, MyGeneInfoResult } from '../types.js';
-// import { getSectionBackgroundColor } from './utils'; 
-import tippy from 'tippy.js';
-import type { TippyInstanceWithCustoms } from '../../../core/types.js';
-import type { CoreTooltipConfig } from '../../../core/config.js';
+import { createStaticTooltip, type TooltipController } from '../../../core/tooltip-controller.js';
+import type { CoreTooltipConfig, TooltipOptions } from '../../../core/config.js';
 import { logTooltipTiming } from '../../../core/timing.js';
 import {
     getLongestTranscript,
@@ -45,18 +42,19 @@ Please ensure 'd3' is installed (it's a peer dependency) or the script is loaded
  * @param svg - The D3 selection for the SVG group element.
  * @param transcript - A single transcript object from the API's "exons" array.
  * @param xScale - The D3 scale for the x-axis.
- * @param instance - The parent tippy instance for theme propagation.
+ * @param instance - The parent tooltip instance for theme propagation.
  */
 function drawTranscript(
     svg: D3.Selection<SVGGElement, unknown, null, undefined>,
     transcript: MyGeneExon,
     xScale: D3.ScaleLinear<number, number>,
-    instance: Instance
-) {
+    instance: TooltipController<any>,
+    config: CoreTooltipConfig
+): TooltipController[] {
     // Clear any previous drawing
     svg.selectAll('*').remove();
 
-    if (!transcript?.position) return;
+    if (!transcript?.position) return [];
 
     // Define constants for drawing from the transcript object
     const height = 20;
@@ -86,6 +84,7 @@ function drawTranscript(
     });
 
     // Draw the exon rectangles
+    const tooltips: TooltipController[] = [];
     svg.selectAll<SVGRectElement, ExonDrawingData>(".exon-rect")
         .data(drawingData)
         .enter().append("rect")
@@ -95,29 +94,42 @@ function drawTranscript(
         .attr("width", d => Math.max(1, xScale(d.coords[1]) - xScale(d.coords[0])))
         .attr("height", exonHeight)
         .each(function(this: SVGRectElement, d) {
-            tippy(this, {
-                content: `<strong>Exon ${d.exonNumber}:</strong> ${d.coords[0].toLocaleString()} - ${d.coords[1].toLocaleString()}`,
-                placement: 'top', allowHTML: true, arrow: true, animation: 'scale-subtle',
-                onShow(nestedInstance) {
-                    const currentParentTheme = (instance.props as any).theme || 'auto';
-                    nestedInstance.setProps({ theme: currentParentTheme });
-                }
-            });
+            const child = createStaticTooltip(
+              this,
+              `<strong>Exon ${d.exonNumber}:</strong> ${d.coords[0].toLocaleString()} - ${d.coords[1].toLocaleString()}`,
+              {
+                tooltip: ({
+                  ...config.nestedTooltipOptions,
+                  placement: 'top',
+                  fallbackPlacements: ['bottom', 'right', 'left'],
+                  appendTo: instance.root,
+                  zIndex: (config.tooltipOptions.zIndex ?? 9999) + 1,
+                  allowedPlacements: undefined,
+                } as TooltipOptions),
+                theme: instance.theme,
+                constrainToViewport: config.constrainToViewport,
+                interactiveDebounce: 75,
+                parent: instance,
+              }
+            );
+            instance.addNestedTooltip(child);
+            tooltips.push(child);
         });
+    return tooltips;
 }
 
 /**
  * Main rendering function
  */
 export async function renderGeneTrack(
-  instance: TippyInstanceWithCustoms, 
+  instance: TooltipController<any>,
   data: MyGeneInfoResult, 
   uniqueId: string,
   config: CoreTooltipConfig,
 ) {
     logTooltipTiming(instance, config, 'gene track render start');
-    const container = instance.popper.querySelector<HTMLElement>(`#gene-tooltip-track-${uniqueId}`);
-    const selectorEl = instance.popper.querySelector<HTMLSelectElement>(`#transcript-selector-${uniqueId}`);
+    const container = instance.root.querySelector<HTMLElement>(`#gene-tooltip-track-${uniqueId}`);
+    const selectorEl = instance.root.querySelector<HTMLSelectElement>(`#transcript-selector-${uniqueId}`);
 
     if (!container) return;
 
@@ -142,16 +154,7 @@ export async function renderGeneTrack(
     }
     let drawSelectedTranscript: ((transcriptId: string) => void) | null = null;
 
-    const existingSvg = container.querySelector('svg');
-    if (existingSvg) {
-        const exonRects = existingSvg.querySelectorAll('.exon-rect');
-        exonRects.forEach(rect => {
-            const tippyInstance = (rect as any)._tippy;
-            if (tippyInstance) {
-                tippyInstance.destroy();
-            }
-        });
-    }
+    let exonTooltips: TooltipController[] = [];
 
     try {
         if (transcripts.length > 1 && selectorEl) {
@@ -211,8 +214,9 @@ export async function renderGeneTrack(
             .html(`<tspan font-weight="bold">${data.symbol}</tspan> <tspan>${directionArrow}</tspan>`);
 
         drawSelectedTranscript = (transcriptId: string) => {
+            exonTooltips.forEach(tooltip => tooltip.destroy());
             const selectedTranscript = transcripts.find(tx => tx.transcript === transcriptId) ?? longestTranscript;
-            drawTranscript(g, selectedTranscript, xScale, instance);
+            exonTooltips = drawTranscript(g, selectedTranscript, xScale, instance, config);
         };
 
         // --- Initial Draw (common to all cases) ---

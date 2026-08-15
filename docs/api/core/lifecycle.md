@@ -4,11 +4,41 @@
 
 ## Functions
 
-### createOnHideHandler()
+### cleanupTooltipLifecycle()
 
-> **createOnHideHandler**(): (`instance`) => `false` \| `undefined`
+> **cleanupTooltipLifecycle**\<`TData`\>(`instance`): `void`
 
-Defined in: [core/lifecycle.ts:309](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/lifecycle.ts#L309)
+Defined in: [core/lifecycle.ts:376](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/lifecycle.ts#L376)
+
+#### Type Parameters
+
+##### TData
+
+`TData`
+
+#### Parameters
+
+##### instance
+
+[`TooltipController`](tooltip-controller.md#tooltipcontroller)\<`TData`\>
+
+#### Returns
+
+`void`
+
+***
+
+### createHideHandler()
+
+> **createHideHandler**\<`TData`\>(): (`instance`) => `false` \| `undefined`
+
+Defined in: [core/lifecycle.ts:346](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/lifecycle.ts#L346)
+
+#### Type Parameters
+
+##### TData
+
+`TData` = `unknown`
 
 #### Returns
 
@@ -16,11 +46,11 @@ Defined in: [core/lifecycle.ts:309](https://github.com/mattjmeier/bio-tooltips/b
 
 ***
 
-### createOnShowHandler()
+### createShowHandler()
 
-> **createOnShowHandler**\<`TData`, `TConfig`\>(`config`, `profile`, `inFlightRequests`): (`instance`) => `void`
+> **createShowHandler**\<`TData`, `TConfig`\>(`config`, `profile`, `inFlightRequests`): (`instance`) => `void`
 
-Defined in: [core/lifecycle.ts:157](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/lifecycle.ts#L157)
+Defined in: [core/lifecycle.ts:149](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/lifecycle.ts#L149)
 
 #### Type Parameters
 
@@ -52,11 +82,11 @@ Defined in: [core/lifecycle.ts:157](https://github.com/mattjmeier/bio-tooltips/b
 
 ***
 
-### createOnShownHandler()
+### createShownHandler()
 
-> **createOnShownHandler**\<`TData`, `TConfig`\>(`config`, `profile`): (`instance`) => `void`
+> **createShownHandler**\<`TData`, `TConfig`\>(`config`, `profile`): (`instance`) => `void`
 
-Defined in: [core/lifecycle.ts:241](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/lifecycle.ts#L241)
+Defined in: [core/lifecycle.ts:235](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/lifecycle.ts#L235)
 
 #### Type Parameters
 

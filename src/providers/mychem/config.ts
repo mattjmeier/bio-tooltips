@@ -77,10 +77,10 @@ export function mergeConfig(userConfig: Partial<MyChemTooltipConfig> = {}): MyCh
       ...defaultMyChemConfig.display,
       ...userConfig.display,
     },
-    tippyOptions: { ...defaultMyChemConfig.tippyOptions, ...userConfig.tippyOptions },
-    nestedTippyOptions: {
-      ...defaultMyChemConfig.nestedTippyOptions,
-      ...userConfig.nestedTippyOptions,
-    },
+    tooltipOptions: { ...defaultMyChemConfig.tooltipOptions, ...userConfig.tooltipOptions } as MyChemTooltipConfig['tooltipOptions'],
+    nestedTooltipOptions: {
+      ...defaultMyChemConfig.nestedTooltipOptions,
+      ...userConfig.nestedTooltipOptions,
+    } as MyChemTooltipConfig['nestedTooltipOptions'],
   };
 }

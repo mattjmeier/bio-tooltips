@@ -6,8 +6,8 @@ import { logTooltipTiming, startTooltipTiming } from '../src/core/timing';
 import { GeneTooltip } from '../src/mygene';
 import type {
   DataProvider,
-  TippyInstanceWithCustoms,
 } from '../src/core/types';
+import type { TooltipController } from '../src/core/tooltip-controller';
 
 interface TestRecord {
   query: string;
@@ -52,7 +52,7 @@ describe('structured timing events', () => {
     };
     const instance = {
       _uniqueId: 'timing-test',
-    } as TippyInstanceWithCustoms;
+    } as TooltipController;
 
     startTooltipTiming(instance, config, 'onShow');
     logTooltipTiming(instance, config, 'content set', { source: 'cache' });

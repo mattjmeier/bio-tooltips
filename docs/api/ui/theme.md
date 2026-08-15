@@ -8,9 +8,9 @@
 
 > **getEffectiveTheme**(`configTheme`): `string`
 
-Defined in: [ui/theme.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/ui/theme.ts#L6)
+Defined in: [ui/theme.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/ui/theme.ts#L6)
 
-Determines the effective theme to be used for tippy instances.
+Determines the effective theme to be used for tooltip instances.
 
 #### Parameters
 
@@ -28,16 +28,16 @@ Determines the effective theme to be used for tippy instances.
 
 > **initializeThemeObserver**(`instances`, `isAutoTheme`): `ThemeObserverCleanup`
 
-Defined in: [ui/theme.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/ui/theme.ts#L23)
+Defined in: [ui/theme.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/ui/theme.ts#L23)
 
 Sets up a MutationObserver to watch for theme changes on the `<html>` element
-and updates the tippy instances accordingly.
+and updates the tooltip instances accordingly.
 
 #### Parameters
 
 ##### instances
 
-[`TippyInstanceWithCustoms`](../core/types.md#tippyinstancewithcustoms)\<`unknown`\>[]
+[`TooltipController`](../core/tooltip-controller.md#tooltipcontroller)\<`any`\>[]
 
 ##### isAutoTheme
 

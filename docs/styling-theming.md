@@ -6,7 +6,7 @@ Import the shared stylesheet once:
 import 'bio-tooltips/style.css';
 ```
 
-The stylesheet includes base Tippy styles, Bio Tooltips layout rules, module section styling, and CSS variables.
+The stylesheet includes the owned Bio Tooltips shell, layout rules, module section styling, themes, and CSS variables.
 
 ## Themes
 
@@ -99,7 +99,7 @@ picker uses these values in browsers that support customizable native selects;
 other browsers continue to use their operating-system picker.
 
 ```css
-.tippy-box {
+.gt-tooltip-box {
   --gt-transcript-selector-background: var(--gt-background-color-base);
   --gt-transcript-selector-picker-background: var(--gt-background-color-base);
   --gt-transcript-selector-border-color: var(--gt-border-color);
@@ -119,6 +119,13 @@ other browsers continue to use their operating-system picker.
 
 Applications can also target `.gene-tooltip-transcript-selector` and its
 `::picker(select)` directly when more control is needed.
+
+## Tooltip Shell Selectors
+
+Bio Tooltips owns its rendered shell. The stable selectors are
+`[data-gt-tooltip-root]`, `.gt-tooltip-box`, `.gt-tooltip-content`, and
+`.gt-tooltip-arrow`. Applications migrating from v1 should replace the old
+Tippy selectors as described in [Migrating to v2](./migrating-to-v2.md).
 
 ## Dimensions
 

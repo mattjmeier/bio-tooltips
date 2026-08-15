@@ -1,7 +1,7 @@
-import type { TippyInstanceWithCustoms } from '../core/types.js';
+import type { TooltipController } from '../core/tooltip-controller.js';
 
 /**
- * Determines the effective theme to be used for tippy instances.
+ * Determines the effective theme to be used for tooltip instances.
  */
 export function getEffectiveTheme(configTheme: 'light' | 'dark' | 'auto' | 'material' | 'translucent'| 'light-border' | undefined): string {
     const isAutoTheme = configTheme === 'auto' || typeof configTheme === 'undefined';
@@ -17,11 +17,11 @@ type ThemeObserverCleanup = () => void;
 
 /**
  * Sets up a MutationObserver to watch for theme changes on the `<html>` element
- * and updates the tippy instances accordingly.
+ * and updates the tooltip instances accordingly.
  * @returns A cleanup function to disconnect the observer.
  */
 export function initializeThemeObserver(
-    instances: TippyInstanceWithCustoms[], 
+    instances: TooltipController<any>[],
     isAutoTheme: boolean
 ): ThemeObserverCleanup {
     if (!isAutoTheme) {
@@ -29,10 +29,10 @@ export function initializeThemeObserver(
         return () => {};
     }
 
-    const setTippyTheme = (theme: string): void => {
+    const setTooltipTheme = (theme: string): void => {
         instances.forEach(instance => {
-            if (instance._themeIntent === 'auto' && instance.props.theme !== theme) {
-                instance.setProps({ theme });
+            if (instance._themeIntent === 'auto' && instance.theme !== theme) {
+                instance.setTheme(theme);
             }
         });
     };
@@ -40,7 +40,7 @@ export function initializeThemeObserver(
     const observer = new MutationObserver(() => {
         const isNowDark = document.documentElement.classList.contains('dark');
         const newTheme = isNowDark ? 'dark' : 'light';
-        setTippyTheme(newTheme);
+        setTooltipTheme(newTheme);
     });
 
     observer.observe(document.documentElement, {

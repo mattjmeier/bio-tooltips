@@ -8,7 +8,7 @@
 
 > **renderSpecies**(`taxid`): `string`
 
-Defined in: [providers/mygene/sections/species.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/providers/mygene/sections/species.ts#L3)
+Defined in: [providers/mygene/sections/species.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/sections/species.ts#L3)
 
 #### Parameters
 

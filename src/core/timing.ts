@@ -1,12 +1,12 @@
 import type { CoreTooltipConfig, TooltipTimingEvent } from './config.js';
-import type { TippyInstanceWithCustoms } from './types.js';
+import type { TooltipController } from './tooltip-controller.js';
 
 function now(): number {
   return typeof performance !== 'undefined' ? performance.now() : Date.now();
 }
 
 export function startTooltipTiming(
-  instance: TippyInstanceWithCustoms,
+  instance: TooltipController<any>,
   config: CoreTooltipConfig,
   label: string
 ): void {
@@ -17,7 +17,7 @@ export function startTooltipTiming(
 }
 
 export function logTooltipTiming(
-  instance: TippyInstanceWithCustoms | undefined,
+  instance: TooltipController<any> | undefined,
   config: CoreTooltipConfig,
   label: string,
   details?: Record<string, unknown>

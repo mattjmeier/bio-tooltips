@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../dist/bio-tooltips.css">
+    <title>Bio Tooltips browser smoke test</title>
+  </head>
+  <body>
+    <span class="gene-tooltip" data-species="human">TP53</span>
+    <output id="result">pending</output>
+    <script src="../dist/bio-tooltips.global.js"></script>
+    <script>
+      const checks = {};
+      window.fetch = async () => ({
+        ok: true,
+        json: async () => [{
+          _id: '7157',
+          query: 'TP53',
+          symbol: 'TP53',
+          name: 'tumor protein p53',
+          summary: 'Browser smoke fixture',
+          taxid: 9606
+        }]
+      });
+
+      const reference = document.querySelector('.gene-tooltip');
+      const cleanup = window.GeneTooltip.init({
+        prefetch: 'none',
+        visualPreload: 'none',
+        display: {
+          ideogram: false,
+          geneTrack: false,
+          pathways: false,
+          domains: false,
+          transcripts: false,
+          structures: false,
+          generifs: false
+        },
+        tooltipOptions: {
+          placement: 'bottom',
+          fallbackPlacements: ['top', 'right', 'left'],
+          showDuration: 0,
+          hideDuration: 0
+        }
+      });
+
+      reference.dispatchEvent(new MouseEvent('mouseenter'));
+      setTimeout(() => {
+        const root = document.querySelector('[data-gt-tooltip-root]');
+        const box = document.querySelector('.gt-tooltip-box');
+        const pin = document.querySelector('.gt-pin-button');
+        checks.mounted = Boolean(root && box);
+        checks.positioned = Boolean(box?.dataset.placement);
+        checks.role = box?.getAttribute('role') === 'tooltip';
+        checks.content = document.querySelector('.gt-tooltip-content')?.textContent.includes('TP53') === true;
+
+        document.documentElement.classList.add('dark');
+        setTimeout(() => {
+          checks.theme = box?.dataset.theme === 'dark';
+          pin?.click();
+          reference.dispatchEvent(new MouseEvent('mouseleave'));
+          setTimeout(() => {
+            checks.pinned = Boolean(document.querySelector('[data-gt-tooltip-root]'));
+            pin?.click();
+            setTimeout(() => {
+              checks.unpinned = !document.querySelector('[data-gt-tooltip-root]');
+              cleanup();
+              checks.cleaned = !document.querySelector('[data-gt-tooltip-root]')
+                && !reference.hasAttribute('aria-expanded');
+              const passed = Object.values(checks).every(Boolean);
+              document.body.dataset.smoke = passed ? 'pass' : 'fail';
+              document.querySelector('#result').textContent = JSON.stringify(checks);
+            }, 20);
+          }, 20);
+        }, 20);
+      }, 250);
+    </script>
+  </body>
+</html>

@@ -8,7 +8,7 @@
 
 > `const` **GeneTooltip**: `object`
 
-Defined in: [mygene.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L45)
+Defined in: [mygene.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mygene.ts#L48)
 
 #### Type Declaration
 
@@ -85,7 +85,7 @@ are ready when tooltips are first shown.
 
 > **cacheSize**(): `number`
 
-Defined in: [mygene.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L41)
+Defined in: [mygene.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mygene.ts#L44)
 
 #### Returns
 
@@ -97,7 +97,7 @@ Defined in: [mygene.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/515b4
 
 > **clearCache**(): `void`
 
-Defined in: [mygene.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L37)
+Defined in: [mygene.ts:40](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mygene.ts#L40)
 
 #### Returns
 
@@ -109,7 +109,7 @@ Defined in: [mygene.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/515b4
 
 > **filterNestedList**(`query`, `listId`): `void`
 
-Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/utils.ts#L24)
 
 #### Parameters
 
@@ -131,7 +131,7 @@ Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/515b4a
 
 > **init**(`userConfig?`): () => `void`
 
-Defined in: [mygene.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L21)
+Defined in: [mygene.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mygene.ts#L24)
 
 #### Parameters
 
@@ -149,7 +149,7 @@ Defined in: [mygene.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/515b4
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mygene.ts:29](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L29)
+Defined in: [mygene.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mygene.ts#L32)
 
 Preloads the optional heavy dependencies (d3, ideogram) so they
 are ready when tooltips are first shown.
@@ -164,7 +164,7 @@ are ready when tooltips are first shown.
 
 > **whenPrefetchReady**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [mygene.ts:33](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/mygene.ts#L33)
+Defined in: [mygene.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/mygene.ts#L36)
 
 #### Returns
 
@@ -217,6 +217,12 @@ Re-exports [findGeneElements](providers/mygene/parser.md#findgeneelements)
 ### findSpecies
 
 Re-exports [findSpecies](providers/mygene/species.md#findspecies)
+
+***
+
+### FixedPlacement
+
+Re-exports [FixedPlacement](core/config.md#fixedplacement)
 
 ***
 
@@ -427,6 +433,18 @@ Re-exports [speciesMap](providers/mygene/species.md#speciesmap)
 ### TooltipDisplayConfig
 
 Re-exports [TooltipDisplayConfig](providers/mygene/config.md#tooltipdisplayconfig)
+
+***
+
+### TooltipOptions
+
+Re-exports [TooltipOptions](core/config.md#tooltipoptions-1)
+
+***
+
+### TooltipPlacementOptions
+
+Re-exports [TooltipPlacementOptions](core/config.md#tooltipplacementoptions)
 
 ***
 
