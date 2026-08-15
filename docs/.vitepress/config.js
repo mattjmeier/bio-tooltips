@@ -105,6 +105,7 @@ export default {
           { text: 'Browser / Bundler Usage', link: '/browser-bundler-usage' },
           { text: 'CSS', link: '/css' },
           { text: 'Core API', link: '/reference/core' },
+          { text: 'Migrating to v2', link: '/migrating-to-v2' },
           { text: 'Adapter API', link: '/reference/adapters' },
           { text: 'Provider Reference', link: '/reference/providers' },
           { text: 'Generated API Reference', link: '/api/modules' },

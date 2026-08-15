@@ -8,7 +8,7 @@
 
 > **filterNestedList**(`query`, `listId`): `void`
 
-Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/utils.ts#L24)
 
 #### Parameters
 
@@ -89,6 +89,12 @@ Re-exports [findGeneElements](providers/mygene/parser.md#findgeneelements)
 ### findSpecies
 
 Re-exports [findSpecies](providers/mygene/species.md#findspecies)
+
+***
+
+### FixedPlacement
+
+Re-exports [FixedPlacement](core/config.md#fixedplacement)
 
 ***
 
@@ -335,6 +341,18 @@ Re-exports [speciesMap](providers/mygene/species.md#speciesmap)
 ### TooltipDisplayConfig
 
 Re-exports [TooltipDisplayConfig](providers/mygene/config.md#tooltipdisplayconfig)
+
+***
+
+### TooltipOptions
+
+Re-exports [TooltipOptions](core/config.md#tooltipoptions-1)
+
+***
+
+### TooltipPlacementOptions
+
+Re-exports [TooltipPlacementOptions](core/config.md#tooltipplacementoptions)
 
 ***
 

@@ -24,12 +24,12 @@ Both tooltip modules expose the same lifecycle shape.
 
 | Method | Description |
 | --- | --- |
-| `init(config?)` | Finds matching elements, attaches Tippy instances, and returns a cleanup function. |
+| `init(config?)` | Finds matching elements, attaches Bio Tooltips controllers, and returns a cleanup function. |
 | `preload()` | Preloads optional module dependencies when available. |
 
 ## Shared Config
 
-Shared options include `selector`, `prefetch`, `prefetchThreshold`, `theme`, `tooltipWidth`, `tooltipHeight`, `constrainToViewport`, `tippyOptions`, and `nestedTippyOptions`.
+Shared options include `selector`, `prefetch`, `prefetchThreshold`, `theme`, `tooltipWidth`, `tooltipHeight`, `constrainToViewport`, `tooltipOptions`, and `nestedTooltipOptions`.
 
 Read the [Core API](./reference/core.md) for shared behavior, [Gene API](./gene-api.md) for `GeneTooltipConfig`, and [Chemical API](./chemical-api.md) for `MyChemTooltipConfig`.
 

@@ -1,4 +1,4 @@
-import type { Instance } from 'tippy.js';
+import type { TooltipController } from './core/tooltip-controller.js';
 
 // Generate a unique ID for each tooltip instance
 export function generateUniqueTooltipId(): string {
@@ -67,12 +67,12 @@ export function createNestedContent(items: { name: string; url?: string }[]): st
 }
 
 /**
- * Gets the computed background color from a Tippy instance's popper.
- * @param instance The Tippy instance to inspect.
+ * Gets the computed background color from a tooltip instance's root.
+ * @param instance The tooltip instance to inspect.
  * @returns The background color string (e.g., 'rgb(255, 255, 255)') or null if not found.
  */
-export function getSectionBackgroundColor(instance: Instance): string | null {
-  const section = instance.popper.querySelector<HTMLElement>('.gene-tooltip-section-container');
+export function getSectionBackgroundColor(instance: TooltipController<any>): string | null {
+  const section = instance.root.querySelector<HTMLElement>('.gene-tooltip-section-container');
   if (section) {
     return window.getComputedStyle(section).backgroundColor;
   }

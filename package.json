@@ -79,10 +79,10 @@
     "benchmark:fixtures": "node benchmark/capture-fixtures.mjs"
   },
   "devDependencies": {
+    "@floating-ui/dom": "^1.8.0",
     "@rdkit/rdkit": "^2025.3.4-1.0.0",
     "@types/d3": "^7.4.3",
     "@types/node": "^26.0.0",
-    "@types/tippy.js": "^6.0.0",
     "bootstrap": "^5.3.8",
     "cpx2": "^9.0.0",
     "d3": "^7.9.0",
@@ -94,7 +94,6 @@
     "npm-run-all": "^4.1.5",
     "rimraf": "^6.0.1",
     "sass": "^1.93.2",
-    "tippy.js": "^6.3.7",
     "typedoc": "^0.28.13",
     "typedoc-plugin-markdown": "^4.9.0",
     "typedoc-plugin-mdn-links": "^5.0.9",

@@ -93,7 +93,7 @@ export function mergeConfig(userConfig: Partial<GeneTooltipConfig> = {}): GeneTo
       links: { ...defaultConfig.display.links, ...userConfig.display?.links },
     },
     ideogram: { ...defaultConfig.ideogram, ...userConfig.ideogram },
-    tippyOptions: { ...defaultConfig.tippyOptions, ...userConfig.tippyOptions },
-    nestedTippyOptions: { ...defaultConfig.nestedTippyOptions, ...userConfig.nestedTippyOptions },
+    tooltipOptions: { ...defaultConfig.tooltipOptions, ...userConfig.tooltipOptions } as GeneTooltipConfig['tooltipOptions'],
+    nestedTooltipOptions: { ...defaultConfig.nestedTooltipOptions, ...userConfig.nestedTooltipOptions } as GeneTooltipConfig['nestedTooltipOptions'],
   };
 }

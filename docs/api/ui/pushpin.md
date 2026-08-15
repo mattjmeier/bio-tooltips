@@ -8,13 +8,13 @@
 
 > **attachPushpin**(`instance`): `void`
 
-Defined in: [ui/pushpin.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/ui/pushpin.ts#L3)
+Defined in: [ui/pushpin.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/ui/pushpin.ts#L3)
 
 #### Parameters
 
 ##### instance
 
-[`TippyInstanceWithCustoms`](../core/types.md#tippyinstancewithcustoms)
+[`TooltipController`](../core/tooltip-controller.md#tooltipcontroller)\<`any`\>
 
 #### Returns
 

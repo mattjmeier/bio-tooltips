@@ -8,7 +8,7 @@
 
 > **createNestedContent**(`items`): `string`
 
-Defined in: [utils.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/utils.ts#L46)
+Defined in: [utils.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/utils.ts#L46)
 
 #### Parameters
 
@@ -26,7 +26,7 @@ Defined in: [utils.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/515b4a
 
 > **filterNestedList**(`query`, `listId`): `void`
 
-Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/utils.ts#L24)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/515b4a
 
 > **generateUniqueTooltipId**(): `string`
 
-Defined in: [utils.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/utils.ts#L4)
+Defined in: [utils.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/utils.ts#L4)
 
 #### Returns
 
@@ -60,17 +60,17 @@ Defined in: [utils.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/515b4aa
 
 > **getSectionBackgroundColor**(`instance`): `string` \| `null`
 
-Defined in: [utils.ts:74](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/utils.ts#L74)
+Defined in: [utils.ts:74](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/utils.ts#L74)
 
-Gets the computed background color from a Tippy instance's popper.
+Gets the computed background color from a tooltip instance's root.
 
 #### Parameters
 
 ##### instance
 
-`Instance`
+[`TooltipController`](core/tooltip-controller.md#tooltipcontroller)\<`any`\>
 
-The Tippy instance to inspect.
+The tooltip instance to inspect.
 
 #### Returns
 
@@ -84,7 +84,7 @@ The background color string (e.g., 'rgb(255, 255, 255)') or null if not found.
 
 > **installNestedListFilter**(): `void`
 
-Defined in: [utils.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/utils.ts#L38)
+Defined in: [utils.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/utils.ts#L38)
 
 #### Returns
 

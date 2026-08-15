@@ -8,13 +8,13 @@
 
 > **logTooltipTiming**(`instance`, `config`, `label`, `details?`): `void`
 
-Defined in: [core/timing.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/timing.ts#L19)
+Defined in: [core/timing.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/timing.ts#L19)
 
 #### Parameters
 
 ##### instance
 
-[`TippyInstanceWithCustoms`](types.md#tippyinstancewithcustoms)\<`unknown`\> \| `undefined`
+[`TooltipController`](tooltip-controller.md#tooltipcontroller)\<`any`\> \| `undefined`
 
 ##### config
 
@@ -38,13 +38,13 @@ Defined in: [core/timing.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **startTooltipTiming**(`instance`, `config`, `label`): `void`
 
-Defined in: [core/timing.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/515b4aaeb547597dc0329796de87565eb2307074/src/core/timing.ts#L8)
+Defined in: [core/timing.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/timing.ts#L8)
 
 #### Parameters
 
 ##### instance
 
-[`TippyInstanceWithCustoms`](types.md#tippyinstancewithcustoms)
+[`TooltipController`](tooltip-controller.md#tooltipcontroller)\<`any`\>
 
 ##### config
 

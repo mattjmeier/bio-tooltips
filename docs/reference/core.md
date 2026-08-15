@@ -10,12 +10,12 @@ Core config is shared by all tooltip modules.
 | `visualPreload` | `hover` | Optional visual dependency warmup strategy: `hover`, `init`, or `none`. |
 | `debugTimings` | `false` | Logs tooltip lifecycle timing checkpoints to the browser console. |
 | `onTiming` | `undefined` | Receives structured timing checkpoints for diagnostics and benchmarking. |
-| `theme` | `auto` | Tippy theme: `auto`, `light`, `dark`, `material`, `translucent`, or `light-border`. |
+| `theme` | `auto` | Theme: `auto`, `light`, `dark`, `material`, `translucent`, or `light-border`. |
 | `tooltipWidth` | Module-specific | Optional fixed max width in pixels. |
 | `tooltipHeight` | None | Optional fixed max height in pixels. |
 | `constrainToViewport` | `true` | Keeps large tooltips within the visible viewport. |
-| `tippyOptions` | Module defaults | Options passed to the main Tippy instance. |
-| `nestedTippyOptions` | Module defaults | Options passed to nested popovers. |
+| `tooltipOptions` | Module defaults | Bio Tooltips positioning, timing, portal, and stacking options for main tooltips. |
+| `nestedTooltipOptions` | Module defaults | The same owned option surface for nested tooltips. |
 
 ## Visual Preload
 
@@ -59,20 +59,35 @@ Each module also exposes:
 See [Performance Benchmarking](../performance.md) for measurement guidance and the
 benchmark report command.
 
-## Tippy Options
+## Tooltip Options
 
-Any supported Tippy.js option can be passed through `tippyOptions`.
+`tooltipOptions` and `nestedTooltipOptions` use the framework-agnostic Bio Tooltips option surface. Fixed placements can provide an ordered fallback list. Automatic placement can instead restrict the placements it is allowed to choose.
 
 ```ts
 GeneTooltip.init({
-  tippyOptions: {
+  tooltipOptions: {
     placement: 'right',
-    delay: [100, 50]
+    fallbackPlacements: ['left', 'bottom', 'top'],
+    showDelay: 100,
+    hideDelay: 50
   }
 });
 ```
 
-The library sets interactive defaults so users can pin, scroll, copy, and click links inside tooltips.
+| Option | Main default | Purpose |
+| --- | --- | --- |
+| `placement` | `bottom` | A fixed side/alignment or `auto`. |
+| `fallbackPlacements` | `top`, `right`, `left` | Ordered alternatives for fixed placement. |
+| `allowedPlacements` | All | Allowed sides when `placement` is `auto`. |
+| `offset` | `10` | Gap in pixels between reference and tooltip. |
+| `viewportPadding` | `8` | Minimum viewport-edge padding in pixels. |
+| `strategy` | `absolute` | CSS positioning strategy: `absolute` or `fixed`. |
+| `showDelay` / `hideDelay` | `0` / `0` | Opening and closing delays in milliseconds. |
+| `showDuration` / `hideDuration` | `300` / `250` | Transition durations in milliseconds. |
+| `zIndex` | `9999` | Root stacking order. |
+| `appendTo` | `document.body` | Portal element or function returning it. |
+
+Nested tooltips default to `right` on desktop and `bottom` on viewports narrower than 768px. The controller keeps interactive content open while pointer or focus is within the reference, tooltip, or a nested tooltip.
 
 ## Cleanup
 

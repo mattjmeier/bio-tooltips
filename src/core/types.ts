@@ -1,5 +1,5 @@
-import type { Instance } from 'tippy.js';
 import type { CoreTooltipConfig } from './config.js';
+import type { TooltipController } from './tooltip-controller.js';
 export type { CoreTooltipConfig } from './config.js';
 
 export interface EntityRef {
@@ -23,33 +23,12 @@ export interface NestedTooltipDefinition {
   items: FormattedItem[];
 }
 
-export interface TippyInstanceWithCustoms<TData = unknown> extends Instance {
-  _nestedTippys?: Instance[];
-  _entityData?: TData | null;
-  _geneData?: TData | null;
-  _isFetching?: boolean;
-  _uniqueId?: string;
-  _themeIntent?: 'auto' | string;
-  _isChildTippyVisible?: boolean;
-  _isFullyShown?: boolean;
-  _sectionToggleHandler?: (event: Event) => void;
-  _sectionKeydownHandler?: (event: KeyboardEvent) => void;
-  _visualsRendered?: boolean;
-  _visualRenderPromise?: Promise<void>;
-  _renderedVisualSections?: Set<string>;
-  _renderingVisualSections?: Set<string>;
-  _timingStart?: number;
-  _isPinned?: boolean;
-  _originalTrigger?: string;
-  _pinButton?: HTMLElement | null;
-}
-
 export interface RenderTooltipOptions {
   uniqueId: string;
 }
 
 export interface VisualRenderContext<TData, TConfig extends CoreTooltipConfig> {
-  instance: TippyInstanceWithCustoms<TData>;
+  instance: TooltipController<TData>;
   data: TData;
   config: TConfig;
   uniqueId: string;

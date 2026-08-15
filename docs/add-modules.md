@@ -52,7 +52,8 @@ Adapters should keep service-specific details out of the shared core. They own:
 
 The shared core owns:
 
-- Tippy.js initialization and cleanup
+- tooltip controller initialization and cleanup
+- Floating UI positioning
 - prefetch strategy
 - cache plumbing
 - viewport constraints

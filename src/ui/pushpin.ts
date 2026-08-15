@@ -1,13 +1,13 @@
-import type { TippyInstanceWithCustoms } from '../core/types.js';
+import type { TooltipController } from '../core/tooltip-controller.js';
 
-export function attachPushpin(instance: TippyInstanceWithCustoms) {
+export function attachPushpin(instance: TooltipController<any>) {
   // This guard is now the key. If we've already found and initialized the button, do nothing.
   if (instance._pinButton) return;
 
-  const popper = instance.popper;
-  const btn = popper?.querySelector<HTMLButtonElement>('.gt-pin-button');
+  const tooltipRoot = instance.root;
+  const btn = tooltipRoot.querySelector<HTMLButtonElement>('.gt-pin-button');
 
-  if (!popper || !btn) return;
+  if (!btn) return;
 
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -20,38 +20,17 @@ export function attachPushpin(instance: TippyInstanceWithCustoms) {
 
 
 
-function togglePin(instance: TippyInstanceWithCustoms, btn: HTMLElement) {
+function togglePin(instance: TooltipController<any>, btn: HTMLElement) {
   instance._isPinned = !instance._isPinned;
 
   if (instance._isPinned) {
-    // --- PINNING LOGIC ---
-    // Store the original trigger so we can restore it later
-    instance._originalTrigger = instance.props.trigger;
-
-    // Set to manual mode
-    instance.setProps({
-      trigger: 'manual',
-      hideOnClick: false, // Ensure clicking outside doesn't hide it
-    });
-
     btn.classList.add('gt-pin-active');
     btn.setAttribute('aria-label', 'Unpin tooltip');
-    
-    // Ensure it's visible. This is safe to call even if it's already shown.
-    instance.show();
+    instance.setPinned(true);
 
   } else {
-    // --- UNPINNING LOGIC ---
-    // Restore the original trigger
-    instance.setProps({
-      trigger: instance._originalTrigger || 'mouseenter focus',
-    });
-
     btn.classList.remove('gt-pin-active');
     btn.setAttribute('aria-label', 'Pin tooltip');
-
-    // Explicitly hide the tooltip to reset its state.
-    // The user will need to mouseenter again to show it.
-    instance.hide();
+    instance.setPinned(false);
   }
 }

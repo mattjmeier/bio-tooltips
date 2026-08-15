@@ -1,18 +1,19 @@
-import tippy, { type Instance, type Props } from 'tippy.js';
 import * as cache from './cache.js';
 import type {
   CoreTooltipConfig,
   EntityRef,
   FormattedItem,
-  TippyInstanceWithCustoms,
   TooltipProfile,
 } from './types.js';
+import type { TooltipOptions } from './config.js';
+import { TooltipController } from './tooltip-controller.js';
+import { getDefaultFallbackPlacements } from './positioning.js';
 import { generateUniqueTooltipId, createNestedContent } from '../utils.js';
 import { attachPushpin } from '../ui/pushpin.js';
 import { logTooltipTiming, startTooltipTiming } from './timing.js';
 
-async function renderVisualsAndNestedTippys<TData, TConfig extends CoreTooltipConfig>(
-  instance: TippyInstanceWithCustoms<TData>,
+async function renderVisualsAndNestedTooltips<TData, TConfig extends CoreTooltipConfig>(
+  instance: TooltipController<TData>,
   config: TConfig,
   profile: TooltipProfile<TData, TConfig>
 ): Promise<void> {
@@ -21,6 +22,8 @@ async function renderVisualsAndNestedTippys<TData, TConfig extends CoreTooltipCo
     if (!data || !instance._uniqueId) return;
 
     logTooltipTiming(instance, config, 'visuals render start');
+
+    instance.destroyNestedTooltips();
 
     await profile.renderVisuals?.({
       instance,
@@ -37,46 +40,29 @@ async function renderVisualsAndNestedTippys<TData, TConfig extends CoreTooltipCo
         isShown: instance.state.isShown,
         isVisible: instance.state.isVisible,
       });
+      instance.destroyNestedTooltips();
       return;
     }
 
     instance._visualsRendered = true;
-    instance._nestedTippys = [];
     logTooltipTiming(instance, config, 'visuals render complete');
 
-    const baseNestedOptions = { ...config.nestedTippyOptions };
+    const baseNestedOptions = { ...config.nestedTooltipOptions } as TooltipOptions;
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     const defaultPlacement = isMobile ? 'bottom' : 'right';
 
-    const finalNestedTippyOptions: Partial<Props> = {
+    const resolvedPlacement = baseNestedOptions.placement ?? defaultPlacement;
+    const finalNestedTooltipOptions = ({
       ...baseNestedOptions,
-      placement: baseNestedOptions.placement ?? defaultPlacement,
-      appendTo: instance.popper,
-      popperOptions: config.tippyOptions.popperOptions,
-      zIndex: (config.tippyOptions.zIndex || 9999) + 1,
-      onShow(childInstance: Instance) {
-        instance._isChildTippyVisible = true;
-        const currentParentTheme = instance.props.theme || 'auto';
-        childInstance.setProps({ theme: currentParentTheme });
-
-        if (config.constrainToViewport) {
-          const content = childInstance.popper.querySelector('.tippy-content');
-          if (content) {
-            const padding = config.tippyOptions?.popperOptions?.modifiers?.find(
-              modifier => modifier.name === 'preventOverflow'
-            )?.options?.padding ?? 8;
-            const availableHeight = window.visualViewport?.height || window.innerHeight;
-            (content as HTMLElement).style.maxHeight = `${availableHeight - (padding * 2)}px`;
-          }
-        }
-
-        baseNestedOptions.onShow?.(childInstance);
-      },
-      onHide(childInstance: Instance) {
-        instance._isChildTippyVisible = false;
-        baseNestedOptions.onHide?.(childInstance);
-      },
-    };
+      placement: resolvedPlacement,
+      ...(
+        resolvedPlacement !== 'auto' && !baseNestedOptions.fallbackPlacements
+          ? { fallbackPlacements: getDefaultFallbackPlacements(resolvedPlacement) }
+          : {}
+      ),
+      appendTo: instance.root,
+      zIndex: baseNestedOptions.zIndex ?? ((config.tooltipOptions.zIndex ?? 9999) + 1),
+    } as TooltipOptions);
 
     const nestedDefinitions = profile.getNestedTooltipDefinitions?.(
       data,
@@ -85,9 +71,9 @@ async function renderVisualsAndNestedTippys<TData, TConfig extends CoreTooltipCo
     ) ?? [];
 
     nestedDefinitions.forEach(definition => {
-      createNestedTippy(instance, finalNestedTippyOptions, definition.selector, definition.items);
+      createNestedTooltip(instance, finalNestedTooltipOptions, definition.selector, definition.items, config);
     });
-    logTooltipTiming(instance, config, 'nested tippys attached', { count: nestedDefinitions.length });
+    logTooltipTiming(instance, config, 'nested tooltips attached', { count: nestedDefinitions.length });
   } catch (error) {
     console.error(`[${profile.id}] A critical error occurred during post-render lifecycle.`, error);
     if (instance.state.isShown) {
@@ -96,8 +82,8 @@ async function renderVisualsAndNestedTippys<TData, TConfig extends CoreTooltipCo
   }
 }
 
-function scheduleVisualsAndNestedTippys<TData, TConfig extends CoreTooltipConfig>(
-  instance: TippyInstanceWithCustoms<TData>,
+function scheduleVisualsAndNestedTooltips<TData, TConfig extends CoreTooltipConfig>(
+  instance: TooltipController<TData>,
   config: TConfig,
   profile: TooltipProfile<TData, TConfig>,
   reason: string
@@ -125,7 +111,7 @@ function scheduleVisualsAndNestedTippys<TData, TConfig extends CoreTooltipConfig
       return;
     }
 
-    instance._visualRenderPromise = renderVisualsAndNestedTippys(instance, config, profile)
+    instance._visualRenderPromise = renderVisualsAndNestedTooltips(instance, config, profile)
       .finally(() => {
         instance._visualRenderPromise = undefined;
       });
@@ -138,36 +124,41 @@ function scheduleVisualsAndNestedTippys<TData, TConfig extends CoreTooltipConfig
   }
 }
 
-function createNestedTippy<TData>(
-  instance: TippyInstanceWithCustoms<TData>,
-  options: Partial<Props>,
+function createNestedTooltip<TData>(
+  instance: TooltipController<TData>,
+  options: TooltipOptions,
   selector: string,
-  items: FormattedItem[]
+  items: FormattedItem[],
+  config: CoreTooltipConfig
 ): void {
-  const button = instance.popper.querySelector<HTMLElement>(selector);
+  const button = instance.root.querySelector<HTMLElement>(selector);
   if (!button || items.length === 0) return;
 
-  const nestedInstance = tippy(button, {
-    ...options,
+  const nestedInstance = new TooltipController(button, {
+    tooltip: options,
     content: createNestedContent(items),
+    theme: instance.theme,
+    constrainToViewport: config.constrainToViewport,
+    interactiveBorder: 20,
+    interactiveDebounce: 75,
+    parent: instance,
   });
-  instance._nestedTippys?.push(nestedInstance as Instance);
+  instance.addNestedTooltip(nestedInstance);
 }
 
-export function createOnShowHandler<TData, TConfig extends CoreTooltipConfig>(
+export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
   config: TConfig,
   profile: TooltipProfile<TData, TConfig>,
   inFlightRequests: Map<string, Promise<Map<string, TData>>>
 ) {
-  return function onShow(instance: TippyInstanceWithCustoms<TData>) {
-    instance._isFullyShown = false;
+  return function onShow(instance: TooltipController<TData>) {
     instance._visualsRendered = false;
     startTooltipTiming(instance, config, 'onShow');
 
     constrainTooltipHeight(instance, config);
 
     const resizeHandler = () => constrainTooltipHeight(instance, config);
-    (instance as any)._visualViewportResizeHandler = resizeHandler;
+    instance._visualViewportResizeHandler = resizeHandler;
 
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', resizeHandler);
@@ -182,7 +173,7 @@ export function createOnShowHandler<TData, TConfig extends CoreTooltipConfig>(
       }
       if (instance._entityData !== undefined) {
         logTooltipTiming(instance, config, 'instance data already available');
-        scheduleVisualsAndNestedTippys(instance, config, profile, 'existing-instance-data');
+        scheduleVisualsAndNestedTooltips(instance, config, profile, 'existing-instance-data');
         return;
       }
 
@@ -195,14 +186,15 @@ export function createOnShowHandler<TData, TConfig extends CoreTooltipConfig>(
       const cacheKey = profile.provider.getCacheKey(ref);
 
       const renderContent = (data: TData | null) => {
+        if (instance.state.isDestroyed) return;
         instance._entityData = data;
-        instance._geneData = data;
         instance._renderedVisualSections = new Set();
         instance._renderingVisualSections = new Set();
         logTooltipTiming(instance, config, 'content render start');
         instance.setContent(profile.renderTooltipHTML(data, { uniqueId: instance._uniqueId! }, config));
+        attachPushpin(instance);
         logTooltipTiming(instance, config, 'content set');
-        scheduleVisualsAndNestedTippys(instance, config, profile, 'content-set');
+        scheduleVisualsAndNestedTooltips(instance, config, profile, 'content-set');
       };
 
       const cachedData = cache.get<TData>(cacheKey);
@@ -229,10 +221,10 @@ export function createOnShowHandler<TData, TConfig extends CoreTooltipConfig>(
         logTooltipTiming(instance, config, 'fetch complete', { cacheKey });
         const data = resultsMap.get(cacheKey) || null;
         cache.set(cacheKey, data);
-        renderContent(data);
+        if (!instance.state.isDestroyed) renderContent(data);
       } catch (error) {
         console.error(`Failed to fetch data for ${describeRef(ref)}`, error);
-        instance.setContent('Error loading data.');
+        if (!instance.state.isDestroyed) instance.setContent('Error loading data.');
       } finally {
         inFlightRequests.delete(cacheKey);
       }
@@ -240,21 +232,20 @@ export function createOnShowHandler<TData, TConfig extends CoreTooltipConfig>(
   };
 }
 
-export function createOnShownHandler<TData, TConfig extends CoreTooltipConfig>(
+export function createShownHandler<TData, TConfig extends CoreTooltipConfig>(
   config: TConfig,
   profile: TooltipProfile<TData, TConfig>
 ) {
-  return function onShown(instance: TippyInstanceWithCustoms<TData>) {
-    instance._isFullyShown = true;
+  return function onShown(instance: TooltipController<TData>) {
     logTooltipTiming(instance, config, 'onShown');
 
     if (instance._entityData !== undefined) {
-      scheduleVisualsAndNestedTippys(instance, config, profile, 'onShown-fallback');
+      scheduleVisualsAndNestedTooltips(instance, config, profile, 'onShown-fallback');
     }
 
     const display = config.display as { collapsible?: unknown } | undefined;
     if (display?.collapsible) {
-      const popper = instance.popper;
+      const tooltipRoot = instance.root;
 
       instance._sectionToggleHandler = (event: Event) => {
         const target = event.target as HTMLElement;
@@ -344,62 +335,56 @@ export function createOnShownHandler<TData, TConfig extends CoreTooltipConfig>(
         }
       };
 
-      popper.addEventListener('click', instance._sectionToggleHandler);
-      popper.addEventListener('keydown', instance._sectionKeydownHandler);
+      tooltipRoot.addEventListener('click', instance._sectionToggleHandler);
+      tooltipRoot.addEventListener('keydown', instance._sectionKeydownHandler);
     }
 
     attachPushpin(instance);
   };
 }
 
-export function createOnHideHandler() {
-  return function onHide(instance: TippyInstanceWithCustoms) {
+export function createHideHandler<TData = unknown>() {
+  return function onHide(instance: TooltipController<TData>) {
     if (instance._isPinned) {
       return false;
     }
 
-    instance._isFullyShown = false;
-
-    if (instance._isChildTippyVisible) {
-      return false;
-    }
-
     if (instance._sectionToggleHandler) {
-      instance.popper.removeEventListener('click', instance._sectionToggleHandler);
+      instance.root.removeEventListener('click', instance._sectionToggleHandler);
       instance._sectionToggleHandler = undefined;
     }
 
     if (instance._sectionKeydownHandler) {
-      instance.popper.removeEventListener('keydown', instance._sectionKeydownHandler);
+      instance.root.removeEventListener('keydown', instance._sectionKeydownHandler);
       instance._sectionKeydownHandler = undefined;
     }
 
-    const resizeHandler = (instance as any)._visualViewportResizeHandler;
+    const resizeHandler = instance._visualViewportResizeHandler;
     if (resizeHandler) {
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', resizeHandler);
       } else {
         window.removeEventListener('resize', resizeHandler);
       }
-      delete (instance as any)._visualViewportResizeHandler;
+      instance._visualViewportResizeHandler = undefined;
     }
 
-    if (instance._nestedTippys) {
-      instance._nestedTippys.forEach(nested => nested.destroy());
-      instance._nestedTippys = [];
-    }
+    instance.destroyNestedTooltips();
   };
 }
 
-function constrainTooltipHeight(instance: TippyInstanceWithCustoms, config: CoreTooltipConfig): void {
+export function cleanupTooltipLifecycle<TData>(instance: TooltipController<TData>): void {
+  instance._isPinned = false;
+  createHideHandler<TData>()(instance);
+}
+
+function constrainTooltipHeight(instance: TooltipController<any>, config: CoreTooltipConfig): void {
   if (!config.constrainToViewport) return;
 
-  const content = instance.popper.querySelector('.tippy-content');
+  const content = instance.content;
   if (!content) return;
 
-  const padding = config.tippyOptions?.popperOptions?.modifiers?.find(
-    modifier => modifier.name === 'preventOverflow'
-  )?.options?.padding ?? 8;
+  const padding = config.tooltipOptions.viewportPadding ?? 8;
 
   const availableHeight = window.visualViewport?.height || window.innerHeight;
   (content as HTMLElement).style.maxHeight = `${availableHeight - (padding * 2)}px`;

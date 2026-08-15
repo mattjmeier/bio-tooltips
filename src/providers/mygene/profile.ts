@@ -1,4 +1,5 @@
-import type { TooltipProfile, TippyInstanceWithCustoms } from '../../core/types.js';
+import type { TooltipProfile } from '../../core/types.js';
+import type { TooltipController } from '../../core/tooltip-controller.js';
 import type { GeneTooltipConfig } from './config.js';
 import type { MyGeneInfoResult } from './types.js';
 import { fetchMyGeneRefs, getMyGeneCacheKey } from './client.js';
@@ -12,7 +13,7 @@ import { getMyGeneNestedTooltipDefinitions } from './sections/index.js';
 import { logTooltipTiming } from '../../core/timing.js';
 
 async function renderMyGeneVisuals(
-  instance: TippyInstanceWithCustoms<MyGeneInfoResult>,
+  instance: TooltipController<MyGeneInfoResult>,
   data: MyGeneInfoResult,
   config: GeneTooltipConfig,
   uniqueId: string,
@@ -21,10 +22,10 @@ async function renderMyGeneVisuals(
   const renderPromises: Array<{ sectionKey: string; promise: Promise<void> }> = [];
   const renderedSections = instance._renderedVisualSections ??= new Set();
 
-  const locationSection = instance.popper.querySelector('[data-section="location"]');
+  const locationSection = instance.root.querySelector('[data-section="location"]');
   const isLocationCollapsed = locationSection?.getAttribute('data-collapsed') === 'true';
 
-  const geneModelSection = instance.popper.querySelector('[data-section="gene-model"]');
+  const geneModelSection = instance.root.querySelector('[data-section="gene-model"]');
   const isGeneModelCollapsed = geneModelSection?.getAttribute('data-collapsed') === 'true';
 
   const shouldRenderGeneTrack = sectionKey

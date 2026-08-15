@@ -42,6 +42,28 @@ describe('architecture compatibility', () => {
     expect(mergeMyChemConfig({ sectionVariant: 'dividers' }).sectionVariant).toBe('dividers');
   });
 
+  it('merges the owned tooltip option bags without legacy Tippy configuration', () => {
+    const geneConfig = mergeConfig({
+      tooltipOptions: { placement: 'right', showDelay: 125 },
+      nestedTooltipOptions: { placement: 'auto', allowedPlacements: ['top', 'bottom'] },
+    });
+    const chemicalConfig = mergeMyChemConfig({
+      tooltipOptions: { placement: 'bottom', strategy: 'fixed' },
+    });
+
+    expect(geneConfig.tooltipOptions).toMatchObject({
+      placement: 'right',
+      showDelay: 125,
+      viewportPadding: 8,
+    });
+    expect(geneConfig.nestedTooltipOptions).toMatchObject({
+      placement: 'auto',
+      allowedPlacements: ['top', 'bottom'],
+    });
+    expect(chemicalConfig.tooltipOptions.strategy).toBe('fixed');
+    expect('tippyOptions' in geneConfig).toBe(false);
+  });
+
   it('MyGene profile returns provider-keyed cache keys', () => {
     const key = myGeneProfile.provider.getCacheKey({
       query: 'TP53',

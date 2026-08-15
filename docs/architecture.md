@@ -7,7 +7,8 @@ Bio Tooltips uses a shared core plus adapter architecture.
 The core owns generic tooltip behavior:
 
 - tooltip engine creation
-- Tippy lifecycle wiring
+- owned tooltip controller and DOM lifecycle
+- Floating UI positioning and viewport middleware
 - cache and prefetch plumbing
 - generic renderer helpers
 - section wrappers and collapsible state

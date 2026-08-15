@@ -95,7 +95,7 @@ GeneTooltip.init({
 ```
 
 Useful checkpoint labels include `onShow`, `cache hit`, `fetch complete`, `content set`,
-`visuals render complete`, and `nested tippys attached`. Each event contains elapsed
+`visuals render complete`, and `nested tooltips attached`. Each event contains elapsed
 milliseconds relative to that tooltip's `onShow` checkpoint.
 
 Eager prefetch can be awaited before starting an experimental interaction:
