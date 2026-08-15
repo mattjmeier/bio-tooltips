@@ -6,8 +6,8 @@ Bio Tooltips provides shared tooltip behavior plus entity-specific tooltip modul
 
 Currently supported modules:
 
-- Gene tooltips via MyGene.info
-- Chemical tooltips via MyChem.info
+- Gene tooltips via MyGene.info[MyGene.info]
+- Chemical tooltips via MyChem.info[MyChem.info]
 
 ## Install
 
