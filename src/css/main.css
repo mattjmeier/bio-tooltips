@@ -360,6 +360,11 @@ ul.gene-tooltip-nested-list {
   display: block;
 }
 
+/* The location marker is visual only; coordinates are already shown beside it. */
+.gene-tooltip-ideo .annot {
+  pointer-events: none;
+}
+
 .gt-tooltip-box .bandLabel text {
   /* Use the theme's text color, with a fallback. Unfortunately, we need to use important */
   /* because ideogram.js doesn't have an API method for setting these colors */

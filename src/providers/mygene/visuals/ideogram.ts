@@ -1,8 +1,8 @@
 import type { IdeogramConfig } from '../config.js';
 import type { MyGeneInfoResult } from '../types.js';
 import { speciesMap } from '../species.js';
-import type { CoreTooltipConfig, TooltipOptions } from '../../../core/config.js';
-import { createStaticTooltip, type TooltipController } from '../../../core/tooltip-controller.js';
+import type { CoreTooltipConfig } from '../../../core/config.js';
+import type { TooltipController } from '../../../core/tooltip-controller.js';
 import { logTooltipTiming } from '../../../core/timing.js';
 
 let ideogramModulePromise: Promise<any> | null = null;
@@ -90,10 +90,6 @@ export async function renderIdeogram(
         return;
     }
 
-    // Get the theme from the main instance
-    const parentInstance = instance;
-    let hasAttachedTooltip = false;
-
     // Also get the current text color
     const computedStyle = window.getComputedStyle(instance.root);
     const labelColor = computedStyle.getPropertyValue('--gt-text-color').trim();
@@ -117,53 +113,6 @@ export async function renderIdeogram(
       }],
       showAnnotTooltip: false,
       onClickAnnot: function() {},
-      onDrawAnnots: function() {
-        logTooltipTiming(parentInstance, timingConfig, 'ideogram onDrawAnnots');
-        // If we've already run successfully, don't do anything on subsequent calls.
-        if (hasAttachedTooltip) {
-          return;
-        }
-
-        setTimeout(() => {
-          if (hasAttachedTooltip) return;
-
-          const containerElement = instance.root.querySelector(ideogramContainerSelector);
-          if (!containerElement) return;
-
-          const annotElements = containerElement.querySelectorAll('.annot');
-
-          // We only proceed and set the flag if we actually find the elements.
-          if (annotElements.length > 0) {
-            // This is our "one-shot" trigger.
-            hasAttachedTooltip = true;
-
-            annotElements.forEach(annotation => {
-              const child = createStaticTooltip(
-                annotation,
-                `<b>${data.symbol}</b><br>chr${chromosome}:${genomicPos.start.toLocaleString()}-${genomicPos.end.toLocaleString()}`,
-                {
-                  tooltip: ({
-                    ...timingConfig.nestedTooltipOptions,
-                    placement: 'top',
-                    fallbackPlacements: ['bottom', 'right', 'left'],
-                    appendTo: instance.root,
-                    zIndex: 99999,
-                    allowedPlacements: undefined,
-                  } as TooltipOptions),
-                  theme: parentInstance.theme,
-                  constrainToViewport: timingConfig.constrainToViewport,
-                  interactiveDebounce: 75,
-                  parent: parentInstance,
-                }
-              );
-              parentInstance.addNestedTooltip(child);
-            });
-            logTooltipTiming(parentInstance, timingConfig, 'ideogram annotation tooltips attached', {
-              count: annotElements.length,
-            });
-          }
-        }, 0);
-      },
     };
     // Before drawing, clear the container of the spinner.
     // This gives the Ideogram library a clean slate.

@@ -241,6 +241,12 @@ describe('native transcript selector', () => {
       root: tooltipRoot,
       _entityData: data,
       _uniqueId: uniqueId,
+      state: {
+        isDestroyed: false,
+        isMounted: false,
+        isShown: false,
+        isVisible: false,
+      },
     } as TooltipController<MyGeneInfoResult>;
     const onShown = createShownHandler(defaultConfig, profile);
     onShown(instance);
