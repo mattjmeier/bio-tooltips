@@ -35,11 +35,14 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
+      - name: Install xvfb
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
       - name: Build library
         run: npm run build:js-css
 
       - name: Capture screenshots
-        run: node screenshots/capture.mjs
+        run: xvfb-run -a node screenshots/capture.mjs
 
       - name: Commit updated screenshot (if changed)
         run: |
