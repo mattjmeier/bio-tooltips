@@ -9,9 +9,9 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #ffffff;
-            padding: 40px;
+            padding: 50px 60px;
             display: flex;
-            gap: 80px;
+            gap: 300px;
             align-items: flex-start;
         }
         .trigger-card {
@@ -37,14 +37,20 @@
         .trigger-word:hover {
             color: #2563eb;
         }
+        .gene-card {
+            margin-top: 20px;
+        }
+        .chemical-card {
+            margin-top: 80px;
+        }
     </style>
 </head>
 <body>
-    <div class="trigger-card">
+    <div class="trigger-card gene-card">
         <h2>Gene (MyGene.info)</h2>
         <span class="gene-tooltip trigger-word" data-species="human">TP53</span>
     </div>
-    <div class="trigger-card">
+    <div class="trigger-card chemical-card">
         <h2>Chemical (MyChem.info)</h2>
         <span class="chemical-tooltip trigger-word" data-query="2244" data-scope="pubchem">aspirin</span>
     </div>
@@ -57,14 +63,17 @@
         document.addEventListener('DOMContentLoaded', () => {
             GeneTooltip.init({
                 truncateSummary: 3,
-                display: { ideogram: true },
+                display: {
+                    ideogram: true,
+                    geneTrack: 'expanded',
+                },
                 ideogram: { enabled: true, height: 100 },
-                tooltipHeight: 360,
+                tooltipHeight: 480,
                 tooltipWidth: 420,
                 theme: 'light'
             });
             ChemicalTooltip.init({
-                tooltipHeight: 360,
+                tooltipHeight: 420,
                 tooltipWidth: 420,
                 theme: 'light'
             });

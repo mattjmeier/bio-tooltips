@@ -48,7 +48,7 @@ const baseUrl = `http://127.0.0.1:${port}`;
 const browser = await chromium.launch({ headless: true });
 try {
   const context = await browser.newContext({
-    viewport: { width: 1200, height: 750 },
+    viewport: { width: 1400, height: 900 },
     deviceScaleFactor: 2,
   });
   const page = await context.newPage();
