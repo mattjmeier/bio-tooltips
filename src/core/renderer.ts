@@ -12,16 +12,23 @@ export function generateUniqueId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 }
 
+/**
+ * Wraps provider content in the standard shell markup (data attributes only).
+ * Geometry and vertical scrolling are owned by the tooltip shell — the
+ * positioning `size` middleware sets `max-width` on the box and `max-height`
+ * on the content, and `.gt-tooltip-content` CSS provides `overflow-y`. No
+ * inline sizing is applied here, so the inner wrapper never becomes a second
+ * scroll container.
+ */
 export function renderTooltipShell(
   uniqueId: string,
   innerHTML: string,
-  inlineStyle: string = '',
   sectionVariant: SectionVariant = 'cards'
 ): string {
   const resolvedSectionVariant = sectionVariant === 'dividers' ? 'dividers' : 'cards';
 
   return `
-    <div class="gene-tooltip-content" ${inlineStyle} data-tooltip-id="${uniqueId}" data-section-variant="${resolvedSectionVariant}">
+    <div class="gene-tooltip-content" data-tooltip-id="${uniqueId}" data-section-variant="${resolvedSectionVariant}">
       ${innerHTML}
     </div>
   `;

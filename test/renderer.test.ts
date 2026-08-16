@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { renderTooltipHTML } from '../src/providers/mygene/renderer';
 import { renderTooltipHTML as renderMyChemTooltipHTML } from '../src/providers/mychem/renderer';
+import { myGeneProfile } from '../src/providers/mygene/profile';
+import { mergeConfig as mergeMyGeneConfig } from '../src/providers/mygene/config';
+import { myChemProfile } from '../src/providers/mychem/profile';
+import { mergeConfig as mergeMyChemConfig } from '../src/providers/mychem/config';
 import type { MyGeneInfoResult } from '../src/providers/mygene/types';
 import type { MyChemInfoResult } from '../src/providers/mychem/types';
 
@@ -123,6 +127,21 @@ describe('renderTooltipHTML', () => {
     // Disable both
     html = renderTooltipHTML(mockGeneData, { display: { links: { ncbi: false, ensembl: false } }, uniqueId: MOCK_UNIQUE_ID });
     expect(html).not.toContain('gene-tooltip-links-container');
+  });
+
+  it('keeps the outer shell as the single scroll owner when tooltipWidth/tooltipHeight are configured', () => {
+    const html = myGeneProfile.renderTooltipHTML(
+      mockGeneData,
+      { uniqueId: MOCK_UNIQUE_ID },
+      mergeMyGeneConfig({ tooltipHeight: 480, tooltipWidth: 400 })
+    );
+
+    // The content wrapper must not carry inline sizing, so it cannot become
+    // a nested scroll container on top of `.gt-tooltip-content`.
+    expect(html).toContain('<div class="gene-tooltip-content" data-tooltip-id="');
+    expect(html).not.toContain('overflow-y: auto');
+    expect(html).not.toContain('max-height: 480px');
+    expect(html).not.toContain('max-width: 400px');
   });
 });
 
@@ -340,5 +359,26 @@ describe('renderMyChemTooltipHTML', () => {
     expect(html).toMatch(/data-collapsed="true"[\s\S]*data-section="structure-&-properties"/);
     expect(html).toMatch(/data-collapsed="true"[\s\S]*data-section="summary"/);
     expect(html).toMatch(/data-collapsed="false"[\s\S]*data-section="detailed-properties"/);
+  });
+
+  it('keeps the outer shell as the single scroll owner when tooltipWidth/tooltipHeight are configured', () => {
+    const mockChemicalData: MyChemInfoResult = {
+      _id: '2244',
+      name: 'Aspirin',
+      pubchem: { cid: 2244 },
+    };
+
+    const html = myChemProfile.renderTooltipHTML(
+      mockChemicalData,
+      { uniqueId: 'mychem-scroll-owner' },
+      mergeMyChemConfig({ tooltipHeight: 480, tooltipWidth: 400 })
+    );
+
+    // The content wrapper must not carry inline sizing, so it cannot become
+    // a nested scroll container on top of `.gt-tooltip-content`.
+    expect(html).toContain('<div class="gene-tooltip-content" data-tooltip-id="');
+    expect(html).not.toContain('overflow-y: auto');
+    expect(html).not.toContain('max-height: 480px');
+    expect(html).not.toContain('max-width: 400px');
   });
 });
