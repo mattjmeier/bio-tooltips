@@ -95,13 +95,13 @@ try {
   // Wait for the engine to be ready
   await page.waitForTimeout(500);
 
-  // 1. Open the gene tooltip by dispatching mouseenter
+  // 1. Open the chemical tooltip by dispatching mouseenter
   await page.evaluate(() => {
-    const el = document.querySelector('.gene-tooltip');
+    const el = document.querySelector('.chemical-tooltip');
     el.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
   });
 
-  // Wait for gene tooltip to appear with content
+  // Wait for chemical tooltip to appear with content
   await page.waitForFunction(
     () => {
       const roots = document.querySelectorAll('[data-gt-tooltip-root]');
@@ -109,19 +109,31 @@ try {
     },
     { timeout: 15000 }
   );
-  console.log('[capture] Gene tooltip rendered');
+  console.log('[capture] Chemical tooltip rendered');
 
-  // 2. Pin the gene tooltip
+  // Wait for the PubChem structure image to load (it has loading="lazy")
+  await page.waitForFunction(
+    () => {
+      const imgs = document.querySelectorAll('[data-gt-tooltip-root] img');
+      return imgs.length === 0 || [...imgs].every(img => img.naturalWidth > 0);
+    },
+    { timeout: 10000 }
+  ).catch(() => {
+    // Structure image may not be present if rdkit renders it; that's fine
+  });
+  console.log('[capture] Chemical structure image ready');
+
+  // 2. Pin the chemical tooltip
   await page.evaluate(() => {
-    const btn = document.querySelector('.gt-pin-button');
-    if (btn) btn.click();
+    const btns = document.querySelectorAll('.gt-pin-button');
+    if (btns.length > 0) btns[0].click();
   });
   await page.waitForTimeout(300);
-  console.log('[capture] Gene tooltip pinned');
+  console.log('[capture] Chemical tooltip pinned');
 
-  // 3. Open the chemical tooltip by dispatching mouseenter
+  // 3. Open the gene tooltip by dispatching mouseenter
   await page.evaluate(() => {
-    const el = document.querySelector('.chemical-tooltip');
+    const el = document.querySelector('.gene-tooltip');
     el.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
   });
 
@@ -133,10 +145,10 @@ try {
     },
     { timeout: 20000 }
   );
-  console.log('[capture] Chemical tooltip rendered');
+  console.log('[capture] Gene tooltip rendered');
 
-  // Wait for any images (PubChem structure, ideogram) to settle
-  await page.waitForTimeout(2000);
+  // Wait for ideogram and gene track visuals to finish rendering
+  await page.waitForTimeout(3000);
 
   // Wait for fonts
   await page.evaluateHandle('document.fonts.ready');
