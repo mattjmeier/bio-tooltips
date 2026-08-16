@@ -4,6 +4,14 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.4] - 2026-08-16
+
+### Added
+- Automated README preview screenshots (light and dark mode) with a GitHub Actions workflow and a local `npm run screenshots` script.
+
+### Changed
+- Tooltip geometry and vertical scrolling is now owned exclusively by the shell CSS and Floating UI `size` middleware. The per-provider `tooltipWidth` and `tooltipHeight` inline style options are removed to prevent a secondary scroll container inside the tooltip.
+
 ## [2.0.3] - 2026-08-15
 
 - Ideogram was failing to load alternate scaffolds; this fix ensures the correct canonical chromosome is used for both displayed coordinates and the Ideogram annotation.

@@ -1,0 +1,54 @@
+name: Update README Screenshots
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'screenshots/**'
+      - 'benchmark/fixtures/**'
+      - 'package.json'
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    name: Capture Tooltips Screenshot
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build library
+        run: npm run build:js-css
+
+      - name: Capture screenshots
+        run: node screenshots/capture.mjs
+
+      - name: Commit updated screenshot (if changed)
+        run: |
+          if git diff --quiet -- assets/preview.png; then
+            echo "Screenshot unchanged, nothing to commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add assets/preview.png
+            git commit -m "chore: update README tooltip screenshot"
+            git push
+          fi

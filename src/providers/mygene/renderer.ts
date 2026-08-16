@@ -22,8 +22,6 @@ interface RenderOptions {
   transcriptCount?: number;
   structureCount?: number;
   generifCount?: number;
-  tooltipWidth?: number;
-  tooltipHeight?: number;
   sectionVariant?: SectionVariant;
   uniqueId?: string;
 }
@@ -55,8 +53,6 @@ export function renderTooltipHTML(
     transcriptCount = 3,
     structureCount = 3,
     generifCount = 3,
-    tooltipWidth,
-    tooltipHeight,
     sectionVariant = 'cards',
   } = options;
 
@@ -85,11 +81,6 @@ export function renderTooltipHTML(
       extraHeaderHtml
     );
   };
-
-  const styleParts: string[] = [];
-  if (tooltipWidth) styleParts.push(`max-width: ${tooltipWidth}px`);
-  if (tooltipHeight) styleParts.push(`max-height: ${tooltipHeight}px`, `overflow-y: auto`);
-  const inlineStyle = styleParts.length > 0 ? `style="${styleParts.join('; ')}"` : '';
 
   const sectionContext: MyGeneSectionContext = {
     data,
@@ -129,7 +120,6 @@ export function renderTooltipHTML(
 
       ${display.footer !== false ? renderFooter(data) : ''}
     `,
-    inlineStyle,
     sectionVariant
   );
 }

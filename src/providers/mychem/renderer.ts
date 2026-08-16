@@ -36,8 +36,6 @@ interface RenderOptions {
   truncate?: number;
   synonymCount?: number;
   listCount?: number;
-  tooltipWidth?: number;
-  tooltipHeight?: number;
   sectionVariant?: SectionVariant;
   display?: Partial<MyChemDisplayConfig>;
   structureRenderer?: MyChemStructureRenderer;
@@ -84,11 +82,6 @@ export function renderTooltipHTML(
   const collapsible = display.collapsible ?? true;
   const globalCollapsedByDefault = display.collapsedByDefault ?? true;
   const showSourcePaths = display.sourcePaths === true;
-
-  const styleParts: string[] = [];
-  if (options.tooltipWidth) styleParts.push(`max-width: ${options.tooltipWidth}px`);
-  if (options.tooltipHeight) styleParts.push(`max-height: ${options.tooltipHeight}px`, 'overflow-y: auto');
-  const inlineStyle = styleParts.length > 0 ? `style="${styleParts.join('; ')}"` : '';
 
   const identity = buildChemicalIdentity(data, data.query);
   const { isVisible: showIdentityMeta } = getSectionState(
@@ -150,7 +143,6 @@ export function renderTooltipHTML(
       ${sections}
       ${display.footer !== false ? renderFooter(data) : ''}
     `,
-    inlineStyle,
     options.sectionVariant
   );
 }
@@ -165,8 +157,6 @@ export function renderMyChemTooltipFromConfig(
     truncate: config.truncateSummary,
     synonymCount: config.synonymCount,
     listCount: config.listCount,
-    tooltipWidth: config.tooltipWidth,
-    tooltipHeight: config.tooltipHeight,
     sectionVariant: config.sectionVariant,
     display: config.display,
     structureRenderer: config.structureRenderer,

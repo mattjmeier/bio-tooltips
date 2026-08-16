@@ -2,6 +2,13 @@
 
 Framework-agnostic biological & biochemical tooltips for HTML documents.
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/preview-dark.png">
+    <img src="assets/preview.png" alt="Bio Tooltips preview: gene and chemical tooltips" width="900">
+  </picture>
+</p>
+
 Bio Tooltips provides shared tooltip behavior plus entity-specific tooltip modules for genes, chemicals, and future biology-related entities such as variants.
 
 Currently supported modules:
@@ -90,7 +97,7 @@ Bio Tooltips keeps its user-facing dependency surface intentionally small:
 - Required runtime npm dependencies: none.
 - Bundled positioning foundation: `@floating-ui/dom`; consumers do not install or configure it separately.
 - Optional peer dependencies: `d3`, `ideogram`, and `@rdkit/rdkit`. These are not bundled into the package and are only needed for optional visual/structure-rendering features.
-- Published package contents: `dist`, `README.md`, `LICENSE`, and `package.json`.
+- Published package contents: `dist`, `assets` (light + dark README preview images), `README.md`, `LICENSE`, and `package.json`.
 - External data/API sources used at runtime: MyGene.info for gene records, MyChem.info for chemical records, and PubChem image URLs for chemical structure images.
 
 The release workflow installs from `package-lock.json` with `npm ci` and publishes to npm with provenance. For browser CDN usage, prefer a pinned package version instead of `@latest`.
