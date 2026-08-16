@@ -8,7 +8,6 @@ import { createServer } from 'node:http';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.join(__dirname, '..');
 const outputDir = path.join(projectRoot, 'assets');
-const outputFile = path.join(outputDir, 'preview.png');
 
 const geneFixture = JSON.parse(
   await readFile(path.join(projectRoot, 'benchmark/fixtures/mygene-tp53.json'), 'utf8')
@@ -45,8 +44,9 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const port = server.address().port;
 const baseUrl = `http://127.0.0.1:${port}`;
 
-const browser = await chromium.launch({ headless: true });
-try {
+// Render one screenshot for the given theme, driving both the page chrome and
+// the tooltip theme via the ?theme query parameter.
+async function captureScreenshot(browser, theme, outputFile) {
   const context = await browser.newContext({
     viewport: { width: 1400, height: 900 },
     deviceScaleFactor: 2,
@@ -62,7 +62,7 @@ try {
 
   // Mock MyGene.info batch query (POST /v3/query)
   await page.route('**/mygene.info/v3/query', route => {
-    console.log('[mock] mygene.info/v3/query hit');
+    console.log(`[mock:${theme}] mygene.info/v3/query hit`);
     return route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -72,7 +72,7 @@ try {
 
   // Mock MyChem.info annotation lookup (POST /v1/chem)
   await page.route('**/mychem.info/v1/chem', route => {
-    console.log('[mock] mychem.info/v1/chem hit');
+    console.log(`[mock:${theme}] mychem.info/v1/chem hit`);
     return route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -82,7 +82,7 @@ try {
 
   // Mock MyChem.info general query (POST /v1/query) — fallback for name/best-guess lookups
   await page.route('**/mychem.info/v1/query**', route => {
-    console.log('[mock] mychem.info/v1/query hit');
+    console.log(`[mock:${theme}] mychem.info/v1/query hit`);
     return route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -90,7 +90,7 @@ try {
     });
   });
 
-  await page.goto(`${baseUrl}/screenshots/screenshot.html`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/screenshots/screenshot.html?theme=${theme}`, { waitUntil: 'networkidle' });
 
   // Wait for the engine to be ready
   await page.waitForTimeout(500);
@@ -109,7 +109,7 @@ try {
     },
     { timeout: 15000 }
   );
-  console.log('[capture] Chemical tooltip rendered');
+  console.log(`[capture:${theme}] Chemical tooltip rendered`);
 
   // Wait for the PubChem structure image to load (it has loading="lazy")
   await page.waitForFunction(
@@ -121,7 +121,7 @@ try {
   ).catch(() => {
     // Structure image may not be present if rdkit renders it; that's fine
   });
-  console.log('[capture] Chemical structure image ready');
+  console.log(`[capture:${theme}] Chemical structure image ready`);
 
   // 2. Pin the chemical tooltip
   await page.evaluate(() => {
@@ -129,7 +129,7 @@ try {
     if (btns.length > 0) btns[0].click();
   });
   await page.waitForTimeout(300);
-  console.log('[capture] Chemical tooltip pinned');
+  console.log(`[capture:${theme}] Chemical tooltip pinned`);
 
   // 3. Open the gene tooltip by dispatching mouseenter
   await page.evaluate(() => {
@@ -145,7 +145,7 @@ try {
     },
     { timeout: 20000 }
   );
-  console.log('[capture] Gene tooltip rendered');
+  console.log(`[capture:${theme}] Gene tooltip rendered`);
 
   // Wait for ideogram and gene track visuals to finish rendering
   await page.waitForTimeout(3000);
@@ -183,12 +183,18 @@ try {
       }
     : undefined;
 
-  // Ensure output directory exists
-  await mkdir(outputDir, { recursive: true });
-
   // Take the screenshot clipped to content bounds
   await page.screenshot({ path: outputFile, type: 'png', clip: clipRect });
-  console.log(`[capture] Screenshot saved to ${outputFile} (${clipRect ? `${Math.round(clipRect.width)}x${Math.round(clipRect.height)}` : 'full viewport'})`);
+  console.log(`[capture:${theme}] Screenshot saved to ${outputFile} (${clipRect ? `${Math.round(clipRect.width)}x${Math.round(clipRect.height)}` : 'full viewport'})`);
+
+  await context.close();
+}
+
+const browser = await chromium.launch({ headless: true });
+try {
+  await mkdir(outputDir, { recursive: true });
+  await captureScreenshot(browser, 'light', path.join(outputDir, 'preview.png'));
+  await captureScreenshot(browser, 'dark', path.join(outputDir, 'preview-dark.png'));
 } finally {
   server.close();
   await browser.close();
