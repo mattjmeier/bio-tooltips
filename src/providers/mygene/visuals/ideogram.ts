@@ -4,6 +4,10 @@ import { speciesMap } from '../species.js';
 import type { CoreTooltipConfig } from '../../../core/config.js';
 import type { TooltipController } from '../../../core/tooltip-controller.js';
 import { logTooltipTiming } from '../../../core/timing.js';
+import {
+  normalizeChromosomeName,
+  selectPrimaryGenomicPosition,
+} from '../genomic-position.js';
 
 let ideogramModulePromise: Promise<any> | null = null;
 let ideogramRenderQueue: Promise<void> = Promise.resolve();
@@ -91,29 +95,20 @@ export async function renderIdeogram(
       return;
     }
 
-    const genomicPos = Array.isArray(data.genomic_pos) ? data.genomic_pos[0] : data.genomic_pos!;
+    const genomicPos = selectPrimaryGenomicPosition(data.genomic_pos);
     if (!genomicPos) {
-      ideoDiv.innerHTML = '<small>No genomic position</small>';
-      logTooltipTiming(instance, timingConfig, 'ideogram skipped', { reason: 'no-genomic-position' });
+      const positions = Array.isArray(data.genomic_pos) ? data.genomic_pos : [data.genomic_pos];
+      const hasChromosome = positions.some(position => normalizeChromosomeName(position?.chr));
+      ideoDiv.innerHTML = hasChromosome
+        ? '<small>Ideogram not available for this chromosome.</small>'
+        : '<small>No chromosome data</small>';
+      logTooltipTiming(instance, timingConfig, 'ideogram skipped', {
+        reason: hasChromosome ? 'no-primary-chromosome' : 'no-chromosome',
+      });
       return;
     }
 
-    if (genomicPos.chr == null || String(genomicPos.chr).trim() === '') {
-      ideoDiv.innerHTML = '<small>No chromosome data</small>';
-      logTooltipTiming(instance, timingConfig, 'ideogram skipped', { reason: 'no-chromosome' });
-      return;
-    }
-
-    let chromosome = String(genomicPos.chr).trim();
-    if (chromosome.toLowerCase().startsWith('chr')) {
-      chromosome = chromosome.substring(3);
-    }
-
-    if (!chromosome) {
-      ideoDiv.innerHTML = '<small>No chromosome data</small>';
-      logTooltipTiming(instance, timingConfig, 'ideogram skipped', { reason: 'no-chromosome' });
-      return;
-    }
+    const chromosome = normalizeChromosomeName(genomicPos.chr)!;
 
     const organism = speciesMap[data.taxid]?.ideogramName;
     if (!organism) {

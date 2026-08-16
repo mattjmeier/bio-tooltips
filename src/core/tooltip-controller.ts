@@ -270,9 +270,19 @@ export class TooltipController<TData = unknown> {
 
   private unmount(): void {
     this.stopPositioning();
-    this.root.remove();
     this.root.style.visibility = 'hidden';
     this.state.isMounted = false;
+
+    const remove = () => {
+      if (!this.state.isMounted) this.root.remove();
+    };
+
+    const pendingRender = this._visualRenderPromise;
+    if (pendingRender) {
+      void pendingRender.then(remove, remove);
+    } else {
+      remove();
+    }
   }
 
   private restartPositioning(): void {

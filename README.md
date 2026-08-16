@@ -13,8 +13,8 @@ Bio Tooltips provides shared tooltip behavior plus entity-specific tooltip modul
 
 Currently supported modules:
 
-- Gene tooltips via MyGene.info
-- Chemical tooltips via MyChem.info
+- Gene tooltips via [MyGene.info](https://mygene.info)
+- Chemical tooltips via [MyChem.info](https://mychem.info)
 
 ## Install
 
@@ -119,8 +119,8 @@ import { GeneTooltip } from 'bio-tooltips/mygene';
 Browser CDN paths also move to the new package and artifact names:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.0.1/dist/bio-tooltips.css">
-<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@2.0.1/dist/bio-tooltips.global.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.0.3/dist/bio-tooltips.css">
+<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@2.0.3/dist/bio-tooltips.global.js"></script>
 ```
 
 ## Package History

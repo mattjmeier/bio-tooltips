@@ -1,5 +1,6 @@
 import { loaderHTML } from '../../../core/renderer.js';
 import type { GenomicPosition } from '../types.js';
+import { selectPrimaryGenomicPosition } from '../genomic-position.js';
 import type { MyGeneSectionDefinition } from './types.js';
 
 function renderLocation(
@@ -9,7 +10,7 @@ function renderLocation(
 ): string {
   if (!genomic_pos) return '';
 
-  const pos = Array.isArray(genomic_pos) ? genomic_pos[0] : genomic_pos;
+  const pos = selectPrimaryGenomicPosition(genomic_pos);
   if (!pos) return '';
 
   const start = pos.start.toLocaleString();
