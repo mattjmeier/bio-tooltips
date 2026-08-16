@@ -80,7 +80,7 @@ https://mattjmeier.github.io/bio-tooltips/
 Run the reproducible renderer and controlled cache/prefetch benchmark with:
 
 ```powershell
-npm.cmd run benchmark
+npm run benchmark
 ```
 
 It produces raw JSON plus publication-ready Markdown tables under

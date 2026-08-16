@@ -8,7 +8,7 @@ controlled cached, prefetched, and uncached interaction pipelines.
 From a clean checkout with dependencies installed:
 
 ```powershell
-npm.cmd run benchmark
+npm run benchmark
 ```
 
 The command builds the JavaScript entry points, warms each renderer, runs repeated
@@ -27,7 +27,7 @@ $env:BENCH_SAMPLES = '200'
 $env:BENCH_OPS_PER_SAMPLE = '25'
 $env:BENCH_PIPELINE_TRIALS = '50'
 $env:BENCH_LATENCY_MS = '100'
-npm.cmd run benchmark
+npm run benchmark
 ```
 
 The benchmark reports the median, interquartile range, and 95th percentile. Prefer the
@@ -68,7 +68,7 @@ date.
 To replace these records with current provider responses:
 
 ```powershell
-npm.cmd run benchmark:fixtures
+npm run benchmark:fixtures
 ```
 
 This command requires network access and intentionally changes tracked fixture files.

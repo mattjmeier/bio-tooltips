@@ -7,9 +7,9 @@ This repo keeps generated API reference markdown under `docs/api/**`.
 - Use `npm run docs:build` for a local VitePress site build that does not rewrite `docs/api/**`.
 - Use `npm run docs:build:fresh` only when the generated TypeDoc API reference should be refreshed before building the docs site.
 - If `docs/api/**` changes accidentally, revert those generated files before finishing the task and tell the user what happened.
-- For ordinary source changes, prefer focused tests such as `npm.cmd test -- --run test/renderer.test.ts` on Windows, plus `npm.cmd run build:types`.
+- For ordinary source changes, prefer focused tests such as `npm test -- --run test/renderer.test.ts` on Windows, plus `npm run build:types`.
 
-On Windows PowerShell, `npm` may be blocked by script execution policy. Use `npm.cmd` for npm scripts.
+On Windows PowerShell, `npm` may be blocked by script execution policy. Use `npm` for npm scripts.
 
 ## Supply Chain Notes
 
@@ -19,7 +19,7 @@ Keep user-facing dependencies minimal and documented:
 - Current optional peer dependencies are `d3`, `ideogram`, and `@rdkit/rdkit`; keep large visualization/chemistry integrations optional unless there is a strong reason to bundle them.
 - When adding or changing dependencies, update the dependency/source summary in `README.md`.
 - Do not add browser CDN examples that use `@latest`; pin a concrete version instead.
-- For dependency changes, run `npm.cmd audit --omit=dev`, `npm.cmd audit`, `npm.cmd audit signatures`, and `npm.cmd pack --dry-run --json` before finishing when network access is available.
+- For dependency changes, run `npm audit --omit=dev`, `npm audit`, `npm audit signatures`, and `npm pack --dry-run --json` before finishing when network access is available.
 - Keep GitHub Actions pinned to commit SHAs and let Dependabot update those pins.
 
 ## Release Notes
@@ -33,9 +33,9 @@ For a normal patch release, prefer this order:
 
 1. Merge the release branch to `main`.
 2. On `main`, update `CHANGELOG.md` for the release and confirm `package.json` and `package-lock.json` are at the expected pre-release version.
-3. Run `npm.cmd run docs:build:fresh` when the generated API markdown should match the release, then commit any intended `docs/api/**` changes.
-4. Run the release checks, usually `npm.cmd test`, `npm.cmd run build:types`, and `npm.cmd run build`.
-5. Run `npm.cmd version patch` from a clean `main` tree. This updates `package.json` and `package-lock.json`, creates the version commit, and creates the matching `vX.Y.Z` tag.
+3. Run `npm run docs:build:fresh` when the generated API markdown should match the release, then commit any intended `docs/api/**` changes.
+4. Run the release checks, usually `npm test`, `npm run build:types`, and `npm run build`.
+5. Run `npm version patch` from a clean `main` tree. This updates `package.json` and `package-lock.json`, creates the version commit, and creates the matching `vX.Y.Z` tag.
 6. Push `main` first and let CI/docs deploy pass. Then push the tag with `git push origin vX.Y.Z` to publish to npm.
 
-Do not push a release tag from a feature branch unless intentionally publishing that branch. If preparing a version bump before merge, use `npm.cmd version patch --no-git-tag-version`, commit the package files, merge to `main`, then create the release tag on `main`. The release tag should point at the exact `main` commit intended for npm so npm provenance, GitHub source, and GitHub Pages documentation line up.
+Do not push a release tag from a feature branch unless intentionally publishing that branch. If preparing a version bump before merge, use `npm version patch --no-git-tag-version`, commit the package files, merge to `main`, then create the release tag on `main`. The release tag should point at the exact `main` commit intended for npm so npm provenance, GitHub source, and GitHub Pages documentation line up.
