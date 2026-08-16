@@ -154,12 +154,41 @@ try {
   await page.evaluateHandle('document.fonts.ready');
   await page.waitForTimeout(200);
 
+  // Compute the union bounding box of all visible content (trigger cards + tooltip roots)
+  const clip = await page.evaluate(() => {
+    const els = [
+      ...document.querySelectorAll('.trigger-card'),
+      ...document.querySelectorAll('[data-gt-tooltip-root]'),
+    ];
+    if (els.length === 0) return null;
+    let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
+    for (const el of els) {
+      const r = el.getBoundingClientRect();
+      x1 = Math.min(x1, r.left);
+      y1 = Math.min(y1, r.top);
+      x2 = Math.max(x2, r.right);
+      y2 = Math.max(y2, r.bottom);
+    }
+    return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
+  });
+
+  // Add margin around content for breathing room
+  const margin = 24;
+  const clipRect = clip
+    ? {
+        x: Math.max(0, clip.x - margin),
+        y: Math.max(0, clip.y - margin),
+        width: Math.min(clip.width + margin * 2, 1400),
+        height: Math.min(clip.height + margin * 2, 900),
+      }
+    : undefined;
+
   // Ensure output directory exists
   await mkdir(outputDir, { recursive: true });
 
-  // Take the screenshot
-  await page.screenshot({ path: outputFile, type: 'png', fullPage: false });
-  console.log(`[capture] Screenshot saved to ${outputFile}`);
+  // Take the screenshot clipped to content bounds
+  await page.screenshot({ path: outputFile, type: 'png', clip: clipRect });
+  console.log(`[capture] Screenshot saved to ${outputFile} (${clipRect ? `${Math.round(clipRect.width)}x${Math.round(clipRect.height)}` : 'full viewport'})`);
 } finally {
   server.close();
   await browser.close();
