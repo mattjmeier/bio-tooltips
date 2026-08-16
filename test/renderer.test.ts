@@ -74,6 +74,22 @@ describe('renderTooltipHTML', () => {
     expect(html).toContain('<span class="gene-tooltip-location-chr">chr17</span>');
     expect(html).toContain('<span class="gene-tooltip-location-pos">7,661,779-7,687,538</span>');
   });
+
+  it('should prefer a primary chromosome location over alternate scaffolds', () => {
+    const html = renderTooltipHTML({
+      ...mockGeneData,
+      symbol: 'Trp53',
+      taxid: 10090,
+      genomic_pos: [
+        { chr: 'QGOO01036689.1', start: 343420, end: 347943, strand: -1 },
+        { chr: '11', start: 69469669, end: 69482701, strand: 1 },
+      ],
+    }, { display: { location: true }, uniqueId: MOCK_UNIQUE_ID });
+
+    expect(html).toContain('<span class="gene-tooltip-location-chr">chr11</span>');
+    expect(html).toContain('<span class="gene-tooltip-location-pos">69,469,669-69,482,701</span>');
+    expect(html).not.toContain('QGOO01036689.1');
+  });
   
   it('should NOT render location information when disabled', () => {
     const html = renderTooltipHTML(mockGeneData, { display: { location: false }, uniqueId: MOCK_UNIQUE_ID });
