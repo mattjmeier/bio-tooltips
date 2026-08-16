@@ -190,7 +190,13 @@ async function captureScreenshot(browser, theme, outputFile) {
   await context.close();
 }
 
-const browser = await chromium.launch({ headless: true });
+// Headed by default: new-headless Chromium does not paint scrollbars, but the
+// tooltip's overflow scrollbar is a key "there's more below" affordance we want
+// in the README image. Headed renders it (CI wraps this in xvfb-run; on a dev
+// machine a browser window briefly appears). Set SCREENSHOTS_HEADLESS=1 to force
+// the old headless path (no scrollbars) when a display is unavailable.
+const headless = process.env.SCREENSHOTS_HEADLESS === '1';
+const browser = await chromium.launch({ headless });
 try {
   await mkdir(outputDir, { recursive: true });
   await captureScreenshot(browser, 'light', path.join(outputDir, 'preview.png'));
