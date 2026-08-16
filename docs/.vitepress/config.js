@@ -148,6 +148,14 @@ export default {
         {
           find: /^ideogram$/,
           replacement: fileURLToPath(new URL('./ideogram-shim.js', import.meta.url))
+        },
+        // TypeDoc (typedoc-plugin-markdown) rewrites the README preview images to
+        // `_media/<file>` without a leading `./`. Vite then treats that as a bare
+        // module import and fails to resolve it. Map it back to the real directory
+        // that TypeDoc copies the images into so the docs build can emit them.
+        {
+          find: /^_media\/(.+)$/,
+          replacement: fileURLToPath(new URL('../api/_media', import.meta.url)) + '/$1'
         }
       ]
     }
