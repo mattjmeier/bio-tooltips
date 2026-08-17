@@ -1,4 +1,4 @@
-import { renderCollapseButton } from '../../../core/renderer.js';
+import { renderSummaryCopyButton } from '../../../core/renderer.js';
 import type { MyGeneSectionDefinition } from './types.js';
 
 export const summarySection: MyGeneSectionDefinition = {
@@ -12,8 +12,7 @@ export const summarySection: MyGeneSectionDefinition = {
     }
 
     return `
-    <p class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${summary}</p>
-    ${renderCollapseButton(`summary-less-${uniqueId}`, 'Show less')}
+    <p class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${summary}${renderSummaryCopyButton(uniqueId)}</p>
   `;
   },
 };

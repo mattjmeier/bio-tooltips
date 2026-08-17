@@ -26,6 +26,7 @@ import {
 import {
   generateUniqueId,
   renderMoreButton,
+  renderSummaryCopyButton,
   renderTooltipHeader,
   renderTooltipShell,
 } from '../../core/renderer.js';
@@ -125,7 +126,7 @@ export function renderTooltipHTML(
       renderStructureProperties(data, propertyFields, visibleIdentity, showSourcePaths, options.structureRenderer),
       renderIdentityHeaderMeta(visibleIdentity)
     ),
-    buildSection('summary', 'Summary', renderSummarySection(data, truncate)),
+    buildSection('summary', 'Summary', renderSummarySection(data, truncate, uniqueId)),
     buildSection('synonyms', 'Synonyms', renderSynonymsSection(identity.synonyms, synonymCount, uniqueId)),
     buildSection('detailedProperties', 'Detailed Properties', renderDetailedProperties(propertyFields, showSourcePaths)),
     buildSection('classes', 'Chemical Classes', renderGroupedSection(getClassGroups(data), listCount, showSourcePaths, uniqueId, 'classes')),
@@ -334,7 +335,8 @@ function getBestStructureSmiles(data: MyChemInfoResult): string | undefined {
 
 function renderSummarySection(
   data: MyChemInfoResult,
-  truncate: number
+  truncate: number,
+  uniqueId: string
 ): string {
   const summary = getFirstString(data, [
     'drugbank.description',
@@ -343,7 +345,7 @@ function renderSummarySection(
     'drugbank.pharmacodynamics',
   ]);
   const summaryHTML = summary
-    ? `<p class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${sanitizeInlineHTML(summary)}</p>`
+    ? `<p class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${sanitizeInlineHTML(summary)}${renderSummaryCopyButton(uniqueId)}</p>`
     : '';
 
   return summaryHTML;

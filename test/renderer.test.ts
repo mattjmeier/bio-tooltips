@@ -114,6 +114,16 @@ describe('renderTooltipHTML', () => {
     const html = renderTooltipHTML(mockGeneData, { uniqueId: MOCK_UNIQUE_ID });
     expect(html).toContain('class="gene-tooltip-summary"');
     expect(html).toContain('style="--line-clamp: 4;"');
+    expect(html).toContain('gt-summary-copy-btn');
+    expect(html).toContain(`id="summary-copy-${MOCK_UNIQUE_ID}"`);
+
+    // The copy affordance sits inline at the end of the text, i.e. inside the
+    // summary paragraph rather than on a following line.
+    const pStart = html.indexOf('<p class="gene-tooltip-summary"');
+    const pEnd = html.indexOf('</p>', pStart);
+    const btnStart = html.indexOf(`id="summary-copy-${MOCK_UNIQUE_ID}"`);
+    expect(btnStart).toBeGreaterThan(pStart);
+    expect(btnStart).toBeLessThan(pEnd);
   });
   
   
@@ -293,6 +303,8 @@ describe('renderMyChemTooltipHTML', () => {
 
     expect(html).toContain('An <em>ortho</em>- and <em>peri</em>-fused polycyclic arene.');
     expect(html).not.toContain('&lt;em&gt;ortho&lt;/em&gt;');
+    expect(html).toContain('gt-summary-copy-btn');
+    expect(html).toContain('id="summary-copy-mychem-chebi-emphasis"');
   });
 
   it('sanitizes non-allowlisted chemical summary markup', () => {

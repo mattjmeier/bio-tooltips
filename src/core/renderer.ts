@@ -57,6 +57,22 @@ export function renderCollapseButton(id: string, text: string): string {
   return renderMoreButton(id, text);
 }
 
+/**
+ * A small copy affordance for the summary. It is rendered inline at the end of
+ * the `.gene-tooltip-summary` paragraph's text. The icon button carries no text
+ * itself (accessibility is via aria-label/title); the click handler reads the
+ * owning `.gene-tooltip-summary` paragraph's full text (truncation is CSS-only,
+ * so `textContent` is always the complete value) after stripping the button. The
+ * inline SVG follows the same convention as the pin button icon.
+ */
+export function renderSummaryCopyButton(uniqueId: string): string {
+  return `
+    <span id="summary-copy-${uniqueId}" class="gt-summary-copy-btn" role="button" tabindex="0" aria-label="Copy summary" title="Copy summary">
+      <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/></svg>
+    </span>
+  `;
+}
+
 export function renderParagraphContent(
   items: FormattedItem[],
   initialCount: number,

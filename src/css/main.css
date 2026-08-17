@@ -73,6 +73,11 @@
   padding: 0;
   line-height: 1.5; /* Crucial for calc() */
   cursor: pointer;
+  /* Expand/collapse is a click action, not a text target. Disabling selection
+     stops the browser's double-click word selection from highlighting a word
+     when the user clicks to expand and then again to collapse. */
+  user-select: none;
+  -webkit-user-select: none;
 
   -webkit-mask-image:
     /* Gradient 1: The horizontal fade on the right */
@@ -123,25 +128,32 @@
   display: none;
 }
 
-/* Hide the "Show more" button when its preceding sibling (.summary) is expanded */
-.gene-tooltip-summary.expanded + .gene-tooltip-more-btn {
-  display: none;
+/* Summary copy affordance. An icon button (inline SVG, matching the pin
+   button's convention). Kept under its own class so it is always visible. */
+.gt-summary-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  color: var(--gt-text-color-secondary);
+  opacity: 0.7;
+  cursor: pointer;
+  margin-left: 6px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background-color 0.2s, opacity 0.2s;
 }
 
-/* By default, HIDE the "Show less" button */
-#summary-less-btn,
-[id^="summary-less-"] {
-  display: none;
+.gt-summary-copy-btn svg {
+  width: 14px;
+  height: 14px;
 }
 
-/* When expanded, HIDE the "Show more" button */
-.gene-tooltip-summary.expanded + .gene-tooltip-more-btn {
-  display: none;
-}
-
-/* When expanded, SHOW the "Show less" button */
-.gene-tooltip-summary.expanded ~ [id^="summary-less-"] {
-  display: inline-block;
+.gt-summary-copy-btn:hover,
+.gt-summary-copy-btn:focus-visible {
+  opacity: 1;
+  outline: none;
 }
 
 .gene-tooltip-summary-full {
