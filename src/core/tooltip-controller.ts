@@ -395,6 +395,10 @@ export class TooltipController<TData = unknown> {
     setTimeout(() => {
       const active = document.activeElement;
       if (active && (this.reference.contains(active) || this.root.contains(active))) return;
+      // Clicking non-focusable content (e.g. empty space in the panel) drops focus to the
+      // document body instead of moving it to a real control. That is not a deliberate
+      // "leave", so keep the panel open; the pointer bridge closes it once the cursor exits.
+      if (active === document.body || active === document.documentElement) return;
       this.hide();
     }, 0);
   }

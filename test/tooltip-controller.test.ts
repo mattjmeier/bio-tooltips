@@ -112,6 +112,48 @@ describe('TooltipController', () => {
     expect(controller.status).toBe('open');
   });
 
+  it('stays open when clicking whitespace after focusing a control in the panel', () => {
+    const { controller } = createController();
+    controller.show();
+    vi.runAllTimers();
+    expect(controller.status).toBe('open');
+
+    // A focusable control inside the panel holds focus (e.g. the pin button or "Show more").
+    const control = document.createElement('button');
+    controller.content.append(control);
+    control.focus();
+    expect(document.activeElement).toBe(control);
+
+    // Clicking empty space blurs the control and drops focus to <body>.
+    document.activeElement.blur();
+    expect(document.activeElement).toBe(document.body);
+    controller.root.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+    vi.runAllTimers();
+
+    expect(controller.status).toBe('open');
+  });
+
+  it('closes when keyboard focus leaves the panel for a real external control', () => {
+    const { controller } = createController();
+    controller.show();
+    vi.runAllTimers();
+
+    const control = document.createElement('button');
+    controller.content.append(control);
+    control.focus();
+
+    // Tabbing to a focusable control outside the panel moves focus to a real element,
+    // not <body>, so the panel should close.
+    const external = document.createElement('button');
+    document.body.append(external);
+    external.focus();
+    expect(document.activeElement).toBe(external);
+    controller.root.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+    vi.runAllTimers();
+
+    expect(controller.status).toBe('idle');
+  });
+
   it('repositions resized interactive content and keeps its previous pointer bridge', async () => {
     const { controller } = createController();
     controller.show();
