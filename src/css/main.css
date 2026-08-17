@@ -351,13 +351,15 @@ ul.gene-tooltip-nested-list {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: 1em;
+  justify-content: space-between; /* pin the ideogram to the right edge */
+  gap: 0.25em;
 }
 
 .gene-tooltip-location-coords {
   display: flex;
   flex-direction: column;
+  flex: 0 0 auto;      /* never shrinks, so the coordinates are not squeezed into a wrap */
+  white-space: nowrap; /* keep the position range on a single line */
 }
 
 .gene-tooltip-location-chr {
@@ -370,7 +372,8 @@ ul.gene-tooltip-nested-list {
 }
 
 .gene-tooltip-ideo {
-  min-width: 120px;
+  flex: 0 1 auto; /* the ideogram absorbs any width pressure rather than the text */
+  min-width: 0;
 }
 
 .gene-tooltip-ideo #_ideogram {
