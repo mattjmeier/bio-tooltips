@@ -142,7 +142,7 @@
   border-radius: 3px;
   user-select: none;
   -webkit-user-select: none;
-  transition: background-color 0.2s, opacity 0.2s;
+  transition: background-color 0.2s, opacity 0.2s, color 0.2s;
 }
 
 .gt-summary-copy-btn svg {
@@ -154,6 +154,12 @@
 .gt-summary-copy-btn:focus-visible {
   opacity: 1;
   outline: none;
+}
+
+/* Brief success affordance: the icon is swapped to a checkmark and tinted. */
+.gt-summary-copy-btn--success {
+  color: var(--gt-success-color);
+  opacity: 1;
 }
 
 .gene-tooltip-summary-full {

@@ -67,4 +67,29 @@ describe('summary expansion', () => {
 
     expect(writeText).toHaveBeenCalledWith('A long biological summary');
   });
+
+  it('swaps the copy icon to a checkmark on success, then restores it after 2s', async () => {
+    vi.useFakeTimers();
+    try {
+      const copy = document.querySelector<HTMLElement>('#summary-copy-test')!;
+      const path = copy.querySelector('svg path')!;
+      const originalD = path.getAttribute('d')!;
+
+      copy.click();
+      // The icon swap happens on the microtask after the awaited clipboard write
+      // resolves; flush those before asserting the checkmark is showing.
+      await vi.advanceTimersByTimeAsync(0);
+
+      expect(writeText).toHaveBeenCalledWith('A long biological summary');
+      expect(path.getAttribute('d')).not.toBe(originalD);
+      expect(copy.classList.contains('gt-summary-copy-btn--success')).toBe(true);
+
+      await vi.advanceTimersByTimeAsync(2000);
+
+      expect(path.getAttribute('d')).toBe(originalD);
+      expect(copy.classList.contains('gt-summary-copy-btn--success')).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

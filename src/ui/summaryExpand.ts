@@ -1,8 +1,26 @@
+const COPY_SUCCESS_DURATION_MS = 2000;
+
+// Bootstrap `bi-check` icon path. It shares the copy icon's `0 0 16 16` viewBox,
+// so it can replace the copy `<path>` in place without changing the SVG geometry.
+const CHECKMARK_PATH =
+  'M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z';
+
+// Per-button success state so a rapid re-click restarts the countdown instead of
+// stacking timers, and the original icon can be restored exactly.
+interface CopySuccessState {
+  timer: number;
+  originalD: string;
+  originalFillRule: string | null;
+}
+
+const copySuccessStates = new WeakMap<HTMLElement, CopySuccessState>();
+
 /**
  * Copies the full text of the summary paragraph that owns the given copy button.
  * Truncation is CSS-only, so `textContent` always holds the complete value. The
  * button is rendered inside the paragraph, so it is stripped from a clone before
- * reading text to keep its markup out of the copied value.
+ * reading text to keep its markup out of the copied value. On success the copy
+ * icon briefly swaps to a checkmark so the user can tell the copy went through.
  */
 async function copySummaryText(button: HTMLElement): Promise<void> {
   const summaryP = button
@@ -16,21 +34,73 @@ async function copySummaryText(button: HTMLElement): Promise<void> {
   const text = clone.textContent?.trim();
   if (!text) return;
 
+  let copied = false;
   if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(text);
+    try {
+      await navigator.clipboard.writeText(text);
+      copied = true;
+    } catch {
+      copied = false;
+    }
+  } else {
+    // Fallback for non-secure contexts where the async clipboard API is unavailable.
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    copied = document.execCommand('copy');
+    document.body.removeChild(textarea);
+  }
+
+  if (copied) flashCopySuccess(button);
+}
+
+/**
+ * Briefly swaps the copy icon for a checkmark to confirm the copy succeeded, then
+ * restores the original icon. Re-invoking while already shown just extends the
+ * countdown rather than resetting the icon.
+ */
+function flashCopySuccess(button: HTMLElement): void {
+  const path = button.querySelector('svg path');
+  if (!path) return;
+
+  const existing = copySuccessStates.get(button);
+  if (existing) {
+    window.clearTimeout(existing.timer);
+    existing.timer = window.setTimeout(
+      () => revertCopyIcon(button, existing),
+      COPY_SUCCESS_DURATION_MS
+    );
     return;
   }
 
-  // Fallback for non-secure contexts where the async clipboard API is unavailable.
-  const textarea = document.createElement('textarea');
-  textarea.value = text;
-  textarea.setAttribute('readonly', '');
-  textarea.style.position = 'absolute';
-  textarea.style.left = '-9999px';
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand('copy');
-  document.body.removeChild(textarea);
+  const state: CopySuccessState = {
+    timer: 0,
+    originalD: path.getAttribute('d') ?? '',
+    originalFillRule: path.getAttribute('fill-rule'),
+  };
+  path.setAttribute('d', CHECKMARK_PATH);
+  if (state.originalFillRule !== null) path.removeAttribute('fill-rule');
+  button.classList.add('gt-summary-copy-btn--success');
+
+  state.timer = window.setTimeout(
+    () => revertCopyIcon(button, state),
+    COPY_SUCCESS_DURATION_MS
+  );
+  copySuccessStates.set(button, state);
+}
+
+function revertCopyIcon(button: HTMLElement, state: CopySuccessState): void {
+  const path = button.querySelector('svg path');
+  if (path) {
+    path.setAttribute('d', state.originalD);
+    if (state.originalFillRule !== null) path.setAttribute('fill-rule', state.originalFillRule);
+  }
+  button.classList.remove('gt-summary-copy-btn--success');
+  copySuccessStates.delete(button);
 }
 
 /**
