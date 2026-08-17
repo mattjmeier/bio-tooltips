@@ -4,6 +4,17 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.5] - 2026-08-17
+
+### Added
+- Copy affordance on the gene and chemical summary. An inline copy button rendered at the end of the summary copies the full (untruncated) summary text to the clipboard on click or keyboard activation (Enter/Space). On success the icon briefly switches to a checkmark to confirm the copy went through, with a fallback path for non-secure contexts where the async clipboard API is unavailable.
+
+### Changed
+- Summary expand/collapse is now toggled by clicking the summary paragraph itself; the mygene summary no longer renders a separate "Show less" collapse button.
+
+### Fixed
+- Clicking non-focusable content inside an open tooltip (which drops focus to the document body) no longer dismisses the tooltip; the panel is now closed by the pointer bridge only when the cursor actually exits.
+
 ## [2.0.4] - 2026-08-16
 
 ### Added

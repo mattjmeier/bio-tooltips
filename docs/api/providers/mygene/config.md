@@ -6,7 +6,7 @@
 
 ### GeneTooltipConfig
 
-Defined in: [providers/mygene/config.ts:35](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L35)
+Defined in: [providers/mygene/config.ts:35](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L35)
 
 #### Extends
 
@@ -18,13 +18,13 @@ Defined in: [providers/mygene/config.ts:35](https://github.com/mattjmeier/bio-to
 
 > **api**: `"mygene"`
 
-Defined in: [providers/mygene/config.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L36)
+Defined in: [providers/mygene/config.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L36)
 
 ##### constrainToViewport
 
 > **constrainToViewport**: `boolean`
 
-Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L67)
+Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L67)
 
 ###### Inherited from
 
@@ -34,7 +34,7 @@ Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **debugTimings**: `boolean`
 
-Defined in: [core/config.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L59)
+Defined in: [core/config.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L59)
 
 ###### Inherited from
 
@@ -44,7 +44,7 @@ Defined in: [core/config.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **display**: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`TooltipDisplayConfig`](#tooltipdisplayconfig)\>
 
-Defined in: [providers/mygene/config.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L38)
+Defined in: [providers/mygene/config.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L38)
 
 ###### Overrides
 
@@ -54,25 +54,25 @@ Defined in: [providers/mygene/config.ts:38](https://github.com/mattjmeier/bio-to
 
 > **domainCount**: `number`
 
-Defined in: [providers/mygene/config.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L42)
+Defined in: [providers/mygene/config.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L42)
 
 ##### generifCount
 
 > **generifCount**: `number`
 
-Defined in: [providers/mygene/config.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L45)
+Defined in: [providers/mygene/config.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L45)
 
 ##### ideogram
 
 > **ideogram**: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`IdeogramConfig`](#ideogramconfig)\>
 
-Defined in: [providers/mygene/config.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L39)
+Defined in: [providers/mygene/config.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L39)
 
 ##### nestedTooltipOptions
 
 > **nestedTooltipOptions**: [`TooltipOptions`](../../core/config.md#tooltipoptions-1)
 
-Defined in: [core/config.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L64)
+Defined in: [core/config.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L64)
 
 ###### Inherited from
 
@@ -82,7 +82,7 @@ Defined in: [core/config.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **onTiming?**: [`TooltipTimingObserver`](../../core/config.md#tooltiptimingobserver)
 
-Defined in: [core/config.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L60)
+Defined in: [core/config.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L60)
 
 ###### Inherited from
 
@@ -92,19 +92,19 @@ Defined in: [core/config.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **pathwayCount**: `number`
 
-Defined in: [providers/mygene/config.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L41)
+Defined in: [providers/mygene/config.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L41)
 
 ##### pathwaySource
 
 > **pathwaySource**: `"reactome"` \| `"kegg"` \| `"wikipathways"`
 
-Defined in: [providers/mygene/config.ts:40](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L40)
+Defined in: [providers/mygene/config.ts:40](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L40)
 
 ##### prefetch
 
 > **prefetch**: [`PrefetchMode`](../../core/config.md#prefetchmode)
 
-Defined in: [core/config.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L56)
+Defined in: [core/config.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L56)
 
 ###### Inherited from
 
@@ -114,7 +114,7 @@ Defined in: [core/config.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **prefetchThreshold**: `number`
 
-Defined in: [core/config.ts:57](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L57)
+Defined in: [core/config.ts:57](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L57)
 
 ###### Inherited from
 
@@ -124,7 +124,7 @@ Defined in: [core/config.ts:57](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **sectionVariant**: [`SectionVariant`](../../core/config.md#sectionvariant-1)
 
-Defined in: [core/config.ts:62](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L62)
+Defined in: [core/config.ts:62](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L62)
 
 ###### Inherited from
 
@@ -134,7 +134,7 @@ Defined in: [core/config.ts:62](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **selector**: `string`
 
-Defined in: [core/config.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L55)
+Defined in: [core/config.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L55)
 
 ###### Inherited from
 
@@ -144,13 +144,13 @@ Defined in: [core/config.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **structureCount**: `number`
 
-Defined in: [providers/mygene/config.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L44)
+Defined in: [providers/mygene/config.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L44)
 
 ##### theme
 
 > **theme**: [`TooltipTheme`](../../core/config.md#tooltiptheme)
 
-Defined in: [core/config.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L61)
+Defined in: [core/config.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L61)
 
 ###### Inherited from
 
@@ -160,7 +160,7 @@ Defined in: [core/config.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **tooltipHeight?**: `number`
 
-Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L66)
+Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L66)
 
 ###### Inherited from
 
@@ -170,7 +170,7 @@ Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **tooltipOptions**: [`TooltipOptions`](../../core/config.md#tooltipoptions-1)
 
-Defined in: [core/config.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L63)
+Defined in: [core/config.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L63)
 
 ###### Inherited from
 
@@ -180,7 +180,7 @@ Defined in: [core/config.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **tooltipWidth?**: `number`
 
-Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L65)
+Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L65)
 
 ###### Inherited from
 
@@ -190,19 +190,19 @@ Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **transcriptCount**: `number`
 
-Defined in: [providers/mygene/config.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L43)
+Defined in: [providers/mygene/config.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L43)
 
 ##### truncateSummary
 
 > **truncateSummary**: `number`
 
-Defined in: [providers/mygene/config.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L37)
+Defined in: [providers/mygene/config.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L37)
 
 ##### visualPreload
 
 > **visualPreload**: [`VisualPreloadMode`](../../core/config.md#visualpreloadmode)
 
-Defined in: [core/config.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/config.ts#L58)
+Defined in: [core/config.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/config.ts#L58)
 
 ###### Inherited from
 
@@ -212,7 +212,7 @@ Defined in: [core/config.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/
 
 ### IdeogramConfig
 
-Defined in: [providers/mygene/config.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L28)
+Defined in: [providers/mygene/config.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L28)
 
 #### Properties
 
@@ -220,31 +220,31 @@ Defined in: [providers/mygene/config.ts:28](https://github.com/mattjmeier/bio-to
 
 > **enabled**: `boolean`
 
-Defined in: [providers/mygene/config.ts:29](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L29)
+Defined in: [providers/mygene/config.ts:29](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L29)
 
 ##### height
 
 > **height**: `number`
 
-Defined in: [providers/mygene/config.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L31)
+Defined in: [providers/mygene/config.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L31)
 
 ##### showLabels
 
 > **showLabels**: `boolean`
 
-Defined in: [providers/mygene/config.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L32)
+Defined in: [providers/mygene/config.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L32)
 
 ##### width
 
 > **width**: `number`
 
-Defined in: [providers/mygene/config.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L30)
+Defined in: [providers/mygene/config.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L30)
 
 ***
 
 ### TooltipDisplayConfig
 
-Defined in: [providers/mygene/config.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L6)
+Defined in: [providers/mygene/config.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L6)
 
 #### Properties
 
@@ -252,49 +252,49 @@ Defined in: [providers/mygene/config.ts:6](https://github.com/mattjmeier/bio-too
 
 > `optional` **collapsedByDefault?**: `boolean`
 
-Defined in: [providers/mygene/config.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L20)
+Defined in: [providers/mygene/config.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L20)
 
 ##### collapsible?
 
 > `optional` **collapsible?**: `boolean`
 
-Defined in: [providers/mygene/config.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L19)
+Defined in: [providers/mygene/config.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L19)
 
 ##### domains
 
 > **domains**: [`SectionVisibility`](#sectionvisibility)
 
-Defined in: [providers/mygene/config.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L12)
+Defined in: [providers/mygene/config.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L12)
 
 ##### footer
 
 > **footer**: `boolean`
 
-Defined in: [providers/mygene/config.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L18)
+Defined in: [providers/mygene/config.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L18)
 
 ##### generifs
 
 > **generifs**: [`SectionVisibility`](#sectionvisibility)
 
-Defined in: [providers/mygene/config.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L16)
+Defined in: [providers/mygene/config.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L16)
 
 ##### geneTrack
 
 > **geneTrack**: [`SectionVisibility`](#sectionvisibility)
 
-Defined in: [providers/mygene/config.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L13)
+Defined in: [providers/mygene/config.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L13)
 
 ##### ideogram
 
 > **ideogram**: `boolean`
 
-Defined in: [providers/mygene/config.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L10)
+Defined in: [providers/mygene/config.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L10)
 
 ##### links
 
 > **links**: `object`
 
-Defined in: [providers/mygene/config.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L21)
+Defined in: [providers/mygene/config.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L21)
 
 ###### ensembl?
 
@@ -312,43 +312,43 @@ Defined in: [providers/mygene/config.ts:21](https://github.com/mattjmeier/bio-to
 
 > **linksSection**: [`SectionVisibility`](#sectionvisibility)
 
-Defined in: [providers/mygene/config.ts:17](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L17)
+Defined in: [providers/mygene/config.ts:17](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L17)
 
 ##### location
 
 > **location**: [`SectionVisibility`](#sectionvisibility)
 
-Defined in: [providers/mygene/config.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L9)
+Defined in: [providers/mygene/config.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L9)
 
 ##### pathways
 
 > **pathways**: [`SectionVisibility`](#sectionvisibility)
 
-Defined in: [providers/mygene/config.ts:11](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L11)
+Defined in: [providers/mygene/config.ts:11](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L11)
 
 ##### species
 
 > **species**: `boolean`
 
-Defined in: [providers/mygene/config.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L8)
+Defined in: [providers/mygene/config.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L8)
 
 ##### structures
 
 > **structures**: [`SectionVisibility`](#sectionvisibility)
 
-Defined in: [providers/mygene/config.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L15)
+Defined in: [providers/mygene/config.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L15)
 
 ##### summary
 
 > **summary**: [`SectionVisibility`](#sectionvisibility)
 
-Defined in: [providers/mygene/config.ts:7](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L7)
+Defined in: [providers/mygene/config.ts:7](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L7)
 
 ##### transcripts
 
 > **transcripts**: [`SectionVisibility`](#sectionvisibility)
 
-Defined in: [providers/mygene/config.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L14)
+Defined in: [providers/mygene/config.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L14)
 
 ## Type Aliases
 
@@ -356,7 +356,7 @@ Defined in: [providers/mygene/config.ts:14](https://github.com/mattjmeier/bio-to
 
 > **SectionVisibility** = `boolean` \| `"expanded"` \| `"collapsed"`
 
-Defined in: [providers/mygene/config.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L4)
+Defined in: [providers/mygene/config.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L4)
 
 ## Variables
 
@@ -364,7 +364,7 @@ Defined in: [providers/mygene/config.ts:4](https://github.com/mattjmeier/bio-too
 
 > `const` **defaultConfig**: [`GeneTooltipConfig`](#genetooltipconfig)
 
-Defined in: [providers/mygene/config.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L48)
+Defined in: [providers/mygene/config.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L48)
 
 ## Functions
 
@@ -372,7 +372,7 @@ Defined in: [providers/mygene/config.ts:48](https://github.com/mattjmeier/bio-to
 
 > **mergeConfig**(`userConfig?`): [`GeneTooltipConfig`](#genetooltipconfig)
 
-Defined in: [providers/mygene/config.ts:86](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/config.ts#L86)
+Defined in: [providers/mygene/config.ts:86](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/config.ts#L86)
 
 #### Parameters
 

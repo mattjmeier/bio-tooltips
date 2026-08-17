@@ -8,7 +8,7 @@
 
 > **FormattedItem** = `object`
 
-Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L3)
+Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L3)
 
 #### Properties
 
@@ -16,13 +16,13 @@ Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **name**: `string`
 
-Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L3)
+Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L3)
 
 ##### url?
 
 > `optional` **url?**: `string`
 
-Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L3)
+Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L3)
 
 ## Variables
 
@@ -30,7 +30,7 @@ Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob
 
 > `const` **loaderHTML**: "\<div class=\"gt-loader-container\"\>\<div class=\"gt-spinner\"\>\</div\>\<span\>Loading...\</span\>\</div\>"
 
-Defined in: [core/renderer.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L5)
+Defined in: [core/renderer.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L5)
 
 ## Functions
 
@@ -38,7 +38,7 @@ Defined in: [core/renderer.ts:5](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **generateUniqueId**(): `string`
 
-Defined in: [core/renderer.ts:7](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L7)
+Defined in: [core/renderer.ts:7](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L7)
 
 #### Returns
 
@@ -50,7 +50,7 @@ Defined in: [core/renderer.ts:7](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **renderCollapseButton**(`id`, `text`): `string`
 
-Defined in: [core/renderer.ts:49](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L49)
+Defined in: [core/renderer.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L56)
 
 #### Parameters
 
@@ -72,7 +72,7 @@ Defined in: [core/renderer.ts:49](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderListContent**(`items`, `initialCount`, `moreButtonId`): `string`
 
-Defined in: [core/renderer.ts:80](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L80)
+Defined in: [core/renderer.ts:103](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L103)
 
 #### Parameters
 
@@ -98,7 +98,7 @@ Defined in: [core/renderer.ts:80](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderMoreButton**(`id`, `text`): `string`
 
-Defined in: [core/renderer.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L41)
+Defined in: [core/renderer.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L48)
 
 #### Parameters
 
@@ -120,7 +120,7 @@ Defined in: [core/renderer.ts:41](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderParagraphContent**(`items`, `initialCount`, `moreButtonId`): `string`
 
-Defined in: [core/renderer.ts:53](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L53)
+Defined in: [core/renderer.ts:76](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L76)
 
 #### Parameters
 
@@ -142,11 +142,36 @@ Defined in: [core/renderer.ts:53](https://github.com/mattjmeier/bio-tooltips/blo
 
 ***
 
+### renderSummaryCopyButton()
+
+> **renderSummaryCopyButton**(`uniqueId`): `string`
+
+Defined in: [core/renderer.ts:68](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L68)
+
+A small copy affordance for the summary. It is rendered inline at the end of
+the `.gene-tooltip-summary` paragraph's text. The icon button carries no text
+itself (accessibility is via aria-label/title); the click handler reads the
+owning `.gene-tooltip-summary` paragraph's full text (truncation is CSS-only,
+so `textContent` is always the complete value) after stripping the button. The
+inline SVG follows the same convention as the pin button icon.
+
+#### Parameters
+
+##### uniqueId
+
+`string`
+
+#### Returns
+
+`string`
+
+***
+
 ### renderTooltipHeader()
 
 > **renderTooltipHeader**(`titleHTML`, `actionHTML?`): `string`
 
-Defined in: [core/renderer.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L30)
+Defined in: [core/renderer.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L37)
 
 #### Parameters
 
@@ -166,9 +191,16 @@ Defined in: [core/renderer.ts:30](https://github.com/mattjmeier/bio-tooltips/blo
 
 ### renderTooltipShell()
 
-> **renderTooltipShell**(`uniqueId`, `innerHTML`, `inlineStyle?`, `sectionVariant?`): `string`
+> **renderTooltipShell**(`uniqueId`, `innerHTML`, `sectionVariant?`): `string`
 
-Defined in: [core/renderer.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/renderer.ts#L15)
+Defined in: [core/renderer.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/renderer.ts#L23)
+
+Wraps provider content in the standard shell markup (data attributes only).
+Geometry and vertical scrolling are owned by the tooltip shell — the
+positioning `size` middleware sets `max-width` on the box and `max-height`
+on the content, and `.gt-tooltip-content` CSS provides `overflow-y`. No
+inline sizing is applied here, so the inner wrapper never becomes a second
+scroll container.
 
 #### Parameters
 
@@ -179,10 +211,6 @@ Defined in: [core/renderer.ts:15](https://github.com/mattjmeier/bio-tooltips/blo
 ##### innerHTML
 
 `string`
-
-##### inlineStyle?
-
-`string` = `''`
 
 ##### sectionVariant?
 

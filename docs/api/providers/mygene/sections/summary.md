@@ -8,4 +8,4 @@
 
 > `const` **summarySection**: [`MyGeneSectionDefinition`](types.md#mygenesectiondefinition)
 
-Defined in: [providers/mygene/sections/summary.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/providers/mygene/sections/summary.ts#L4)
+Defined in: [providers/mygene/sections/summary.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/sections/summary.ts#L4)

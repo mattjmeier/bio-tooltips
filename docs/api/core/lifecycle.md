@@ -8,7 +8,7 @@
 
 > **cleanupTooltipLifecycle**\<`TData`\>(`instance`): `void`
 
-Defined in: [core/lifecycle.ts:376](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/lifecycle.ts#L376)
+Defined in: [core/lifecycle.ts:388](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/lifecycle.ts#L388)
 
 #### Type Parameters
 
@@ -32,7 +32,7 @@ Defined in: [core/lifecycle.ts:376](https://github.com/mattjmeier/bio-tooltips/b
 
 > **createHideHandler**\<`TData`\>(): (`instance`) => `false` \| `undefined`
 
-Defined in: [core/lifecycle.ts:346](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/lifecycle.ts#L346)
+Defined in: [core/lifecycle.ts:358](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/lifecycle.ts#L358)
 
 #### Type Parameters
 
@@ -50,7 +50,7 @@ Defined in: [core/lifecycle.ts:346](https://github.com/mattjmeier/bio-tooltips/b
 
 > **createShowHandler**\<`TData`, `TConfig`\>(`config`, `profile`, `inFlightRequests`): (`instance`) => `void`
 
-Defined in: [core/lifecycle.ts:149](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/lifecycle.ts#L149)
+Defined in: [core/lifecycle.ts:152](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/lifecycle.ts#L152)
 
 #### Type Parameters
 
@@ -86,7 +86,7 @@ Defined in: [core/lifecycle.ts:149](https://github.com/mattjmeier/bio-tooltips/b
 
 > **createShownHandler**\<`TData`, `TConfig`\>(`config`, `profile`): (`instance`) => `void`
 
-Defined in: [core/lifecycle.ts:235](https://github.com/mattjmeier/bio-tooltips/blob/442e0c8fc3a0fe0c2b130d3e1fd969bb92b63ad7/src/core/lifecycle.ts#L235)
+Defined in: [core/lifecycle.ts:238](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/lifecycle.ts#L238)
 
 #### Type Parameters
 

@@ -31,6 +31,7 @@
 - [providers/mygene/client](providers/mygene/client.md)
 - [providers/mygene/config](providers/mygene/config.md)
 - [providers/mygene/formatters](providers/mygene/formatters.md)
+- [providers/mygene/genomic-position](providers/mygene/genomic-position.md)
 - [providers/mygene/parser](providers/mygene/parser.md)
 - [providers/mygene/profile](providers/mygene/profile.md)
 - [providers/mygene/renderer](providers/mygene/renderer.md)
