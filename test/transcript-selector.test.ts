@@ -60,9 +60,9 @@ describe('native transcript selector', () => {
       'ENST000003',
     ]);
     expect([...selector.options].map(option => option.text)).toEqual([
-      'ENST000001 (5 exons)',
-      'ENST000002 (3 exons)',
-      'ENST000003 (2 exons)',
+      'ENST000001 · 5 exons',
+      'ENST000002 · 3 exons',
+      'ENST000003 · 2 exons',
     ]);
     expect(selector.value).toBe('ENST000001');
   });
