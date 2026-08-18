@@ -7,6 +7,12 @@
   inset: 0 auto auto 0;
 }
 
+/* Avoid the transient mobile tap flash while preserving long-press text
+   selection on the trigger. */
+[data-gt-tooltip-reference] {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .gt-tooltip-box {
   position: relative;
   box-sizing: border-box;

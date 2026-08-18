@@ -71,6 +71,7 @@ export class TooltipController<TData = unknown> {
   private readonly cleanupListeners: Array<() => void> = [];
   private readonly visibleChildren = new Set<TooltipController<any>>();
   private readonly originalAriaExpanded: string | null;
+  private readonly originalReferenceMarker: string | null;
   private showTimer?: ReturnType<typeof setTimeout>;
   private hideTimer?: ReturnType<typeof setTimeout>;
   private shownTimer?: ReturnType<typeof setTimeout>;
@@ -88,6 +89,7 @@ export class TooltipController<TData = unknown> {
     this.theme = options.theme;
     this.parent = options.parent;
     this.originalAriaExpanded = reference.getAttribute('aria-expanded');
+    this.originalReferenceMarker = reference.getAttribute('data-gt-tooltip-reference');
 
     this.root = document.createElement('div');
     this.root.dataset.gtTooltipRoot = '';
@@ -110,6 +112,7 @@ export class TooltipController<TData = unknown> {
 
     this.box.append(this.content, this.arrow);
     this.root.append(this.box);
+    this.reference.setAttribute('data-gt-tooltip-reference', '');
     this.reference.setAttribute('aria-expanded', 'false');
     this.installInteractions();
   }
@@ -251,6 +254,11 @@ export class TooltipController<TData = unknown> {
       this.reference.removeAttribute('aria-expanded');
     } else {
       this.reference.setAttribute('aria-expanded', this.originalAriaExpanded);
+    }
+    if (this.originalReferenceMarker == null) {
+      this.reference.removeAttribute('data-gt-tooltip-reference');
+    } else {
+      this.reference.setAttribute('data-gt-tooltip-reference', this.originalReferenceMarker);
     }
   }
 

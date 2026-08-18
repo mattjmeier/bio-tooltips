@@ -57,6 +57,7 @@ describe('TooltipController', () => {
     const { reference, controller } = createController();
     expect(document.querySelector('[data-gt-tooltip-root]')).toBeNull();
     expect(reference.getAttribute('aria-expanded')).toBe('false');
+    expect(reference.hasAttribute('data-gt-tooltip-reference')).toBe(true);
 
     controller.show();
     vi.runAllTimers();
@@ -70,6 +71,7 @@ describe('TooltipController', () => {
     controller.destroy();
     expect(document.querySelector('[data-gt-tooltip-root]')).toBeNull();
     expect(reference.hasAttribute('aria-expanded')).toBe(false);
+    expect(reference.hasAttribute('data-gt-tooltip-reference')).toBe(false);
     expect(destroyPositioner).toHaveBeenCalledTimes(1);
   });
 

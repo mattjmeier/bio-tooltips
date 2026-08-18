@@ -4,6 +4,12 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.7] - 2026-08-18
+
+### Added
+
+- Mobile improvements to make tooltips full-width and prefer appearing above/below (avoids squishy appearance)
+
 ## [2.0.6] - 2026-08-17
 
 ### Fixed
