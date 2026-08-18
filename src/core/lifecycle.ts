@@ -145,6 +145,7 @@ function createNestedTooltip<TData>(
     interactiveBorder: 20,
     interactiveDebounce: 75,
     parent: instance,
+    timingConfig: config,
   });
   instance.addNestedTooltip(nestedInstance);
 }

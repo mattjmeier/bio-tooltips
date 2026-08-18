@@ -236,4 +236,34 @@ describe('TooltipController', () => {
     disconnect();
     controller.destroy();
   });
+
+  it('recovers from a peer dismissal that is interrupted while closing', () => {
+    const { reference, controller } = createController({ hideDuration: 250 });
+    controller.show();
+    vi.runAllTimers();
+    expect(controller.status).toBe('open');
+
+    // A peer tooltip opens and dismisses this one; the unmount is now pending.
+    controller.dismiss();
+    expect(controller.status).toBe('closing');
+    expect(controller.state.isMounted).toBe(true);
+    expect(controller._peerDismissed).toBe(true);
+
+    // The cursor drifts back over the still-animating panel before it unmounts.
+    // This used to cancel the pending unmount and strand the tooltip in
+    // 'closing' with _peerDismissed stuck true, so it never unmounted and
+    // `show()` ignored hover forever (the "permanently disabled" bug).
+    vi.advanceTimersByTime(100);
+    controller.root.dispatchEvent(new MouseEvent('mouseenter'));
+
+    vi.runAllTimers();
+    expect(controller.status).toBe('idle');
+    expect(controller.state.isMounted).toBe(false);
+    expect(controller._peerDismissed).toBe(false);
+
+    // A fresh hover of the trigger opens it again.
+    reference.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.runAllTimers();
+    expect(controller.status).toBe('open');
+  });
 });

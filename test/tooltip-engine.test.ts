@@ -16,7 +16,10 @@ interface TestData {
   label: string;
 }
 
-function createHarness(fetchBatch: TooltipProfile<TestData>['provider']['fetchBatch']) {
+function createHarness(
+  fetchBatch: TooltipProfile<TestData>['provider']['fetchBatch'],
+  selector = '.test-tooltip'
+) {
   const profile: TooltipProfile<TestData, CoreTooltipConfig> = {
     id: 'test',
     provider: {
@@ -29,7 +32,7 @@ function createHarness(fetchBatch: TooltipProfile<TestData>['provider']['fetchBa
   };
   const config: CoreTooltipConfig = {
     ...defaultCoreConfig,
-    selector: '.test-tooltip',
+    selector,
     prefetch: 'none',
     visualPreload: 'none',
     tooltipOptions: {
@@ -145,5 +148,74 @@ describe('tooltip engine lifecycle', () => {
     vi.runAllTimers();
     expect(document.querySelector('[data-gt-tooltip-root]')).toBeNull();
     cleanup();
+  });
+
+  it('dismisses the previously open top-level tooltip when a new one opens', async () => {
+    const engine = createHarness(vi.fn().mockResolvedValue(new Map([
+      ['test:GENE1', { label: 'First gene label' }],
+      ['test:GENE2', { label: 'Second gene label' }],
+    ])));
+    const first = document.createElement('span');
+    first.className = 'test-tooltip';
+    first.textContent = 'GENE1';
+    const second = document.createElement('span');
+    second.className = 'test-tooltip';
+    second.textContent = 'GENE2';
+    document.body.append(first, second);
+    const cleanup = engine.init();
+
+    first.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.runAllTimers();
+    await flushAsync();
+    expect(document.querySelectorAll('[data-gt-tooltip-root]')).toHaveLength(1);
+    expect(document.querySelector('.gt-tooltip-content')?.textContent).toContain('First gene label');
+
+    // Opening the second trigger dismisses the first, so sweeping across a list
+    // of triggers does not leave a trail of stacked panels.
+    second.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.runAllTimers();
+    await flushAsync();
+    expect(document.querySelectorAll('[data-gt-tooltip-root]')).toHaveLength(1);
+    expect(document.querySelector('.gt-tooltip-content')?.textContent).toContain('Second gene label');
+    cleanup();
+  });
+
+  it('dismisses an open tooltip owned by a DIFFERENT engine when a new one opens', async () => {
+    // Each docs demo calls init() with its own selector, so it is its own
+    // single-controller engine. A per-engine sibling list can never see a
+    // tooltip from another engine, so the "only one at a time" rule must span
+    // engines via the shared open-tooltip registry.
+    const fetchBatch = vi.fn().mockResolvedValue(new Map([
+      ['test:GENE1', { label: 'First gene label' }],
+      ['test:GENE2', { label: 'Second gene label' }],
+    ]));
+    const engineA = createHarness(fetchBatch, '.tip-a');
+    const engineB = createHarness(fetchBatch, '.tip-b');
+
+    const first = document.createElement('span');
+    first.className = 'tip-a';
+    first.textContent = 'GENE1';
+    const second = document.createElement('span');
+    second.className = 'tip-b';
+    second.textContent = 'GENE2';
+    document.body.append(first, second);
+    const cleanupA = engineA.init();
+    const cleanupB = engineB.init();
+
+    first.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.runAllTimers();
+    await flushAsync();
+    expect(document.querySelectorAll('[data-gt-tooltip-root]')).toHaveLength(1);
+    expect(document.querySelector('.gt-tooltip-content')?.textContent).toContain('First gene label');
+
+    // GENE2 lives in a separate engine. Opening it must dismiss GENE1, which
+    // engine B has no direct reference to.
+    second.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.runAllTimers();
+    await flushAsync();
+    expect(document.querySelectorAll('[data-gt-tooltip-root]')).toHaveLength(1);
+    expect(document.querySelector('.gt-tooltip-content')?.textContent).toContain('Second gene label');
+    cleanupA();
+    cleanupB();
   });
 });

@@ -6,6 +6,7 @@ import { enableSummaryExpand } from '../ui/summaryExpand.js';
 import { getEffectiveTheme, initializeThemeObserver } from '../ui/theme.js';
 import { installNestedListFilter } from '../utils.js';
 import { logTooltipTiming } from './timing.js';
+import { getOpenTopLevelTooltips } from './tooltip-registry.js';
 
 let isSummaryHandlerEnabled = false;
 
@@ -35,7 +36,32 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
     const isAutoTheme = config.theme === 'auto' || typeof config.theme === 'undefined';
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const showHandler = createShowHandler(config, options.profile, inFlightRequests);
+    const baseShowHandler = createShowHandler(config, options.profile, inFlightRequests);
+    // Enforce "only one top-level tooltip at a time": when any tooltip opens,
+    // dismiss every other top-level tooltip that is currently open, so sweeping
+    // the cursor across a list of triggers does not leave a trail of lingering
+    // panels. The set spans ALL engines on the page, not just this one — a
+    // sibling may be owned by a different `init()` call (e.g. a separate docs
+    // demo), which a per-engine `instances` array could never see. Pinned and
+    // nested tooltips are left alone — nested instances never run through this
+    // hook and are not registered, and pinned siblings are guarded inside
+    // dismiss().
+    const showHandler = (instance: TooltipController<TData>) => {
+      const dismissedSiblings: string[] = [];
+      for (const sibling of getOpenTopLevelTooltips()) {
+        if (sibling === instance) continue;
+        if (sibling.state.isDestroyed || sibling.status === 'idle' || sibling.status === 'closing') {
+          continue;
+        }
+        sibling.dismiss();
+        dismissedSiblings.push(sibling._uniqueId ?? '(no-id)');
+      }
+      logTooltipTiming(instance, config, 'sibling dismiss check', {
+        dismissed: dismissedSiblings.length,
+        siblings: dismissedSiblings,
+      });
+      return baseShowHandler(instance);
+    };
     const shownHandler = createShownHandler(config, options.profile);
     const hideHandler = createHideHandler<TData>();
     const tooltipOptions = {
@@ -51,6 +77,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
       constrainToViewport: config.constrainToViewport,
       interactiveBorder: 2,
       interactiveDebounce: 75,
+      timingConfig: config,
       hooks: {
         onShow: showHandler,
         onShown: shownHandler,
