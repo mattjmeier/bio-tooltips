@@ -8,7 +8,7 @@
 
 > **renderTooltipHTML**(`data`, `options?`): `string`
 
-Defined in: [providers/mygene/renderer.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/providers/mygene/renderer.ts#L39)
+Defined in: [providers/mygene/renderer.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/providers/mygene/renderer.ts#L39)
 
 #### Parameters
 

@@ -8,7 +8,7 @@
 
 > **logTooltipTiming**(`instance`, `config`, `label`, `details?`): `void`
 
-Defined in: [core/timing.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/timing.ts#L19)
+Defined in: [core/timing.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/timing.ts#L19)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [core/timing.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **startTooltipTiming**(`instance`, `config`, `label`): `void`
 
-Defined in: [core/timing.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/timing.ts#L8)
+Defined in: [core/timing.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/timing.ts#L8)
 
 #### Parameters
 

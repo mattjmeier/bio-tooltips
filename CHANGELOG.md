@@ -4,6 +4,12 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.6] - 2026-08-17
+
+### Fixed
+
+- Tooltips were 'piling up' when scrubbing over multiple triggers - this patch fixes lifecycle management so that only one appears at a time.
+
 ## [2.0.5] - 2026-08-17
 
 ### Added

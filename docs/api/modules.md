@@ -14,6 +14,7 @@
 - [core/sections](core/sections.md)
 - [core/timing](core/timing.md)
 - [core/tooltip-controller](core/tooltip-controller.md)
+- [core/tooltip-registry](core/tooltip-registry.md)
 - [core/types](core/types.md)
 - [index](index.md)
 - [mychem](mychem.md)

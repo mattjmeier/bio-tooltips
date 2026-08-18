@@ -6,7 +6,7 @@
 
 ### TooltipController
 
-Defined in: [core/tooltip-controller.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L26)
+Defined in: [core/tooltip-controller.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L31)
 
 #### Type Parameters
 
@@ -20,7 +20,7 @@ Defined in: [core/tooltip-controller.ts:26](https://github.com/mattjmeier/bio-to
 
 > **new TooltipController**\<`TData`\>(`reference`, `options`): [`TooltipController`](#tooltipcontroller)\<`TData`\>
 
-Defined in: [core/tooltip-controller.ts:71](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L71)
+Defined in: [core/tooltip-controller.ts:83](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L83)
 
 ###### Parameters
 
@@ -42,43 +42,49 @@ Defined in: [core/tooltip-controller.ts:71](https://github.com/mattjmeier/bio-to
 
 > `optional` **\_entityData?**: `TData` \| `null`
 
-Defined in: [core/tooltip-controller.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L44)
+Defined in: [core/tooltip-controller.ts:49](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L49)
 
 ##### \_isPinned?
 
 > `optional` **\_isPinned?**: `boolean`
 
-Defined in: [core/tooltip-controller.ts:54](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L54)
+Defined in: [core/tooltip-controller.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L59)
 
 ##### \_nestedTooltips
 
 > **\_nestedTooltips**: [`TooltipController`](#tooltipcontroller)\<`any`\>[] = `[]`
 
-Defined in: [core/tooltip-controller.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L43)
+Defined in: [core/tooltip-controller.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L48)
+
+##### \_peerDismissed?
+
+> `optional` **\_peerDismissed?**: `boolean`
+
+Defined in: [core/tooltip-controller.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L65)
 
 ##### \_pinButton?
 
 > `optional` **\_pinButton?**: [`HTMLElement`](https://developer.mozilla.org/docs/Web/API/HTMLElement) \| `null`
 
-Defined in: [core/tooltip-controller.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L55)
+Defined in: [core/tooltip-controller.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L66)
 
 ##### \_renderedVisualSections?
 
 > `optional` **\_renderedVisualSections?**: [`Set`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)\<`string`\>
 
-Defined in: [core/tooltip-controller.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L51)
+Defined in: [core/tooltip-controller.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L56)
 
 ##### \_renderingVisualSections?
 
 > `optional` **\_renderingVisualSections?**: [`Set`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Set)\<`string`\>
 
-Defined in: [core/tooltip-controller.ts:52](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L52)
+Defined in: [core/tooltip-controller.ts:57](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L57)
 
 ##### \_sectionKeydownHandler?
 
 > `optional` **\_sectionKeydownHandler?**: (`event`) => `void`
 
-Defined in: [core/tooltip-controller.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L48)
+Defined in: [core/tooltip-controller.ts:53](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L53)
 
 ###### Parameters
 
@@ -94,7 +100,7 @@ Defined in: [core/tooltip-controller.ts:48](https://github.com/mattjmeier/bio-to
 
 > `optional` **\_sectionToggleHandler?**: (`event`) => `void`
 
-Defined in: [core/tooltip-controller.ts:47](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L47)
+Defined in: [core/tooltip-controller.ts:52](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L52)
 
 ###### Parameters
 
@@ -110,37 +116,37 @@ Defined in: [core/tooltip-controller.ts:47](https://github.com/mattjmeier/bio-to
 
 > `optional` **\_themeIntent?**: `string`
 
-Defined in: [core/tooltip-controller.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L46)
+Defined in: [core/tooltip-controller.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L51)
 
 ##### \_timingStart?
 
 > `optional` **\_timingStart?**: `number`
 
-Defined in: [core/tooltip-controller.ts:53](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L53)
+Defined in: [core/tooltip-controller.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L58)
 
 ##### \_uniqueId?
 
 > `optional` **\_uniqueId?**: `string`
 
-Defined in: [core/tooltip-controller.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L45)
+Defined in: [core/tooltip-controller.ts:50](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L50)
 
 ##### \_visualRenderPromise?
 
 > `optional` **\_visualRenderPromise?**: [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [core/tooltip-controller.ts:50](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L50)
+Defined in: [core/tooltip-controller.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L55)
 
 ##### \_visualsRendered?
 
 > `optional` **\_visualsRendered?**: `boolean`
 
-Defined in: [core/tooltip-controller.ts:49](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L49)
+Defined in: [core/tooltip-controller.ts:54](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L54)
 
 ##### \_visualViewportResizeHandler?
 
 > `optional` **\_visualViewportResizeHandler?**: () => `void`
 
-Defined in: [core/tooltip-controller.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L56)
+Defined in: [core/tooltip-controller.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L67)
 
 ###### Returns
 
@@ -150,43 +156,43 @@ Defined in: [core/tooltip-controller.ts:56](https://github.com/mattjmeier/bio-to
 
 > `readonly` **arrow**: [`HTMLDivElement`](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)
 
-Defined in: [core/tooltip-controller.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L31)
+Defined in: [core/tooltip-controller.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L36)
 
 ##### box
 
 > `readonly` **box**: [`HTMLDivElement`](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)
 
-Defined in: [core/tooltip-controller.ts:29](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L29)
+Defined in: [core/tooltip-controller.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L34)
 
 ##### content
 
 > `readonly` **content**: [`HTMLDivElement`](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)
 
-Defined in: [core/tooltip-controller.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L30)
+Defined in: [core/tooltip-controller.ts:35](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L35)
 
 ##### options
 
 > **options**: [`TooltipControllerOptions`](#tooltipcontrolleroptions-1)\<`TData`\>
 
-Defined in: [core/tooltip-controller.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L41)
+Defined in: [core/tooltip-controller.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L46)
 
 ##### reference
 
 > `readonly` **reference**: [`Element`](https://developer.mozilla.org/docs/Web/API/Element)
 
-Defined in: [core/tooltip-controller.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L27)
+Defined in: [core/tooltip-controller.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L32)
 
 ##### root
 
 > `readonly` **root**: [`HTMLDivElement`](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)
 
-Defined in: [core/tooltip-controller.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L28)
+Defined in: [core/tooltip-controller.ts:33](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L33)
 
 ##### state
 
 > `readonly` **state**: `object`
 
-Defined in: [core/tooltip-controller.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L32)
+Defined in: [core/tooltip-controller.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L37)
 
 ###### isDestroyed
 
@@ -208,13 +214,13 @@ Defined in: [core/tooltip-controller.ts:32](https://github.com/mattjmeier/bio-to
 
 > **status**: [`TooltipStatus`](#tooltipstatus) = `'idle'`
 
-Defined in: [core/tooltip-controller.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L39)
+Defined in: [core/tooltip-controller.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L44)
 
 ##### theme
 
 > **theme**: `string`
 
-Defined in: [core/tooltip-controller.ts:40](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L40)
+Defined in: [core/tooltip-controller.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L45)
 
 #### Methods
 
@@ -222,7 +228,7 @@ Defined in: [core/tooltip-controller.ts:40](https://github.com/mattjmeier/bio-to
 
 > **addNestedTooltip**(`child`): `void`
 
-Defined in: [core/tooltip-controller.ts:153](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L153)
+Defined in: [core/tooltip-controller.ts:201](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L201)
 
 ###### Parameters
 
@@ -238,7 +244,7 @@ Defined in: [core/tooltip-controller.ts:153](https://github.com/mattjmeier/bio-t
 
 > **destroy**(): `void`
 
-Defined in: [core/tooltip-controller.ts:184](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L184)
+Defined in: [core/tooltip-controller.ts:232](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L232)
 
 ###### Returns
 
@@ -248,7 +254,28 @@ Defined in: [core/tooltip-controller.ts:184](https://github.com/mattjmeier/bio-t
 
 > **destroyNestedTooltips**(): `void`
 
-Defined in: [core/tooltip-controller.ts:167](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L167)
+Defined in: [core/tooltip-controller.ts:215](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L215)
+
+###### Returns
+
+`void`
+
+##### dismiss()
+
+> **dismiss**(): `void`
+
+Defined in: [core/tooltip-controller.ts:159](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L159)
+
+Close this tooltip immediately, bypassing the interactive hide debounce and
+the pointer bridge that otherwise keep an open panel alive while the cursor
+drifts toward the next trigger. The engine calls this on the open siblings
+whenever a tooltip opens so only one top-level tooltip is visible at a time.
+Pinned tooltips are left untouched.
+
+The `_peerDismissed` flag marks this close as "lost to a sibling" so that
+hovering this tooltip's own panel cannot revive it (its panel may still be
+under the cursor, now covered by the sibling's panel). The flag is cleared
+once the tooltip is fully unmounted or genuinely reopens.
 
 ###### Returns
 
@@ -258,7 +285,7 @@ Defined in: [core/tooltip-controller.ts:167](https://github.com/mattjmeier/bio-t
 
 > **hide**(): `void`
 
-Defined in: [core/tooltip-controller.ts:112](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L112)
+Defined in: [core/tooltip-controller.ts:136](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L136)
 
 ###### Returns
 
@@ -268,7 +295,7 @@ Defined in: [core/tooltip-controller.ts:112](https://github.com/mattjmeier/bio-t
 
 > **removeNestedTooltip**(`child`): `void`
 
-Defined in: [core/tooltip-controller.ts:161](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L161)
+Defined in: [core/tooltip-controller.ts:209](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L209)
 
 ###### Parameters
 
@@ -284,7 +311,7 @@ Defined in: [core/tooltip-controller.ts:161](https://github.com/mattjmeier/bio-t
 
 > **setContent**(`content`): `void`
 
-Defined in: [core/tooltip-controller.ts:123](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L123)
+Defined in: [core/tooltip-controller.ts:171](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L171)
 
 ###### Parameters
 
@@ -300,7 +327,7 @@ Defined in: [core/tooltip-controller.ts:123](https://github.com/mattjmeier/bio-t
 
 > **setPinned**(`pinned`): `void`
 
-Defined in: [core/tooltip-controller.ts:173](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L173)
+Defined in: [core/tooltip-controller.ts:221](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L221)
 
 ###### Parameters
 
@@ -316,7 +343,7 @@ Defined in: [core/tooltip-controller.ts:173](https://github.com/mattjmeier/bio-t
 
 > **setTheme**(`theme`): `void`
 
-Defined in: [core/tooltip-controller.ts:131](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L131)
+Defined in: [core/tooltip-controller.ts:179](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L179)
 
 ###### Parameters
 
@@ -332,7 +359,7 @@ Defined in: [core/tooltip-controller.ts:131](https://github.com/mattjmeier/bio-t
 
 > **show**(): `void`
 
-Defined in: [core/tooltip-controller.ts:104](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L104)
+Defined in: [core/tooltip-controller.ts:117](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L117)
 
 ###### Returns
 
@@ -342,7 +369,7 @@ Defined in: [core/tooltip-controller.ts:104](https://github.com/mattjmeier/bio-t
 
 > **updateOptions**(`options`): `void`
 
-Defined in: [core/tooltip-controller.ts:138](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L138)
+Defined in: [core/tooltip-controller.ts:186](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L186)
 
 ###### Parameters
 
@@ -358,7 +385,7 @@ Defined in: [core/tooltip-controller.ts:138](https://github.com/mattjmeier/bio-t
 
 > **updatePosition**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [core/tooltip-controller.ts:149](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L149)
+Defined in: [core/tooltip-controller.ts:197](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L197)
 
 ###### Returns
 
@@ -368,7 +395,7 @@ Defined in: [core/tooltip-controller.ts:149](https://github.com/mattjmeier/bio-t
 
 ### TooltipControllerHooks
 
-Defined in: [core/tooltip-controller.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L6)
+Defined in: [core/tooltip-controller.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L8)
 
 #### Type Parameters
 
@@ -382,7 +409,7 @@ Defined in: [core/tooltip-controller.ts:6](https://github.com/mattjmeier/bio-too
 
 > `optional` **onDestroy?**: (`instance`) => `void`
 
-Defined in: [core/tooltip-controller.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L10)
+Defined in: [core/tooltip-controller.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L12)
 
 ###### Parameters
 
@@ -398,7 +425,7 @@ Defined in: [core/tooltip-controller.ts:10](https://github.com/mattjmeier/bio-to
 
 > `optional` **onHide?**: (`instance`) => `false` \| `void`
 
-Defined in: [core/tooltip-controller.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L9)
+Defined in: [core/tooltip-controller.ts:11](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L11)
 
 ###### Parameters
 
@@ -414,7 +441,7 @@ Defined in: [core/tooltip-controller.ts:9](https://github.com/mattjmeier/bio-too
 
 > `optional` **onShow?**: (`instance`) => `false` \| `void`
 
-Defined in: [core/tooltip-controller.ts:7](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L7)
+Defined in: [core/tooltip-controller.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L9)
 
 ###### Parameters
 
@@ -430,7 +457,7 @@ Defined in: [core/tooltip-controller.ts:7](https://github.com/mattjmeier/bio-too
 
 > `optional` **onShown?**: (`instance`) => `void`
 
-Defined in: [core/tooltip-controller.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L8)
+Defined in: [core/tooltip-controller.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L10)
 
 ###### Parameters
 
@@ -446,7 +473,7 @@ Defined in: [core/tooltip-controller.ts:8](https://github.com/mattjmeier/bio-too
 
 ### TooltipControllerOptions
 
-Defined in: [core/tooltip-controller.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L13)
+Defined in: [core/tooltip-controller.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L15)
 
 #### Type Parameters
 
@@ -460,61 +487,67 @@ Defined in: [core/tooltip-controller.ts:13](https://github.com/mattjmeier/bio-to
 
 > `optional` **constrainToViewport?**: `boolean`
 
-Defined in: [core/tooltip-controller.ts:17](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L17)
+Defined in: [core/tooltip-controller.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L19)
 
 ##### content?
 
 > `optional` **content?**: `string`
 
-Defined in: [core/tooltip-controller.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L14)
+Defined in: [core/tooltip-controller.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L16)
 
 ##### hooks?
 
 > `optional` **hooks?**: [`TooltipControllerHooks`](#tooltipcontrollerhooks)\<`TData`\>
 
-Defined in: [core/tooltip-controller.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L23)
+Defined in: [core/tooltip-controller.ts:25](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L25)
 
 ##### interactiveBorder?
 
 > `optional` **interactiveBorder?**: `number`
 
-Defined in: [core/tooltip-controller.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L20)
+Defined in: [core/tooltip-controller.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L22)
 
 ##### interactiveDebounce?
 
 > `optional` **interactiveDebounce?**: `number`
 
-Defined in: [core/tooltip-controller.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L21)
+Defined in: [core/tooltip-controller.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L23)
 
 ##### maxHeight?
 
 > `optional` **maxHeight?**: `number`
 
-Defined in: [core/tooltip-controller.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L19)
+Defined in: [core/tooltip-controller.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L21)
 
 ##### maxWidth?
 
 > `optional` **maxWidth?**: `number`
 
-Defined in: [core/tooltip-controller.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L18)
+Defined in: [core/tooltip-controller.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L20)
 
 ##### parent?
 
 > `optional` **parent?**: [`TooltipController`](#tooltipcontroller)\<`any`\>
 
-Defined in: [core/tooltip-controller.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L22)
+Defined in: [core/tooltip-controller.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L24)
 
 ##### theme
 
 > **theme**: `string`
 
-Defined in: [core/tooltip-controller.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L16)
+Defined in: [core/tooltip-controller.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L18)
+
+##### timingConfig?
+
+> `optional` **timingConfig?**: [`CoreTooltipConfig`](config.md#coretooltipconfig)
+
+Defined in: [core/tooltip-controller.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L28)
 
 ##### tooltip
 
 > **tooltip**: [`TooltipOptions`](config.md#tooltipoptions-1)
 
-Defined in: [core/tooltip-controller.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L15)
+Defined in: [core/tooltip-controller.ts:17](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L17)
 
 ## Type Aliases
 
@@ -522,7 +555,7 @@ Defined in: [core/tooltip-controller.ts:15](https://github.com/mattjmeier/bio-to
 
 > **TooltipStatus** = `"idle"` \| `"opening"` \| `"open"` \| `"closing"` \| `"destroyed"`
 
-Defined in: [core/tooltip-controller.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L4)
+Defined in: [core/tooltip-controller.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L6)
 
 ## Functions
 
@@ -530,7 +563,7 @@ Defined in: [core/tooltip-controller.ts:4](https://github.com/mattjmeier/bio-too
 
 > **createStaticTooltip**(`reference`, `content`, `options`): [`TooltipController`](#tooltipcontroller)
 
-Defined in: [core/tooltip-controller.ts:445](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/core/tooltip-controller.ts#L445)
+Defined in: [core/tooltip-controller.ts:525](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/core/tooltip-controller.ts#L525)
 
 #### Parameters
 

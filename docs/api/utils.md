@@ -8,7 +8,7 @@
 
 > **createNestedContent**(`items`): `string`
 
-Defined in: [utils.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/utils.ts#L46)
+Defined in: [utils.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/utils.ts#L46)
 
 #### Parameters
 
@@ -26,7 +26,7 @@ Defined in: [utils.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b
 
 > **filterNestedList**(`query`, `listId`): `void`
 
-Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/utils.ts#L24)
+Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/utils.ts#L24)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b
 
 > **generateUniqueTooltipId**(): `string`
 
-Defined in: [utils.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/utils.ts#L4)
+Defined in: [utils.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/utils.ts#L4)
 
 #### Returns
 
@@ -60,7 +60,7 @@ Defined in: [utils.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b8
 
 > **getSectionBackgroundColor**(`instance`): `string` \| `null`
 
-Defined in: [utils.ts:74](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/utils.ts#L74)
+Defined in: [utils.ts:74](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/utils.ts#L74)
 
 Gets the computed background color from a tooltip instance's root.
 
@@ -84,7 +84,7 @@ The background color string (e.g., 'rgb(255, 255, 255)') or null if not found.
 
 > **installNestedListFilter**(): `void`
 
-Defined in: [utils.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/e4c56b87748ac60c9f6f32554d054d9cfcfe0a60/src/utils.ts#L38)
+Defined in: [utils.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/utils.ts#L38)
 
 #### Returns
 
