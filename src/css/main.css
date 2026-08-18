@@ -612,15 +612,16 @@ ul.gene-tooltip-nested-list {
   text-transform: none;
   text-overflow: ellipsis;
   cursor: pointer;
-  background-color: var(--gt-transcript-selector-background, var(--gt-background-color-base));
+  background-color: var(--gt-transcript-selector-background, var(--gt-background-color-subtle));
   border: 1px solid var(--gt-transcript-selector-border-color, var(--gt-border-color));
   border-radius: 5px;
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--gt-text-color) 8%, transparent);
   transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.gene-tooltip-transcript-selector:hover {
-  background-color: color-mix(in srgb, var(--gt-background-color-base) 94%, var(--gt-text-color));
+.gene-tooltip-transcript-selector:hover,
+.gene-tooltip-transcript-selector:open {
+  background-color: var(--gt-transcript-selector-background-active, var(--gt-background-color-base));
   border-color: color-mix(in srgb, var(--gt-accent-color) 55%, var(--gt-border-color));
 }
 
