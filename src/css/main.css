@@ -576,17 +576,17 @@ ul.gene-tooltip-nested-list {
   position: relative;
   display: flex;
   align-items: center;
-  flex: 0 1 13rem;
-  max-width: min(100%, 13rem);
+  flex: 0 1 11.5rem;
+  max-width: min(100%, 11.5rem);
   min-width: 0;
 }
 
 .gene-tooltip-track-controls::after {
   position: absolute;
-  right: 0.7em;
+  right: 0.65em;
   top: 50%;
-  width: 0.4em;
-  height: 0.4em;
+  width: 0.35em;
+  height: 0.35em;
   content: '';
   color: var(--gt-text-color-secondary);
   border-right: 1.5px solid currentColor;
@@ -601,35 +601,41 @@ ul.gene-tooltip-nested-list {
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  min-height: 2.15em;
-  padding: 0.4em 1.9em 0.4em 0.65em;
+
+  min-height: 2em;
+  padding: 0.32em 1.7em 0.32em 0.6em;
+
   color: var(--gt-text-color);
   font: inherit;
-  font-size: 0.9em;
-  font-weight: 500;
+  font-size: 0.86em;
+  font-weight: 400;
   line-height: 1.25;
-  letter-spacing: normal;
-  text-transform: none;
+
   text-overflow: ellipsis;
   cursor: pointer;
-  background-color: var(--gt-transcript-selector-background, var(--gt-background-color-subtle));
-  border: 1px solid var(--gt-transcript-selector-border-color, var(--gt-border-color));
-  border-radius: 5px;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--gt-text-color) 8%, transparent);
-  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+
+  background-color:
+    var(--gt-transcript-selector-background, var(--gt-background-color-subtle));
+  border:
+    1px solid
+    var(--gt-transcript-selector-border-color, var(--gt-border-color));
+  border-radius: 6px;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.gene-tooltip-transcript-selector:hover,
-.gene-tooltip-transcript-selector:open {
-  background-color: var(--gt-transcript-selector-background-active, var(--gt-background-color-base));
-  border-color: color-mix(in srgb, var(--gt-accent-color) 55%, var(--gt-border-color));
+.gene-tooltip-transcript-selector:hover {
+  border-color:
+    color-mix(in srgb, var(--gt-accent-color) 30%, var(--gt-border-color));
 }
 
 .gene-tooltip-transcript-selector:focus-visible {
   border-color: var(--gt-accent-color);
   outline: 2px solid var(--gt-accent-color);
   outline-offset: 2px;
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gt-accent-color) 18%, transparent);
 }
 
 .gene-tooltip-transcript-selector:disabled {
@@ -647,22 +653,13 @@ ul.gene-tooltip-nested-list {
   supported. Other browsers retain their accessible OS-provided picker.
 */
 @supports (appearance: base-select) {
-  .gene-tooltip-track-controls::after {
-    display: none;
-  }
-
   .gene-tooltip-transcript-selector,
   .gene-tooltip-transcript-selector::picker(select) {
     appearance: base-select;
   }
 
   .gene-tooltip-transcript-selector::picker-icon {
-    color: var(--gt-text-color-secondary);
-    transition: transform 0.15s ease;
-  }
-
-  .gene-tooltip-transcript-selector:open::picker-icon {
-    transform: rotate(180deg);
+    display: none;
   }
 
   .gene-tooltip-transcript-selector::picker(select) {
@@ -706,12 +703,6 @@ ul.gene-tooltip-nested-list {
 
   .gene-tooltip-transcript-selector option::checkmark {
     color: var(--gt-accent-color);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .gene-tooltip-transcript-selector::picker-icon {
-    transition: none;
   }
 }
 

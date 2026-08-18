@@ -46,7 +46,7 @@ export function initializeNativeTranscriptSelector(
   selectorEl.replaceChildren(...sortedTranscripts.map(transcript => {
     const option = document.createElement('option');
     option.value = transcript.transcript;
-    option.textContent = `${transcript.transcript} (${transcript.position!.length} exons)`;
+    option.textContent = `${transcript.transcript} · ${transcript.position!.length} exons`;
     return option;
   }));
   selectorEl.value = activeTranscriptId;
