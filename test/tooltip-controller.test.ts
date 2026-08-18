@@ -43,6 +43,7 @@ function createController(overrides: Partial<TooltipOptions> = {}) {
 describe('TooltipController', () => {
   beforeEach(() => {
     document.body.replaceChildren();
+    document.getSelection()?.removeAllRanges();
     document.documentElement.classList.remove('dark');
     vi.useFakeTimers();
     vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
@@ -100,6 +101,31 @@ describe('TooltipController', () => {
       controller.hide();
       vi.runAllTimers();
     }
+  });
+
+  it('clears trigger text selected by a short tap but preserves long-press selection', () => {
+    const { reference } = createController();
+    const selection = document.getSelection()!;
+    const selectReference = () => {
+      const range = document.createRange();
+      range.selectNodeContents(reference);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    };
+
+    reference.dispatchEvent(new Event('touchstart'));
+    selectReference();
+    vi.advanceTimersByTime(100);
+    reference.dispatchEvent(new Event('touchend'));
+    vi.runAllTimers();
+    expect(selection.rangeCount).toBe(0);
+
+    reference.dispatchEvent(new Event('touchstart'));
+    selectReference();
+    vi.advanceTimersByTime(600);
+    reference.dispatchEvent(new Event('touchend'));
+    vi.runAllTimers();
+    expect(selection.rangeCount).toBe(1);
   });
 
   it('keeps interactive content open while the pointer moves into the panel', () => {

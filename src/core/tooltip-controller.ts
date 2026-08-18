@@ -76,6 +76,8 @@ export class TooltipController<TData = unknown> {
   private hideTimer?: ReturnType<typeof setTimeout>;
   private shownTimer?: ReturnType<typeof setTimeout>;
   private unmountTimer?: ReturnType<typeof setTimeout>;
+  private selectionClearTimer?: ReturnType<typeof setTimeout>;
+  private touchStartedAt?: number;
   private positioner?: ActivePositioner;
   private parent?: TooltipController<any>;
   private pointerBridgeCleanup?: () => void;
@@ -403,7 +405,14 @@ export class TooltipController<TData = unknown> {
     this.listen(this.reference, 'mouseleave', (event: Event) => this.handlePointerLeave(event as MouseEvent));
     this.listen(this.reference, 'focus', () => this.show());
     this.listen(this.reference, 'blur', () => this.handleFocusLeave());
-    this.listen(this.reference, 'touchstart', () => this.show(), { passive: true });
+    this.listen(this.reference, 'touchstart', () => {
+      this.touchStartedAt = Date.now();
+      this.show();
+    }, { passive: true });
+    this.listen(this.reference, 'touchend', () => this.handleTouchEnd(), { passive: true });
+    this.listen(this.reference, 'touchcancel', () => {
+      this.touchStartedAt = undefined;
+    }, { passive: true });
     this.listen(this.root, 'mouseenter', () => {
       this.preservedInteractiveRect = undefined;
       this.clearHideTimers();
@@ -412,6 +421,25 @@ export class TooltipController<TData = unknown> {
     this.listen(this.root, 'focusin', () => this.clearHideTimers());
     this.listen(this.root, 'focusout', () => this.handleFocusLeave());
     this.listen(this.root, 'gt:content-resize', () => this.handleContentResize());
+  }
+
+  private handleTouchEnd(): void {
+    const startedAt = this.touchStartedAt;
+    this.touchStartedAt = undefined;
+    if (startedAt == null || Date.now() - startedAt > 450) return;
+
+    // Android may select the tapped word as part of its default short-tap
+    // handling. Wait until that default action has run, then clear only a
+    // selection whose endpoint is inside this trigger. A long press exceeds
+    // the threshold above, so intentional text selection remains available.
+    if (this.selectionClearTimer) clearTimeout(this.selectionClearTimer);
+    this.selectionClearTimer = setTimeout(() => {
+      this.selectionClearTimer = undefined;
+      const selection = document.getSelection();
+      const startsInside = selection?.anchorNode && this.reference.contains(selection.anchorNode);
+      const endsInside = selection?.focusNode && this.reference.contains(selection.focusNode);
+      if (startsInside || endsInside) selection?.removeAllRanges();
+    }, 0);
   }
 
   private handleContentResize(): void {
@@ -528,6 +556,8 @@ export class TooltipController<TData = unknown> {
     this.clearHideTimers();
     if (this.shownTimer) clearTimeout(this.shownTimer);
     this.shownTimer = undefined;
+    if (this.selectionClearTimer) clearTimeout(this.selectionClearTimer);
+    this.selectionClearTimer = undefined;
   }
 }
 
