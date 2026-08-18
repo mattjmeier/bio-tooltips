@@ -85,15 +85,30 @@ function drawTranscript(
 
     // Draw the exon rectangles
     const tooltips: TooltipController[] = [];
-    svg.selectAll<SVGRectElement, ExonDrawingData>(".exon-rect")
+    const exonRects = svg.selectAll<SVGRectElement, ExonDrawingData>(".exon-rect")
         .data(drawingData)
         .enter().append("rect")
         .attr("class", "exon-rect")
         .attr("x", d => xScale(d.coords[0]))
         .attr("y", exonY)
         .attr("width", d => Math.max(1, xScale(d.coords[1]) - xScale(d.coords[0])))
-        .attr("height", exonHeight)
-        .each(function(this: SVGRectElement, d) {
+        .attr("height", exonHeight);
+
+    // Let the newly drawn SVG commit before binding its child controllers.
+    // The initial track is rendered as part of the parent's asynchronous visual
+    // lifecycle; selector-driven redraws happen later and therefore did not hit
+    // the same first-render timing issue.  A frame also lets us reject rectangles
+    // replaced by a rapid transcript change before their controllers are added.
+    scheduleFrame(() => {
+        exonRects.each(function(this: SVGRectElement, d) {
+            if (
+              instance.state.isDestroyed
+              || !instance.state.isMounted
+              || !instance.state.isShown
+              || !this.isConnected
+              || !instance.root.contains(this)
+            ) return;
+
             const child = createStaticTooltip(
               this,
               `<strong>Exon ${d.exonNumber}:</strong> ${d.coords[0].toLocaleString()} - ${d.coords[1].toLocaleString()}`,
@@ -115,7 +130,16 @@ function drawTranscript(
             instance.addNestedTooltip(child);
             tooltips.push(child);
         });
+    });
     return tooltips;
+}
+
+function scheduleFrame(callback: FrameRequestCallback): void {
+    if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(callback);
+    } else {
+        setTimeout(() => callback(Date.now()), 0);
+    }
 }
 
 /**

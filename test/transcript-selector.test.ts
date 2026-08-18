@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { defaultCoreConfig } from '../src/core/config';
 import { createShownHandler } from '../src/core/lifecycle';
-import type { TooltipController } from '../src/core/tooltip-controller';
+import { TooltipController } from '../src/core/tooltip-controller';
 import { defaultConfig } from '../src/providers/mygene/config';
 import { myGeneProfile } from '../src/providers/mygene/profile';
 import { renderTooltipHTML } from '../src/providers/mygene/renderer';
@@ -123,6 +123,63 @@ describe('native transcript selector', () => {
       ...transcript('', 2),
       position: undefined,
     }])).toEqual([]);
+  });
+
+  it('binds exon child tooltips on the initial gene-track render', async () => {
+    const uniqueId = 'initial-exon-tooltips';
+    const data = geneData([
+      transcript('ENST000001', 3),
+      transcript('ENST000002', 2),
+    ]);
+    const reference = document.createElement('button');
+    document.body.append(reference);
+    const parent = new TooltipController(reference, {
+      content: renderTooltipHTML(data, { uniqueId }),
+      tooltip: {
+        ...defaultCoreConfig.tooltipOptions,
+        showDuration: 0,
+        hideDuration: 0,
+        appendTo: () => document.body,
+      },
+      theme: 'light',
+    });
+
+    // Mount the parent without starting Floating UI; this test is concerned
+    // with the visual lifecycle's initial child-controller attachment.
+    document.body.append(parent.root);
+    parent.state.isMounted = true;
+    parent.state.isShown = true;
+    parent.status = 'open';
+    const container = parent.root.querySelector<HTMLElement>(`#gene-tooltip-track-${uniqueId}`)!;
+    Object.defineProperty(container, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => ({
+        width: 320,
+        height: 45,
+        top: 0,
+        right: 320,
+        bottom: 45,
+        left: 0,
+        x: 0,
+        y: 0,
+        toJSON() {},
+      }),
+    });
+
+    await renderGeneTrack(parent, data, uniqueId, {
+      ...defaultCoreConfig,
+      nestedTooltipOptions: {
+        ...defaultCoreConfig.nestedTooltipOptions,
+        showDuration: 0,
+        hideDuration: 0,
+      },
+    });
+    await new Promise(resolve => setTimeout(resolve, 20));
+
+    const firstExon = container.querySelector<SVGRectElement>('.exon-rect')!;
+    expect(firstExon.hasAttribute('data-gt-tooltip-reference')).toBe(true);
+    expect(parent._nestedTooltips).toHaveLength(3);
+    parent.destroy();
   });
 
   it('uses accessible native markup and contains no Tom Select classes or integration', () => {
