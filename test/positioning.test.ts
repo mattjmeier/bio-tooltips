@@ -41,6 +41,7 @@ describe('Floating UI positioning adapter', () => {
   beforeEach(() => {
     document.body.replaceChildren();
     vi.clearAllMocks();
+    vi.unstubAllGlobals();
   });
 
   it('uses fixed placement middleware and applies coordinates and arrow data', async () => {
@@ -99,5 +100,38 @@ describe('Floating UI positioning adapter', () => {
     expect(nodes.content.style.maxHeight).toBe('240px');
     expect(nodes.box.style.maxWidth).toBe('320px');
     expect(nodes.box.style.getPropertyValue('--gt-available-width')).toBe('320px');
+  });
+
+  it('uses a full-width vertical placement for top-level tooltips on narrow viewports', async () => {
+    vi.stubGlobal('innerWidth', 390);
+    const nodes = elements();
+    const active = startPositioning(nodes, {
+      tooltip: {
+        placement: 'right',
+        fallbackPlacements: ['left', 'bottom', 'top'],
+        viewportPadding: 8,
+      },
+      constrainToViewport: true,
+      maxWidth: 350,
+      isTopLevel: true,
+    });
+
+    expect(floating.flip).toHaveBeenCalledWith(expect.objectContaining({
+      fallbackPlacements: ['top'],
+    }));
+
+    const sizeOptions = floating.size.mock.calls[0][0] as {
+      apply: (dimensions: { availableWidth: number; availableHeight: number }) => void;
+    };
+    sizeOptions.apply({ availableWidth: 374, availableHeight: 280 });
+    expect(nodes.box.style.width).toBe('350px');
+    expect(nodes.content.style.maxHeight).toBe('280px');
+
+    await active.update();
+    expect(floating.computePosition).toHaveBeenLastCalledWith(
+      nodes.reference,
+      nodes.root,
+      expect.objectContaining({ placement: 'bottom' })
+    );
   });
 });

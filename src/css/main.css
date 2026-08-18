@@ -61,6 +61,35 @@
     transition: none;
   }
 }
+
+/* On narrow screens the positioner keeps top-level panels above or below the
+   trigger, where their configured width can remain useful. These touch-sized
+   controls and roomier edges make the resulting scrollable panel easier to
+   operate without changing the denser desktop presentation. */
+@media (max-width: 600px) {
+  .gt-tooltip-box {
+    border-radius: 8px;
+  }
+
+  .gt-tooltip-content {
+    padding: 8px 10px;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .gt-pin-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin: -0.5rem -0.5rem -0.5rem 0;
+  }
+
+  .gt-collapsible-header.gt-is-collapsible {
+    min-height: 1.6rem;
+  }
+}
 /* --- Summary --- */
 .gene-tooltip-summary {
   display: -webkit-box;
