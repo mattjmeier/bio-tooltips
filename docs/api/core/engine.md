@@ -8,7 +8,7 @@
 
 > **createTooltipEngine**\<`TData`, `TConfig`\>(`options`): `object`
 
-Defined in: [core/engine.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/core/engine.ts#L19)
+Defined in: [core/engine.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/engine.ts#L19)
 
 #### Type Parameters
 

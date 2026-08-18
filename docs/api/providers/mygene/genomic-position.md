@@ -8,7 +8,7 @@
 
 > **isPrimaryChromosome**(`chromosome`): `boolean`
 
-Defined in: [providers/mygene/genomic-position.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/providers/mygene/genomic-position.ts#L16)
+Defined in: [providers/mygene/genomic-position.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mygene/genomic-position.ts#L16)
 
 #### Parameters
 
@@ -26,7 +26,7 @@ Defined in: [providers/mygene/genomic-position.ts:16](https://github.com/mattjme
 
 > **normalizeChromosomeName**(`chromosome`): `string` \| `undefined`
 
-Defined in: [providers/mygene/genomic-position.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/providers/mygene/genomic-position.ts#L5)
+Defined in: [providers/mygene/genomic-position.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mygene/genomic-position.ts#L5)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [providers/mygene/genomic-position.ts:5](https://github.com/mattjmei
 
 > **selectPrimaryGenomicPosition**(`genomicPosition`): [`GenomicPosition`](types.md#genomicposition) \| `undefined`
 
-Defined in: [providers/mygene/genomic-position.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/providers/mygene/genomic-position.ts#L21)
+Defined in: [providers/mygene/genomic-position.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mygene/genomic-position.ts#L21)
 
 #### Parameters
 

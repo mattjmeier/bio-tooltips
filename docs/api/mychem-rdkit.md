@@ -6,7 +6,7 @@
 
 ### RDKitStructureRendererOptions
 
-Defined in: [mychem-rdkit.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/mychem-rdkit.ts#L13)
+Defined in: [mychem-rdkit.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/mychem-rdkit.ts#L13)
 
 #### Properties
 
@@ -14,19 +14,19 @@ Defined in: [mychem-rdkit.ts:13](https://github.com/mattjmeier/bio-tooltips/blob
 
 > `optional` **className?**: `string`
 
-Defined in: [mychem-rdkit.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/mychem-rdkit.ts#L16)
+Defined in: [mychem-rdkit.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/mychem-rdkit.ts#L16)
 
 ##### module?
 
 > `optional` **module?**: `RDKitModule`
 
-Defined in: [mychem-rdkit.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/mychem-rdkit.ts#L14)
+Defined in: [mychem-rdkit.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/mychem-rdkit.ts#L14)
 
 ##### moduleOptions?
 
 > `optional` **moduleOptions?**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, `unknown`\>
 
-Defined in: [mychem-rdkit.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/mychem-rdkit.ts#L15)
+Defined in: [mychem-rdkit.ts:15](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/mychem-rdkit.ts#L15)
 
 ## Functions
 
@@ -34,7 +34,7 @@ Defined in: [mychem-rdkit.ts:15](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **createRDKitStructureRenderer**(`options?`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`MyChemStructureRenderer`](providers/mychem/config.md#mychemstructurerenderer)\>
 
-Defined in: [mychem-rdkit.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/mychem-rdkit.ts#L19)
+Defined in: [mychem-rdkit.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/mychem-rdkit.ts#L19)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ Defined in: [mychem-rdkit.ts:19](https://github.com/mattjmeier/bio-tooltips/blob
 
 > **renderRDKitStructureSVG**(`rdkit`, `smiles`): `string` \| `undefined`
 
-Defined in: [mychem-rdkit.ts:35](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/mychem-rdkit.ts#L35)
+Defined in: [mychem-rdkit.ts:35](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/mychem-rdkit.ts#L35)
 
 #### Parameters
 
