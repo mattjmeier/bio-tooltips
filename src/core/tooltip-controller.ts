@@ -372,6 +372,7 @@ export class TooltipController<TData = unknown> {
       constrainToViewport: this.options.constrainToViewport ?? true,
       maxWidth: this.options.maxWidth,
       maxHeight: this.options.maxHeight,
+      isTopLevel: !this.parent,
     });
   }
 

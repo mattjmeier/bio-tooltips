@@ -25,6 +25,7 @@ export interface PositioningOptions {
   constrainToViewport: boolean;
   maxWidth?: number;
   maxHeight?: number;
+  isTopLevel?: boolean;
 }
 
 export interface ActivePositioner {
@@ -40,13 +41,18 @@ export function startPositioning(
   const tooltipOptions = options.tooltip;
   const padding = tooltipOptions.viewportPadding ?? 8;
   const strategy = tooltipOptions.strategy ?? 'absolute';
+  const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+  const useCompactLayout = options.isTopLevel === true && viewportWidth <= 600;
+  const preferredPlacement = useCompactLayout
+    ? (tooltipOptions.placement?.startsWith('top') ? 'top' : 'bottom')
+    : tooltipOptions.placement;
   let active = true;
 
   root.style.position = strategy;
   root.style.zIndex = String(tooltipOptions.zIndex ?? 9999);
   box.style.maxWidth = `${options.maxWidth ?? 350}px`;
 
-  const placementMiddleware: Middleware = tooltipOptions.placement === 'auto'
+  const placementMiddleware: Middleware = preferredPlacement === 'auto'
     ? autoPlacement({
         padding,
         rootBoundary: 'viewport',
@@ -55,7 +61,9 @@ export function startPositioning(
     : flip({
         padding,
         rootBoundary: 'viewport',
-        fallbackPlacements: tooltipOptions.fallbackPlacements as Placement[] | undefined,
+        fallbackPlacements: useCompactLayout
+          ? [preferredPlacement === 'top' ? 'bottom' : 'top']
+          : tooltipOptions.fallbackPlacements as Placement[] | undefined,
       });
 
   const middleware: Middleware[] = [
@@ -69,6 +77,10 @@ export function startPositioning(
         if (!active) return;
         const resolvedWidth = Math.max(0, Math.min(availableWidth, options.maxWidth ?? 350));
         box.style.maxWidth = `${resolvedWidth}px`;
+        // Side placements can leave a full-sized tooltip squeezed into a thin
+        // column on phones. Compact top-level tooltips use the full resolved
+        // width so their sections stay readable and scroll vertically instead.
+        if (useCompactLayout) box.style.width = `${resolvedWidth}px`;
         box.style.setProperty('--gt-available-width', `${Math.max(0, availableWidth)}px`);
         box.style.setProperty('--gt-available-height', `${Math.max(0, availableHeight)}px`);
         if (options.constrainToViewport) {
@@ -88,9 +100,9 @@ export function startPositioning(
   const update = async (): Promise<void> => {
     if (!active || !root.isConnected) return;
     const result = await computePosition(reference, root, {
-      placement: tooltipOptions.placement === 'auto'
+      placement: preferredPlacement === 'auto'
         ? undefined
-        : tooltipOptions.placement as Placement | undefined,
+        : preferredPlacement as Placement | undefined,
       strategy,
       middleware,
     });
