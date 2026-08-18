@@ -393,6 +393,12 @@ export class TooltipController<TData = unknown> {
 
   private setChildVisible(child: TooltipController<any>, visible: boolean): void {
     if (visible) {
+      // A parent tooltip owns at most one visible child. Dismiss the previous
+      // child before recording the new one so scrubbing across nested triggers
+      // (for example, adjacent exons) cannot accumulate tooltip panels.
+      for (const visibleChild of this.visibleChildren) {
+        if (visibleChild !== child) visibleChild.dismiss();
+      }
       this.visibleChildren.add(child);
       this.clearHideTimers();
     } else {

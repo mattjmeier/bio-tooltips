@@ -233,6 +233,41 @@ describe('TooltipController', () => {
     expect(child.state.isDestroyed).toBe(true);
   });
 
+  it('allows a parent to own only one visible nested tooltip at a time', () => {
+    const { controller: parent } = createController();
+    parent.show();
+    vi.runAllTimers();
+
+    const firstReference = document.createElement('button');
+    const secondReference = document.createElement('button');
+    parent.content.append(firstReference, secondReference);
+    const createChild = (reference: Element, content: string) => {
+      const child = new TooltipController(reference, {
+        content,
+        tooltip: { ...immediateOptions, appendTo: parent.root },
+        theme: parent.theme,
+        parent,
+      });
+      parent.addNestedTooltip(child);
+      return child;
+    };
+    const firstChild = createChild(firstReference, 'First exon');
+    const secondChild = createChild(secondReference, 'Second exon');
+
+    firstChild.show();
+    vi.runAllTimers();
+    expect(firstChild.status).toBe('open');
+
+    secondChild.show();
+    vi.runAllTimers();
+
+    expect(firstChild.status).toBe('idle');
+    expect(firstChild.state.isMounted).toBe(false);
+    expect(secondChild.status).toBe('open');
+    expect(parent.status).toBe('open');
+    expect(parent.root.querySelectorAll('[data-gt-tooltip-root]')).toHaveLength(1);
+  });
+
   it('pins, updates content and theme, then hides when unpinned', () => {
     const { controller } = createController();
     controller.show();
