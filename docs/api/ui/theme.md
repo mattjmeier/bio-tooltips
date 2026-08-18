@@ -8,7 +8,7 @@
 
 > **getEffectiveTheme**(`configTheme`): `string`
 
-Defined in: [ui/theme.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/ui/theme.ts#L6)
+Defined in: [ui/theme.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/ui/theme.ts#L6)
 
 Determines the effective theme to be used for tooltip instances.
 
@@ -28,7 +28,7 @@ Determines the effective theme to be used for tooltip instances.
 
 > **initializeThemeObserver**(`instances`, `isAutoTheme`): `ThemeObserverCleanup`
 
-Defined in: [ui/theme.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/c21e23be25099f386b5f5ccdea5d734fc7369996/src/ui/theme.ts#L23)
+Defined in: [ui/theme.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/a9805325837ef15264ba5a8f41c356aa83345d67/src/ui/theme.ts#L23)
 
 Sets up a MutationObserver to watch for theme changes on the `<html>` element
 and updates the tooltip instances accordingly.
