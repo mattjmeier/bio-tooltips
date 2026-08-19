@@ -8,7 +8,7 @@
 
 > **getOpenTopLevelTooltips**(): `ReadonlySet`\<[`TooltipController`](tooltip-controller.md#tooltipcontroller)\<`any`\>\>
 
-Defined in: [core/tooltip-registry.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/tooltip-registry.ts#L27)
+Defined in: [core/tooltip-registry.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-registry.ts#L27)
 
 #### Returns
 
@@ -20,7 +20,7 @@ Defined in: [core/tooltip-registry.ts:27](https://github.com/mattjmeier/bio-tool
 
 > **registerTopLevelTooltip**(`instance`): `void`
 
-Defined in: [core/tooltip-registry.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/tooltip-registry.ts#L19)
+Defined in: [core/tooltip-registry.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-registry.ts#L19)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [core/tooltip-registry.ts:19](https://github.com/mattjmeier/bio-tool
 
 > **unregisterTopLevelTooltip**(`instance`): `void`
 
-Defined in: [core/tooltip-registry.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/tooltip-registry.ts#L23)
+Defined in: [core/tooltip-registry.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-registry.ts#L23)
 
 #### Parameters
 

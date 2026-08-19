@@ -8,7 +8,7 @@
 
 > `const` **ChemicalTooltip**: `object`
 
-Defined in: [mychem.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/mychem.ts#L42)
+Defined in: [mychem.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L42)
 
 #### Type Declaration
 
@@ -64,7 +64,7 @@ Defined in: [mychem.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/acb01
 
 > **cacheSize**(): `number`
 
-Defined in: [mychem.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/mychem.ts#L38)
+Defined in: [mychem.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L38)
 
 #### Returns
 
@@ -76,7 +76,7 @@ Defined in: [mychem.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/acb01
 
 > **clearCache**(): `void`
 
-Defined in: [mychem.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/mychem.ts#L34)
+Defined in: [mychem.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L34)
 
 #### Returns
 
@@ -88,7 +88,7 @@ Defined in: [mychem.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/acb01
 
 > **init**(`userConfig?`): () => `void`
 
-Defined in: [mychem.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/mychem.ts#L22)
+Defined in: [mychem.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L22)
 
 #### Parameters
 
@@ -106,7 +106,7 @@ Defined in: [mychem.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/acb01
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mychem.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/mychem.ts#L26)
+Defined in: [mychem.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L26)
 
 #### Returns
 
@@ -118,7 +118,7 @@ Defined in: [mychem.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/acb01
 
 > **whenPrefetchReady**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [mychem.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/mychem.ts#L30)
+Defined in: [mychem.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L30)
 
 #### Returns
 
