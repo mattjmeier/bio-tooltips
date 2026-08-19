@@ -30,7 +30,7 @@ async function renderMyGeneVisuals(
 
   const shouldRenderGeneTrack = sectionKey
     ? sectionKey === 'gene-model' && !renderedSections.has('gene-model')
-    : !isGeneModelCollapsed && !renderedSections.has('gene-model');
+    : !isGeneModelCollapsed;
 
   const shouldRenderIdeogram = sectionKey
     ? sectionKey === 'location' && !renderedSections.has('location')
