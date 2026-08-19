@@ -173,7 +173,7 @@ function ciRunsForSha(sha) {
     [
       'run',
       'list',
-      '--sha',
+      '--commit',
       sha,
       '--limit',
       '25',
