@@ -4,6 +4,13 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.8] - 2026-08-19
+
+### Fixed
+
+- Reduce churn with generation of API docs: (`typedoc.json` used `sourceLinkTemplate: …/blob/{gitRevision}/{path}#L{line}`. TypeDoc’s `{gitRevision}` expands to the full 40-hex SHA of HEAD at generation time, and it was embedded into every one of the 464 source links. Since `docs/api/**` is committed, the docs always carried the SHA of whatever commit generated them — one commit behind HEAD. So every regeneration rewrote every link line.
+- Selection issue with tooltip IDs on mobile: now tapping on a gene/chemical name no longer highlights the word.
+
 ## [2.0.7] - 2026-08-18
 
 ### Added
