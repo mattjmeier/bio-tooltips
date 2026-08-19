@@ -95,9 +95,15 @@ export function which(name) {
 // Git helpers
 // ---------------------------------------------------------------------------
 
-/** Run git, capturing output (parse-oriented by default). */
+/** Run git, capturing output (parse-oriented by default).
+ *
+ * GIT_PAGER=cat is forced so no git command ever drops into an interactive
+ * pager (e.g. the inherited `git diff` printed during a release) and stalls
+ * the flow waiting for a `q`.
+ */
 export function runGit(args, opts = {}) {
-  return run('git', args, { stdio: 'pipe', ...opts });
+  const { env = process.env, ...rest } = opts;
+  return run('git', args, { stdio: 'pipe', ...rest, env: { ...env, GIT_PAGER: 'cat' } });
 }
 
 /** Current branch name, or the short SHA when detached. */

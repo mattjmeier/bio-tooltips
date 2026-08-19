@@ -307,9 +307,14 @@ async function prepare(bump, version) {
   const g2 = await confirm(`Commit "chore(release): v${proposed}" and push to origin/main? (No tag yet.)`);
   if (!g2) {
     info('Version files are modified but NOT committed or pushed.');
-    info('Inspect:   git diff');
-    info('To undo:   git checkout -- package.json package-lock.json');
-    info('To finish: re-run the release command (it will resume cleanly).');
+    info('Inspect:  git diff');
+    info('To finish the release now:');
+    info(`  git add package.json package-lock.json`);
+    info(`  git commit -m "chore(release): v${proposed}"`);
+    info('  git push origin main');
+    info('  then, once CI passes:  npm run release:publish');
+    info('To undo the bump instead:');
+    info('  git checkout -- package.json package-lock.json');
     process.exit(0);
   }
 
