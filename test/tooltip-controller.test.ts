@@ -233,6 +233,76 @@ describe('TooltipController', () => {
     expect(child.state.isDestroyed).toBe(true);
   });
 
+  it('closes the parent after the last child tooltip finishes hiding when the pointer has left', () => {
+    const { controller: parent } = createController();
+    parent.show();
+    vi.runAllTimers();
+    expect(parent.status).toBe('open');
+
+    const childReference = document.createElement('button');
+    parent.content.append(childReference);
+    const child = new TooltipController(childReference, {
+      content: 'Nested content',
+      tooltip: { ...immediateOptions, appendTo: parent.root, hideDelay: 0 },
+      theme: parent.theme,
+      parent,
+      interactiveDebounce: 75,
+    });
+    parent.addNestedTooltip(child);
+    child.show();
+    vi.runAllTimers();
+    expect(child.status).toBe('open');
+
+    // Pointer leaves both the child and the parent in the same instant.
+    // The child schedules its closeNow after a 75 ms debounce; the parent's
+    // hide() sees the child still in visibleChildren and defers.
+    childReference.dispatchEvent(new MouseEvent('mouseleave', { relatedTarget: document.body }));
+    parent.root.dispatchEvent(new MouseEvent('mouseleave', { relatedTarget: document.body }));
+    // Nothing has closed yet — parent must still be open.
+    vi.advanceTimersByTime(50);
+    expect(parent.status).toBe('open');
+
+    // The child's debounce elapses; closeNow fires and removes it from
+    // visibleChildren. The parent should now complete its deferred hide.
+    vi.advanceTimersByTime(30);
+    vi.runAllTimers();
+    expect(parent.status).toBe('idle');
+    expect(parent.state.isMounted).toBe(false);
+  });
+
+  it('does not close the parent when the pointer re-enters before the child finishes hiding', () => {
+    const { controller: parent } = createController();
+    parent.show();
+    vi.runAllTimers();
+
+    const childReference = document.createElement('button');
+    parent.content.append(childReference);
+    const child = new TooltipController(childReference, {
+      content: 'Nested content',
+      tooltip: { ...immediateOptions, appendTo: parent.root },
+      theme: parent.theme,
+      parent,
+      interactiveDebounce: 75,
+    });
+    parent.addNestedTooltip(child);
+    child.show();
+    vi.runAllTimers();
+
+    // Pointer leaves, triggering the deferred-hide path.
+    childReference.dispatchEvent(new MouseEvent('mouseleave', { relatedTarget: document.body }));
+    parent.root.dispatchEvent(new MouseEvent('mouseleave', { relatedTarget: document.body }));
+
+    // User quickly mouses back over the parent panel.
+    parent.root.dispatchEvent(new MouseEvent('mouseenter'));
+
+    // Child debounce elapses — parent should stay open because the pointer returned.
+    vi.advanceTimersByTime(100);
+    vi.runAllTimers();
+    expect(parent.status).toBe('open');
+
+    parent.destroy();
+  });
+
   it('allows a parent to own only one visible nested tooltip at a time', () => {
     const { controller: parent } = createController();
     parent.show();

@@ -82,6 +82,11 @@ export class TooltipController<TData = unknown> {
   private parent?: TooltipController<any>;
   private pointerBridgeCleanup?: () => void;
   private preservedInteractiveRect?: DOMRect;
+  // Set when the pointer has left but hide() bailed because a nested tooltip
+  // was still visible. Cleared by clearHideTimers() (i.e. the user re-hovered).
+  // When the last visible child closes, setChildVisible re-evaluates and
+  // proceeds with the hide that was deferred.
+  private _pendingHide = false;
 
   constructor(reference: Element, options: TooltipControllerOptions<TData>) {
     this.reference = reference;
@@ -140,7 +145,15 @@ export class TooltipController<TData = unknown> {
 
   hide(): void {
     if (this.state.isDestroyed || this.status === 'idle' || this.status === 'closing') return;
-    if (this._isPinned || this.visibleChildren.size > 0) return;
+    if (this._isPinned) return;
+    if (this.visibleChildren.size > 0) {
+      // The pointer left while a nested tooltip is still animating closed.
+      // Remember that we want to hide; setChildVisible(child, false) will
+      // re-evaluate once the last child is gone.
+      this._pendingHide = true;
+      return;
+    }
+    this._pendingHide = false;
     this.clearShowTimer();
     const delay = Math.max(
       this.options.tooltip.hideDelay ?? 0,
@@ -403,11 +416,19 @@ export class TooltipController<TData = unknown> {
       this.clearHideTimers();
     } else {
       this.visibleChildren.delete(child);
+      // The pointer left while this child was still visible; hide() set
+      // _pendingHide and bailed. Now that the last child is gone, proceed.
+      if (this._pendingHide && this.visibleChildren.size === 0) {
+        this.hide();
+      }
     }
   }
 
   private installInteractions(): void {
-    this.listen(this.reference, 'mouseenter', () => this.show());
+    this.listen(this.reference, 'mouseenter', () => {
+      this.clearHideTimers();
+      this.show();
+    });
     this.listen(this.reference, 'mouseleave', (event: Event) => this.handlePointerLeave(event as MouseEvent));
     this.listen(this.reference, 'focus', () => this.show());
     this.listen(this.reference, 'blur', () => this.handleFocusLeave());
@@ -476,6 +497,7 @@ export class TooltipController<TData = unknown> {
       if (this.isWithinInteractiveBridge(event.clientX, event.clientY)) {
         if (this.hideTimer) clearTimeout(this.hideTimer);
         this.hideTimer = undefined;
+        this._pendingHide = false;
         return;
       }
       this.pointerBridgeCleanup?.();
@@ -538,6 +560,7 @@ export class TooltipController<TData = unknown> {
     if (this.hideTimer) clearTimeout(this.hideTimer);
     this.hideTimer = undefined;
     this.pointerBridgeCleanup?.();
+    this._pendingHide = false;
     // A peer-dismissed tooltip is on its way out for good. Its unmount timer is
     // the ONLY thing that tears the panel down and clears `_peerDismissed`. If
     // we cancelled it here — e.g. because the cursor drifted back over the still
