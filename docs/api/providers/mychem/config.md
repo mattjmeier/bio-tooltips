@@ -6,7 +6,7 @@
 
 ### MyChemDisplayConfig
 
-Defined in: [providers/mychem/config.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L18)
+Defined in: [providers/mychem/config.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L18)
 
 #### Properties
 
@@ -14,97 +14,97 @@ Defined in: [providers/mychem/config.ts:18](https://github.com/mattjmeier/bio-to
 
 > **classes**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L24)
+Defined in: [providers/mychem/config.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L24)
 
 ##### collapsedByDefault?
 
 > `optional` **collapsedByDefault?**: `boolean`
 
-Defined in: [providers/mychem/config.ts:33](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L33)
+Defined in: [providers/mychem/config.ts:33](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L33)
 
 ##### collapsible?
 
 > `optional` **collapsible?**: `boolean`
 
-Defined in: [providers/mychem/config.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L32)
+Defined in: [providers/mychem/config.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L32)
 
 ##### detailedProperties
 
 > **detailedProperties**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L21)
+Defined in: [providers/mychem/config.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L21)
 
 ##### footer
 
 > **footer**: `boolean`
 
-Defined in: [providers/mychem/config.ts:29](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L29)
+Defined in: [providers/mychem/config.ts:29](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L29)
 
 ##### identifiers
 
 > **identifiers**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L28)
+Defined in: [providers/mychem/config.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L28)
 
 ##### identity
 
 > **identity**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L19)
+Defined in: [providers/mychem/config.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L19)
 
 ##### pharmacology
 
 > **pharmacology**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:25](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L25)
+Defined in: [providers/mychem/config.ts:25](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L25)
 
 ##### rawJson
 
 > **rawJson**: `boolean`
 
-Defined in: [providers/mychem/config.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L30)
+Defined in: [providers/mychem/config.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L30)
 
 ##### regulatory
 
 > **regulatory**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L26)
+Defined in: [providers/mychem/config.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L26)
 
 ##### safety
 
 > **safety**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L27)
+Defined in: [providers/mychem/config.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L27)
 
 ##### sourcePaths
 
 > **sourcePaths**: `boolean`
 
-Defined in: [providers/mychem/config.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L31)
+Defined in: [providers/mychem/config.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L31)
 
 ##### structureProperties
 
 > **structureProperties**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L20)
+Defined in: [providers/mychem/config.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L20)
 
 ##### summary
 
 > **summary**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L22)
+Defined in: [providers/mychem/config.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L22)
 
 ##### synonyms
 
 > **synonyms**: [`MyChemSectionVisibility`](#mychemsectionvisibility)
 
-Defined in: [providers/mychem/config.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L23)
+Defined in: [providers/mychem/config.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L23)
 
 ***
 
 ### MyChemStructureRenderContext
 
-Defined in: [providers/mychem/config.ts:7](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L7)
+Defined in: [providers/mychem/config.ts:7](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L7)
 
 #### Properties
 
@@ -112,25 +112,25 @@ Defined in: [providers/mychem/config.ts:7](https://github.com/mattjmeier/bio-too
 
 > **alt**: `string`
 
-Defined in: [providers/mychem/config.ts:11](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L11)
+Defined in: [providers/mychem/config.ts:11](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L11)
 
 ##### data
 
 > **data**: [`MyChemInfoResult`](types.md#mycheminforesult)
 
-Defined in: [providers/mychem/config.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L10)
+Defined in: [providers/mychem/config.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L10)
 
 ##### smiles?
 
 > `optional` **smiles?**: `string`
 
-Defined in: [providers/mychem/config.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L9)
+Defined in: [providers/mychem/config.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L9)
 
 ##### structure
 
 > **structure**: `object`
 
-Defined in: [providers/mychem/config.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L8)
+Defined in: [providers/mychem/config.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L8)
 
 ###### kind
 
@@ -144,7 +144,7 @@ Defined in: [providers/mychem/config.ts:8](https://github.com/mattjmeier/bio-too
 
 ### MyChemTooltipConfig
 
-Defined in: [providers/mychem/config.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L36)
+Defined in: [providers/mychem/config.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L36)
 
 #### Extends
 
@@ -156,13 +156,13 @@ Defined in: [providers/mychem/config.ts:36](https://github.com/mattjmeier/bio-to
 
 > **api**: `"mychem"`
 
-Defined in: [providers/mychem/config.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L37)
+Defined in: [providers/mychem/config.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L37)
 
 ##### constrainToViewport
 
 > **constrainToViewport**: `boolean`
 
-Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L67)
+Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L67)
 
 ###### Inherited from
 
@@ -172,7 +172,7 @@ Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **debugTimings**: `boolean`
 
-Defined in: [core/config.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L59)
+Defined in: [core/config.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L59)
 
 ###### Inherited from
 
@@ -182,7 +182,7 @@ Defined in: [core/config.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **display**: [`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`MyChemDisplayConfig`](#mychemdisplayconfig)\>
 
-Defined in: [providers/mychem/config.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L41)
+Defined in: [providers/mychem/config.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L41)
 
 ###### Overrides
 
@@ -192,13 +192,13 @@ Defined in: [providers/mychem/config.ts:41](https://github.com/mattjmeier/bio-to
 
 > **listCount**: `number`
 
-Defined in: [providers/mychem/config.ts:40](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L40)
+Defined in: [providers/mychem/config.ts:40](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L40)
 
 ##### nestedTooltipOptions
 
 > **nestedTooltipOptions**: [`TooltipOptions`](../../core/config.md#tooltipoptions-1)
 
-Defined in: [core/config.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L64)
+Defined in: [core/config.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L64)
 
 ###### Inherited from
 
@@ -208,7 +208,7 @@ Defined in: [core/config.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **onTiming?**: [`TooltipTimingObserver`](../../core/config.md#tooltiptimingobserver)
 
-Defined in: [core/config.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L60)
+Defined in: [core/config.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L60)
 
 ###### Inherited from
 
@@ -218,7 +218,7 @@ Defined in: [core/config.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **prefetch**: [`PrefetchMode`](../../core/config.md#prefetchmode)
 
-Defined in: [core/config.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L56)
+Defined in: [core/config.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L56)
 
 ###### Inherited from
 
@@ -228,7 +228,7 @@ Defined in: [core/config.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **prefetchThreshold**: `number`
 
-Defined in: [core/config.ts:57](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L57)
+Defined in: [core/config.ts:57](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L57)
 
 ###### Inherited from
 
@@ -238,7 +238,7 @@ Defined in: [core/config.ts:57](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **sectionVariant**: [`SectionVariant`](../../core/config.md#sectionvariant-1)
 
-Defined in: [core/config.ts:62](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L62)
+Defined in: [core/config.ts:62](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L62)
 
 ###### Inherited from
 
@@ -248,7 +248,7 @@ Defined in: [core/config.ts:62](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **selector**: `string`
 
-Defined in: [core/config.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L55)
+Defined in: [core/config.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L55)
 
 ###### Inherited from
 
@@ -258,19 +258,19 @@ Defined in: [core/config.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **structureRenderer?**: [`MyChemStructureRenderer`](#mychemstructurerenderer)
 
-Defined in: [providers/mychem/config.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L42)
+Defined in: [providers/mychem/config.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L42)
 
 ##### synonymCount
 
 > **synonymCount**: `number`
 
-Defined in: [providers/mychem/config.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L39)
+Defined in: [providers/mychem/config.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L39)
 
 ##### theme
 
 > **theme**: [`TooltipTheme`](../../core/config.md#tooltiptheme)
 
-Defined in: [core/config.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L61)
+Defined in: [core/config.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L61)
 
 ###### Inherited from
 
@@ -280,7 +280,7 @@ Defined in: [core/config.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **tooltipHeight?**: `number`
 
-Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L66)
+Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L66)
 
 ###### Inherited from
 
@@ -290,7 +290,7 @@ Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **tooltipOptions**: [`TooltipOptions`](../../core/config.md#tooltipoptions-1)
 
-Defined in: [core/config.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L63)
+Defined in: [core/config.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L63)
 
 ###### Inherited from
 
@@ -300,7 +300,7 @@ Defined in: [core/config.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **tooltipWidth?**: `number`
 
-Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L65)
+Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L65)
 
 ###### Inherited from
 
@@ -310,13 +310,13 @@ Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **truncateSummary**: `number`
 
-Defined in: [providers/mychem/config.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L38)
+Defined in: [providers/mychem/config.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L38)
 
 ##### visualPreload
 
 > **visualPreload**: [`VisualPreloadMode`](../../core/config.md#visualpreloadmode)
 
-Defined in: [core/config.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/core/config.ts#L58)
+Defined in: [core/config.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/core/config.ts#L58)
 
 ###### Inherited from
 
@@ -328,7 +328,7 @@ Defined in: [core/config.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **MyChemSectionVisibility** = `boolean` \| `"expanded"` \| `"collapsed"`
 
-Defined in: [providers/mychem/config.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L5)
+Defined in: [providers/mychem/config.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L5)
 
 ***
 
@@ -336,7 +336,7 @@ Defined in: [providers/mychem/config.ts:5](https://github.com/mattjmeier/bio-too
 
 > **MyChemStructureRenderer** = (`context`) => `string` \| `null` \| `undefined`
 
-Defined in: [providers/mychem/config.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L14)
+Defined in: [providers/mychem/config.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L14)
 
 #### Parameters
 
@@ -354,7 +354,7 @@ Defined in: [providers/mychem/config.ts:14](https://github.com/mattjmeier/bio-to
 
 > `const` **defaultMyChemConfig**: [`MyChemTooltipConfig`](#mychemtooltipconfig)
 
-Defined in: [providers/mychem/config.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L45)
+Defined in: [providers/mychem/config.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L45)
 
 ## Functions
 
@@ -362,7 +362,7 @@ Defined in: [providers/mychem/config.ts:45](https://github.com/mattjmeier/bio-to
 
 > **mergeConfig**(`userConfig?`): [`MyChemTooltipConfig`](#mychemtooltipconfig)
 
-Defined in: [providers/mychem/config.ts:72](https://github.com/mattjmeier/bio-tooltips/blob/0b219d7c30b5f18beb729daa94cd741b310396f4/src/providers/mychem/config.ts#L72)
+Defined in: [providers/mychem/config.ts:72](https://github.com/mattjmeier/bio-tooltips/blob/acb01f2607b7371dc44a07b2a62fc3e79bec4f82/src/providers/mychem/config.ts#L72)
 
 #### Parameters
 
