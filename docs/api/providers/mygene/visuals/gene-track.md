@@ -20,7 +20,7 @@ Defined in: [providers/mygene/visuals/gene-track.ts:16](https://github.com/mattj
 
 > **renderGeneTrack**(`instance`, `data`, `uniqueId`, `config`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [providers/mygene/visuals/gene-track.ts:148](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/gene-track.ts#L148)
+Defined in: [providers/mygene/visuals/gene-track.ts:128](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/gene-track.ts#L128)
 
 Main rendering function
 
