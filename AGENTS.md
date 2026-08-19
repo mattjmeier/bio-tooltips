@@ -24,18 +24,46 @@ Keep user-facing dependencies minimal and documented:
 
 ## Release Notes
 
-Publishing to npm and deploying docs are separate workflows:
+Publishing to npm and deploying docs stay separate workflows. Both now call the
+canonical npm scripts (see `package.json`) so local, CI, and publish use the same
+commands and cannot drift:
 
-- `.github/workflows/publish.yml` runs when a `v*.*.*` tag is pushed. It builds with Node 22, runs `npm ci`, `npm run build`, `npm test`, and publishes to npm with provenance.
-- `.github/workflows/docs.yml` runs when `main` is pushed. It builds the library, runs `npm run docs:build:fresh`, and deploys the generated VitePress site to GitHub Pages.
+- `.github/workflows/publish.yml` runs when a `v*.*.*` tag is pushed. It runs `npm ci`, `npm run ci:release` (build + test, once), `npm run package:check` (`npm pack --dry-run`), then `npm publish --provenance --access public` (trusted publishing). It is never combined with docs deployment.
+- `.github/workflows/docs.yml` runs when `main` is pushed. It runs `npm run build`, `npm run ci:docs` (regenerate TypeDoc + build the VitePress site), and deploys to GitHub Pages.
+- `.github/workflows/ci.yml` runs on `main` pushes and pull requests. It runs `npm run ci:release` and lints the workflow files with `actionlint`.
 
-For a normal patch release, prefer this order:
+### Preflight
 
-1. Merge the release branch to `main`.
-2. On `main`, update `CHANGELOG.md` for the release and confirm `package.json` and `package-lock.json` are at the expected pre-release version.
-3. Run `npm run docs:build:fresh` when the generated API markdown should match the release, then commit any intended `docs/api/**` changes.
-4. Run the release checks, usually `npm test`, `npm run build:types`, and `npm run build`.
-5. Run `npm version patch` from a clean `main` tree. This updates `package.json` and `package-lock.json`, creates the version commit, and creates the matching `vX.Y.Z` tag.
-6. Push `main` first and let CI/docs deploy pass. Then push the tag with `git push origin vX.Y.Z` to publish to npm.
+`npm run preflight` answers "is this repository ready to be released?" locally. It runs `ci:release`, `package:check`, `ci:docs`, and the workflow lint, then checks that the verification steps did not unexpectedly modify any tracked files (e.g. stale generated `docs/api/**`) and fails with a message if they did. GitHub Actions remains the authoritative check; preflight only mirrors it locally.
 
-Do not push a release tag from a feature branch unless intentionally publishing that branch. If preparing a version bump before merge, use `npm version patch --no-git-tag-version`, commit the package files, merge to `main`, then create the release tag on `main`. The release tag should point at the exact `main` commit intended for npm so npm provenance, GitHub source, and GitHub Pages documentation line up.
+### Two-phase release
+
+The release is a resumable two-phase flow driven by `scripts/release.mjs`. Each phase independently re-validates the environment (on `main`, clean tree, `HEAD == origin/main`, and `git`/`npm`/`gh` available) and stops on any failure — never stashing, resetting, force-pushing, or moving an existing tag.
+
+**Happy path:** run `npm run preflight`, then `npm run release -- patch` (also `minor`, `major`, or an explicit `X.Y.Z`). Wait for GitHub Actions on the pushed commit, then `npm run release:publish`.
+
+**Phase 1 — `npm run release -- patch`:**
+
+1. Safety checks + `npm run preflight`; aborts on failure (nothing changes).
+2. **Gate 1** — confirm before touching the version files.
+3. `npm version <bump> --no-git-tag-version` (updates only `package.json` + `package-lock.json`, creates no tag); verifies the new version, shows `git diff`, fails if anything else changed.
+4. **Gate 2** — confirm before committing `chore(release): vX.Y.Z` and pushing to `origin/main`. No tag yet.
+
+**Phase 2 — `npm run release:publish`** (after CI finishes for the pushed commit):
+
+1. Re-validates the environment and confirms the version tag does **not** already exist (a tag present locally *and* on remote pointing exactly at HEAD is an idempotent no-op).
+2. Verifies GitHub Actions **passed for the exact commit at HEAD** via `gh run list --sha <sha>` (polls while runs are in progress). The tag is created only *after* CI so the published package always corresponds to a commit whose tests already passed in CI.
+3. **Gate 3** — confirm before creating and pushing `vX.Y.Z` (no `--force`). The tag triggers `publish.yml`.
+
+`release:publish` never calls `npm publish`; the pushed tag always drives publication so npm provenance is preserved.
+
+### Recovery
+
+- **Preflight fails:** nothing is committed or tagged. Fix and re-run.
+- **Bumped but commit/push declined:** the tree is left modified (not committed). Inspect with `git diff`, undo with `git checkout -- package.json package-lock.json`, or re-run the release command to resume.
+- **Pushed but CI fails:** no tag is created and the version commit is untouched. Fix CI normally (e.g. re-run the failed workflow in the Actions UI), then re-run `npm run release:publish`. It does not bump the version again — it operates on the version already in `package.json`.
+- **Tag already exists:** the script stops with a clear error unless it points exactly at the expected commit; it never moves an existing release tag.
+
+### Workflow linting
+
+`npm run lint:workflows` runs `actionlint` over `.github/workflows/**` locally and prints an install guide (brew / go / release binary) if `actionlint` is not on PATH. CI runs the same check in the "Lint GitHub Workflows" job of `ci.yml`. `act` is an optional local debug tool and is not required.
