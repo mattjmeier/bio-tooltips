@@ -1,4 +1,4 @@
-# Gene Configuration
+# Gene Configuration & Examples
 
 Gene-specific options extend the shared core config.
 
@@ -64,4 +64,41 @@ GeneTooltip.init({
 
 `display.ideogram` controls whether the ideogram appears inside the location section. `ideogram.enabled` controls whether the optional visual is enabled.
 
-Compare themes and section variants in [Styling & Theming](./styling-theming.md), or see complete configurations in [Gene Examples](./gene-examples.md).
+## Live Examples
+
+These examples show how configuration choices change the rendered tooltip. See the [Gene Demo](./demos/gene.md) for a broader gallery of genes, lists, and species.
+
+### Wide Tooltip
+
+<GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 600, tooltipHeight: 400, truncateSummary: 6 }" />
+
+```ts
+GeneTooltip.init({
+  tooltipWidth: 600,
+  tooltipHeight: 400,
+  truncateSummary: 6
+});
+```
+
+### Minimal Sections
+
+<GeneDemo genes="TP53" species="human" :config="{ display: { species: false, location: false, ideogram: false, pathways: false, domains: false, geneTrack: false, transcripts: false, structures: false, generifs: false, linksSection: false } }" />
+
+```ts
+GeneTooltip.init({
+  display: {
+    species: false,
+    location: false,
+    ideogram: false,
+    pathways: false,
+    domains: false,
+    geneTrack: false,
+    transcripts: false,
+    structures: false,
+    generifs: false,
+    linksSection: false
+  }
+});
+```
+
+For visual comparisons of every theme and section variant, see [Styling & Theming](./styling-theming.md).

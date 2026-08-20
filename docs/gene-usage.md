@@ -1,6 +1,8 @@
-# Gene Usage
+# Gene Tooltips
 
 The gene tooltip module uses the MyGene.info adapter to resolve gene symbols and render gene-specific context.
+
+Common sections include summaries, species context, genomic location, pathways, protein domains, transcripts, structures, GeneRIFs, and external links.
 
 ## Import
 

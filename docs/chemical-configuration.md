@@ -1,4 +1,4 @@
-# Chemical Configuration
+# Chemical Configuration & Examples
 
 Chemical-specific options extend the shared core config.
 
@@ -92,4 +92,43 @@ initChemicalTooltips();
 
 Install `@rdkit/rdkit` in applications that use this option. Tooltips fall back to the default PubChem PNG when RDKit cannot render a SMILES string.
 
-Compare themes and section variants in [Styling & Theming](./styling-theming.md), or see complete configurations and the live RDKit renderer in [Chemical Examples](./chemical-examples.md).
+## Live Examples
+
+These examples show how configuration choices change the rendered tooltip. See the [Chemical Demo](./demos/chemical.md) for a broader gallery of names and identifier scopes.
+
+### Compact Tooltip
+
+<ChemicalDemo query="caffeine" :config="{ tooltipWidth: 360, display: { pharmacology: false, regulatory: false, safety: false, identifiers: 'collapsed' } }" />
+
+```ts
+ChemicalTooltip.init({
+  tooltipWidth: 360,
+  display: {
+    pharmacology: false,
+    regulatory: false,
+    safety: false,
+    identifiers: 'collapsed'
+  }
+});
+```
+
+### Source-Aware Tooltip
+
+<ChemicalDemo query="aspirin" :config="{ display: { sourcePaths: true, identifiers: 'expanded' } }" />
+
+```ts
+ChemicalTooltip.init({
+  display: {
+    sourcePaths: true,
+    identifiers: 'expanded'
+  }
+});
+```
+
+### RDKit Structure SVG
+
+<ChemicalRDKitDemo query="aspirin" :config="{ display: { identifiers: 'collapsed' } }" />
+
+The RDKit renderer is optional; use the installation and setup shown above.
+
+For visual comparisons of every theme and section variant, see [Styling & Theming](./styling-theming.md).

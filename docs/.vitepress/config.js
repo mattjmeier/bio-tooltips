@@ -30,7 +30,7 @@ export default {
   themeConfig: {
     nav: [
       { text: 'Start Here', link: '/guide' },
-      { text: 'Modules', link: '/gene-overview' },
+      { text: 'Modules', link: '/gene-usage' },
       { text: 'Demos', link: '/demo' },
       { text: 'API', link: '/api' },
       // TODO(next breaking major): replace this release link with a versioned-docs
@@ -47,11 +47,7 @@ export default {
         items: [
           { text: 'Quick Start', link: '/guide' },
           { text: 'Core Concepts', link: '/core-concepts' },
-          { text: 'Architecture', link: '/architecture' },
-          { text: 'Performance', link: '/performance' },
-          { text: 'Markup Patterns', link: '/markup-patterns' },
           { text: 'Framework Integration', link: '/integration' },
-          { text: 'Configuration', link: '/configuration' },
           { text: 'Styling & Theming', link: '/styling-theming' }
         ]
       },
@@ -60,31 +56,22 @@ export default {
         items: [
           {
             text: 'Gene Tooltips',
+            link: '/gene-usage',
             items: [
-              { text: 'Overview', link: '/gene-overview' },
               { text: 'Usage', link: '/gene-usage' },
-              { text: 'Configuration', link: '/gene-configuration' },
+              { text: 'Configuration & Examples', link: '/gene-configuration' },
               { text: 'Data Fields', link: '/gene-data-fields' },
-              { text: 'API', link: '/gene-api' },
-              { text: 'Examples', link: '/gene-examples' }
+              { text: 'API', link: '/gene-api' }
             ]
           },
           {
             text: 'Chemical Tooltips',
+            link: '/chemical-usage',
             items: [
-              { text: 'Overview', link: '/chemical-overview' },
               { text: 'Usage', link: '/chemical-usage' },
-              { text: 'Configuration', link: '/chemical-configuration' },
-              { text: 'Data Fields', link: '/chemical-data-fields' },
-              { text: 'Source Comparison', link: '/chemical-source-comparison' },
-              { text: 'API', link: '/chemical-api' },
-              { text: 'Examples', link: '/chemical-examples' }
-            ]
-          },
-          {
-            text: 'Variant Tooltips',
-            items: [
-              { text: 'Roadmap', link: '/variant-roadmap' }
+              { text: 'Configuration & Examples', link: '/chemical-configuration' },
+              { text: 'Data & Sources', link: '/chemical-data-fields' },
+              { text: 'API', link: '/chemical-api' }
             ]
           }
         ]
@@ -92,23 +79,27 @@ export default {
       {
         text: 'Demos',
         items: [
-          { text: 'Demo Overview', link: '/demo' },
-          { text: 'Gene Demo', link: '/demos/gene' },
-          { text: 'Chemical Demo', link: '/demos/chemical' },
-          { text: 'Mixed Entity Demo', link: '/demos/mixed' }
+          { text: 'Overview', link: '/demo' },
+          { text: 'Gene', link: '/demos/gene' },
+          { text: 'Chemical', link: '/demos/chemical' },
+          { text: 'Mixed Entities', link: '/demos/mixed' }
         ]
       },
       {
         text: 'Reference',
         items: [
-          { text: 'Installation', link: '/installation' },
-          { text: 'Browser / Bundler Usage', link: '/browser-bundler-usage' },
-          { text: 'CSS', link: '/css' },
+          { text: 'Installation & Imports', link: '/installation' },
           { text: 'Core API', link: '/reference/core' },
-          { text: 'Migrating to v2', link: '/migrating-to-v2' },
-          { text: 'Adapter API', link: '/reference/adapters' },
-          { text: 'Provider Reference', link: '/reference/providers' },
+          { text: 'Module & Adapter Reference', link: '/reference/adapters' },
           { text: 'Generated API Reference', link: '/api/modules' },
+          { text: 'Migrating to v2', link: '/migrating-to-v2' }
+        ]
+      },
+      {
+        text: 'Internals',
+        items: [
+          { text: 'Architecture', link: '/architecture' },
+          { text: 'Performance Benchmarking', link: '/performance' },
           { text: 'Adding a New Tooltip Module', link: '/add-modules' }
         ]
       }

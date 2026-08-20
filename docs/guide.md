@@ -74,4 +74,4 @@ ChemicalTooltip.init({
 
 ## Next Steps
 
-Read [Core Concepts](./core-concepts.md) for shared behavior, [Gene Usage](./gene-usage.md) for MyGene.info adapter details, and [Chemical Usage](./chemical-usage.md) for MyChem.info adapter details.
+Read [Core Concepts](./core-concepts.md) for shared behavior, [Gene Tooltips](./gene-usage.md) or [Chemical Tooltips](./chemical-usage.md) for module usage, and the corresponding [Gene](./gene-configuration.md) or [Chemical](./chemical-configuration.md) configuration and examples.

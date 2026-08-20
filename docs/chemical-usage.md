@@ -1,6 +1,8 @@
-# Chemical Usage
+# Chemical Tooltips
 
 The chemical tooltip module uses the MyChem.info adapter to resolve chemical names and identifiers.
+
+Common sections include identity, structure and properties, summaries, synonyms, chemical classes, pharmacology, regulatory information, safety annotations, and external identifiers.
 
 ## Import
 

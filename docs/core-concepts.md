@@ -50,6 +50,18 @@ Chemical tooltips prefer `data-query` for stable identifiers and `data-scope` fo
 
 When `data-query` is omitted, chemical tooltips use visible text as an experimental best-guess name search.
 
+Gene and chemical elements can coexist in the same document:
+
+```html
+<p>
+  <span class="gene-tooltip" data-species="human">TP53</span>
+  responds to compounds such as
+  <span class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</span>.
+</p>
+```
+
+Initialize each module against its own selector. See the [Mixed Entity Demo](./demos/mixed.md) for a live example.
+
 ## Prefetching
 
 `prefetch` controls when data is fetched:

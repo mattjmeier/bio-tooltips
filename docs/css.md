@@ -1,15 +1,3 @@
 # CSS
 
-The package exposes one shared stylesheet:
-
-```ts
-import 'bio-tooltips/style.css';
-```
-
-or from a CDN:
-
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.0.3/dist/bio-tooltips.css">
-```
-
-The stylesheet includes base tooltip layout, module section styles, pushpin behavior, summary expansion affordances, and theme variables.
+Stylesheet imports, browser links, themes, variants, dimensions, and CSS variables are now documented together in [Styling & Theming](./styling-theming.md).

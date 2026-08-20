@@ -49,19 +49,6 @@ import { ChemicalTooltip } from 'bio-tooltips/mychem';
 
 ## Optional RDKit SVG Rendering
 
-RDKit rendering is not part of the default MyChem bundle. Install `@rdkit/rdkit`, import the optional entry point, and pass the renderer into `ChemicalTooltip.init`.
-
-```ts
-import { ChemicalTooltip } from 'bio-tooltips/mychem';
-import { createRDKitStructureRenderer } from 'bio-tooltips/mychem/rdkit';
-
-const structureRenderer = await createRDKitStructureRenderer();
-
-ChemicalTooltip.init({
-  structureRenderer,
-});
-```
-
-If RDKit cannot render a structure, the tooltip falls back to the default PubChem PNG renderer.
+RDKit rendering is not part of the default MyChem bundle. The API accepts the optional `structureRenderer`; see [Chemical Configuration & Examples](./chemical-configuration.md#optional-rdkit-structure-svgs) for installation, initialization, fallback behavior, and a live example.
 
 For exact exported types, see the generated MyChem reference pages for [config](./api/providers/mychem/config.md), [client](./api/providers/mychem/client.md), and [types](./api/providers/mychem/types.md).

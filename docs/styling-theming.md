@@ -8,6 +8,12 @@ import 'bio-tooltips/style.css';
 
 The stylesheet includes the owned Bio Tooltips shell, layout rules, module section styling, themes, and CSS variables.
 
+For a browser build, load the stylesheet from a pinned package version:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.0.3/dist/bio-tooltips.css">
+```
+
 ## Themes
 
 ```ts

@@ -45,14 +45,3 @@ The VitePress demo components support URL toggles for timing diagnostics:
 | `?btVisualPreload=reset` | Clears the persisted demo visual preload override. |
 
 These toggles are docs-only conveniences for testing the local demos. Library users can configure the same behavior with `debugTimings` and `visualPreload`.
-
-## Code Shape
-
-```ts
-import { GeneTooltip } from 'bio-tooltips/mygene';
-import { ChemicalTooltip } from 'bio-tooltips/mychem';
-import 'bio-tooltips/style.css';
-
-GeneTooltip.init({ selector: '.gene-tooltip' });
-ChemicalTooltip.init({ selector: '.chemical-tooltip' });
-```
