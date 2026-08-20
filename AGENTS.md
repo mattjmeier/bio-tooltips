@@ -46,7 +46,7 @@ The release is a resumable two-phase flow driven by `scripts/release.mjs`. Each 
 
 1. Safety checks + `npm run preflight`; aborts on failure (nothing changes).
 2. **Gate 1** — confirm before touching the version files.
-3. `npm version <bump> --no-git-tag-version` (updates only `package.json` + `package-lock.json`, creates no tag); verifies the new version, shows `git diff`, fails if anything else changed.
+3. `npm version <bump> --no-git-tag-version` updates `package.json` + `package-lock.json` and synchronizes pinned `bio-tooltips@X.Y.Z` links in the allowlisted README/docs files through the npm `version` hook; it creates no tag, verifies the new version, shows `git diff`, and fails if anything outside the release allowlist changed.
 4. **Gate 2** — confirm before committing `chore(release): vX.Y.Z` and pushing to `origin/main`. No tag yet.
 
 **Phase 2 — `npm run release:publish`** (after CI finishes for the pushed commit):
@@ -60,7 +60,7 @@ The release is a resumable two-phase flow driven by `scripts/release.mjs`. Each 
 ### Recovery
 
 - **Preflight fails:** nothing is committed or tagged. Fix and re-run.
-- **Bumped but commit/push declined:** the tree is left modified (not committed). Inspect with `git diff`, undo with `git checkout -- package.json package-lock.json`, or re-run the release command to resume.
+- **Bumped but commit/push declined:** the tree is left modified (not committed). Inspect with `git diff`, undo the allowlisted version and documentation files shown by the release command, or re-run the release command to resume.
 - **Pushed but CI fails:** no tag is created and the version commit is untouched. Fix CI normally (e.g. re-run the failed workflow in the Actions UI), then re-run `npm run release:publish`. It does not bump the version again — it operates on the version already in `package.json`.
 - **Tag already exists:** the script stops with a clear error unless it points exactly at the expected commit; it never moves an existing release tag.
 

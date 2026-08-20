@@ -74,6 +74,8 @@
     "docs:build": "vitepress build docs",
     "docs:build:fresh": "npm run docs:generate && npm run docs:build",
     "docs:preview": "vitepress preview docs",
+    "docs:versions:sync": "node scripts/sync-doc-version.mjs",
+    "docs:versions:check": "node scripts/sync-doc-version.mjs --check",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "benchmark": "npm run build:js-css && node benchmark/run.mjs",
@@ -85,6 +87,7 @@
     "ci:docs": "npm run docs:build:fresh",
     "lint:workflows": "node scripts/lint-workflows.mjs",
     "preflight": "node scripts/preflight.mjs",
+    "version": "npm run docs:versions:sync",
     "release": "node scripts/release.mjs",
     "release:publish": "node scripts/release.mjs publish"
   },

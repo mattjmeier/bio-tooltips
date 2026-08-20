@@ -10,8 +10,8 @@
 //   2. Runs `npm run preflight` and aborts if it fails.
 //   3. GATE 1 — confirm before touching version files.
 //   4. `npm version <bump> --no-git-tag-version` (bumps package.json +
-//      package-lock.json only), verifies the resulting versions, shows the
-//      diff, and fails if anything other than the two release files changed.
+//      package-lock.json and synchronizes pinned documentation links), shows the
+//      diff, and fails if anything outside the release allowlist changed.
 //   5. GATE 2 — confirm before committing + pushing. Commits
 //      `chore(release): vX.Y.Z` and pushes to origin/main (NO tag yet).
 //
@@ -54,7 +54,14 @@ import {
   remoteUrl,
 } from './lib.mjs';
 
-const EXPECTED_RELEASE_FILES = ['package.json', 'package-lock.json'];
+const EXPECTED_RELEASE_FILES = [
+  'package.json',
+  'package-lock.json',
+  'README.md',
+  'docs/installation.md',
+  'docs/integration.md',
+  'docs/styling-theming.md',
+];
 const CI_WORKFLOW_NAME = 'Continuous Integration';
 const BAD_CONCLUSIONS = new Set(['failure', 'cancelled', 'timed_out', 'action_required']);
 const RUNNING_STATUSES = new Set(['in_progress', 'queued', 'pending', 'waiting']);
@@ -272,7 +279,7 @@ async function prepare(bump, version) {
 
   // GATE 1
   printSummary({ kind: 'prepare', current, proposed, sha: headSha() });
-  const g1 = await confirm('Create the version bump? (modifies package.json + package-lock.json only)');
+  const g1 = await confirm('Create the version bump? (updates package metadata and pinned documentation links)');
   if (!g1) {
     info('Aborted before any change. Nothing was modified.');
     process.exit(0);
@@ -290,7 +297,7 @@ async function prepare(bump, version) {
   if (newLock !== proposed) die(`package-lock.json is now ${newLock}; expected ${proposed}.`);
   ok(`version bumped to ${proposed}`);
 
-  // Only the two release files may have changed (tree was clean beforehand).
+  // Only version files and synchronized documentation may have changed.
   const changed = changedTrackedFiles();
   const unexpected = changed.filter((f) => !EXPECTED_RELEASE_FILES.includes(f));
   step('Reviewing changes (git diff)');
@@ -299,22 +306,22 @@ async function prepare(bump, version) {
     die(
       `Unexpected files changed: ${unexpected.join(', ')}.\n` +
         `Expected only: ${EXPECTED_RELEASE_FILES.join(', ')}.\n` +
-        `To undo the bump: git checkout -- package.json package-lock.json`
+        `To undo the bump: git checkout -- ${EXPECTED_RELEASE_FILES.join(' ')}`
     );
   }
 
   // GATE 2
   const g2 = await confirm(`Commit "chore(release): v${proposed}" and push to origin/main? (No tag yet.)`);
   if (!g2) {
-    info('Version files are modified but NOT committed or pushed.');
+    info('Version and documentation files are modified but NOT committed or pushed.');
     info('Inspect:  git diff');
     info('To finish the release now:');
-    info(`  git add package.json package-lock.json`);
+    info(`  git add ${EXPECTED_RELEASE_FILES.join(' ')}`);
     info(`  git commit -m "chore(release): v${proposed}"`);
     info('  git push origin main');
     info('  then, once CI passes:  npm run release:publish');
     info('To undo the bump instead:');
-    info('  git checkout -- package.json package-lock.json');
+    info(`  git checkout -- ${EXPECTED_RELEASE_FILES.join(' ')}`);
     process.exit(0);
   }
 

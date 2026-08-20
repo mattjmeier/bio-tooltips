@@ -11,7 +11,7 @@ The stylesheet includes the owned Bio Tooltips shell, layout rules, module secti
 For a browser build, load the stylesheet from a pinned package version:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.0.3/dist/bio-tooltips.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.0.9/dist/bio-tooltips.css">
 ```
 
 ## Themes

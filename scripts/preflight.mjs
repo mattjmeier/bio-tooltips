@@ -3,10 +3,11 @@
 // It runs the exact same validation that GitHub Actions runs, so a green
 // preflight and a green CI cannot drift apart:
 //
-//   1. ci:release      build + a single non-watch test run
-//   2. package:check   npm pack --dry-run (file list + exports sanity)
-//   3. ci:docs         regenerate the TypeDoc API reference + build VitePress
-//   4. lint:workflows  actionlint over .github/workflows (skipped w/ warning
+//   1. docs:versions:check  pinned documentation links match package.json
+//   2. ci:release          build + a single non-watch test run
+//   3. package:check       npm pack --dry-run (file list + exports sanity)
+//   4. ci:docs             regenerate the TypeDoc API reference + build VitePress
+//   5. lint:workflows      actionlint over .github/workflows (skipped w/ warning
 //                      if actionlint is not installed)
 //
 // It also detects unintended working-tree mutations: a verification command
@@ -39,28 +40,35 @@ function main() {
 
   const before = snapshot();
 
-  // 1. Build + tests (single run, exits).
+  // 1. Pinned documentation versions.
+  step('docs:versions:check — verify pinned documentation links');
+  if (!run('npm', ['run', 'docs:versions:check'], { stdio: 'inherit' }).ok) {
+    fail('Pinned documentation links are stale. Synchronize them before releasing.');
+  }
+  ok('documentation versions match package.json');
+
+  // 2. Build + tests (single run, exits).
   step('ci:release — build + test (single run)');
   if (!run('npm', ['run', 'ci:release'], { stdio: 'inherit' }).ok) {
     fail('ci:release failed: the build and/or tests did not pass. Fix these before releasing.');
   }
   ok('build + tests passed');
 
-  // 2. Packaging sanity.
+  // 3. Packaging sanity.
   step('package:check — npm pack --dry-run');
   if (!run('npm', ['run', 'package:check'], { stdio: 'inherit' }).ok) {
     fail('package:check failed: the packaged file list or exports look wrong.');
   }
   ok('packaging OK');
 
-  // 3. Docs (this is the step that can legitimately rewrite docs/api).
+  // 4. Docs (this is the step that can legitimately rewrite docs/api).
   step('ci:docs — regenerate API docs + build VitePress site');
   if (!run('npm', ['run', 'ci:docs'], { stdio: 'inherit' }).ok) {
     fail('ci:docs failed: documentation could not be built.');
   }
   ok('docs built');
 
-  // 4. Workflow lint (node script so we can read its distinct exit codes).
+  // 5. Workflow lint (node script so we can read its distinct exit codes).
   step('lint:workflows — actionlint over .github/workflows');
   const lint = run('node', [path.join(REPO_ROOT, 'scripts', 'lint-workflows.mjs')], { stdio: 'inherit' });
   if (lint.status === 2) {
