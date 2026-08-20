@@ -36,8 +36,10 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             padding: 50px 60px;
-            display: flex;
-            gap: 300px;
+            display: grid;
+            grid-template-columns: repeat(2, 400px);
+            justify-content: center;
+            gap: 120px;
             align-items: flex-start;
         }
         .trigger-card {
@@ -45,6 +47,7 @@
             border-radius: 12px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
+            text-align: center;
         }
         .trigger-card h2 {
             font-size: 13px;
@@ -91,11 +94,19 @@
                 ideogram: { enabled: true, height: 100 },
                 tooltipHeight: 480,
                 tooltipWidth: 400,
+                tooltipOptions: {
+                    placement: 'bottom',
+                    fallbackPlacements: [],
+                },
                 theme
             });
             ChemicalTooltip.init({
                 tooltipHeight: 480,
                 tooltipWidth: 400,
+                tooltipOptions: {
+                    placement: 'bottom',
+                    fallbackPlacements: [],
+                },
                 theme
             });
         });

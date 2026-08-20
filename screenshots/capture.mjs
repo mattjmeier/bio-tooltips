@@ -152,7 +152,42 @@ async function captureScreenshot(browser, theme, outputFile) {
 
   // Wait for fonts
   await page.evaluateHandle('document.fonts.ready');
-  await page.waitForTimeout(200);
+
+  // The README image is a fixed composition, so fail rather than silently
+  // accepting a collision-driven fallback that puts the panels out of line.
+  await page.waitForFunction(
+    () => {
+      const boxes = [...document.querySelectorAll('.gt-tooltip-box')];
+      const roots = [...document.querySelectorAll('[data-gt-tooltip-root]')];
+      if (boxes.length !== 2 || roots.length !== 2) return false;
+      if (!boxes.every(box => box.dataset.placement === 'bottom')) return false;
+      return Math.abs(
+        roots[0].getBoundingClientRect().top - roots[1].getBoundingClientRect().top
+      ) <= 0.5;
+    },
+    { timeout: 5000 }
+  );
+
+  // Ensure asynchronous content/layout work has stopped moving either panel.
+  await page.evaluate(async () => {
+    const bounds = () => [...document.querySelectorAll('[data-gt-tooltip-root]')]
+      .map(el => {
+        const rect = el.getBoundingClientRect();
+        return [rect.left, rect.top, rect.width, rect.height];
+      });
+    const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
+    let previous = bounds();
+    let stableFrames = 0;
+    while (stableFrames < 3) {
+      await nextFrame();
+      const current = bounds();
+      const stable = current.length === previous.length && current.every((rect, index) =>
+        rect.every((value, coordinate) => Math.abs(value - previous[index][coordinate]) <= 0.25)
+      );
+      stableFrames = stable ? stableFrames + 1 : 0;
+      previous = current;
+    }
+  });
 
   // Compute the union bounding box of all visible content (trigger cards + tooltip roots)
   const clip = await page.evaluate(() => {
