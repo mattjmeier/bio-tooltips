@@ -27,8 +27,11 @@ import {
   generateUniqueId,
   renderMoreButton,
   renderSummaryCopyButton,
+  renderSummaryActions,
+  renderSummaryToggle,
   renderTooltipHeader,
   renderTooltipShell,
+  renderCloseButton,
 } from '../../core/renderer.js';
 import { getSectionState, renderCollapsibleSection } from '../../core/sections.js';
 
@@ -140,7 +143,7 @@ export function renderTooltipHTML(
   return renderTooltipShell(
     uniqueId,
     `
-      ${renderTooltipHeader(titleHTML, renderPinButton())}
+      ${renderTooltipHeader(titleHTML, `<div class="gt-tooltip-actions">${renderPinButton()}${renderCloseButton()}</div>`)}
       ${sections}
       ${display.footer !== false ? renderFooter(data) : ''}
     `,
@@ -187,7 +190,7 @@ function renderIdentityMeta(identity: ReturnType<typeof buildChemicalIdentity> |
   const row = renderIdentityRow(identity);
 
   return row
-    ? `<div class="gt-chem-identity-meta">${row}</div>`
+    ? `<dl class="gt-chem-identity-meta">${row}</dl>`
     : '';
 }
 
@@ -221,18 +224,18 @@ function renderStructureProperties(
       ${compactRows || identityMeta ? `
         <div class="gt-chem-structure-summary">
           ${compactRows ? `
-            <div class="gt-chem-property-grid gt-chem-property-grid-compact">
+            <dl class="gt-chem-property-grid gt-chem-property-grid-compact">
               ${compactRows}
-            </div>
+            </dl>
           ` : ''}
           ${identityMeta}
         </div>
       ` : ''}
       ${identifierRows ? `
         <div class="gt-chem-structure-identifiers">
-          <div class="gt-chem-property-grid">
+          <dl class="gt-chem-property-grid">
             ${identifierRows}
-          </div>
+          </dl>
         </div>
       ` : ''}
     </div>
@@ -257,9 +260,9 @@ function renderDetailedProperties(fields: ResolvedField<string>[], showSourcePat
   if (!rows) return '';
 
   return `
-    <div class="gt-chem-property-grid gt-chem-property-grid-detailed">
+    <dl class="gt-chem-property-grid gt-chem-property-grid-detailed">
       ${rows}
-    </div>
+    </dl>
   `;
 }
 
@@ -345,7 +348,7 @@ function renderSummarySection(
     'drugbank.pharmacodynamics',
   ]);
   const summaryHTML = summary
-    ? `<p class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${sanitizeInlineHTML(summary)}${renderSummaryCopyButton(uniqueId)}</p>`
+    ? `<div class="gt-summary-section"><p id="summary-text-${uniqueId}" class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${sanitizeInlineHTML(summary)}</p>${renderSummaryToggle(uniqueId)}${renderSummaryActions(uniqueId)}</div>`
     : '';
 
   return summaryHTML;
@@ -617,8 +620,8 @@ function renderIdentifiers(data: MyChemInfoResult, showSourcePaths: boolean): st
 
 function renderIdentifierRow(row: IdentifierRow, showSourcePaths: boolean): string {
   const action = row.action === 'open' && row.url
-    ? `<a href="${escapeAttr(row.url)}" target="_blank" rel="noopener noreferrer">Open</a>`
-    : `<button type="button" data-copy="${escapeAttr(row.value)}" onclick="navigator.clipboard && navigator.clipboard.writeText(this.dataset.copy || '')">Copy</button>`;
+    ? `<a href="${escapeAttr(row.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeAttr(row.label)}">Open</a>`
+    : `<button type="button" data-copy="${escapeAttr(row.value)}" aria-label="Copy ${escapeAttr(row.label)}" onclick="navigator.clipboard && navigator.clipboard.writeText(this.dataset.copy || '')">Copy</button>`;
 
   return `
     <div class="gt-chem-id-row">

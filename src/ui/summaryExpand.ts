@@ -29,7 +29,7 @@ async function copySummaryText(button: HTMLElement): Promise<void> {
   if (!summaryP) return;
 
   const clone = summaryP.cloneNode(true) as HTMLElement;
-  clone.querySelectorAll('.gt-summary-copy-btn').forEach(node => node.remove());
+  clone.querySelectorAll('.gt-summary-actions, .gt-summary-copy-btn').forEach(node => node.remove());
 
   const text = clone.textContent?.trim();
   if (!text) return;
@@ -55,7 +55,13 @@ async function copySummaryText(button: HTMLElement): Promise<void> {
     document.body.removeChild(textarea);
   }
 
-  if (copied) flashCopySuccess(button);
+  const status = button.closest('.gene-tooltip-section-container')?.querySelector<HTMLElement>('.gt-copy-status');
+  if (copied) {
+    flashCopySuccess(button);
+    if (status) status.textContent = 'Summary copied';
+  } else if (status) {
+    status.textContent = 'Unable to copy summary';
+  }
 }
 
 /**
@@ -112,9 +118,11 @@ export function enableSummaryExpand(): void {
     let summaryP: HTMLElement | null = null;
     let shouldExpand: boolean | null = null;
 
-    // Case 1: Clicked "Show more"
-    if (target.matches('[id^="summary-more-"]')) {
-      summaryP = target.previousElementSibling as HTMLElement;
+    if (target.matches('.gt-summary-toggle')) {
+      summaryP = target.closest('.gt-summary-section')?.querySelector('.gene-tooltip-summary') as HTMLElement;
+      shouldExpand = target.getAttribute('aria-expanded') !== 'true';
+    } else if (target.matches('[id^="summary-more-"]')) {
+      summaryP = target.closest('.gt-summary-section')?.querySelector('.gene-tooltip-summary') as HTMLElement;
       shouldExpand = true;
     }
     // Case 2: Clicked "Show less"
@@ -122,21 +130,26 @@ export function enableSummaryExpand(): void {
       summaryP = target.closest('.gene-tooltip-section-container')?.querySelector('.gene-tooltip-summary') as HTMLElement;
       shouldExpand = false;
     }
-
-    // Case 3: Clicked the truncated summary paragraph itself
     else if (target.matches('.gene-tooltip-summary:not(.expanded)')) {
       summaryP = target;
-      shouldExpand = true; // Tell it to expand
-    }
-    // Case 4: Clicked the expanded summary paragraph itself
-    else if (target.matches('.gene-tooltip-summary.expanded')) {
+      shouldExpand = true;
+    } else if (target.matches('.gene-tooltip-summary.expanded')) {
       summaryP = target;
       shouldExpand = false;
     }
-    
+
+    // Case 3: Clicked the truncated summary paragraph itself
     // If a relevant element was clicked, perform the action
     if (summaryP && shouldExpand !== null) {
       summaryP.classList.toggle('expanded', shouldExpand);
+      const section = summaryP.closest('.gt-summary-section');
+      const toggle = section?.querySelector<HTMLButtonElement>('.gt-summary-toggle');
+      if (toggle) {
+        toggle.setAttribute('aria-expanded', String(shouldExpand));
+        toggle.textContent = shouldExpand ? 'Show less' : 'Show more';
+      }
+      const actions = section?.querySelector<HTMLElement>('.gt-summary-actions');
+      if (actions) actions.hidden = !shouldExpand;
       summaryP.dispatchEvent(new CustomEvent('gt:content-resize', { bubbles: true }));
     }
   };
@@ -154,21 +167,21 @@ export function enableSummaryExpand(): void {
     handleSummaryToggle(target);
   });
 
-  // --- Keyboard Handler ---
-  document.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === " ") {
-      const target = e.target as HTMLElement;
-      const copyBtn = target.closest<HTMLElement>('[id^="summary-copy-"]');
-      if (copyBtn) {
-        e.preventDefault();
-        void copySummaryText(copyBtn);
-        return;
-      }
-      // Also update the keyboard handler to allow expanding via text focus
-      if (target.matches('[id^="summary-more-"]') || target.matches('[id^="summary-less-"]') || target.matches('.gene-tooltip-summary')) {
-        e.preventDefault();
-        handleSummaryToggle(target);
-      }
+  // Retain support for legacy author supplied role=button markup. Generated
+  // controls are native buttons and receive their activation from the browser.
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const target = e.target as HTMLElement;
+    if (target instanceof HTMLButtonElement) return;
+    const copyBtn = target.closest<HTMLElement>('[id^="summary-copy-"]');
+    if (copyBtn) {
+      e.preventDefault();
+      void copySummaryText(copyBtn);
+      return;
+    }
+    if (target.matches('.gene-tooltip-summary, [id^="summary-more-"], [id^="summary-less-"]')) {
+      e.preventDefault();
+      handleSummaryToggle(target);
     }
   });
 }

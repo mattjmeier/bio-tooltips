@@ -69,7 +69,7 @@ export function renderCollapsibleSection(
         ${headerRightHTML}
       </div>
 
-      <div class="gt-collapsible-content" id="${contentId}">
+      <div class="gt-collapsible-content" id="${contentId}"${collapsedState ? ' inert' : ''}>
         ${innerHTML}
       </div>
     </div>

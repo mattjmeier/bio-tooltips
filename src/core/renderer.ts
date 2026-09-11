@@ -45,11 +45,15 @@ export function renderTooltipHeader(titleHTML: string, actionHTML: string = ''):
   `;
 }
 
+export function renderCloseButton(label = 'Close'): string {
+  return `<button type="button" class="gt-close-button" aria-label="${label}">×</button>`;
+}
+
 export function renderMoreButton(id: string, text: string): string {
   return `
-    <span id="${id}" class="gene-tooltip-more-btn" role="button" tabindex="0">
+    <button type="button" id="${id}" class="gene-tooltip-more-btn">
       ${text}
-    </span>
+    </button>
   `;
 }
 
@@ -67,10 +71,22 @@ export function renderCollapseButton(id: string, text: string): string {
  */
 export function renderSummaryCopyButton(uniqueId: string): string {
   return `
-    <span id="summary-copy-${uniqueId}" class="gt-summary-copy-btn" role="button" tabindex="0" aria-label="Copy summary" title="Copy summary">
+    <button type="button" id="summary-copy-${uniqueId}" class="gt-summary-copy-btn" aria-label="Copy summary" title="Copy summary">
       <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/></svg>
-    </span>
+    </button>
   `;
+}
+
+export function renderSummaryActions(uniqueId: string, expanded = false): string {
+  return `<div class="gt-summary-actions">
+    ${renderSummaryCopyButton(uniqueId)}
+    <span class="gt-copy-status" role="status" aria-live="polite"></span>
+  </div>`;
+}
+
+export function renderSummaryToggle(uniqueId: string, expanded = false): string {
+  const controls = `summary-text-${uniqueId}`;
+  return `<button type="button" class="gt-summary-toggle" aria-expanded="${expanded}" aria-controls="${controls}">${expanded ? 'Show less' : 'Show more'}</button>`;
 }
 
 export function renderParagraphContent(

@@ -14,6 +14,17 @@ import { logTooltipTiming, startTooltipTiming } from './timing.js';
 
 const COLLAPSIBLE_HEIGHT_CLEANUP_DELAY = 300;
 const pendingCollapsibleHeightCleanups = new WeakMap<HTMLElement, () => void>();
+const closeHandlers = new WeakMap<TooltipController<any>, (event: Event) => void>();
+
+function installCloseHandler<TData>(instance: TooltipController<TData>): void {
+  if (closeHandlers.has(instance)) return;
+  const handler = (event: Event) => {
+    const target = (event.target as HTMLElement).closest('.gt-close-button');
+    if (target && target.closest('[data-gt-tooltip-root]') === instance.root) instance.close();
+  };
+  instance.root.addEventListener('click', handler);
+  closeHandlers.set(instance, handler);
+}
 
 async function renderVisualsAndNestedTooltips<TData, TConfig extends CoreTooltipConfig>(
   instance: TooltipController<TData>,
@@ -74,7 +85,7 @@ async function renderVisualsAndNestedTooltips<TData, TConfig extends CoreTooltip
     ) ?? [];
 
     nestedDefinitions.forEach(definition => {
-      createNestedTooltip(instance, finalNestedTooltipOptions, definition.selector, definition.items, config);
+      createNestedTooltip(instance, finalNestedTooltipOptions, definition.selector, definition.items, config, definition.accessibleName);
     });
     logTooltipTiming(instance, config, 'nested tooltips attached', { count: nestedDefinitions.length });
   } catch (error) {
@@ -132,7 +143,8 @@ function createNestedTooltip<TData>(
   options: TooltipOptions,
   selector: string,
   items: FormattedItem[],
-  config: CoreTooltipConfig
+  config: CoreTooltipConfig,
+  accessibleName?: string
 ): void {
   const button = instance.root.querySelector<HTMLElement>(selector);
   if (!button || items.length === 0) return;
@@ -145,6 +157,10 @@ function createNestedTooltip<TData>(
     interactiveBorder: 20,
     interactiveDebounce: 75,
     parent: instance,
+    accessibleName: accessibleName
+      ?? button.closest('.gt-chem-source-group')?.querySelector('.gt-chem-source-title span')?.textContent?.trim()
+      ?? button.closest('.gene-tooltip-section-container')?.querySelector('.gt-section-title')?.textContent?.trim()
+      ?? 'More details',
     timingConfig: config,
   });
   instance.addNestedTooltip(nestedInstance);
@@ -156,6 +172,7 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
   inFlightRequests: Map<string, Promise<Map<string, TData>>>
 ) {
   return function onShow(instance: TooltipController<TData>) {
+    installCloseHandler(instance);
     instance._visualsRendered = false;
     startTooltipTiming(instance, config, 'onShow');
 
@@ -191,6 +208,7 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
 
       const renderContent = (data: TData | null) => {
         if (instance.state.isDestroyed) return;
+        instance.updateOptions({ accessibleName: `${profile.id} details for ${ref.query}` });
         instance._entityData = data;
         instance._renderedVisualSections = new Set();
         instance._renderingVisualSections = new Set();
@@ -208,7 +226,7 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
         return;
       }
 
-      instance.setContent('Loading...');
+      instance.setContent('<div class="gt-loader-container" role="status" aria-live="polite"><div class="gt-spinner" aria-hidden="true"></div><span>Loading…</span><button type="button" class="gt-close-button" aria-label="Close">×</button></div>');
       logTooltipTiming(instance, config, 'loading content set');
 
       let fetchPromise = inFlightRequests.get(cacheKey);
@@ -228,7 +246,7 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
         if (!instance.state.isDestroyed) renderContent(data);
       } catch (error) {
         console.error(`Failed to fetch data for ${describeRef(ref)}`, error);
-        if (!instance.state.isDestroyed) instance.setContent('Error loading data.');
+        if (!instance.state.isDestroyed) instance.setContent('<p role="alert">Error loading data.</p><button type="button" class="gt-close-button" aria-label="Close">×</button>');
       } finally {
         inFlightRequests.delete(cacheKey);
       }
@@ -302,6 +320,16 @@ export function createShownHandler<TData, TConfig extends CoreTooltipConfig>(
         }
 
         section.setAttribute('data-collapsed', String(newCollapsedState));
+        if (content) {
+          if (newCollapsedState) {
+            instance._nestedTooltips
+              .filter(child => section.contains(child.reference))
+              .forEach(child => child.close());
+            if (content.contains(document.activeElement)) header.focus();
+            content.setAttribute('inert', '');
+          }
+          else content.removeAttribute('inert');
+        }
         header.setAttribute('aria-expanded', String(!newCollapsedState));
 
         const arrow = header.querySelector('.gt-section-arrow');
@@ -353,6 +381,7 @@ export function createShownHandler<TData, TConfig extends CoreTooltipConfig>(
     }
 
     attachPushpin(instance);
+    installCloseHandler(instance);
   };
 }
 
@@ -365,6 +394,11 @@ export function createHideHandler<TData = unknown>() {
     if (instance._sectionToggleHandler) {
       instance.root.removeEventListener('click', instance._sectionToggleHandler);
       instance._sectionToggleHandler = undefined;
+    }
+    const closeHandler = closeHandlers.get(instance);
+    if (closeHandler) {
+      instance.root.removeEventListener('click', closeHandler);
+      closeHandlers.delete(instance);
     }
 
     if (instance._sectionKeydownHandler) {

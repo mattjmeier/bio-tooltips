@@ -5,6 +5,7 @@ import {
   generateUniqueId,
   renderTooltipHeader,
   renderTooltipShell,
+  renderCloseButton,
 } from '../../core/renderer.js';
 import { getSectionState, renderCollapsibleSection } from '../../core/sections.js';
 import {
@@ -112,7 +113,7 @@ export function renderTooltipHTML(
   return renderTooltipShell(
     uniqueId,
     `
-      ${renderTooltipHeader(titleHTML, renderPinButton())}
+      ${renderTooltipHeader(titleHTML, `<div class="gt-tooltip-actions">${renderPinButton()}${renderCloseButton()}</div>`)}
 
       ${display.species !== false && data.taxid ? renderSpecies(data.taxid) : ''}
 
