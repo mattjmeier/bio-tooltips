@@ -12,6 +12,7 @@ import { renderGeneTrack } from '../src/providers/mygene/visuals/gene-track';
 import {
   getUsableTranscripts,
   initializeNativeTranscriptSelector,
+  renderGeneTextAlternative,
 } from '../src/providers/mygene/visuals/transcript-selector';
 
 function transcript(transcriptId: string, exonCount: number): MyGeneExon {
@@ -39,6 +40,31 @@ function geneData(exons: MyGeneExon[] | undefined): MyGeneInfoResult {
 }
 
 describe('native transcript selector', () => {
+  it('renders a native expandable exon alternative with strand and transcript identity', () => {
+    const container = document.createElement('div');
+    const selected = { ...transcript('ENST000009', 3), strand: -1 };
+
+    const alternative = renderGeneTextAlternative(container, selected, 'TP53');
+
+    expect(alternative.className).toBe('gt-gene-text-alternative');
+    expect(alternative.querySelector('summary')?.textContent).toBe('Text alternative');
+    expect(alternative.textContent).toContain('ENST000009');
+    expect(alternative.textContent).toContain('strand: reverse (−)');
+    expect(alternative.querySelectorAll('tbody tr')).toHaveLength(3);
+    expect(alternative.querySelector('tbody tr th')?.textContent).toBe('3');
+    expect(alternative.querySelector('table caption')?.textContent).toContain('ENST000009');
+  });
+
+  it('updates the existing alternative without creating duplicate panels', () => {
+    const container = document.createElement('div');
+    renderGeneTextAlternative(container, transcript('ENST000001', 2), 'TP53');
+    renderGeneTextAlternative(container, transcript('ENST000002', 1), 'TP53');
+
+    expect(container.querySelectorAll('.gt-gene-text-alternative')).toHaveLength(1);
+    expect(container.textContent).toContain('ENST000002');
+    expect(container.textContent).not.toContain('ENST000001');
+  });
+
   it('sorts native options, shows exon counts, and selects the longest transcript', () => {
     const selector = document.createElement('select');
     const transcripts = [
