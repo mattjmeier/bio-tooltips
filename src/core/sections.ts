@@ -53,7 +53,7 @@ export function renderCollapsibleSection(
   }
 
   const triggerAttributes = collapsible
-    ? `role="button" tabindex="0" aria-expanded="${!collapsedState}" aria-controls="${contentId}"`
+    ? `type="button" aria-expanded="${!collapsedState}" aria-controls="${contentId}"`
     : 'role="heading" aria-level="3"';
 
   return `
@@ -62,14 +62,14 @@ export function renderCollapsibleSection(
         data-section="${sectionKey}">
 
       <div class="gene-tooltip-section-header">
-        <div class="${triggerClasses}" ${triggerAttributes}>
+        <${collapsible ? 'button' : 'div'} class="${triggerClasses}" ${triggerAttributes}>
           ${arrow}
           <span class="gt-section-title">${title}</span>
-        </div>
+        </${collapsible ? 'button' : 'div'}>
         ${headerRightHTML}
       </div>
 
-      <div class="gt-collapsible-content" id="${contentId}"${collapsedState ? ' inert' : ''}>
+      <div class="gt-collapsible-content" id="${contentId}"${collapsedState ? ' inert hidden' : ''}>
         ${innerHTML}
       </div>
     </div>

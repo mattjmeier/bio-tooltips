@@ -117,13 +117,12 @@ describe('renderTooltipHTML', () => {
     expect(html).toContain('gt-summary-copy-btn');
     expect(html).toContain(`id="summary-copy-${MOCK_UNIQUE_ID}"`);
 
-    // The copy affordance sits inline at the end of the text, i.e. inside the
-    // summary paragraph rather than on a following line.
+    // Copy is a separate action so it remains available outside the clamped
+    // summary text.
     const pStart = html.indexOf('<p class="gene-tooltip-summary"');
     const pEnd = html.indexOf('</p>', pStart);
     const btnStart = html.indexOf(`id="summary-copy-${MOCK_UNIQUE_ID}"`);
-    expect(btnStart).toBeGreaterThan(pStart);
-    expect(btnStart).toBeLessThan(pEnd);
+    expect(btnStart).toBeGreaterThan(pEnd);
   });
   
   

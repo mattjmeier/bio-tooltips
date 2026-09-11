@@ -22,6 +22,25 @@ const copySuccessStates = new WeakMap<HTMLElement, CopySuccessState>();
  * reading text to keep its markup out of the copied value. On success the copy
  * icon briefly swaps to a checkmark so the user can tell the copy went through.
  */
+export async function copyTextToClipboard(value: string, status?: HTMLElement): Promise<boolean> {
+  let copied = false;
+  if (navigator.clipboard?.writeText) {
+    try { await navigator.clipboard.writeText(value); copied = true; } catch { copied = false; }
+  } else {
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const textarea = document.createElement('textarea');
+    textarea.value = value;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute'; textarea.style.left = '-9999px';
+    document.body.appendChild(textarea); textarea.select();
+    try { copied = document.execCommand('copy'); } catch { copied = false; }
+    textarea.remove();
+    if (previousFocus?.isConnected) previousFocus.focus();
+  }
+  if (status) status.textContent = copied ? 'Copied' : 'Unable to copy';
+  return copied;
+}
+
 async function copySummaryText(button: HTMLElement): Promise<void> {
   const summaryP = button
     .closest('.gene-tooltip-section-container')
@@ -34,28 +53,8 @@ async function copySummaryText(button: HTMLElement): Promise<void> {
   const text = clone.textContent?.trim();
   if (!text) return;
 
-  let copied = false;
-  if (navigator.clipboard?.writeText) {
-    try {
-      await navigator.clipboard.writeText(text);
-      copied = true;
-    } catch {
-      copied = false;
-    }
-  } else {
-    // Fallback for non-secure contexts where the async clipboard API is unavailable.
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.setAttribute('readonly', '');
-    textarea.style.position = 'absolute';
-    textarea.style.left = '-9999px';
-    document.body.appendChild(textarea);
-    textarea.select();
-    copied = document.execCommand('copy');
-    document.body.removeChild(textarea);
-  }
-
-  const status = button.closest('.gene-tooltip-section-container')?.querySelector<HTMLElement>('.gt-copy-status');
+  const status = button.closest('.gene-tooltip-section-container')?.querySelector<HTMLElement>('.gt-copy-status') ?? undefined;
+  const copied = await copyTextToClipboard(text, status);
   if (copied) {
     flashCopySuccess(button);
     if (status) status.textContent = 'Summary copied';
@@ -162,6 +161,12 @@ export function enableSummaryExpand(): void {
     const copyBtn = target.closest<HTMLElement>('[id^="summary-copy-"]');
     if (copyBtn) {
       void copySummaryText(copyBtn);
+      return;
+    }
+    const identifierCopy = target.closest<HTMLButtonElement>('[data-copy]');
+    if (identifierCopy) {
+      const identifierStatus = identifierCopy.parentElement?.querySelector<HTMLElement>('.gt-copy-status') ?? undefined;
+      void copyTextToClipboard(identifierCopy.dataset.copy ?? '', identifierStatus);
       return;
     }
     handleSummaryToggle(target);

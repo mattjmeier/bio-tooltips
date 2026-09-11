@@ -60,6 +60,7 @@ export function createNestedContent(items: { name: string; url?: string }[]): st
   // The 'oninput' handler directly calls our filtering function, passing the input's value and the target list's ID.
   return `
     <div class="gene-tooltip-nested-container">
+      <div class="gt-tooltip-actions">${'<button type="button" class="gt-close-button" aria-label="Close">×</button>'}</div>
       <label class="gt-nested-search-label" for="${listId}-search">Filter results</label>
       <input id="${listId}-search"
         type="search" 

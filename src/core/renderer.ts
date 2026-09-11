@@ -46,7 +46,8 @@ export function renderTooltipHeader(titleHTML: string, actionHTML: string = ''):
 }
 
 export function renderCloseButton(label = 'Close'): string {
-  return `<button type="button" class="gt-close-button" aria-label="${label}">×</button>`;
+  const escaped = label.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  return `<button type="button" class="gt-close-button" aria-label="${escaped}">×</button>`;
 }
 
 export function renderMoreButton(id: string, text: string): string {
@@ -77,7 +78,7 @@ export function renderSummaryCopyButton(uniqueId: string): string {
   `;
 }
 
-export function renderSummaryActions(uniqueId: string, expanded = false): string {
+export function renderSummaryActions(uniqueId: string): string {
   return `<div class="gt-summary-actions">
     ${renderSummaryCopyButton(uniqueId)}
     <span class="gt-copy-status" role="status" aria-live="polite"></span>

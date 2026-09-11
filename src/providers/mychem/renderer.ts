@@ -26,7 +26,6 @@ import {
 import {
   generateUniqueId,
   renderMoreButton,
-  renderSummaryCopyButton,
   renderSummaryActions,
   renderSummaryToggle,
   renderTooltipHeader,
@@ -621,7 +620,7 @@ function renderIdentifiers(data: MyChemInfoResult, showSourcePaths: boolean): st
 function renderIdentifierRow(row: IdentifierRow, showSourcePaths: boolean): string {
   const action = row.action === 'open' && row.url
     ? `<a href="${escapeAttr(row.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeAttr(row.label)}">Open</a>`
-    : `<button type="button" data-copy="${escapeAttr(row.value)}" aria-label="Copy ${escapeAttr(row.label)}" onclick="navigator.clipboard && navigator.clipboard.writeText(this.dataset.copy || '')">Copy</button>`;
+    : `<button type="button" data-copy="${escapeAttr(row.value)}" aria-label="Copy ${escapeAttr(row.label)}">Copy</button><span class="gt-copy-status" role="status" aria-live="polite"></span>`;
 
   return `
     <div class="gt-chem-id-row">
