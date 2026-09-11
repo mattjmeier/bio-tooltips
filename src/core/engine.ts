@@ -84,6 +84,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
         onHide: hideHandler,
         onDestroy: cleanupTooltipLifecycle,
       },
+      kind: 'dialog',
     }));
 
     instances.forEach(instance => {

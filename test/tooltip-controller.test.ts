@@ -10,7 +10,7 @@ vi.mock('../src/core/positioning', () => ({
   })),
 }));
 
-import { TooltipController } from '../src/core/tooltip-controller';
+import { TooltipController, createStaticTooltip } from '../src/core/tooltip-controller';
 import type { TooltipOptions } from '../src/core/config';
 import { initializeThemeObserver } from '../src/ui/theme';
 
@@ -65,7 +65,7 @@ describe('TooltipController', () => {
 
     expect(controller.status).toBe('open');
     expect(reference.getAttribute('aria-expanded')).toBe('true');
-    expect(document.querySelector('.gt-tooltip-box')?.getAttribute('role')).toBe('tooltip');
+    expect(document.querySelector('.gt-tooltip-box')?.getAttribute('role')).toBe('dialog');
     expect(document.querySelector('.gt-tooltip-content')?.innerHTML).toContain('TP53');
 
     controller.destroy();
@@ -74,6 +74,53 @@ describe('TooltipController', () => {
     expect(reference.hasAttribute('aria-expanded')).toBe(false);
     expect(reference.hasAttribute('data-gt-tooltip-reference')).toBe(false);
     expect(destroyPositioner).toHaveBeenCalledTimes(1);
+  });
+
+  it('makes plain text dialog triggers keyboard reachable and restores author attributes', () => {
+    const reference = document.createElement('span');
+    reference.textContent = 'BRCA1';
+    reference.setAttribute('aria-controls', 'author-control');
+    reference.setAttribute('tabindex', '2');
+    document.body.append(reference);
+    const controller = new TooltipController(reference, {
+      content: 'Details', tooltip: immediateOptions, theme: 'light', accessibleName: 'Gene details',
+    });
+    expect(reference.getAttribute('role')).toBe('button');
+    expect(reference.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(reference.getAttribute('aria-controls')).toContain('author-control');
+    reference.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(controller.status).toBe('open');
+    expect(document.activeElement).toBe(controller.box);
+    expect(controller.box.getAttribute('role')).toBe('dialog');
+    expect(controller.box.getAttribute('aria-label')).toBe('Gene details');
+    controller.destroy();
+    expect(reference.getAttribute('tabindex')).toBe('2');
+    expect(reference.getAttribute('role')).toBeNull();
+    expect(reference.getAttribute('aria-controls')).toBe('author-control');
+  });
+
+  it('uses tooltip semantics for static descriptive tooltips', () => {
+    const reference = document.createElement('span');
+    document.body.append(reference);
+    const controller = createStaticTooltip(reference, 'Description', {
+      tooltip: immediateOptions, theme: 'light',
+    });
+    controller.show();
+    vi.runAllTimers();
+    expect(controller.box.getAttribute('role')).toBe('tooltip');
+    expect(reference.getAttribute('aria-describedby')).toContain(controller.box.id);
+    expect(reference.hasAttribute('aria-expanded')).toBe(false);
+    controller.destroy();
+  });
+
+  it('closes the focused dialog on Escape and returns focus to its trigger', () => {
+    const { reference, controller } = createController();
+    reference.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(document.activeElement).toBe(controller.box);
+    controller.box.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    vi.runAllTimers();
+    expect(controller.status).toBe('idle');
+    expect(document.activeElement).toBe(reference);
   });
 
   it('supports delayed opening and cancels it when hiding', () => {
