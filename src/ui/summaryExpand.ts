@@ -14,6 +14,8 @@ interface CopySuccessState {
 }
 
 const copySuccessStates = new WeakMap<HTMLElement, CopySuccessState>();
+let listenerUsers = 0;
+let removeListeners: (() => void) | undefined;
 
 /**
  * Copies the full text of the summary paragraph that owns the given copy button.
@@ -112,7 +114,18 @@ function revertCopyIcon(button: HTMLElement, state: CopySuccessState): void {
  * Enables click/keyboard expand/collapse for summary sections in Bio Tooltips.
  * It listens for events on the document and targets the specific 'Show more' button.
  */
-export function enableSummaryExpand(): void {
+export function enableSummaryExpand(): () => void {
+  listenerUsers++;
+  let released = false;
+  const release = () => {
+    if (released) return;
+    released = true;
+    if (--listenerUsers === 0) {
+      removeListeners?.();
+      removeListeners = undefined;
+    }
+  };
+  if (listenerUsers > 1) return release;
   const handleSummaryToggle = (target: HTMLElement) => {
     let summaryP: HTMLElement | null = null;
     let shouldExpand: boolean | null = null;
@@ -147,14 +160,12 @@ export function enableSummaryExpand(): void {
         toggle.setAttribute('aria-expanded', String(shouldExpand));
         toggle.textContent = shouldExpand ? 'Show less' : 'Show more';
       }
-      const actions = section?.querySelector<HTMLElement>('.gt-summary-actions');
-      if (actions) actions.hidden = !shouldExpand;
       summaryP.dispatchEvent(new CustomEvent('gt:content-resize', { bubbles: true }));
     }
   };
 
   // --- Click Handler ---
-  document.addEventListener("click", e => {
+  const onClick = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
     // The copy button wraps an inline SVG, so a click lands on the icon rather
     // than the span itself; walk up with closest() to still resolve the button.
@@ -163,18 +174,18 @@ export function enableSummaryExpand(): void {
       void copySummaryText(copyBtn);
       return;
     }
-    const identifierCopy = target.closest<HTMLButtonElement>('[data-copy]');
+    const identifierCopy = target.closest<HTMLButtonElement>('.gt-chem-id-row [data-copy]');
     if (identifierCopy) {
       const identifierStatus = identifierCopy.parentElement?.querySelector<HTMLElement>('.gt-copy-status') ?? undefined;
       void copyTextToClipboard(identifierCopy.dataset.copy ?? '', identifierStatus);
       return;
     }
     handleSummaryToggle(target);
-  });
+  };
 
   // Retain support for legacy author supplied role=button markup. Generated
   // controls are native buttons and receive their activation from the browser.
-  document.addEventListener('keydown', e => {
+  const onKeydown = (e: KeyboardEvent) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     const target = e.target as HTMLElement;
     if (target instanceof HTMLButtonElement) return;
@@ -188,5 +199,12 @@ export function enableSummaryExpand(): void {
       e.preventDefault();
       handleSummaryToggle(target);
     }
-  });
+  };
+  document.addEventListener('click', onClick);
+  document.addEventListener('keydown', onKeydown);
+  removeListeners = () => {
+    document.removeEventListener('click', onClick);
+    document.removeEventListener('keydown', onKeydown);
+  };
+  return release;
 }
