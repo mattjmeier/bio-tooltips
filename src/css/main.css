@@ -1195,3 +1195,30 @@ ul.gene-tooltip-nested-list {
   }
   .gt-tooltip-box a { color: LinkText; }
 }
+
+/* Keep the focus treatment authoritative over component resets and the
+   summary's legacy visual rules. */
+.gt-tooltip-box :where(button, [role='button'], a, select, input, summary):focus-visible,
+.gt-tooltip-box:focus-visible,
+[data-gt-tooltip-reference]:focus-visible {
+  outline: 3px solid var(--gt-focus-color, var(--gt-accent-color, #005fcc));
+  outline-offset: 3px;
+}
+.gt-tooltip-box .gt-summary-copy-btn:focus-visible,
+.gt-tooltip-box .gene-tooltip-nested-search:focus {
+  outline: 3px solid var(--gt-focus-color, var(--gt-accent-color, #005fcc));
+  outline-offset: 3px;
+}
+.gene-tooltip-summary { -webkit-mask-image: none; mask-image: none; }
+.gene-tooltip-more-btn,
+.gt-summary-toggle,
+.gt-collapsible-header[role='button'] {
+  box-sizing: border-box;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  text-align: inherit;
+}
+.gene-tooltip-box dl,
+.gt-tooltip-box dl { margin: 0; }
