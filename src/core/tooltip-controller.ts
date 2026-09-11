@@ -110,6 +110,7 @@ export class TooltipController<TData = unknown> {
   // When the last visible child closes, setChildVisible re-evaluates and
   // proceeds with the hide that was deferred.
   private _pendingHide = false;
+  private explicitClose = false;
 
   constructor(reference: Element, options: TooltipControllerOptions<TData>) {
     this.reference = reference;
@@ -343,6 +344,7 @@ export class TooltipController<TData = unknown> {
 
   /** Explicitly dismiss this controller, including pinned dialogs. */
   close(): void {
+    this.explicitClose = true;
     this.clearShowTimer();
     this.clearHideTimers();
     this._isPinned = false;
@@ -400,6 +402,11 @@ export class TooltipController<TData = unknown> {
   private closeNow(): void {
     if (this.state.isDestroyed || (this.status !== 'open' && this.status !== 'opening')) return;
     this.hideTimer = undefined;
+    const restoreFocus = this.kind === 'dialog' && this.root.contains(document.activeElement);
+    if (restoreFocus) {
+      this.suppressFocusReopen = true;
+      (this.reference as HTMLElement).focus();
+    }
     if (this.hooks.onHide?.(this) === false) return;
 
     this.status = 'closing';
@@ -413,8 +420,6 @@ export class TooltipController<TData = unknown> {
       });
     }
     if (this.kind === 'dialog') this.reference.setAttribute('aria-expanded', 'false');
-    const restoreFocus = this.kind === 'dialog'
-      && this.root.contains(document.activeElement);
     this.parent?.setChildVisible(this, false);
     this.box.dataset.state = 'hidden';
     this.content.dataset.state = 'hidden';
@@ -429,10 +434,7 @@ export class TooltipController<TData = unknown> {
       this._peerDismissed = false;
       unregisterTopLevelTooltip(this);
       unregisterOpenTooltip(this);
-      if (restoreFocus && !this.state.isDestroyed) {
-        this.suppressFocusReopen = true;
-        (this.reference as HTMLElement).focus();
-      }
+      this.explicitClose = false;
       if (this.timingConfig) {
         logTooltipTiming(this, this.timingConfig, 'unmounted (hidden)', { status: this.status });
       }
@@ -548,7 +550,9 @@ export class TooltipController<TData = unknown> {
     this.listen(this.root, 'mouseleave', (event: Event) => this.handlePointerLeave(event as MouseEvent));
     this.listen(this.root, 'focusin', () => this.clearHideTimers());
     this.listen(this.root, 'focusout', () => this.handleFocusLeave());
-    this.listen(this.root, 'keydown', (event: Event) => this.handlePanelKeydown(event as KeyboardEvent));
+    this.listen(this.root, 'keydown', (event: Event) => {
+      if (!event.defaultPrevented) this.handlePanelKeydown(event as KeyboardEvent);
+    });
     this.listen(this.root, 'gt:content-resize', () => this.handleContentResize());
   }
 
@@ -566,11 +570,7 @@ export class TooltipController<TData = unknown> {
   }
 
   private handlePanelKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Escape') {
-      event.stopPropagation();
-      this.close();
-      return;
-    }
+    if (event.key === 'Escape') return;
     if (event.key !== 'Tab' || this.kind !== 'dialog') return;
     const focusables = getFocusable(this.root);
     if (event.shiftKey && (document.activeElement === this.box || document.activeElement === focusables[0])) {
@@ -706,7 +706,7 @@ export class TooltipController<TData = unknown> {
     if (this._peerDismissed) return;
     if (this.unmountTimer) clearTimeout(this.unmountTimer);
     this.unmountTimer = undefined;
-    if (this.status === 'closing' && this.state.isMounted) {
+    if (!this.explicitClose && this.status === 'closing' && this.state.isMounted) {
       this.status = 'open';
       this.state.isShown = true;
       this.state.isVisible = true;
