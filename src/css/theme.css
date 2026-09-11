@@ -18,10 +18,10 @@ html:not(.dark) .gt-tooltip-box:not([data-theme~='dark']):not([data-theme~='mate
 
   /* 3. Define the rest of our light theme variables. */
   --gt-text-color: #222;
-  --gt-text-color-secondary: rgba(0, 0, 0, 0.6);
-  --gt-accent-color: #007bff;
+  --gt-text-color-secondary: #4b5563;
+  --gt-accent-color: #005fcc;
   --gt-border-color: rgba(0, 0, 0, 0.1);
-  --gt-exon-color: #007bff;
+  --gt-exon-color: #005fcc;
   --gt-success-color: #1a7f37;
   background-color: #fff;
   color: #26323d;
@@ -44,7 +44,7 @@ html.dark .gt-tooltip-box:not([data-theme~='light']):not([data-theme~='light-bor
 
   /* 3. Define the rest of our dark theme variables. */
   --gt-text-color: #fff;
-  --gt-text-color-secondary: rgba(255, 255, 255, 0.7);
+  --gt-text-color-secondary: #d1d5db;
   --gt-accent-color: #58a6ff;
   --gt-border-color: rgba(255, 255, 255, 0.2);
   --gt-exon-color: #58a6ff;
@@ -69,10 +69,10 @@ html.dark .gt-tooltip-box:not([data-theme~='light']):not([data-theme~='light-bor
 
   /* 3. Define the rest of our light theme variables. */
   --gt-text-color: #222;
-  --gt-text-color-secondary: rgba(0, 0, 0, 0.6);
-  --gt-accent-color: #007bff;
+  --gt-text-color-secondary: #4b5563;
+  --gt-accent-color: #005fcc;
   --gt-border-color: rgba(0, 0, 0, 0.1);
-  --gt-exon-color: #007bff;
+  --gt-exon-color: #005fcc;
   --gt-success-color: #1a7f37;
   background-color: #fff;
   color: #26323d;
@@ -96,9 +96,9 @@ html.dark .gt-tooltip-box:not([data-theme~='light']):not([data-theme~='light-bor
 
   /* 3. Define the rest of our material-specific variables. */
   --gt-text-color: #fff;
-  --gt-text-color-secondary: rgba(255, 255, 255, 0.7);
-  --gt-accent-color: #80cbc4;
-  --gt-exon-color: #80cbc4;
+  --gt-text-color-secondary: #d1d5db;
+  --gt-accent-color: #9fe7df;
+  --gt-exon-color: #9fe7df;
   --gt-border-color: rgba(255, 255, 255, 0.2);
   --gt-success-color: #3fb950;
   background-color: #505355;
@@ -120,11 +120,18 @@ html.dark .gt-tooltip-box:not([data-theme~='light']):not([data-theme~='light-bor
 
   /* 3. Define the rest of our translucent-specific variables. */
   --gt-text-color: #fff;
-  --gt-text-color-secondary: rgba(255, 255, 255, 0.7);
-  --gt-accent-color: #8cb3f3;
+  --gt-text-color-secondary: #d1d5db;
+  --gt-accent-color: #b8d3ff;
   --gt-border-color: rgba(255, 255, 255, 0.25);
-  --gt-exon-color: #8cb3f3;
+  --gt-exon-color: #b8d3ff;
   --gt-success-color: #3fb950;
   background-color: rgba(0, 0, 0, 0.7);
   color: #fff;
+}
+
+/* Shared focus and hover surfaces are opaque enough to remain discernible
+   against each theme's panel background. */
+.gt-tooltip-box {
+  --gt-focus-color: var(--gt-accent-color);
+  --gt-control-hover-background: color-mix(in srgb, var(--gt-accent-color) 16%, var(--gt-background-color-base));
 }
