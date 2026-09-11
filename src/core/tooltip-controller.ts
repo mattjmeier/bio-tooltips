@@ -8,7 +8,7 @@ let tooltipIdCounter = 0;
 function isNativeInteractive(element: Element): boolean {
   return element instanceof HTMLButtonElement || element instanceof HTMLAnchorElement
     || element instanceof HTMLInputElement || element instanceof HTMLSelectElement
-    || element instanceof HTMLTextAreaElement || element.getAttribute('role') === 'button';
+    || element instanceof HTMLTextAreaElement || element.matches('summary, [contenteditable="true"]');
 }
 
 function appendId(value: string | null, id: string): string {
@@ -161,8 +161,8 @@ export class TooltipController<TData = unknown> {
       this.reference.setAttribute('aria-haspopup', 'dialog');
       this.reference.setAttribute('aria-controls', appendId(this.originalReferenceControls, this.tooltipId));
       if (!isNativeInteractive(reference)) {
-        this.reference.setAttribute('tabindex', '0');
-        this.reference.setAttribute('role', 'button');
+        if (!reference.hasAttribute('tabindex')) this.reference.setAttribute('tabindex', '0');
+        if (!reference.hasAttribute('role')) this.reference.setAttribute('role', 'button');
       }
     } else {
       this.reference.setAttribute('aria-describedby', appendId(this.originalReferenceDescribedBy, this.tooltipId));
@@ -176,7 +176,7 @@ export class TooltipController<TData = unknown> {
     // be revived by a stray mouseenter while its old panel is still under the
     // cursor. The flag is cleared once it is fully unmounted or genuinely
     // reopens, so a deliberate re-hover of its trigger still works.
-    if (this._peerDismissed) return;
+    if (this._peerDismissed || this.explicitClose) return;
     this.clearHideTimers();
     this.status = 'opening';
     if (this.timingConfig) {
@@ -191,7 +191,7 @@ export class TooltipController<TData = unknown> {
 
   hide(): void {
     if (this.state.isDestroyed || this.status === 'idle' || this.status === 'closing') return;
-    if (this._isPinned) return;
+    if (this._isPinned || this.hasFocus()) return;
     if (this.visibleChildren.size > 0) {
       // The pointer left while a nested tooltip is still animating closed.
       // Remember that we want to hide; setChildVisible(child, false) will
@@ -205,7 +205,9 @@ export class TooltipController<TData = unknown> {
       this.options.tooltip.hideDelay ?? 0,
       this.options.interactiveDebounce ?? 0
     );
-    this.hideTimer = setTimeout(() => this.closeNow(), delay);
+    this.hideTimer = setTimeout(() => {
+      if (!this.hasFocus() && !this._isPinned) this.closeNow();
+    }, delay);
   }
 
   /**
@@ -222,7 +224,7 @@ export class TooltipController<TData = unknown> {
    */
   dismiss(): void {
     if (this.state.isDestroyed || this.status === 'idle' || this.status === 'closing') return;
-    if (this._isPinned) return;
+    if (this._isPinned || this.hasFocus()) return;
     this._peerDismissed = true;
     if (this.timingConfig) {
       logTooltipTiming(this, this.timingConfig, 'dismissed by peer', { status: this.status });
@@ -234,6 +236,7 @@ export class TooltipController<TData = unknown> {
 
   setContent(content: string): void {
     if (this.state.isDestroyed) return;
+    if (this.content.contains(document.activeElement) && this.state.isMounted) this.box.focus();
     this.content.innerHTML = content;
     queueMicrotask(() => {
       void this.updatePosition();
@@ -255,6 +258,7 @@ export class TooltipController<TData = unknown> {
       tooltip: { ...this.options.tooltip, ...options.tooltip } as TooltipOptions,
     };
     if (options.theme) this.setTheme(options.theme);
+    if (options.accessibleName && this.kind === 'dialog') this.box.setAttribute('aria-label', options.accessibleName);
     if (this.state.isMounted) this.restartPositioning();
   }
 
@@ -288,13 +292,13 @@ export class TooltipController<TData = unknown> {
       this.clearHideTimers();
       this.show();
     } else {
-      this.clearHideTimers();
-      this.closeNow();
+      this.close();
     }
   }
 
   destroy(): void {
     if (this.state.isDestroyed) return;
+    if (this.root.contains(document.activeElement)) this.returnFocus();
     this.status = 'destroyed';
     this.state.isDestroyed = true;
     this.state.isShown = false;
@@ -332,9 +336,12 @@ export class TooltipController<TData = unknown> {
   /** Explicitly enter a dialog from keyboard activation. */
   enter(): void {
     if (this.kind !== 'dialog' || this.state.isDestroyed) return;
+    this.explicitClose = false;
+    this._peerDismissed = false;
     this.clearHideTimers();
     this.clearShowTimer();
     if (this.status === 'open') {
+      this.makeVisible();
       this.box.focus();
       return;
     }
@@ -348,6 +355,9 @@ export class TooltipController<TData = unknown> {
     this.clearShowTimer();
     this.clearHideTimers();
     this._isPinned = false;
+    this._pinButton?.classList.remove('gt-pin-active');
+    this._pinButton?.setAttribute('aria-label', 'Pin tooltip');
+    this._pinButton?.setAttribute('aria-pressed', 'false');
     this.closeNow();
   }
 
@@ -359,6 +369,7 @@ export class TooltipController<TData = unknown> {
       return;
     }
 
+    this.root.removeAttribute('inert');
     this.mount();
     this.status = 'open';
     this._peerDismissed = false;
@@ -375,20 +386,14 @@ export class TooltipController<TData = unknown> {
     }
     if (this.kind === 'dialog') this.reference.setAttribute('aria-expanded', 'true');
     if (focusDialog && this.kind === 'dialog') {
-      this.root.style.visibility = 'visible';
-      this.box.dataset.state = 'visible';
-      this.content.dataset.state = 'visible';
-      this.state.isVisible = true;
+      this.makeVisible();
       this.box.focus();
     }
     this.parent?.setChildVisible(this, true);
 
     scheduleFrame(() => {
-      if (!this.state.isMounted || this.state.isDestroyed) return;
-      this.root.style.visibility = 'visible';
-      this.box.dataset.state = 'visible';
-      this.content.dataset.state = 'visible';
-      this.state.isVisible = true;
+      if (!this.state.isMounted || this.state.isDestroyed || this.status !== 'open') return;
+      this.makeVisible();
     });
 
     const duration = this.options.tooltip.showDuration ?? 300;
@@ -403,12 +408,11 @@ export class TooltipController<TData = unknown> {
     if (this.state.isDestroyed || (this.status !== 'open' && this.status !== 'opening')) return;
     this.hideTimer = undefined;
     const restoreFocus = this.kind === 'dialog' && this.root.contains(document.activeElement);
-    if (restoreFocus) {
-      this.suppressFocusReopen = true;
-      (this.reference as HTMLElement).focus();
-    }
+    if (restoreFocus) this.returnFocus();
     if (this.hooks.onHide?.(this) === false) return;
 
+    this.destroyNestedTooltips();
+    this.root.setAttribute('inert', '');
     this.status = 'closing';
     this.state.isShown = false;
     this.state.isVisible = false;
@@ -434,7 +438,6 @@ export class TooltipController<TData = unknown> {
       this._peerDismissed = false;
       unregisterTopLevelTooltip(this);
       unregisterOpenTooltip(this);
-      this.explicitClose = false;
       if (this.timingConfig) {
         logTooltipTiming(this, this.timingConfig, 'unmounted (hidden)', { status: this.status });
       }
@@ -516,6 +519,7 @@ export class TooltipController<TData = unknown> {
   private installInteractions(): void {
     this.listen(this.reference, 'mouseenter', () => {
       this._isPointerInside = true;
+      this.explicitClose = false;
       this.clearHideTimers();
       this.show();
     });
@@ -525,6 +529,8 @@ export class TooltipController<TData = unknown> {
         this.suppressFocusReopen = false;
         return;
       }
+      this.explicitClose = false;
+      this.clearHideTimers();
       this.show();
     });
     this.listen(this.reference, 'click', () => {
@@ -535,6 +541,7 @@ export class TooltipController<TData = unknown> {
     this.listen(this.reference, 'blur', () => this.handleFocusLeave());
     this.listen(this.reference, 'touchstart', () => {
       this.touchStartedAt = Date.now();
+      this.explicitClose = false;
       this.show();
     }, { passive: true });
     this.listen(this.reference, 'touchend', () => this.handleTouchEnd(), { passive: true });
@@ -556,31 +563,74 @@ export class TooltipController<TData = unknown> {
     this.listen(this.root, 'gt:content-resize', () => this.handleContentResize());
   }
 
+  private makeVisible(): void {
+    this.root.removeAttribute('inert');
+    this.root.style.visibility = 'visible';
+    this.box.dataset.state = 'visible';
+    this.content.dataset.state = 'visible';
+    this.state.isVisible = true;
+  }
+
+  hasFocus(): boolean {
+    const active = document.activeElement;
+    return this.reference.contains(active) || this.root.contains(active)
+      || [...this.visibleChildren].some(child => child.hasFocus());
+  }
+
+  private returnFocus(): void {
+    if (!this.reference.isConnected) return;
+    this.suppressFocusReopen = true;
+    (this.reference as HTMLElement).focus({ preventScroll: true });
+    this.suppressFocusReopen = false;
+  }
+
   private handleReferenceKeydown(event: KeyboardEvent): void {
-    if (this.kind !== 'dialog') return;
-    const isLink = this.reference instanceof HTMLAnchorElement;
+    if (event.defaultPrevented || event.target !== this.reference || this.kind !== 'dialog') return;
+    const isLink = this.reference.matches('a[href]');
     if (event.key === 'ArrowDown' && isLink) {
       event.preventDefault();
       this.enter();
-    } else if ((event.key === 'Enter' || event.key === ' ') && !isLink
-      && !isNativeFormControl(this.reference)) {
+    } else if ((event.key === 'Enter' || event.key === ' ')
+      && this.reference.getAttribute('role') === 'button'
+      && !(this.reference instanceof HTMLButtonElement)) {
       event.preventDefault();
       this.enter();
     }
+    // Native buttons activate through their click event, avoiding double handling.
+  }
+
+  private nextAfterReference(): HTMLElement | undefined {
+    const scope = this.parent?.root ?? document.body;
+    const focusables = getFocusable(scope).filter(element =>
+      element.closest('[data-gt-tooltip-root]') === (this.parent?.root ?? null));
+    const index = focusables.indexOf(this.reference as HTMLElement);
+    const next = index < 0 ? focusables.find(element =>
+      Boolean(this.reference.compareDocumentPosition(element) & Node.DOCUMENT_POSITION_FOLLOWING))
+      : focusables[index + 1];
+    return next ?? this.parent?.nextAfterReference();
   }
 
   private handlePanelKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Escape') return;
-    if (event.key !== 'Tab' || this.kind !== 'dialog') return;
-    const focusables = getFocusable(this.root);
-    if (event.shiftKey && (document.activeElement === this.box || document.activeElement === focusables[0])) {
+    if (event.key !== 'Tab' || this.kind !== 'dialog' || event.defaultPrevented) return;
+    if (!(event.target instanceof Element)
+      || event.target.closest('[data-gt-tooltip-root]') !== this.root) return;
+    const focusables = getFocusable(this.root).filter(element =>
+      element.closest('[data-gt-tooltip-root]') === this.root);
+    const active = document.activeElement;
+    if (event.shiftKey && (active === this.box || active === focusables[0])) {
       event.preventDefault();
-      (this.reference as HTMLElement).focus();
-    } else if (!event.shiftKey && (document.activeElement === focusables[focusables.length - 1] || (focusables.length === 0 && document.activeElement === this.box))) {
-      const next = nextFocusableAfter(this.reference);
+      this.returnFocus();
+    } else if (!event.shiftKey && (active === focusables[focusables.length - 1]
+      || (focusables.length === 0 && active === this.box))) {
+      const next = this.nextAfterReference();
       if (next) {
         event.preventDefault();
         next.focus();
+      } else {
+        // At the page boundary, remove this portal from sequential navigation
+        // and let the browser continue from the trigger to its own chrome.
+        this.close();
+        (this.reference as HTMLElement).focus();
       }
     }
   }
@@ -614,9 +664,9 @@ export class TooltipController<TData = unknown> {
   }
 
   private handlePointerLeave(event: MouseEvent): void {
-    this._isPointerInside = false;
     const next = event.relatedTarget;
     if (next instanceof Node && (this.reference.contains(next) || this.root.contains(next))) return;
+    this._isPointerInside = false;
     this.startPointerBridge();
     if (this.preservedInteractiveRect && this.isWithinRect(
       event.clientX,
@@ -668,7 +718,7 @@ export class TooltipController<TData = unknown> {
   private handleFocusLeave(): void {
     setTimeout(() => {
       const active = document.activeElement;
-      if (active && (this.reference.contains(active) || this.root.contains(active))) return;
+      if (this.hasFocus() || this._isPointerInside) return;
       // Clicking non-focusable content (e.g. empty space in the panel) drops focus to the
       // document body instead of moving it to a real control. That is not a deliberate
       // "leave", so keep the panel open; the pointer bridge closes it once the cursor exits.
@@ -703,11 +753,12 @@ export class TooltipController<TData = unknown> {
     // animating panel, a nested tooltip re-asserted visibility, or a content
     // resize fired — the tooltip would be stranded in 'closing' with the flag
     // stuck true: it would never unmount and `show()` would ignore hover forever.
-    if (this._peerDismissed) return;
+    if (this._peerDismissed || this.explicitClose) return;
     if (this.unmountTimer) clearTimeout(this.unmountTimer);
     this.unmountTimer = undefined;
     if (!this.explicitClose && this.status === 'closing' && this.state.isMounted) {
       this.status = 'open';
+      this.root.removeAttribute('inert');
       this.state.isShown = true;
       this.state.isVisible = true;
       this.box.dataset.state = 'visible';
@@ -719,6 +770,8 @@ export class TooltipController<TData = unknown> {
   private clearAllTimers(): void {
     this.clearShowTimer();
     this.clearHideTimers();
+    if (this.unmountTimer) clearTimeout(this.unmountTimer);
+    this.unmountTimer = undefined;
     if (this.shownTimer) clearTimeout(this.shownTimer);
     this.shownTimer = undefined;
     if (this.selectionClearTimer) clearTimeout(this.selectionClearTimer);
@@ -738,11 +791,6 @@ function isNativeButton(element: Element): boolean {
   return element instanceof HTMLButtonElement || element.getAttribute('role') === 'button';
 }
 
-function isNativeFormControl(element: Element): boolean {
-  return element instanceof HTMLInputElement || element instanceof HTMLSelectElement
-    || element instanceof HTMLTextAreaElement;
-}
-
 function restoreAttribute(element: Element, name: string, value: string | null): void {
   if (value == null) element.removeAttribute(name);
   else element.setAttribute(name, value);
@@ -750,18 +798,18 @@ function restoreAttribute(element: Element, name: string, value: string | null):
 
 function getFocusable(root: Element): HTMLElement[] {
   return Array.from(root.querySelectorAll<HTMLElement>(
-    'a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])'
-  )).filter(element => !element.hasAttribute('disabled') && element.tabIndex >= 0
-    && !element.closest('[hidden], [inert]') && getComputedStyle(element).display !== 'none'
-    && getComputedStyle(element).visibility !== 'hidden');
-}
-
-function nextFocusableAfter(reference: Element): HTMLElement | undefined {
-  const all = Array.from(document.querySelectorAll<HTMLElement>(
-    'a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])'
-  )).filter(element => !element.hasAttribute('disabled') && !element.closest('[hidden], [inert]'));
-  const index = all.indexOf(reference as HTMLElement);
-  return index >= 0 ? all[index + 1] : undefined;
+    'a[href],button,input,select,textarea,summary,[tabindex],[contenteditable="true"]'
+  )).filter(element => {
+    if (element.matches(':disabled, input[type="hidden"]') || element.tabIndex < 0
+      || element.closest('[hidden], [inert]')) return false;
+    for (let ancestor: Element | null = element; ancestor; ancestor = ancestor.parentElement) {
+      const style = getComputedStyle(ancestor);
+      if (style.display === 'none' || style.visibility === 'hidden') return false;
+      if (ancestor instanceof HTMLDetailsElement && !ancestor.open
+        && !ancestor.querySelector(':scope > summary')?.contains(element)) return false;
+    }
+    return true;
+  }).sort((a, b) => (a.tabIndex || Infinity) - (b.tabIndex || Infinity));
 }
 
 function scheduleFrame(callback: FrameRequestCallback): void {

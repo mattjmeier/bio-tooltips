@@ -18,24 +18,23 @@ const openTopLevelTooltips = new Set<TooltipController<any>>();
 const openTooltips = new Set<TooltipController<any>>();
 let escapeInstalled = false;
 const escapeHandler = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape') return;
-    const active = document.activeElement;
-    const candidates = [...openTooltips].filter(instance =>
-      !instance.state.isDestroyed && instance.status === 'open'
-      && (instance.root.contains(active) || instance.reference.contains(active)
-        || instance._isPinned || instance._isPointerInside)
-    );
-    const target = candidates.reduce<TooltipController<any> | undefined>((deepest, candidate) => {
-      if (!deepest) return candidate;
-      if (deepest.root.contains(candidate.root)) return candidate;
-      if (candidate.root.contains(deepest.root)) return deepest;
-      return candidate;
-    }, undefined);
-    if (target) {
-      event.preventDefault();
-      event.stopPropagation();
-      target.close();
-    }
+  if (event.key !== 'Escape' || event.defaultPrevented) return;
+  const visible = [...openTooltips].filter(instance =>
+    !instance.state.isDestroyed && instance.status === 'open');
+  const focused = visible.filter(instance => instance.hasFocus());
+  const hovered = visible.filter(instance => instance._isPointerInside);
+  const candidates = focused.length ? focused : hovered.length ? hovered : visible;
+  const target = candidates.reduce<TooltipController<any> | undefined>((deepest, candidate) => {
+    if (!deepest) return candidate;
+    if (deepest.root.contains(candidate.reference)) return candidate;
+    if (candidate.root.contains(deepest.reference)) return deepest;
+    return candidate;
+  }, undefined);
+  if (target) {
+    event.preventDefault();
+    event.stopPropagation();
+    target.close();
+  }
 };
 
 function installEscapeDispatcher(): void {
@@ -46,17 +45,12 @@ function installEscapeDispatcher(): void {
 
 export function registerTopLevelTooltip(instance: TooltipController<any>): void {
   openTopLevelTooltips.add(instance);
-  openTooltips.add(instance);
-  installEscapeDispatcher();
+  registerOpenTooltip(instance);
 }
 
 export function unregisterTopLevelTooltip(instance: TooltipController<any>): void {
   openTopLevelTooltips.delete(instance);
-  openTooltips.delete(instance);
-  if (openTooltips.size === 0 && escapeInstalled) {
-    document.removeEventListener('keydown', escapeHandler);
-    escapeInstalled = false;
-  }
+  unregisterOpenTooltip(instance);
 }
 
 export function registerOpenTooltip(instance: TooltipController<any>): void {
@@ -66,6 +60,10 @@ export function registerOpenTooltip(instance: TooltipController<any>): void {
 
 export function unregisterOpenTooltip(instance: TooltipController<any>): void {
   openTooltips.delete(instance);
+  if (openTooltips.size === 0 && escapeInstalled) {
+    document.removeEventListener('keydown', escapeHandler);
+    escapeInstalled = false;
+  }
 }
 
 export function getOpenTopLevelTooltips(): ReadonlySet<TooltipController<any>> {
