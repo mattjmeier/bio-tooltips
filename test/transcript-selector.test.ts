@@ -65,6 +65,24 @@ describe('native transcript selector', () => {
     expect(container.textContent).not.toContain('ENST000001');
   });
 
+  it('preserves a focused, open text disclosure during asynchronous visual updates', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    const alternative = renderGeneTextAlternative(container, transcript('ENST000001', 2), 'TP53');
+    alternative.open = true;
+    const summary = alternative.querySelector('summary')!;
+    summary.focus();
+
+    renderGeneTextAlternative(container, transcript('ENST000001', 2), 'TP53');
+    renderGeneTextAlternative(container, transcript('ENST000002', 3), 'TP53');
+
+    expect(alternative.querySelector('summary')).toBe(summary);
+    expect(document.activeElement).toBe(summary);
+    expect(alternative.open).toBe(true);
+    expect(alternative.querySelectorAll('tbody tr')).toHaveLength(3);
+    container.remove();
+  });
+
   it('sorts native options, shows exon counts, and selects the longest transcript', () => {
     const selector = document.createElement('select');
     const transcripts = [
