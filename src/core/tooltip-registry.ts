@@ -23,7 +23,10 @@ const escapeHandler = (event: KeyboardEvent) => {
     !instance.state.isDestroyed && instance.status === 'open');
   const focused = visible.filter(instance => instance.hasFocus());
   const hovered = visible.filter(instance => instance._isPointerInside);
-  const candidates = focused.length ? focused : hovered.length ? hovered : visible;
+  // A hover child of the focused panel should be dismissed before its parent.
+  const focusChain = visible.filter(instance => focused.some(owner =>
+    owner === instance || owner.root.contains(instance.reference)));
+  const candidates = focused.length ? focusChain : hovered.length ? hovered : visible;
   const target = candidates.reduce<TooltipController<any> | undefined>((deepest, candidate) => {
     if (!deepest) return candidate;
     if (deepest.root.contains(candidate.reference)) return candidate;

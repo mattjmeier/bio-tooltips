@@ -179,6 +179,22 @@ describe('TooltipController', () => {
     expect(reference.isConnected).toBe(true);
   });
 
+  it('dismisses a hover child before a focused parent without moving focus', () => {
+    const { controller: parent } = createController();
+    parent.setContent('<button>More</button>');
+    parent.enter();
+    const child = new TooltipController(parent.content.querySelector('button')!, {
+      parent, tooltip: { ...immediateOptions, appendTo: parent.root }, theme: 'light',
+    });
+    parent.addNestedTooltip(child);
+    child.show();
+    vi.runAllTimers();
+    parent.box.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(child.status).toBe('closing');
+    expect(parent.status).toBe('open');
+    expect(document.activeElement).toBe(parent.box);
+  });
+
   it('preserves focus on the persistent box when asynchronous content replaces a control', () => {
     const { controller } = createController();
     controller.setContent('<button>Loading action</button>');

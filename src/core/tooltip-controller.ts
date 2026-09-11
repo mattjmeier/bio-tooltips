@@ -1,9 +1,8 @@
 import type { CoreTooltipConfig, TooltipOptions } from './config.js';
 import { startPositioning, type ActivePositioner } from './positioning.js';
 import { logTooltipTiming } from './timing.js';
+import { generateUniqueTooltipId } from '../utils.js';
 import { registerTopLevelTooltip, unregisterTopLevelTooltip, registerOpenTooltip, unregisterOpenTooltip } from './tooltip-registry.js';
-
-let tooltipIdCounter = 0;
 
 function isNativeInteractive(element: Element): boolean {
   return element instanceof HTMLButtonElement || element instanceof HTMLAnchorElement
@@ -127,7 +126,7 @@ export class TooltipController<TData = unknown> {
     this.originalReferenceControls = reference.getAttribute('aria-controls');
     this.originalReferenceDescribedBy = reference.getAttribute('aria-describedby');
     this.kind = options.kind ?? 'dialog';
-    this.tooltipId = `gt-tooltip-${++tooltipIdCounter}`;
+    this.tooltipId = `gt-tooltip-${generateUniqueTooltipId()}`;
 
     this.root = document.createElement('div');
     this.root.dataset.gtTooltipRoot = '';
@@ -457,6 +456,7 @@ export class TooltipController<TData = unknown> {
   }
 
   private unmount(): void {
+    this._isPointerInside = false;
     this.stopPositioning();
     this.root.style.visibility = 'hidden';
     this.state.isMounted = false;
