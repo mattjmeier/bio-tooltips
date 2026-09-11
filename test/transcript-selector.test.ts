@@ -358,3 +358,24 @@ describe('native transcript selector', () => {
     expect(stylesheet).toContain('--gt-transcript-selector-option-selected');
   });
 });
+
+// Keep the optional-dependency failure case last because the mocked dynamic
+// import is intentionally process-local to this test file.
+describe('gene track fallback', () => {
+  it('keeps the text alternative and removes the loader when D3 fails', async () => {
+    vi.resetModules();
+    vi.doMock('d3', () => { throw new Error('D3 unavailable'); });
+    const { renderGeneTrack: renderWithFailedD3 } = await import('../src/providers/mygene/visuals/gene-track');
+    const uniqueId = 'failed-d3-alternative';
+    const root = document.createElement('div');
+    root.innerHTML = `<select id="transcript-selector-${uniqueId}"></select><div id="gene-tooltip-track-${uniqueId}"><div class="gt-loader-container"><span>Loading...</span></div></div>`;
+
+    await renderWithFailedD3({ root } as TooltipController, geneData([transcript('ENST000001', 2)]), uniqueId, defaultCoreConfig);
+
+    expect(root.querySelector('.gt-gene-text-alternative')).not.toBeNull();
+    expect(root.querySelector('.gt-gene-text-alternative')?.textContent).toContain('ENST000001');
+    expect(root.querySelector('.gt-loader-container')).toBeNull();
+    expect(root.querySelector('[role="status"]')?.textContent).toContain('text alternative');
+    vi.doUnmock('d3');
+  });
+});

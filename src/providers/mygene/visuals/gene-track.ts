@@ -127,8 +127,9 @@ function setGeneTrackAccessibleLabel(
     svgRoot: D3.Selection<SVGSVGElement, unknown, null, undefined>,
     symbol: string,
     transcript: MyGeneExon,
+    uniqueId: string,
 ): void {
-    const labelId = `gene-track-label-${transcript.transcript.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+    const labelId = `gene-track-label-${uniqueId}-${transcript.transcript.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
     svgRoot.attr('role', 'img').attr('aria-labelledby', labelId);
     svgRoot.select('title').remove();
     svgRoot.append('title').attr('id', labelId)
@@ -172,7 +173,7 @@ export async function renderGeneTrack(
     let drawSelectedTranscript: ((transcriptId: string) => void) | null = null;
 
     let exonTooltips: TooltipController[] = [];
-    renderGeneTextAlternative(container, longestTranscript, data.symbol);
+    renderGeneTextAlternative(container, transcripts.find(tx => tx.transcript === selectedTranscriptId) ?? longestTranscript, data.symbol);
 
     try {
         if (transcripts.length > 1 && selectorEl) {
@@ -183,11 +184,11 @@ export async function renderGeneTrack(
             // Initialize the header control before D3 loads so it does not appear after the SVG.
             selectedTranscriptId = initializeNativeTranscriptSelector(selectorEl, transcripts, {
                 selectedTranscriptId,
-            onChange: selectedValue => {
-                selectedTranscriptId = selectedValue;
-                const selected = transcripts.find(tx => tx.transcript === selectedValue) ?? longestTranscript;
-                renderGeneTextAlternative(container, selected, data.symbol);
-                logTooltipTiming(instance, config, 'transcript selector change', { selected: selectedTranscriptId });
+                onChange: selectedValue => {
+                    selectedTranscriptId = selectedValue;
+                    const selected = transcripts.find(tx => tx.transcript === selectedValue) ?? longestTranscript;
+                    renderGeneTextAlternative(container, selected, data.symbol);
+                    logTooltipTiming(instance, config, 'transcript selector change', { selected: selectedTranscriptId });
                     drawSelectedTranscript?.(selectedTranscriptId);
                 },
             }) ?? longestTranscript.transcript;
@@ -219,6 +220,7 @@ export async function renderGeneTrack(
         container.querySelector('svg')?.remove();
         container.querySelector('.gt-gene-track-status')?.remove();
         container.querySelector('small:not(.gt-gene-track-status)')?.remove();
+        container.querySelectorAll('.gt-loader-container').forEach(loader => loader.remove());
         const svgRoot = d3.select(container).append("svg")
             .attr("width", availableWidth)
             .attr("height", height + margin.top + margin.bottom);
@@ -242,7 +244,7 @@ export async function renderGeneTrack(
             const selectedTranscript = transcripts.find(tx => tx.transcript === transcriptId) ?? longestTranscript;
             renderGeneTextAlternative(container, selectedTranscript, data.symbol);
             exonTooltips = drawTranscript(g, selectedTranscript, xScale, instance, config);
-            setGeneTrackAccessibleLabel(svgRoot, data.symbol, selectedTranscript);
+            setGeneTrackAccessibleLabel(svgRoot, data.symbol, selectedTranscript, uniqueId);
         };
 
         // --- Initial Draw (common to all cases) ---
@@ -251,6 +253,7 @@ export async function renderGeneTrack(
 
     } catch (error) {
         console.error("Error during gene track rendering:", error);
+        container.querySelectorAll('.gt-loader-container').forEach(loader => loader.remove());
         const status = container.querySelector<HTMLElement>('.gt-gene-track-status')
             ?? document.createElement('small');
         status.className = 'gt-gene-track-status';

@@ -46,17 +46,24 @@ export function renderGeneTextAlternative(
     const exonNumber = transcript.strand === -1 ? exons.length - index : index + 1;
     return `<tr><th scope="row">${exonNumber}</th><td>${coordinates[0].toLocaleString()}</td><td>${coordinates[1].toLocaleString()}</td></tr>`;
   }).join('');
-  alternative.innerHTML = `
-    <summary>Text alternative</summary>
-    <div class="gt-gene-text-alternative-content">
-      <p><strong>${escapeHTML(symbol)}</strong> transcript <span class="gt-transcript-id">${escapeHTML(transcript.transcript)}</span>; strand: ${strand}; ${exons.length} exon${exons.length === 1 ? '' : 's'}.</p>
+  const contentHTML = `<p><strong>${escapeHTML(symbol)}</strong> transcript <span class="gt-transcript-id">${escapeHTML(transcript.transcript)}</span>; strand: ${strand}; ${exons.length} exon${exons.length === 1 ? '' : 's'}.</p>
       <table>
         <caption>Exon coordinates for ${escapeHTML(transcript.transcript)}</caption>
         <thead><tr><th scope="col">Exon</th><th scope="col">Start</th><th scope="col">End</th></tr></thead>
         <tbody>${rows}</tbody>
-      </table>
-    </div>`;
-  if (!existing) container.prepend(alternative);
+      </table>`;
+  if (!existing) {
+    alternative.innerHTML = `<summary>Text alternative</summary><div class="gt-gene-text-alternative-content">${contentHTML}</div>`;
+    container.prepend(alternative);
+  } else {
+    const content = alternative.querySelector<HTMLElement>('.gt-gene-text-alternative-content');
+    if (content?.dataset.transcript === transcript.transcript) return alternative;
+    if (content) {
+      content.dataset.transcript = transcript.transcript;
+      content.innerHTML = contentHTML;
+    }
+  }
+  alternative.querySelector<HTMLElement>('.gt-gene-text-alternative-content')!.dataset.transcript = transcript.transcript;
   return alternative;
 }
 
