@@ -51,7 +51,7 @@
         const pin = document.querySelector('.gt-pin-button');
         checks.mounted = Boolean(root && box);
         checks.positioned = Boolean(box?.dataset.placement);
-        checks.role = box?.getAttribute('role') === 'tooltip';
+        checks.role = box?.getAttribute('role') === 'dialog';
         checks.content = document.querySelector('.gt-tooltip-content')?.textContent.includes('TP53') === true;
 
         document.documentElement.classList.add('dark');

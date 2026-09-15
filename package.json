@@ -77,7 +77,7 @@
     "docs:versions:sync": "node scripts/sync-doc-version.mjs",
     "docs:versions:check": "node scripts/sync-doc-version.mjs --check",
     "test": "vitest",
-    "test:a11y": "npm run build:js-css && node scripts/test-a11y-browser.mjs",
+    "test:a11y": "npm run build:js-css && node scripts/test-a11y-browser.mjs && node scripts/test-a11y-visual.mjs",
     "test:watch": "vitest --watch",
     "benchmark": "npm run build:js-css && node benchmark/run.mjs",
     "benchmark:fixtures": "node benchmark/capture-fixtures.mjs",
