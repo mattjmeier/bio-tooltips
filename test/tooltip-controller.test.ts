@@ -549,4 +549,25 @@ describe('TooltipController', () => {
     vi.runAllTimers();
     expect(controller.status).toBe('open');
   });
+  it.each(['close', 'destroy'] as const)('returns focus outside body-mounted descendants when a parent is %s', action => {
+    const { reference, controller: parent } = createController();
+    parent.enter();
+    const trigger = document.createElement('button');
+    parent.content.append(trigger);
+    const child = new TooltipController(trigger, {
+      content: '<input aria-label="Search">',
+      tooltip: immediateOptions,
+      theme: parent.theme,
+      parent,
+    });
+    parent.addNestedTooltip(child);
+    child.enter();
+    child.content.querySelector('input')!.focus();
+    parent[action]();
+    expect(document.activeElement).toBe(reference);
+    expect(child.state.isDestroyed).toBe(true);
+    vi.runAllTimers();
+    expect(parent.state.isMounted).toBe(false);
+  });
+
 });

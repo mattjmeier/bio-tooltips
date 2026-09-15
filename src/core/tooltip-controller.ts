@@ -297,7 +297,7 @@ export class TooltipController<TData = unknown> {
 
   destroy(): void {
     if (this.state.isDestroyed) return;
-    if (this.root.contains(document.activeElement)) this.returnFocus();
+    if (this.containsPanelFocus()) this.returnFocus();
     this.status = 'destroyed';
     this.state.isDestroyed = true;
     this.state.isShown = false;
@@ -368,6 +368,8 @@ export class TooltipController<TData = unknown> {
       return;
     }
 
+    const duration = this.options.tooltip.showDuration ?? 300;
+    this.box.style.setProperty('--gt-show-duration', `${duration}ms`);
     this.root.removeAttribute('inert');
     this.mount();
     this.status = 'open';
@@ -395,8 +397,6 @@ export class TooltipController<TData = unknown> {
       this.makeVisible();
     });
 
-    const duration = this.options.tooltip.showDuration ?? 300;
-    this.box.style.setProperty('--gt-show-duration', `${duration}ms`);
     this.shownTimer = setTimeout(() => {
       this.shownTimer = undefined;
       if (this.status === 'open') this.hooks.onShown?.(this);
@@ -406,7 +406,7 @@ export class TooltipController<TData = unknown> {
   private closeNow(): void {
     if (this.state.isDestroyed || (this.status !== 'open' && this.status !== 'opening')) return;
     this.hideTimer = undefined;
-    const restoreFocus = this.kind === 'dialog' && this.root.contains(document.activeElement);
+    const restoreFocus = this.kind === 'dialog' && this.containsPanelFocus();
     if (restoreFocus) this.returnFocus();
     if (this.hooks.onHide?.(this) === false) return;
 
@@ -575,6 +575,11 @@ export class TooltipController<TData = unknown> {
     const active = document.activeElement;
     return this.reference.contains(active) || this.root.contains(active)
       || [...this.visibleChildren].some(child => child.hasFocus());
+  }
+
+  private containsPanelFocus(): boolean {
+    return this.root.contains(document.activeElement)
+      || [...this.visibleChildren].some(child => child.containsPanelFocus());
   }
 
   private returnFocus(): void {
