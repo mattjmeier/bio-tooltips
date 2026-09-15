@@ -9,7 +9,8 @@ import type { MyGeneInfoResult } from './types.js';
  */
 export async function fetchMyGeneBatch(
   geneSymbols: string[],
-  species: string
+  species: string,
+  throwOnError = false
 ): Promise<Map<string, MyGeneInfoResult>> {
   if (!geneSymbols || geneSymbols.length === 0) {
     return new Map();
@@ -56,6 +57,7 @@ export async function fetchMyGeneBatch(
     }
     return resultsMap;
   } catch (error) {
+    if (throwOnError) throw error;
     console.error('Batch fetch failed:', error);
     return new Map();
   }
@@ -75,16 +77,18 @@ export async function fetchMyGeneRefs(refs: EntityRef[]): Promise<Map<string, My
   });
 
   const results = new Map<string, MyGeneInfoResult>();
-  await Promise.allSettled(
+  const batches = await Promise.allSettled(
     Array.from(refsByTaxid.entries()).map(async ([taxid, taxidRefs]) => {
       const symbols = taxidRefs.map(ref => ref.query);
-      const batchResults = await fetchMyGeneBatch(symbols, String(taxid));
+      const batchResults = await fetchMyGeneBatch(symbols, String(taxid), true);
       batchResults.forEach((data, symbol) => {
         results.set(getMyGeneCacheKey(symbol, taxid), data);
       });
     })
   );
 
+  const failure = batches.find(batch => batch.status === 'rejected');
+  if (failure?.status === 'rejected' && results.size === 0) throw failure.reason;
   return results;
 }
 

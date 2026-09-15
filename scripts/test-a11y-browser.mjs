@@ -39,6 +39,13 @@ try {
     window.__fixtureChemical = chemical;
   }, { gene: geneFixture, chemical: chemicalFixture });
   await page.goto(`http://127.0.0.1:${port}/test/browser-a11y.html`);
+  await page.addScriptTag({ path: join(root, 'node_modules/axe-core/axe.min.js') });
+  const scan = async label => {
+    assert.ok(await page.getByRole('dialog').count(), `${label}: requires an open dialog`);
+    await page.waitForTimeout(500);
+    const violations = await page.evaluate(async () => (await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa'] } })).violations);
+    assert.deepEqual(violations, [], `${label}: ${violations.map(v => v.id).join(', ')}`);
+  };
   const gene = page.locator('#gene');
   await gene.hover();
   const dialog = page.getByRole('dialog').first();
@@ -53,7 +60,12 @@ try {
   await page.keyboard.press('Enter');
   assert.ok(await page.locator('[data-gt-tooltip-root]').count());
   const pin = page.locator('.gt-pin-button').first();
-  if (await pin.count()) { await pin.click(); await page.keyboard.press('Escape'); await waitFor(() => page.locator('[data-gt-tooltip-root]').count().then(count => count === 0)); }
+  assert.equal(await pin.count(), 1);
+  await pin.focus(); await page.keyboard.press('Enter');
+  assert.equal(await pin.getAttribute('aria-pressed'), 'true');
+  await scan('pinned gene');
+  await page.keyboard.press('Enter');
+  await waitFor(() => page.getByRole('dialog').count().then(count => count === 0));
   await gene.focus(); await page.keyboard.press('Enter');
   const rootPanel = page.locator('[data-gt-tooltip-root]').first();
   await waitFor(() => rootPanel.isVisible());
@@ -69,17 +81,22 @@ try {
   await waitFor(() => page.locator('.gt-copy-status').first().textContent().then(text => /Unable/.test(text)));
   const more = rootPanel.locator('.gene-tooltip-more-btn').first();
   assert.equal(await more.count(), 1, 'gene nested child entry must render');
-  await more.evaluate(button => button.click());
+  await more.focus(); await page.keyboard.press('Enter');
   const child = page.locator('.gt-tooltip-box[role="dialog"]').nth(1);
   await waitFor(() => child.isVisible());
   assert.match(await child.getAttribute('aria-label'), /Pathways|Transcripts|Domains|Gene/);
-  await child.focus();
   assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('role')), 'dialog', 'nested dialog must receive focus');
   const nestedSearch = child.locator('.gene-tooltip-nested-search');
   assert.equal(await nestedSearch.count(), 1, 'nested child search must render');
   await nestedSearch.fill('zzzznonexistent');
   assert.match(await child.locator('.gt-nested-status').textContent(), /0 results/);
-  await child.locator('.gt-close-button').click();
+  await scan('nested gene empty results');
+  await page.keyboard.press('Escape');
+  await waitFor(() => page.getByRole('dialog').count().then(count => count === 1));
+  assert.equal(await more.evaluate(el => el === document.activeElement), true);
+  await page.keyboard.press('Enter');
+  await child.locator('.gt-close-button').focus();
+  await page.keyboard.press('Enter');
   await waitFor(() => page.locator('.gt-tooltip-box[role="dialog"]').count().then(count => count === 1));
   assert.equal(await page.locator('.gt-tooltip-box[role="dialog"]').count(), 1, 'child close must preserve parent');
   const parentPin = rootPanel.locator('.gt-pin-button');
@@ -88,15 +105,23 @@ try {
   assert.equal(await parentPin.getAttribute('aria-pressed'), 'true', 'pin must expose pressed state');
   await page.keyboard.press('Escape');
   await waitFor(() => page.locator('[data-gt-tooltip-root]').count().then(count => count === 0));
+  await gene.focus(); await page.keyboard.press('Enter');
+  await page.locator('.gt-gene-text-alternative').waitFor();
+  const selector = rootPanel.locator('select').first();
+  assert.ok(await selector.locator('option').count() > 1);
+  await selector.focus(); await page.keyboard.press('ArrowDown');
+  const transcript = await selector.inputValue();
+  assert.ok((await rootPanel.locator('.gt-gene-text-alternative').textContent()).includes(transcript));
   const collapsible = page.locator('.gt-collapsible-header').first();
-  if (await collapsible.count()) { await collapsible.click(); assert.equal(await collapsible.getAttribute('aria-expanded'),'false'); assert.ok(await page.locator('.gt-collapsible-content').first().getAttribute('inert') !== null); await collapsible.click(); }
-  const axePath = join(root, 'node_modules/axe-core/axe.min.js');
-  await page.addScriptTag({ path:axePath });
+  assert.equal(await collapsible.count(), 1);
+  { await collapsible.click(); assert.equal(await collapsible.getAttribute('aria-expanded'),'false'); assert.ok(await page.locator('.gt-collapsible-content').first().getAttribute('inert') !== null); await collapsible.click(); }
+
   for (const theme of ['light','dark','material','translucent','light-border']) {
     await page.evaluate(value => {
       document.documentElement.classList.toggle('dark', value === 'dark');
       document.querySelectorAll('.gt-tooltip-box').forEach(box => { box.dataset.theme = value; });
     }, theme);
+    assert.equal(await page.getByRole('dialog').count(), 1, 'Theme scan requires its provider dialog');
     await page.waitForTimeout(500);
     const result = await page.evaluate(async () => window.axe.run(document, { runOnly:{ type:'tag', values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa'] } }));
     assert.deepEqual(result.violations, [], `gene ${theme} axe violations: ${result.violations.map(v => `${v.id} (${v.nodes.map(n=>n.target).join(',')})`).join('; ')}`);
@@ -113,6 +138,7 @@ try {
       document.documentElement.classList.toggle('dark', value === 'dark');
       document.querySelectorAll('.gt-tooltip-box').forEach(box => { box.dataset.theme = value; });
     }, theme);
+    assert.equal(await page.getByRole('dialog').count(), 1, 'Theme scan requires its provider dialog');
     await page.waitForTimeout(500);
     const result = await page.evaluate(async () => window.axe.run(document, { runOnly:{ type:'tag', values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa'] } }));
     assert.deepEqual(result.violations, [], `chemical ${theme} axe violations: ${result.violations.map(v => `${v.id} (${v.nodes.map(n=>n.target).join(',')})`).join('; ')}`);

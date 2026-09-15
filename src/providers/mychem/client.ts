@@ -89,7 +89,8 @@ const DIRECT_ANNOTATION_SCOPES = new Set<MyChemScope>([
 
 export async function fetchMyChemBatch(
   queries: string[],
-  scope: MyChemScope = 'name'
+  scope: MyChemScope = 'name',
+  throwOnError = false
 ): Promise<Map<string, MyChemInfoResult>> {
   if (!queries || queries.length === 0) {
     return new Map();
@@ -124,13 +125,15 @@ export async function fetchMyChemBatch(
 
     return resultsMap;
   } catch (error) {
+    if (throwOnError) throw error;
     console.error('MyChem batch fetch failed:', error);
     return new Map();
   }
 }
 
 export async function fetchMyChemAnnotationBatch(
-  ids: string[]
+  ids: string[],
+  throwOnError = false
 ): Promise<Map<string, MyChemInfoResult>> {
   if (!ids || ids.length === 0) {
     return new Map();
@@ -165,13 +168,15 @@ export async function fetchMyChemAnnotationBatch(
 
     return resultsMap;
   } catch (error) {
+    if (throwOnError) throw error;
     console.error('MyChem annotation fetch failed:', error);
     return new Map();
   }
 }
 
 export async function fetchMyChemBestGuessBatch(
-  queries: string[]
+  queries: string[],
+  throwOnError = false
 ): Promise<Map<string, MyChemInfoResult>> {
   if (!queries || queries.length === 0) {
     return new Map();
@@ -179,7 +184,7 @@ export async function fetchMyChemBestGuessBatch(
 
   const resultsMap = new Map<string, MyChemInfoResult>();
 
-  await Promise.allSettled(
+  const batches = await Promise.allSettled(
     queries.map(async query => {
       const result = await fetchBestGuessResult(query);
       if (result) {
@@ -188,6 +193,8 @@ export async function fetchMyChemBestGuessBatch(
     })
   );
 
+  const failure = batches.find(batch => batch.status === 'rejected');
+  if (throwOnError && failure?.status === 'rejected' && resultsMap.size === 0) throw failure.reason;
   return resultsMap;
 }
 
@@ -205,14 +212,14 @@ export async function fetchMyChemRefs(refs: EntityRef[]): Promise<Map<string, My
   });
 
   const results = new Map<string, MyChemInfoResult>();
-  await Promise.allSettled(
+  const batches = await Promise.allSettled(
     Array.from(refsByLookup.values()).map(async ({ lookup, scope, refs: scopedRefs }) => {
       const queries = scopedRefs.map(ref => ref.query);
       const batchResults = lookup === 'best-guess'
-        ? await fetchMyChemBestGuessBatch(queries)
+        ? await fetchMyChemBestGuessBatch(queries, true)
         : DIRECT_ANNOTATION_SCOPES.has(scope)
-          ? await fetchMyChemAnnotationBatch(queries)
-          : await fetchMyChemBatch(queries, scope);
+          ? await fetchMyChemAnnotationBatch(queries, true)
+          : await fetchMyChemBatch(queries, scope, true);
 
       batchResults.forEach((data, query) => {
         results.set(getMyChemCacheKey(query, scope, lookup), data);
@@ -220,6 +227,8 @@ export async function fetchMyChemRefs(refs: EntityRef[]): Promise<Map<string, My
     })
   );
 
+  const failure = batches.find(batch => batch.status === 'rejected');
+  if (failure?.status === 'rejected' && results.size === 0) throw failure.reason;
   return results;
 }
 

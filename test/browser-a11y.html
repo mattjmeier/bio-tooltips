@@ -18,7 +18,7 @@
     };
     document.execCommand = () => true;
     Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => {} } });
-    const common = { prefetch:'none', visualPreload:'none', ideogram:{enabled:false}, display:{collapsible:true,ideogram:false,geneTrack:false,pathways:true,domains:true,transcripts:true,structures:false,generifs:true}, tooltipOptions:{showDuration:0,hideDuration:0}, nestedTooltipOptions:{showDuration:0,hideDuration:0} };
+    const common = { prefetch:'none', visualPreload:'none', ideogram:{enabled:false}, display:{collapsible:true,collapsedByDefault:false,ideogram:false,geneTrack:true,pathways:true,domains:true,transcripts:true,structures:false,generifs:true}, tooltipOptions:{showDuration:0,hideDuration:0}, nestedTooltipOptions:{showDuration:0,hideDuration:0} };
     window.__a11y.cleanups.push(window.GeneTooltip.init(common));
     window.__a11y.cleanups.push(window.ChemicalTooltip.init({ ...common, selector:'.chemical-tooltip', structureRenderer:() => '<div role="img" aria-label="Chemical structure fixture"></div>' }));
   </script>

@@ -23,3 +23,9 @@ The visual browser checks assert panel and page reflow at 320 CSS pixels, then a
 The selected-transcript text alternative is a native expandable disclosure with transcript identity, strand, and exon numbers and coordinates. It updates with the transcript selector and remains available when D3 cannot render. Individual SVG exons retain pointer previews without adding hundreds of keyboard stops.
 
 Short descriptive previews use `role="tooltip"` and `aria-describedby`; interactive parent and searchable child panels use named `role="dialog"` containers. Host applications should supply meaningful trigger text, preserve native link/button semantics, and avoid overriding the library’s focus and hidden-state styles. Optional third-party visualizations and custom renderers need their own accessibility assessment.
+
+## Verification record
+
+Validated in Chromium 151.0.7922.34 with local TP53 and aspirin records. The browser suite exercises span/button/link activation, logical Tab exit, nested search and dismissal, pinning, transcript changes, copy success/failure, delayed responses, request errors, empty results, and cleanup/reinitialization. Axe scans require an open panel and cover five shipped themes plus nested and pinned states. The unit suite has 120 passing tests. Production, declaration, documentation, and package dry-run checks also pass.
+
+Development dependency review found zero runtime vulnerabilities and eight existing development-tool findings (three moderate, five high); these were present before the axe-core addition. Registry verification checked 498 package signatures and 89 attestations. The environment used Node 24.14.0, below jsdom 30’s declared Node 24.15.0 minimum; tests passed, but use a supported Node version for release verification.
