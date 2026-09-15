@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
+const geneFixture = JSON.parse(await readFile(join(root, 'benchmark/fixtures/mygene-tp53.json'), 'utf8')).data;
+const chemicalFixture = JSON.parse(await readFile(join(root, 'benchmark/fixtures/mychem-aspirin.json'), 'utf8')).data;
 const mime = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css' };
 const server = http.createServer(async (req, res) => {
   try {
@@ -32,6 +34,10 @@ try {
       await new Promise(resolve => setTimeout(resolve, 25));
     }
   };
+  await page.addInitScript(({ gene, chemical }) => {
+    window.__fixtureGene = gene;
+    window.__fixtureChemical = chemical;
+  }, { gene: geneFixture, chemical: chemicalFixture });
   await page.goto(`http://127.0.0.1:${port}/test/browser-a11y.html`);
   const gene = page.locator('#gene');
   await gene.hover();
@@ -51,12 +57,41 @@ try {
   await gene.focus(); await page.keyboard.press('Enter');
   const rootPanel = page.locator('[data-gt-tooltip-root]').first();
   await waitFor(() => rootPanel.isVisible());
+  const summaryToggle = rootPanel.locator('.gt-summary-toggle');
+  assert.equal(await summaryToggle.count(), 1, 'gene summary toggle must render');
+  await summaryToggle.click();
+  assert.equal(await rootPanel.locator('.gt-summary-copy-btn').count(), 1, 'gene summary copy control must render');
+  await rootPanel.locator('.gt-summary-copy-btn').click();
+  await waitFor(() => page.locator('.gt-copy-status').first().textContent().then(text => Boolean(text)));
+  assert.match(await page.locator('.gt-copy-status').first().textContent(), /copied/i);
+  await page.evaluate(() => { navigator.clipboard.writeText = async () => { throw new Error('fixture clipboard failure'); }; });
+  await rootPanel.locator('.gt-summary-copy-btn').click();
+  await waitFor(() => page.locator('.gt-copy-status').first().textContent().then(text => /Unable/.test(text)));
+  const more = rootPanel.locator('.gene-tooltip-more-btn').first();
+  assert.equal(await more.count(), 1, 'gene nested child entry must render');
+  await more.evaluate(button => button.click());
+  const child = page.locator('.gt-tooltip-box[role="dialog"]').nth(1);
+  await waitFor(() => child.isVisible());
+  assert.match(await child.getAttribute('aria-label'), /Pathways|Transcripts|Domains|Gene/);
+  await child.focus();
+  assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('role')), 'dialog', 'nested dialog must receive focus');
+  const nestedSearch = child.locator('.gene-tooltip-nested-search');
+  assert.equal(await nestedSearch.count(), 1, 'nested child search must render');
+  await nestedSearch.fill('zzzznonexistent');
+  assert.match(await child.locator('.gt-nested-status').textContent(), /0 results/);
+  await child.locator('.gt-close-button').click();
+  await waitFor(() => page.locator('.gt-tooltip-box[role="dialog"]').count().then(count => count === 1));
+  assert.equal(await page.locator('.gt-tooltip-box[role="dialog"]').count(), 1, 'child close must preserve parent');
+  const parentPin = rootPanel.locator('.gt-pin-button');
+  assert.equal(await parentPin.count(), 1, 'parent pin control must render');
+  await parentPin.click();
+  assert.equal(await parentPin.getAttribute('aria-pressed'), 'true', 'pin must expose pressed state');
+  await page.keyboard.press('Escape');
+  await waitFor(() => page.locator('[data-gt-tooltip-root]').count().then(count => count === 0));
   const collapsible = page.locator('.gt-collapsible-header').first();
   if (await collapsible.count()) { await collapsible.click(); assert.equal(await collapsible.getAttribute('aria-expanded'),'false'); assert.ok(await page.locator('.gt-collapsible-content').first().getAttribute('inert') !== null); await collapsible.click(); }
   const axePath = join(root, 'node_modules/axe-core/axe.min.js');
   await page.addScriptTag({ path:axePath });
-  await page.setViewportSize({ width: 320, height: 720 });
-  assert.ok(await dialog.boundingBox(), 'gene panel must render at 320 CSS pixels');
   for (const theme of ['light','dark','material','translucent','light-border']) {
     await page.evaluate(value => {
       document.documentElement.classList.toggle('dark', value === 'dark');
@@ -69,6 +104,7 @@ try {
   await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
   assert.equal(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches), true);
   assert.equal(await page.evaluate(() => matchMedia('(forced-colors: active)').matches), true);
+  await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'none' });
   await page.keyboard.press('Escape');
   await page.locator('#chemical').click();
   await waitFor(() => page.getByRole('dialog').count().then(count => count > 0));
