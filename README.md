@@ -78,6 +78,8 @@ Full documentation and examples are available in the `docs` folder and at the pr
 
 https://mattjmeier.github.io/bio-tooltips/
 
+Accessibility guidance is available in [`docs/accessibility.md`](docs/accessibility.md). The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
+
 ## Performance Benchmarks
 
 Run the reproducible renderer and controlled cache/prefetch benchmark with:

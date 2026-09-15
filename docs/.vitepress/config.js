@@ -48,7 +48,8 @@ export default {
           { text: 'Quick Start', link: '/guide' },
           { text: 'Core Concepts', link: '/core-concepts' },
           { text: 'Framework Integration', link: '/integration' },
-          { text: 'Styling & Theming', link: '/styling-theming' }
+          { text: 'Styling & Theming', link: '/styling-theming' },
+          { text: 'Accessibility', link: '/accessibility' }
         ]
       },
       {

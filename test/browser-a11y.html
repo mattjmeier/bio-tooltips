@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/dist/bio-tooltips.css"><title>Bio Tooltips accessibility fixture</title></head>
+<body>
+  <main><h1>Accessibility fixture</h1>
+    <p><span id="gene" class="gene-tooltip" data-species="human">TP53</span></p>
+    <p><button id="chemical" type="button" class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</button></p>
+  </main>
+  <script src="/dist/bio-tooltips.global.js"></script>
+  <script>
+    window.__a11y = { cleanups: [] };
+    window.fetch = async (input) => {
+      const url = String(input);
+      if (url.includes('mygene')) return { ok: true, json: async () => [{ _id:'7157', query:'TP53', symbol:'TP53', name:'tumor protein p53', summary:'A local accessibility fixture summary.', taxid:9606, pathways:[], exons:[] }] };
+      if (url.includes('mychem')) return { ok: true, json: async () => [{ query:'2244', name:'Aspirin', drugbank_id:'DB00945', pubchem_cid:2244, molecular_formula:'C9H8O4', molecular_weight:180.16 }] };
+      throw new Error('Unexpected fixture request: ' + url);
+    };
+    const common = { prefetch:'none', visualPreload:'none', display:{ideogram:false,geneTrack:false,pathways:false,domains:false,transcripts:false,structures:false,generifs:false}, tooltipOptions:{showDuration:0,hideDuration:0} };
+    window.__a11y.cleanups.push(window.GeneTooltip.init(common));
+    window.__a11y.cleanups.push(window.ChemicalTooltip.init({ ...common, selector:'.chemical-tooltip' }));
+  </script>
+</body></html>
