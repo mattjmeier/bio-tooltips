@@ -40,14 +40,20 @@ function geneData(exons: MyGeneExon[] | undefined): MyGeneInfoResult {
 }
 
 describe('native transcript selector', () => {
-  it('renders a native expandable exon alternative with strand and transcript identity', () => {
+  it('renders a compact accessible exon-data disclosure with strand and transcript identity', () => {
     const container = document.createElement('div');
     const selected = { ...transcript('ENST000009', 3), strand: -1 };
 
     const alternative = renderGeneTextAlternative(container, selected, 'TP53');
 
     expect(alternative.className).toBe('gt-gene-text-alternative');
-    expect(alternative.querySelector('summary')?.textContent).toBe('Text alternative');
+    const toggle = container.querySelector<HTMLButtonElement>('.gt-gene-text-alternative-toggle')!;
+    expect(toggle.textContent).toContain('Exon data');
+    expect(toggle.getAttribute('aria-label')).toBe('Exon data for TP53 gene model');
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(toggle.getAttribute('aria-controls')).toBe(alternative.id);
+    expect(alternative.hidden).toBe(true);
+    expect(container.querySelector('.gt-gene-track-label')?.textContent).toContain('TP53');
     expect(alternative.textContent).toContain('ENST000009');
     expect(alternative.textContent).toContain('strand: reverse (−)');
     expect(alternative.querySelectorAll('tbody tr')).toHaveLength(3);
@@ -69,16 +75,18 @@ describe('native transcript selector', () => {
     const container = document.createElement('div');
     document.body.append(container);
     const alternative = renderGeneTextAlternative(container, transcript('ENST000001', 2), 'TP53');
-    alternative.open = true;
-    const summary = alternative.querySelector('summary')!;
-    summary.focus();
+    const toggle = container.querySelector<HTMLButtonElement>('.gt-gene-text-alternative-toggle')!;
+    toggle.click();
+    toggle.focus();
 
     renderGeneTextAlternative(container, transcript('ENST000001', 2), 'TP53');
     renderGeneTextAlternative(container, transcript('ENST000002', 3), 'TP53');
 
-    expect(alternative.querySelector('summary')).toBe(summary);
-    expect(document.activeElement).toBe(summary);
-    expect(alternative.open).toBe(true);
+    expect(container.querySelector('.gt-gene-text-alternative-toggle')).toBe(toggle);
+    expect(document.activeElement).toBe(toggle);
+    expect(toggle.getAttribute('aria-label')).toBe('Exon data for TP53 gene model');
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(alternative.hidden).toBe(false);
     expect(alternative.querySelectorAll('tbody tr')).toHaveLength(3);
     container.remove();
   });
@@ -393,7 +401,11 @@ describe('gene track fallback', () => {
     expect(root.querySelector('.gt-gene-text-alternative')).not.toBeNull();
     expect(root.querySelector('.gt-gene-text-alternative')?.textContent).toContain('ENST000001');
     expect(root.querySelector('.gt-loader-container')).toBeNull();
-    expect(root.querySelector('[role="status"]')?.textContent).toContain('text alternative');
+    expect(root.querySelector('[role="status"]')?.textContent).toContain('exon data shown below');
+    expect(root.querySelector('.gt-gene-text-alternative')?.hidden).toBe(false);
+    expect(root.querySelector('.gt-gene-text-alternative-toggle')?.getAttribute('aria-expanded')).toBe('true');
+    expect(root.querySelector('[role="status"]')?.nextElementSibling)
+      .toBe(root.querySelector('.gt-gene-text-alternative'));
     vi.doUnmock('d3');
   });
 });

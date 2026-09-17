@@ -7,6 +7,7 @@ import {
     getUsableTranscripts,
     initializeNativeTranscriptSelector,
     renderGeneTextAlternative,
+    setGeneTextAlternativeExpanded,
 } from './transcript-selector.js';
 // 1. Import the D3 type definitions
 import type * as D3 from 'd3';
@@ -173,7 +174,7 @@ export async function renderGeneTrack(
     let drawSelectedTranscript: ((transcriptId: string) => void) | null = null;
 
     let exonTooltips: TooltipController[] = [];
-    renderGeneTextAlternative(container, transcripts.find(tx => tx.transcript === selectedTranscriptId) ?? longestTranscript, data.symbol);
+    renderGeneTextAlternative(container, transcripts.find(tx => tx.transcript === selectedTranscriptId) ?? longestTranscript, data.symbol, uniqueId);
 
     try {
         if (transcripts.length > 1 && selectorEl) {
@@ -187,7 +188,7 @@ export async function renderGeneTrack(
                 onChange: selectedValue => {
                     selectedTranscriptId = selectedValue;
                     const selected = transcripts.find(tx => tx.transcript === selectedValue) ?? longestTranscript;
-                    renderGeneTextAlternative(container, selected, data.symbol);
+                    renderGeneTextAlternative(container, selected, data.symbol, uniqueId);
                     logTooltipTiming(instance, config, 'transcript selector change', { selected: selectedTranscriptId });
                     drawSelectedTranscript?.(selectedTranscriptId);
                 },
@@ -209,7 +210,9 @@ export async function renderGeneTrack(
         logTooltipTiming(instance, config, 'd3 load complete');
 
         // --- D3 Setup ---
-        const margin = { top: 20, right: 10, bottom: 5, left: 10 };
+        // The visible label now lives in the HTML meta row, so the SVG only
+        // needs a small inset above the exon line.
+        const margin = { top: 4, right: 10, bottom: 5, left: 10 };
         const availableWidth = container.getBoundingClientRect().width;
         const width = availableWidth - margin.left - margin.right;
         const height = 20;
@@ -233,16 +236,10 @@ export async function renderGeneTrack(
         const geneEnd = Math.max(...allTxEnds);
         const xScale = d3.scaleLinear().domain([geneStart, geneEnd]).range([0, width]);
         
-        const directionArrow = longestTranscript.strand === -1 ? '\u2190' : '\u2192';
-        svgRoot.append("text")
-            .attr("x", margin.left).attr("y", 12)
-            .attr("font-family", "sans-serif").attr("font-size", "12px")
-            .html(`<tspan font-weight="bold">${data.symbol}</tspan> <tspan>${directionArrow}</tspan>`);
-
         drawSelectedTranscript = (transcriptId: string) => {
             exonTooltips.forEach(tooltip => tooltip.destroy());
             const selectedTranscript = transcripts.find(tx => tx.transcript === transcriptId) ?? longestTranscript;
-            renderGeneTextAlternative(container, selectedTranscript, data.symbol);
+            renderGeneTextAlternative(container, selectedTranscript, data.symbol, uniqueId);
             exonTooltips = drawTranscript(g, selectedTranscript, xScale, instance, config);
             setGeneTrackAccessibleLabel(svgRoot, data.symbol, selectedTranscript, uniqueId);
         };
@@ -258,8 +255,13 @@ export async function renderGeneTrack(
             ?? document.createElement('small');
         status.className = 'gt-gene-track-status';
         status.setAttribute('role', 'status');
-        status.textContent = 'Interactive gene track unavailable; text alternative is available.';
-        if (!status.parentElement) container.append(status);
+        setGeneTextAlternativeExpanded(container, true);
+        status.textContent = 'Interactive gene track unavailable; exon data shown below.';
+        if (!status.parentElement) {
+            const alternative = container.querySelector('.gt-gene-text-alternative');
+            if (alternative) alternative.before(status);
+            else container.append(status);
+        }
         logTooltipTiming(instance, config, 'gene track render failed');
     }
 }

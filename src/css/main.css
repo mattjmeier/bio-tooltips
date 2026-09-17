@@ -1151,22 +1151,79 @@ ul.gene-tooltip-nested-list {
   }
 }
 
-/* The text alternative remains usable when visualization assets fail and at
-   narrow widths; native details supplies the disclosure semantics. */
-.gt-gene-text-alternative {
-  margin-top: .75em;
-  padding: .5em .75em;
-  border: 1px solid var(--gt-border-color);
-  border-radius: 6px;
-  background: var(--gt-background-color-subtle);
+/* Compact secondary disclosure for the accessible equivalent of the exon map. */
+.gt-gene-track-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75em;
+  min-width: 0;
+  margin: 0 0 .15em;
+  line-height: 1.25;
 }
-.gt-gene-text-alternative summary {
-  min-height: 24px;
+.gt-gene-track-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--gt-text-color);
+  font-size: .9em;
+}
+.gt-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.gt-gene-text-alternative-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .25em;
+  flex: 0 0 auto;
+  min-height: 2rem;
+  margin: 0;
+  padding: .25em .35em;
+  color: var(--gt-text-color-secondary);
+  font: inherit;
+  font-size: .82em;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
   cursor: pointer;
-  font-weight: 600;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+}
+.gt-gene-text-alternative-toggle:hover,
+.gt-gene-text-alternative-toggle[aria-expanded='true'] {
+  color: var(--gt-text-color);
+  background: color-mix(in srgb, var(--gt-accent-color) 8%, transparent);
+}
+.gt-gene-text-alternative-toggle:active { background: color-mix(in srgb, var(--gt-accent-color) 16%, transparent); }
+.gt-gene-text-alternative-toggle:focus-visible {
+  color: var(--gt-text-color);
+  outline: 2px solid var(--gt-accent-color);
+  outline-offset: 2px;
+}
+.gt-gene-text-alternative-chevron {
+  font-size: 1.15em;
+  line-height: 1;
+  transition: transform .15s ease;
+}
+.gt-gene-text-alternative-toggle[aria-expanded='true'] .gt-gene-text-alternative-chevron { transform: rotate(180deg); }
+.gt-gene-text-alternative {
+  min-width: 0;
+  margin: .35em 0 0;
+  padding-top: .45em;
+  border-top: 1px solid var(--gt-border-color);
 }
 .gt-gene-text-alternative-content { min-width: 0; overflow-wrap: anywhere; }
-.gt-gene-text-alternative table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.gt-gene-text-alternative-content p { margin: 0 0 .5em; font-size: .82em; color: var(--gt-text-color-secondary); }
+.gt-gene-text-alternative table { width: 100%; border-collapse: collapse; font-size: .82em; font-variant-numeric: tabular-nums; }
 .gt-gene-text-alternative th,
 .gt-gene-text-alternative td { padding: .25rem .4rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--gt-border-color); }
 
@@ -1182,11 +1239,12 @@ ul.gene-tooltip-nested-list {
 
 @media (prefers-reduced-motion: reduce) {
   .gt-tooltip-box, .gt-collapsible-content, .gt-section-arrow::after,
-  .gt-summary-copy-btn, .gene-tooltip-links-container a { transition: none; }
+  .gt-summary-copy-btn, .gene-tooltip-links-container a,
+  .gt-gene-text-alternative-chevron { transition: none; }
 }
 
 @media (forced-colors: active) {
-  .gt-tooltip-box, .gt-gene-text-alternative { border: 1px solid CanvasText; }
+  .gt-tooltip-box { border: 1px solid CanvasText; }
   :where([data-gt-tooltip-reference], .gt-tooltip-box, .gt-tooltip-box button,
     .gt-tooltip-box [role='button'], .gt-tooltip-box a, .gt-tooltip-box select,
     .gt-tooltip-box input, .gt-tooltip-box summary):focus-visible {

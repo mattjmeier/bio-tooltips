@@ -20,7 +20,7 @@ Run `npm ci`, `npx playwright install chromium`, then `npm run test:a11y`. The s
 
 The visual browser checks assert panel and page reflow at 320 CSS pixels, then apply WCAG text-spacing values and double computed text sizes. They also check focus indicators, close-button target sizes, reduced-motion transitions, and forced-colors panel boundaries. These checks cover representative fixtures; inspect actual browser zoom, content overlap, all supported operating systems, and your application’s styles manually.
 
-The selected-transcript text alternative is a native expandable disclosure with transcript identity, strand, and exon numbers and coordinates. It updates with the transcript selector and remains available when D3 cannot render. Individual SVG exons retain pointer previews without adding hundreds of keyboard stops.
+The gene-model header includes a compact **Exon data** button whose controlled region contains the selected transcript identity, strand, and exon numbers and coordinates. The button exposes its state with `aria-expanded`, the region updates with the transcript selector, and the data opens automatically if D3 cannot render. Individual SVG exons retain pointer previews without adding hundreds of keyboard stops.
 
 Short descriptive previews use `role="tooltip"` and `aria-describedby`; interactive parent and searchable child panels use named `role="dialog"` containers. Host applications should supply meaningful trigger text, preserve native link/button semantics, and avoid overriding the library’s focus and hidden-state styles. Optional third-party visualizations and custom renderers need their own accessibility assessment.
 
