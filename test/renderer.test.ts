@@ -1,4 +1,6 @@
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { renderTooltipHTML } from '../src/providers/mygene/renderer';
 import { renderTooltipHTML as renderMyChemTooltipHTML } from '../src/providers/mychem/renderer';
 import { myGeneProfile } from '../src/providers/mygene/profile';
@@ -48,6 +50,17 @@ describe('renderTooltipHTML', () => {
     expect(html).toContain('<strong>TP53</strong>');
     expect(html).toContain('(tumor protein p53)');
     expect(html).toContain('This is a summary');
+  });
+
+  it('reserves the header action column while allowing long gene titles to wrap', () => {
+    const stylesheet = readFileSync(resolve('src/css/main.css'), 'utf8');
+
+    expect(stylesheet).toContain(
+      'grid-template-columns: minmax(0, 1fr) auto;'
+    );
+    expect(stylesheet).toContain(
+      '.gene-tooltip-header .gt-tooltip-actions { flex: 0 0 auto; }'
+    );
   });
 
   it('should render the divider section variant when requested', () => {

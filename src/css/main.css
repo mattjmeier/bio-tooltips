@@ -240,12 +240,13 @@
 /* --- Header --- */
 
 .gene-tooltip-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
   gap: 0.5em;
-  flex-wrap: wrap;
 }
+
+.gene-tooltip-header .gt-tooltip-actions { flex: 0 0 auto; }
 
 .gene-tooltip-title {
   display: flex;
