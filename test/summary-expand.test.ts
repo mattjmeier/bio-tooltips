@@ -16,28 +16,47 @@ describe('summary expansion', () => {
 
   beforeEach(() => {
     writeText.mockClear();
-    // Mirror production markup: the copy button is an inline SVG icon rendered
-    // at the end of the summary text, inside the paragraph.
+    // Mirror production markup: explicit controls follow the summary text.
     document.body.innerHTML = `
       <div data-gt-tooltip-root>
         <div class="gene-tooltip-section-container">
-          <p class="gene-tooltip-summary">A long biological summary<span id="summary-copy-test" class="gt-summary-copy-btn" role="button" tabindex="0" aria-label="Copy summary"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" viewBox="0 0 16 16"><path d="M4 2h8v8H4z"/></svg></span></p>
+          <div class="gt-summary-section">
+            <p id="summary-text-test" class="gene-tooltip-summary">A long biological summary</p>
+            <div class="gt-summary-actions">
+              <button type="button" class="gt-summary-toggle" aria-expanded="false" aria-controls="summary-text-test">Show more</button>
+              <button type="button" id="summary-copy-test" class="gt-summary-copy-btn" aria-label="Copy summary"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" viewBox="0 0 16 16"><path d="M4 2h8v8H4z"/></svg></button>
+              <span class="gt-copy-status" role="status" aria-live="polite"></span>
+            </div>
+          </div>
         </div>
       </div>
     `;
   });
 
-  it('announces both expansion and collapse so the controller can reposition', () => {
+  it('uses the explicit toggle for expansion and collapse and announces both resizes', () => {
     const summary = document.querySelector<HTMLElement>('.gene-tooltip-summary')!;
+    const toggle = document.querySelector<HTMLButtonElement>('.gt-summary-toggle')!;
     const onResize = vi.fn();
     document.querySelector('[data-gt-tooltip-root]')!.addEventListener('gt:content-resize', onResize);
 
-    summary.click();
+    toggle.click();
     expect(summary.classList.contains('expanded')).toBe(true);
+    expect(toggle.textContent).toBe('Show less');
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+
+    toggle.click();
+    expect(summary.classList.contains('expanded')).toBe(false);
+    expect(toggle.textContent).toBe('Show more');
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(onResize).toHaveBeenCalledTimes(2);
+  });
+
+  it('leaves summary prose selectable and non-interactive', () => {
+    const summary = document.querySelector<HTMLElement>('.gene-tooltip-summary')!;
 
     summary.click();
+
     expect(summary.classList.contains('expanded')).toBe(false);
-    expect(onResize).toHaveBeenCalledTimes(2);
   });
 
   it('copies the full summary text when the SVG icon is clicked, without toggling expansion', () => {
@@ -52,7 +71,7 @@ describe('summary expansion', () => {
     expect(summary.classList.contains('expanded')).toBe(false);
   });
 
-  it('copies the full summary text when the button span is clicked directly', () => {
+  it('copies the full summary text when the button is clicked directly', () => {
     const copy = document.querySelector<HTMLElement>('#summary-copy-test')!;
 
     copy.click();
@@ -60,10 +79,10 @@ describe('summary expansion', () => {
     expect(writeText).toHaveBeenCalledWith('A long biological summary');
   });
 
-  it('copies the summary text from keyboard activation', () => {
+  it('copies the summary text through native keyboard activation', () => {
     const copy = document.querySelector<HTMLElement>('#summary-copy-test')!;
 
-    copy.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    copy.click();
 
     expect(writeText).toHaveBeenCalledWith('A long biological summary');
   });

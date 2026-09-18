@@ -1,4 +1,4 @@
-import { renderSummaryActions, renderSummaryToggle } from '../../../core/renderer.js';
+import { renderSummaryActions } from '../../../core/renderer.js';
 import type { MyGeneSectionDefinition } from './types.js';
 
 export const summarySection: MyGeneSectionDefinition = {
@@ -13,7 +13,6 @@ export const summarySection: MyGeneSectionDefinition = {
 
     return `<div class="gt-summary-section">
       <p id="summary-text-${uniqueId}" class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${summary}</p>
-      ${renderSummaryToggle(uniqueId)}
       ${renderSummaryActions(uniqueId)}
     </div>`;
   },

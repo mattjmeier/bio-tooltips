@@ -129,13 +129,19 @@ describe('renderTooltipHTML', () => {
     expect(html).toContain('style="--line-clamp: 4;"');
     expect(html).toContain('gt-summary-copy-btn');
     expect(html).toContain(`id="summary-copy-${MOCK_UNIQUE_ID}"`);
+    expect(html).not.toContain('gt-summary-action-divider');
 
-    // Copy is a separate action so it remains available outside the clamped
-    // summary text.
+    // The action group follows the clamped prose so it can sit on the final
+    // line when collapsed and move below the text when expanded.
     const pStart = html.indexOf('<p class="gene-tooltip-summary"');
     const pEnd = html.indexOf('</p>', pStart);
+    const actionsStart = html.indexOf('class="gt-summary-actions"', pEnd);
+    const toggleStart = html.indexOf('class="gt-summary-toggle"', actionsStart);
     const btnStart = html.indexOf(`id="summary-copy-${MOCK_UNIQUE_ID}"`);
+    expect(actionsStart).toBeGreaterThan(pEnd);
+    expect(toggleStart).toBeGreaterThan(actionsStart);
     expect(btnStart).toBeGreaterThan(pEnd);
+    expect(btnStart).toBeGreaterThan(toggleStart);
   });
   
   

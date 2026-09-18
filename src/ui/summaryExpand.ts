@@ -19,10 +19,8 @@ let removeListeners: (() => void) | undefined;
 
 /**
  * Copies the full text of the summary paragraph that owns the given copy button.
- * Truncation is CSS-only, so `textContent` always holds the complete value. The
- * button is rendered inside the paragraph, so it is stripped from a clone before
- * reading text to keep its markup out of the copied value. On success the copy
- * icon briefly swaps to a checkmark so the user can tell the copy went through.
+ * Truncation is CSS-only, so `textContent` always holds the complete value. On
+ * success the copy icon briefly swaps to a checkmark for visible confirmation.
  */
 export async function copyTextToClipboard(value: string, status?: HTMLElement): Promise<boolean> {
   let copied = false;
@@ -49,10 +47,7 @@ async function copySummaryText(button: HTMLElement): Promise<void> {
     ?.querySelector<HTMLElement>('.gene-tooltip-summary');
   if (!summaryP) return;
 
-  const clone = summaryP.cloneNode(true) as HTMLElement;
-  clone.querySelectorAll('.gt-summary-actions, .gt-summary-copy-btn').forEach(node => node.remove());
-
-  const text = clone.textContent?.trim();
+  const text = summaryP.textContent?.trim();
   if (!text) return;
 
   const status = button.closest('.gene-tooltip-section-container')?.querySelector<HTMLElement>('.gt-copy-status') ?? undefined;
@@ -142,15 +137,6 @@ export function enableSummaryExpand(): () => void {
       summaryP = target.closest('.gene-tooltip-section-container')?.querySelector('.gene-tooltip-summary') as HTMLElement;
       shouldExpand = false;
     }
-    else if (target.matches('.gene-tooltip-summary:not(.expanded)')) {
-      summaryP = target;
-      shouldExpand = true;
-    } else if (target.matches('.gene-tooltip-summary.expanded')) {
-      summaryP = target;
-      shouldExpand = false;
-    }
-
-    // Case 3: Clicked the truncated summary paragraph itself
     // If a relevant element was clicked, perform the action
     if (summaryP && shouldExpand !== null) {
       summaryP.classList.toggle('expanded', shouldExpand);
@@ -195,7 +181,7 @@ export function enableSummaryExpand(): () => void {
       void copySummaryText(copyBtn);
       return;
     }
-    if (target.matches('.gene-tooltip-summary, [id^="summary-more-"], [id^="summary-less-"]')) {
+    if (target.matches('[id^="summary-more-"], [id^="summary-less-"]')) {
       e.preventDefault();
       handleSummaryToggle(target);
     }

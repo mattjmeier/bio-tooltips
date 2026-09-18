@@ -27,7 +27,6 @@ import {
   generateUniqueId,
   renderMoreButton,
   renderSummaryActions,
-  renderSummaryToggle,
   renderTooltipHeader,
   renderTooltipShell,
   renderCloseButton,
@@ -347,7 +346,7 @@ function renderSummarySection(
     'drugbank.pharmacodynamics',
   ]);
   const summaryHTML = summary
-    ? `<div class="gt-summary-section"><p id="summary-text-${uniqueId}" class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${sanitizeInlineHTML(summary)}</p>${renderSummaryToggle(uniqueId)}${renderSummaryActions(uniqueId)}</div>`
+    ? `<div class="gt-summary-section"><p id="summary-text-${uniqueId}" class="gene-tooltip-summary" style="--line-clamp: ${truncate};">${sanitizeInlineHTML(summary)}</p>${renderSummaryActions(uniqueId)}</div>`
     : '';
 
   return summaryHTML;
