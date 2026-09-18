@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { renderTooltipShell } from '../src/core/renderer';
 import { renderCollapsibleSection } from '../src/core/sections';
 import { myGeneProfile } from '../src/providers/mygene/profile';
@@ -101,5 +103,18 @@ describe('architecture compatibility', () => {
       'generifs',
       'linksSection',
     ]);
+  });
+
+  it('docs RDKit demo uses the package-exported WASM asset path', () => {
+    const source = readFileSync(
+      resolve('docs/.vitepress/theme/components/ChemicalRDKitDemo.vue'),
+      'utf8'
+    );
+
+    expect(source).toContain("import rdkitWasmURL from '@rdkit/rdkit/RDKit_minimal.wasm?url';");
+    expect(source).not.toContain("@rdkit/rdkit/dist/RDKit_minimal.wasm?url");
+    expect(source).toContain(
+      "locateFile: (path) => (path === 'RDKit_minimal.wasm' ? rdkitWasmURL : path),"
+    );
   });
 });

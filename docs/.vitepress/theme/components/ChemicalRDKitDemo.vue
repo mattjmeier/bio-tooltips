@@ -13,7 +13,7 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import 'bio-tooltips/style.css';
 import { ChemicalTooltip } from 'bio-tooltips/mychem';
 import { createRDKitStructureRenderer } from 'bio-tooltips/mychem/rdkit';
-import rdkitWasmURL from '@rdkit/rdkit/dist/RDKit_minimal.wasm?url';
+import rdkitWasmURL from '@rdkit/rdkit/RDKit_minimal.wasm?url';
 import { withDocsTooltipConfig } from '../demoTooltipConfig.js';
 
 const props = defineProps({
@@ -33,7 +33,7 @@ const generateUniqueId = () => `chemical-rdkit-tooltip-${Math.random().toString(
 function getStructureRenderer() {
   rendererPromise ??= createRDKitStructureRenderer({
     moduleOptions: {
-      locateFile: () => rdkitWasmURL,
+      locateFile: (path) => (path === 'RDKit_minimal.wasm' ? rdkitWasmURL : path),
     },
   });
 
