@@ -79,7 +79,8 @@
 }
 
 .gt-close-button, .gt-tooltip-actions, .gt-summary-actions { display: flex; align-items: center; gap: .35rem; }
-.gt-close-button { flex: 0 0 auto; min-width: 2rem; min-height: 2rem; padding: .25rem; color: var(--gt-text-color); background: transparent; border: 1px solid transparent; border-radius: 4px; cursor: pointer; }
+.gt-close-button { box-sizing: border-box; flex: 0 0 auto; justify-content: center; width: 1.5rem; height: 1.5rem; min-width: 1.5rem; min-height: 1.5rem; padding: .25rem; line-height: 1; color: var(--gt-text-color); background: transparent; border: 1px solid transparent; border-radius: 4px; cursor: pointer; }
+.gene-tooltip-header .gt-close-button { width: 2rem; height: 2rem; min-width: 2rem; min-height: 2rem; }
 .gt-close-button:hover, .gt-close-button:focus-visible, .gt-pin-button:hover, .gt-pin-button:focus-visible, .gt-summary-copy-btn:hover, .gt-summary-copy-btn:focus-visible { color: var(--gt-accent-color); background-color: var(--gt-control-hover-background); opacity: 1; }
 .gt-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .gt-nested-search-label { display: block; margin: .25rem .35rem 0; color: var(--gt-text-color); font-size: .85em; }
@@ -107,10 +108,17 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .gt-pin-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  .gene-tooltip-header .gt-pin-button {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin: -0.5rem 0;
+  }
+
+  .gene-tooltip-header .gt-close-button {
+    width: 2.75rem;
+    height: 2.75rem;
     min-width: 2.75rem;
     min-height: 2.75rem;
     margin: -0.5rem -0.5rem -0.5rem 0;
@@ -792,8 +800,14 @@ ul.gene-tooltip-nested-list {
   /* position: absolute; */
   /* top: 0.5rem; */
   /* right: 0.6rem; */
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
+  width: 2rem;
+  height: 2rem;
   min-width: 2rem;
   min-height: 2rem;
   padding: .4rem;

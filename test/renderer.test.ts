@@ -5,6 +5,7 @@ import { myGeneProfile } from '../src/providers/mygene/profile';
 import { mergeConfig as mergeMyGeneConfig } from '../src/providers/mygene/config';
 import { myChemProfile } from '../src/providers/mychem/profile';
 import { mergeConfig as mergeMyChemConfig } from '../src/providers/mychem/config';
+import { renderCloseButton } from '../src/core/renderer';
 import type { MyGeneInfoResult } from '../src/providers/mygene/types';
 import type { MyChemInfoResult } from '../src/providers/mychem/types';
 
@@ -24,6 +25,18 @@ const mockGeneData: MyGeneInfoResult = {
 const MOCK_UNIQUE_ID = 'test-id-12345';
 
 describe('renderTooltipHTML', () => {
+  it('uses the same close glyph in primary headers and secondary dismiss controls', () => {
+    const geneHTML = renderTooltipHTML(mockGeneData, { uniqueId: MOCK_UNIQUE_ID });
+    const chemicalHTML = renderMyChemTooltipHTML({
+      _id: '2244',
+      query: 'aspirin',
+    }, { uniqueId: MOCK_UNIQUE_ID });
+
+    expect(geneHTML).toContain('aria-label="Close">×</button>');
+    expect(chemicalHTML).toContain('aria-label="Close">×</button>');
+    expect(renderCloseButton('Close details')).toContain('>×</button>');
+  });
+
   it('should return "not found" message for null or undefined data', () => {
     expect(renderTooltipHTML(null)).toContain('Gene not found.');
     expect(renderTooltipHTML(undefined)).toContain('Gene not found.');
