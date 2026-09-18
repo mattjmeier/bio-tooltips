@@ -2,6 +2,7 @@ export type PrefetchMode = 'smart' | 'all' | 'none';
 export type TooltipTheme = 'light' | 'dark' | 'auto' | 'material' | 'translucent' | 'light-border' | undefined;
 export type VisualPreloadMode = 'none' | 'hover' | 'init';
 export type SectionVariant = 'cards' | 'dividers';
+export type TooltipPresentation = 'auto' | 'popover' | 'drawer';
 
 export type FixedPlacement =
   | 'top'
@@ -53,6 +54,8 @@ export type TooltipTimingObserver = (event: TooltipTimingEvent) => void;
 
 export interface CoreTooltipConfig {
   selector: string;
+  /** How top-level tooltip dialogs are presented. Nested tooltips remain popovers. */
+  presentation?: TooltipPresentation;
   prefetch: PrefetchMode;
   prefetchThreshold: number;
   visualPreload: VisualPreloadMode;
@@ -70,6 +73,7 @@ export interface CoreTooltipConfig {
 
 export const defaultCoreConfig: CoreTooltipConfig = {
   selector: '.gene-tooltip',
+  presentation: 'auto',
   prefetch: 'smart',
   prefetchThreshold: 15,
   visualPreload: 'hover',

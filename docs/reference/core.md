@@ -11,6 +11,7 @@ Core config is shared by all tooltip modules.
 | `debugTimings` | `false` | Logs tooltip lifecycle timing checkpoints to the browser console. |
 | `onTiming` | `undefined` | Receives structured timing checkpoints for diagnostics and benchmarking. |
 | `theme` | `auto` | Theme: `auto`, `light`, `dark`, `material`, `translucent`, or `light-border`. |
+| `presentation` | `auto` | Top-level dialog presentation: `auto`, `popover`, or `drawer`. |
 | `tooltipWidth` | Module-specific | Optional fixed max width in pixels. |
 | `tooltipHeight` | None | Optional fixed max height in pixels. |
 | `constrainToViewport` | `true` | Keeps large tooltips within the visible viewport. |
@@ -58,6 +59,34 @@ Each module also exposes:
 
 See [Performance Benchmarking](../performance.md) for measurement guidance and the
 benchmark report command.
+
+## Responsive presentation
+
+Top-level dialogs use `presentation: 'auto'` by default. At a viewport width of
+600 CSS pixels or less, `auto` displays the dialog as a bottom drawer; above
+600px it uses the existing anchored popover. The breakpoint responds to
+orientation and viewport changes while the engine is active.
+
+```ts
+// Keep the anchored popover everywhere.
+GeneTooltip.init({ presentation: 'popover' });
+
+// Use the bottom drawer everywhere (useful for a touch-first application).
+GeneTooltip.init({ presentation: 'drawer' });
+```
+
+The drawer is a non-modal, full-width bottom sheet capped at roughly 75% of
+the dynamic viewport height. Its content scrolls internally and includes the
+device bottom safe area. The page remains scrollable and interactive: there is
+no backdrop, focus trap, `aria-modal`, inert background, or page scroll lock.
+The drawer closes from its Close control, Escape, opening another top-level
+tooltip, or a completed click outside the drawer and its trigger. Clicking
+inside the drawer or its trigger does not close it; scroll gestures are not
+treated as outside clicks. Pinning is hidden in drawer mode because a drawer
+already persists until deliberate dismissal.
+
+Nested/descriptive tooltips remain anchored popovers regardless of this setting.
+Use `presentation: 'popover'` to retain the pre-drawer behavior at every width.
 
 ## Tooltip Options
 

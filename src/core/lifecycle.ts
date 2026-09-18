@@ -495,7 +495,11 @@ function constrainTooltipHeight(instance: TooltipController<any>, config: CoreTo
   const padding = config.tooltipOptions.viewportPadding ?? 8;
 
   const availableHeight = window.visualViewport?.height || window.innerHeight;
-  (content as HTMLElement).style.maxHeight = `${availableHeight - (padding * 2)}px`;
+  const viewportLimit = instance.isDrawerPresentation()
+    ? availableHeight * 0.75
+    : availableHeight - (padding * 2);
+  const configuredLimit = config.tooltipHeight ?? Number.POSITIVE_INFINITY;
+  (content as HTMLElement).style.maxHeight = `${Math.max(0, Math.min(viewportLimit, configuredLimit))}px`;
 }
 
 function describeRef(ref: EntityRef): string {
