@@ -1159,6 +1159,7 @@ ul.gene-tooltip-nested-list {
   gap: .75em;
   min-width: 0;
   margin: 0 0 .15em;
+  padding-inline-end: .5rem;
   line-height: 1.25;
 }
 .gt-gene-track-label {
@@ -1210,11 +1211,15 @@ ul.gene-tooltip-nested-list {
   outline-offset: 2px;
 }
 .gt-gene-text-alternative-chevron {
-  font-size: 1.15em;
-  line-height: 1;
-  transition: transform .15s ease;
+  flex: 0 0 auto;
 }
-.gt-gene-text-alternative-toggle[aria-expanded='true'] .gt-gene-text-alternative-chevron { transform: rotate(180deg); }
+.gt-gene-text-alternative-chevron::after {
+  margin-right: 0;
+  margin-left: .1em;
+}
+.gt-gene-text-alternative-toggle[aria-expanded='false'] .gt-gene-text-alternative-chevron::after {
+  transform: rotate(-90deg);
+}
 .gt-gene-text-alternative {
   min-width: 0;
   margin: .35em 0 0;
@@ -1239,8 +1244,7 @@ ul.gene-tooltip-nested-list {
 
 @media (prefers-reduced-motion: reduce) {
   .gt-tooltip-box, .gt-collapsible-content, .gt-section-arrow::after,
-  .gt-summary-copy-btn, .gene-tooltip-links-container a,
-  .gt-gene-text-alternative-chevron { transition: none; }
+  .gt-summary-copy-btn, .gene-tooltip-links-container a { transition: none; }
 }
 
 @media (forced-colors: active) {

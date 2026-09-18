@@ -48,7 +48,10 @@ describe('native transcript selector', () => {
 
     expect(alternative.className).toBe('gt-gene-text-alternative');
     const toggle = container.querySelector<HTMLButtonElement>('.gt-gene-text-alternative-toggle')!;
+    const arrow = toggle.querySelector('.gt-gene-text-alternative-chevron')!;
     expect(toggle.textContent).toContain('Exon data');
+    expect(arrow.classList.contains('gt-section-arrow')).toBe(true);
+    expect(arrow.textContent).toBe('');
     expect(toggle.getAttribute('aria-label')).toBe('Exon data for TP53 gene model');
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
     expect(toggle.getAttribute('aria-controls')).toBe(alternative.id);

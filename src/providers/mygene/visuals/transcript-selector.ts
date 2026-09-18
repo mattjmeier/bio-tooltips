@@ -103,7 +103,7 @@ export function renderGeneTextAlternative(
   toggle.setAttribute('aria-controls', alternativeId);
   // Keep the accessible name stable while aria-expanded communicates state.
   toggle.setAttribute('aria-label', `Exon data for ${symbol} gene model`);
-  toggle.innerHTML = '<span>Exon data</span><span class="gt-gene-text-alternative-chevron" aria-hidden="true">⌄</span>';
+  toggle.innerHTML = '<span>Exon data</span><span class="gt-section-arrow gt-gene-text-alternative-chevron" aria-hidden="true"></span>';
   alternative.id = alternativeId;
   alternative.setAttribute('role', 'region');
   alternative.setAttribute('aria-label', `Exon data for ${symbol} gene model`);
