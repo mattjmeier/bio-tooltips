@@ -1,6 +1,14 @@
-# Accessibility guidance
+# Accessibility support
 
-**Accessibility improvements validated against selected WCAG 2.2 AA requirements.** This is not a full conformance assessment.
+**Current status:** Bio Tooltips is designed to support WCAG 2.2 Level AA conforming implementations when used according to this guidance. Representative components and interaction states are covered by automated accessibility scans, browser-based keyboard tests, and browser-based layout and user-preference checks. This testing is not a full WCAG conformance evaluation, and the project does not currently claim that the package, documentation site, or a host application conforms to WCAG.
+
+## Scope
+
+The current assessment covers the library-owned core, gene, and chemical tooltip behavior exercised by the repository's local test fixtures. It includes the shipped themes, common trigger elements, nested and pinned panels, asynchronous states, and selected responsive and user-preference conditions.
+
+It does not cover the surrounding markup, content, styles, or configuration supplied by a host application. Optional third-party visualizations, custom renderers, combinations of browsers and assistive technologies not listed in the verification record, and the documentation site as a whole are also outside the current assessment. A host application needs its own complete evaluation before making a WCAG conformance claim.
+
+## Using the library accessibly
 
 Bio Tooltips preserves the semantics of the host element and adds keyboard and focus behavior when a tooltip is initialized. Prefer a native `<button type="button">` for an action that opens a tooltip, and a native `<a href="…">` when the trigger is also navigation. A `<span>` trigger is supported and is enhanced with an appropriate button role and keyboard behavior by the library.
 
@@ -23,6 +31,10 @@ The visual browser checks assert panel and page reflow at 320 CSS pixels, then a
 The gene-model header includes a compact **Show exon data** button whose controlled region contains the selected transcript identity, strand, and exon numbers and coordinates. Its label changes to **Hide exon data** when open, it exposes its state with `aria-expanded`, the region updates with the transcript selector, and the data opens automatically if D3 cannot render. Individual SVG exons retain pointer previews without adding hundreds of keyboard stops.
 
 Short descriptive previews use `role="tooltip"` and `aria-describedby`; interactive parent and searchable child panels use named `role="dialog"` containers. Host applications should supply meaningful trigger text, preserve native link/button semantics, and avoid overriding the library’s focus and hidden-state styles. Optional third-party visualizations and custom renderers need their own accessibility assessment.
+
+## Reporting an accessibility barrier
+
+If you encounter an accessibility problem, [open a GitHub issue](https://github.com/mattjmeier/bio-tooltips/issues) with the package version, browser and operating system, assistive technology if applicable, a minimal example, and the behavior you expected. Please do not include private or sensitive data.
 
 ## Verification record
 

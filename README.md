@@ -80,7 +80,7 @@ https://mattjmeier.github.io/bio-tooltips/
 
 Span triggers receive keyboard focus and button semantics automatically. Enter or Space enters a named, non-modal details dialog; Tab reaches its controls and Escape dismisses it. Native links retain Enter navigation and use ArrowDown to enter the panel.
 
-Accessibility guidance is available in [`docs/accessibility.md`](docs/accessibility.md). The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
+Accessibility support, integration responsibilities, tested behavior, and current limitations are documented in [`docs/accessibility.md`](docs/accessibility.md). Bio Tooltips is designed to support WCAG 2.2 Level AA conforming implementations when used according to that guidance; this is not a claim that every integration or the package itself has completed a full WCAG conformance evaluation. The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
 
 ## Performance Benchmarks
 
