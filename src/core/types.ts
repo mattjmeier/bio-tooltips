@@ -21,6 +21,7 @@ export type FormattedItem = { name: string; url?: string };
 export interface NestedTooltipDefinition {
   selector: string;
   items: FormattedItem[];
+  accessibleName?: string;
 }
 
 export interface RenderTooltipOptions {

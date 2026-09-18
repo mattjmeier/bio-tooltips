@@ -28,11 +28,16 @@ export function filterNestedList(query: string, listId: string): void {
   const items = list.getElementsByTagName('li');
   const normalizedQuery = query.toLowerCase();
 
+  let visibleCount = 0;
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
     const text = item.textContent || '';
-    item.style.display = text.toLowerCase().includes(normalizedQuery) ? '' : 'none';
+    const visible = text.toLowerCase().includes(normalizedQuery);
+    item.style.display = visible ? '' : 'none';
+    if (visible) visibleCount++;
   }
+  const status = list.parentElement?.querySelector<HTMLElement>('.gt-nested-status');
+  if (status) status.textContent = `${visibleCount} result${visibleCount === 1 ? '' : 's'}`;
 }
 
 export function installNestedListFilter(): void {
@@ -55,12 +60,19 @@ export function createNestedContent(items: { name: string; url?: string }[]): st
   // The 'oninput' handler directly calls our filtering function, passing the input's value and the target list's ID.
   return `
     <div class="gene-tooltip-nested-container">
-      <input 
-        type="search" 
-        class="gene-tooltip-nested-search" 
-        placeholder="Filter..." 
-        oninput="window.GeneTooltipRuntime.filterNestedList(this.value, '${listId}')"
-      />
+      <div class="gt-nested-toolbar">
+        <div class="gt-nested-filter-meta">
+          <label class="gt-nested-search-label" for="${listId}-search">Filter</label>
+          <span class="gt-nested-status" role="status" aria-live="polite">${items.length} result${items.length === 1 ? '' : 's'}</span>
+        </div>
+        <input id="${listId}-search"
+          type="search"
+          class="gene-tooltip-nested-search"
+          placeholder="Search..."
+          oninput="window.GeneTooltipRuntime.filterNestedList(this.value, '${listId}')"
+        />
+        <button type="button" class="gt-close-button" aria-label="Close details">×</button>
+      </div>
       <ul id="${listId}" class="gene-tooltip-nested-list">${listItems}</ul>
     </div>
   `;

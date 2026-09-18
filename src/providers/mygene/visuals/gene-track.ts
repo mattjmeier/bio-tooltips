@@ -6,6 +6,8 @@ import {
     getLongestTranscript,
     getUsableTranscripts,
     initializeNativeTranscriptSelector,
+    renderGeneTextAlternative,
+    setGeneTextAlternativeExpanded,
 } from './transcript-selector.js';
 // 1. Import the D3 type definitions
 import type * as D3 from 'd3';
@@ -122,6 +124,19 @@ function drawTranscript(
     return tooltips;
 }
 
+function setGeneTrackAccessibleLabel(
+    svgRoot: D3.Selection<SVGSVGElement, unknown, null, undefined>,
+    symbol: string,
+    transcript: MyGeneExon,
+    uniqueId: string,
+): void {
+    const labelId = `gene-track-label-${uniqueId}-${transcript.transcript.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+    svgRoot.attr('role', 'img').attr('aria-labelledby', labelId);
+    svgRoot.select('title').remove();
+    svgRoot.append('title').attr('id', labelId)
+        .text(`${symbol} gene model, transcript ${transcript.transcript}, ${transcript.position?.length ?? 0} exons`);
+}
+
 /**
  * Main rendering function
  */
@@ -159,6 +174,7 @@ export async function renderGeneTrack(
     let drawSelectedTranscript: ((transcriptId: string) => void) | null = null;
 
     let exonTooltips: TooltipController[] = [];
+    renderGeneTextAlternative(container, transcripts.find(tx => tx.transcript === selectedTranscriptId) ?? longestTranscript, data.symbol, uniqueId);
 
     try {
         if (transcripts.length > 1 && selectorEl) {
@@ -171,6 +187,8 @@ export async function renderGeneTrack(
                 selectedTranscriptId,
                 onChange: selectedValue => {
                     selectedTranscriptId = selectedValue;
+                    const selected = transcripts.find(tx => tx.transcript === selectedValue) ?? longestTranscript;
+                    renderGeneTextAlternative(container, selected, data.symbol, uniqueId);
                     logTooltipTiming(instance, config, 'transcript selector change', { selected: selectedTranscriptId });
                     drawSelectedTranscript?.(selectedTranscriptId);
                 },
@@ -192,13 +210,20 @@ export async function renderGeneTrack(
         logTooltipTiming(instance, config, 'd3 load complete');
 
         // --- D3 Setup ---
-        const margin = { top: 20, right: 10, bottom: 5, left: 10 };
+        // The visible label now lives in the HTML meta row, so the SVG only
+        // needs a small inset above the exon line.
+        const margin = { top: 4, right: 10, bottom: 5, left: 10 };
         const availableWidth = container.getBoundingClientRect().width;
         const width = availableWidth - margin.left - margin.right;
         const height = 20;
         logTooltipTiming(instance, config, 'gene track measured', { availableWidth, width });
 
-        container.innerHTML = ''; // Clear the loader
+        // Remove only the loading/previous SVG output; retain the native text
+        // alternative so it remains available throughout async rendering.
+        container.querySelector('svg')?.remove();
+        container.querySelector('.gt-gene-track-status')?.remove();
+        container.querySelector('small:not(.gt-gene-track-status)')?.remove();
+        container.querySelectorAll('.gt-loader-container').forEach(loader => loader.remove());
         const svgRoot = d3.select(container).append("svg")
             .attr("width", availableWidth)
             .attr("height", height + margin.top + margin.bottom);
@@ -211,16 +236,12 @@ export async function renderGeneTrack(
         const geneEnd = Math.max(...allTxEnds);
         const xScale = d3.scaleLinear().domain([geneStart, geneEnd]).range([0, width]);
         
-        const directionArrow = longestTranscript.strand === -1 ? '\u2190' : '\u2192';
-        svgRoot.append("text")
-            .attr("x", margin.left).attr("y", 12)
-            .attr("font-family", "sans-serif").attr("font-size", "12px")
-            .html(`<tspan font-weight="bold">${data.symbol}</tspan> <tspan>${directionArrow}</tspan>`);
-
         drawSelectedTranscript = (transcriptId: string) => {
             exonTooltips.forEach(tooltip => tooltip.destroy());
             const selectedTranscript = transcripts.find(tx => tx.transcript === transcriptId) ?? longestTranscript;
+            renderGeneTextAlternative(container, selectedTranscript, data.symbol, uniqueId);
             exonTooltips = drawTranscript(g, selectedTranscript, xScale, instance, config);
+            setGeneTrackAccessibleLabel(svgRoot, data.symbol, selectedTranscript, uniqueId);
         };
 
         // --- Initial Draw (common to all cases) ---
@@ -229,7 +250,18 @@ export async function renderGeneTrack(
 
     } catch (error) {
         console.error("Error during gene track rendering:", error);
-        if (container) container.innerHTML = `<small>Error rendering gene track.</small>`;
+        container.querySelectorAll('.gt-loader-container').forEach(loader => loader.remove());
+        const status = container.querySelector<HTMLElement>('.gt-gene-track-status')
+            ?? document.createElement('small');
+        status.className = 'gt-gene-track-status';
+        status.setAttribute('role', 'status');
+        setGeneTextAlternativeExpanded(container, true);
+        status.textContent = 'Interactive gene track unavailable; exon data shown below.';
+        if (!status.parentElement) {
+            const alternative = container.querySelector('.gt-gene-text-alternative');
+            if (alternative) alternative.before(status);
+            else container.append(status);
+        }
         logTooltipTiming(instance, config, 'gene track render failed');
     }
 }

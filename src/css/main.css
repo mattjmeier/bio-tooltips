@@ -13,6 +13,22 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+:where([data-gt-tooltip-reference], .gt-tooltip-box, .gt-tooltip-box button,
+  .gt-tooltip-box [role="button"], .gt-tooltip-box a, .gt-tooltip-box select,
+  .gt-tooltip-box input, .gt-tooltip-box summary):focus-visible {
+  outline: 3px solid var(--gt-focus-color, var(--gt-accent-color, #005fcc));
+  outline-offset: 3px;
+}
+
+:where(.gt-tooltip-box button, .gt-tooltip-box [role="button"],
+  .gt-tooltip-box select, .gt-tooltip-box input) {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.gt-tooltip-box[role="dialog"] { max-width: min(36rem, calc(100vw - 1rem)); min-width: 0; overflow-wrap: anywhere; }
+.gt-tooltip-box[role="tooltip"] { max-width: min(24rem, calc(100vw - 1rem)); }
+
 .gt-tooltip-box {
   position: relative;
   box-sizing: border-box;
@@ -62,6 +78,15 @@
     scrollbar-color: var(--gt-border-color) transparent;
 }
 
+.gt-close-button, .gt-tooltip-actions, .gt-summary-actions { display: flex; align-items: center; gap: .35rem; }
+.gt-close-button { box-sizing: border-box; flex: 0 0 auto; justify-content: center; width: 1.5rem; height: 1.5rem; min-width: 1.5rem; min-height: 1.5rem; padding: .25rem; line-height: 1; color: var(--gt-text-color); background: transparent; border: 1px solid transparent; border-radius: 4px; cursor: pointer; }
+.gene-tooltip-header .gt-close-button { width: 2rem; height: 2rem; min-width: 2rem; min-height: 2rem; }
+.gt-close-button:hover, .gt-close-button:focus-visible, .gt-pin-button:hover, .gt-pin-button:focus-visible, .gt-summary-copy-btn:hover, .gt-summary-copy-btn:focus-visible { color: var(--gt-accent-color); background-color: var(--gt-control-hover-background); opacity: 1; }
+.gt-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.gt-nested-search-label { color: var(--gt-text-color-secondary); }
+.gt-nested-status, .gt-copy-status, .gt-gene-track-status { color: var(--gt-text-color-secondary); }
+.gt-collapsible-content[hidden], .gt-collapsible-content[inert] { pointer-events: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .gt-tooltip-box {
     transition: none;
@@ -83,10 +108,17 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .gt-pin-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  .gene-tooltip-header .gt-pin-button {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin: -0.5rem 0;
+  }
+
+  .gene-tooltip-header .gt-close-button {
+    width: 2.75rem;
+    height: 2.75rem;
     min-width: 2.75rem;
     min-height: 2.75rem;
     margin: -0.5rem -0.5rem -0.5rem 0;
@@ -107,12 +139,7 @@
   margin: 0;
   padding: 0;
   line-height: 1.5; /* Crucial for calc() */
-  cursor: pointer;
-  /* Expand/collapse is a click action, not a text target. Disabling selection
-     stops the browser's double-click word selection from highlighting a word
-     when the user clicks to expand and then again to collapse. */
-  user-select: none;
-  -webkit-user-select: none;
+  cursor: text;
 
   -webkit-mask-image:
     /* Gradient 1: The horizontal fade on the right */
@@ -151,7 +178,7 @@
   display: block;
   -webkit-line-clamp: unset;
   line-clamp: unset;
-  cursor: pointer;
+  cursor: text;
 
   /* When expanded, remove all masks */
   -webkit-mask-image: none;
@@ -166,14 +193,21 @@
 /* Summary copy affordance. An icon button (inline SVG, matching the pin
    button's convention). Kept under its own class so it is always visible. */
 .gt-summary-copy-btn {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   line-height: 0;
   color: var(--gt-text-color-secondary);
-  opacity: 0.7;
+  font: inherit;
+  opacity: 1;
   cursor: pointer;
-  margin-left: 6px;
-  padding: 2px 4px;
+  margin: 0;
+  padding: 4px;
+  min-width: 24px;
+  min-height: 24px;
+  background: transparent;
+  border: 0;
   border-radius: 3px;
   user-select: none;
   -webkit-user-select: none;
@@ -225,7 +259,8 @@
 
 .gene-tooltip-header strong {
   font-size: 1.1em;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
   /* Let the theme control the text color */
   color: inherit;
 }
@@ -236,13 +271,28 @@
 
 /* --- Reusable Section Components --- */
 
-.gt-section-arrow::after {
-  content: '▼';
-  display: inline-block;
-  transition: transform 0.2s ease, color 0.2s ease;
+/* Use a filled, symmetric triangle so the point has an exact visual midpoint
+   and does not shift with font glyph metrics or diagonal-stroke rasterization. */
+.gt-section-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 .8em;
+  width: .8em;
+  height: .8em;
   color: var(--gt-text-color-secondary);
-  font-size: 0.8em;
-  margin-right: 0.3em;
+}
+
+.gt-section-arrow::after {
+  content: '';
+  display: block;
+  width: .55em;
+  height: .45em;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform: rotate(0deg);
+  transform-origin: center;
+  transition: transform 0.2s ease;
 }
 
 .gt-section-arrow.collapsed::after {
@@ -295,7 +345,7 @@
   font-size: 0.9em;
   color: var(--gt-text-color);
   margin-bottom: 0.3em;
-  opacity: 0.9;
+  opacity: 1;
   user-select: none;
   display: flex;
   justify-content: space-between;
@@ -322,8 +372,8 @@
 }
 
 .gt-collapsible-header.gt-is-collapsible:focus-visible {
-  outline: 2px solid var(--gt-accent-color);
-  outline-offset: 2px;
+  outline: 3px solid var(--gt-focus-color, var(--gt-accent-color));
+  outline-offset: 3px;
 }
 
 .gene-tooltip-section {
@@ -333,7 +383,7 @@
   font-size: 0.9em;
   /* Inherit text color and use opacity to make it subtle */
   color: var(--gt-text-color-secondary);
-  opacity: 0.8;
+  opacity: 1;
   margin-top: 0.5em;
 }
 
@@ -355,9 +405,34 @@
   scrollbar-width: thin;
 }
 
+.gt-nested-toolbar {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .4rem;
+  margin: 0 5px 3px;
+}
+
+.gt-nested-filter-meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .25em;
+  color: var(--gt-text-color-secondary);
+  font-size: .82em;
+  white-space: nowrap;
+}
+
+.gt-nested-toolbar .gt-close-button {
+  color: var(--gt-text-color-secondary);
+}
+
 .gene-tooltip-nested-search {
-  padding: 4px 8px;
-  margin: 5px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 2rem;
+  padding: 6px 8px;
+  margin: 0;
   border: 1px solid var(--gt-border-color);
   border-radius: 4px;
   background-color: transparent;
@@ -373,7 +448,7 @@
 
 ul.gene-tooltip-nested-list {
   list-style: none;
-  padding: 5px;
+  padding: 5px 9px 5px 5px;
   margin: 0;
   text-align: left;
   max-height: 200px;
@@ -395,7 +470,7 @@ ul.gene-tooltip-nested-list {
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;      /* never shrinks, so the coordinates are not squeezed into a wrap */
-  white-space: nowrap; /* keep the position range on a single line */
+  overflow-wrap: anywhere;
 }
 
 .gene-tooltip-location-chr {
@@ -443,10 +518,11 @@ ul.gene-tooltip-nested-list {
 }
 
 .gene-tooltip-list-section li {
-  white-space: nowrap;
+  white-space: normal;
   list-style: none;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
   padding: 2px 0;
 }
 
@@ -464,10 +540,12 @@ ul.gene-tooltip-nested-list {
   font-size: 0.9em;
   /* Make text subtle with opacity */
   color: var(--gt-text-color-secondary);
-  opacity: 0.7;
+  opacity: 1;
   cursor: pointer;
   margin-top: 4px;
-  padding: 2px 4px;
+  padding: 4px;
+  min-width: 24px;
+  min-height: 24px;
   border-radius: 3px;
   transition: background-color 0.2s, opacity 0.2s;
 }
@@ -483,7 +561,7 @@ ul.gene-tooltip-nested-list {
 
 ul.gene-tooltip-nested-list {
   list-style: none;
-  padding: 5px;
+  padding: 5px 9px 5px 5px;
   margin: 0;
   text-align: left;
   max-height: 200px;
@@ -522,14 +600,14 @@ ul.gene-tooltip-nested-list {
     gap: 0.4em;
     text-decoration: none;
     color: var(--gt-text-color-secondary);
-    background-color: var(--gt-border-color);
+    background-color: var(--gt-background-color-subtle);
     padding: 4px 10px;
     border-radius: 5px;
     transition: all 0.2s ease-in-out;
 }
 
 .gene-tooltip-links-container a:hover {
-    color: #fff;
+    color: var(--gt-background-color-base);
     background-color: var(--gt-accent-color);
     opacity: 1;
 }
@@ -563,7 +641,7 @@ ul.gene-tooltip-nested-list {
 .gt-tooltip-box .gene-tooltip-track {
   margin: 0.75em 0;
   min-height: 45px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .gene-track-header {
@@ -726,7 +804,7 @@ ul.gene-tooltip-nested-list {
   gap: 0.5em;
   font-size: 0.85em;
   color: var(--gt-text-color-secondary);
-  opacity: 0.8;
+  opacity: 1;
   min-height: 40px;
 }
 
@@ -759,11 +837,19 @@ ul.gene-tooltip-nested-list {
   /* position: absolute; */
   /* top: 0.5rem; */
   /* right: 0.6rem; */
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  padding: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: .4rem;
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 1;
   transition: opacity 0.2s, color 0.2s;
   color: var(--gt-text-color-secondary);
   line-height: 1; /* Helps with alignment */
@@ -795,7 +881,7 @@ ul.gene-tooltip-nested-list {
   border-radius: 999px;
   padding: 2px 7px;
   color: var(--gt-text-color-secondary);
-  background: color-mix(in srgb, var(--gt-background-color-subtle) 86%, var(--gt-text-color));
+  background: var(--gt-background-color-base);
   font-size: 0.78em;
   line-height: 1.3;
 }
@@ -804,9 +890,9 @@ ul.gene-tooltip-nested-list {
   color: var(--gt-text-color-secondary);
   font-size: 0.78em;
   font-weight: 400;
-  opacity: 0.68;
+  opacity: 1;
   text-align: right;
-  white-space: nowrap;
+  white-space: normal; overflow-wrap: anywhere;
 }
 
 .gt-chem-structure-layout {
@@ -1032,6 +1118,7 @@ ul.gene-tooltip-nested-list {
 }
 
 .gt-chem-id-row {
+  min-width: 0;
   display: grid;
   grid-template-columns: minmax(78px, 0.7fr) minmax(0, 1.3fr) auto;
   gap: 0.5em;
@@ -1044,9 +1131,10 @@ ul.gene-tooltip-nested-list {
 }
 
 .gt-chem-id-row code {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal; overflow-wrap: anywhere;
 }
 
 .gt-chem-id-row small {
@@ -1112,4 +1200,209 @@ ul.gene-tooltip-nested-list {
   .gt-chem-id-row small {
     grid-column: auto;
   }
+}
+
+/* Compact secondary disclosure for the accessible equivalent of the exon map. */
+.gt-gene-track-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75em;
+  min-width: 0;
+  margin: 0 0 .15em;
+  padding-inline-end: .5rem;
+  line-height: 1.25;
+}
+.gt-gene-track-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--gt-text-color);
+  font-size: .9em;
+}
+.gt-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.gt-gene-text-alternative-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .25em;
+  flex: 0 0 auto;
+  min-height: 2rem;
+  margin: 0;
+  padding: .25em .35em;
+  color: var(--gt-text-color-secondary);
+  font: inherit;
+  font-size: .82em;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+}
+.gt-gene-text-alternative-toggle:hover,
+.gt-gene-text-alternative-toggle[aria-expanded='true'] {
+  color: var(--gt-text-color);
+  background: color-mix(in srgb, var(--gt-accent-color) 8%, transparent);
+}
+.gt-gene-text-alternative-toggle:active { background: color-mix(in srgb, var(--gt-accent-color) 16%, transparent); }
+.gt-gene-text-alternative-toggle:focus-visible {
+  color: var(--gt-text-color);
+  outline: 2px solid var(--gt-accent-color);
+  outline-offset: 2px;
+}
+.gt-gene-text-alternative {
+  min-width: 0;
+  margin: .35em 0 0;
+  padding-top: .45em;
+  border-top: 1px solid var(--gt-border-color);
+}
+.gt-gene-text-alternative-content { min-width: 0; overflow-wrap: anywhere; }
+.gt-gene-text-alternative-content p { margin: 0 0 .5em; font-size: .82em; color: var(--gt-text-color-secondary); }
+.gt-gene-text-alternative table { width: 100%; border-collapse: collapse; font-size: .82em; font-variant-numeric: tabular-nums; }
+.gt-gene-text-alternative th,
+.gt-gene-text-alternative td { padding: .25rem .4rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--gt-border-color); }
+
+@media (max-width: 36rem) {
+  .gt-tooltip-box[role='dialog'] { max-width: calc(100vw - .5rem); }
+  .gt-chem-structure-layout { grid-template-columns: minmax(0, 1fr); }
+  .gt-chem-structure-figure { min-height: 120px; }
+  .gene-tooltip-location { align-items: flex-start; flex-wrap: wrap; }
+  .gene-tooltip-location-coords { flex: 1 1 10rem; }
+  .gene-tooltip-ideo { flex: 1 1 8rem; }
+  .gt-gene-text-alternative { overflow-x: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gt-tooltip-box, .gt-collapsible-content, .gt-section-arrow::after,
+  .gt-summary-toggle, .gt-summary-copy-btn, .gene-tooltip-links-container a { transition: none; }
+}
+
+@media (forced-colors: active) {
+  .gt-tooltip-box { border: 1px solid CanvasText; }
+  :where([data-gt-tooltip-reference], .gt-tooltip-box, .gt-tooltip-box button,
+    .gt-tooltip-box [role='button'], .gt-tooltip-box a, .gt-tooltip-box select,
+    .gt-tooltip-box input, .gt-tooltip-box summary):focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 3px;
+  }
+  .gt-tooltip-box a { color: LinkText; }
+}
+
+/* Keep the focus treatment authoritative over component resets and the
+   summary's legacy visual rules. */
+.gt-tooltip-box :where(button, [role='button'], a, select, input, summary):focus-visible,
+.gt-tooltip-box:focus-visible,
+[data-gt-tooltip-reference]:focus-visible {
+  outline: 3px solid var(--gt-focus-color, var(--gt-accent-color, #005fcc));
+  outline-offset: 3px;
+}
+.gt-tooltip-box .gt-summary-copy-btn:focus-visible,
+.gt-tooltip-box .gene-tooltip-nested-search:focus {
+  outline: 3px solid var(--gt-focus-color, var(--gt-accent-color, #005fcc));
+  outline-offset: 3px;
+}
+.gene-tooltip-more-btn,
+.gt-summary-toggle,
+.gt-collapsible-header[role='button'] {
+  box-sizing: border-box;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  text-align: inherit;
+}
+
+/* Summary controls share the clamped text's final line. A surface-colored
+   gradient keeps the controls legible while retaining the fade that signals
+   more prose is available. When expanded, the same controls become a separate
+   utility row below the full text. */
+.gt-summary-section {
+  --gt-summary-action-surface: var(--gt-background-color-subtle);
+  position: relative;
+  /* Keep the focused inline controls inside the collapsible content's clipping
+     boundary without changing the summary line's position. */
+  padding-bottom: 5px;
+}
+.gene-tooltip-content[data-section-variant='dividers'] .gt-summary-section {
+  --gt-summary-action-surface: var(--gt-background-color-base);
+}
+.gt-summary-actions {
+  position: absolute;
+  right: 0;
+  /* The controls end 1px below the text line. With matching typography, that
+     optically aligns their baselines while leaving room for the focus ring. */
+  bottom: 4px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  min-height: 1.5em;
+  padding-left: 2.25rem;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--gt-summary-action-surface) 2rem
+  );
+}
+.gt-summary-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  margin: 0;
+  padding: 0 .3em;
+  color: var(--gt-accent-color);
+  font-size: 1em;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color .2s, background-color .2s;
+}
+.gt-summary-toggle:hover,
+.gt-summary-toggle:focus-visible,
+.gt-summary-toggle[aria-expanded='true'] {
+  color: var(--gt-text-color);
+  background-color: var(--gt-control-hover-background);
+}
+.gt-tooltip-box .gt-summary-toggle:focus-visible,
+.gt-tooltip-box .gt-summary-copy-btn:focus-visible {
+  outline-offset: 1px;
+}
+.gene-tooltip-summary.expanded + .gt-summary-actions {
+  position: static;
+  width: max-content;
+  /* Keep the 3px outline plus its 1px offset inside the clipped content area. */
+  margin: .25rem 0 0 4px;
+  padding-left: 0;
+  background: transparent;
+}
+.gene-tooltip-summary.expanded + .gt-summary-actions .gt-summary-toggle[aria-expanded='true'] {
+  background-color: transparent;
+}
+.gene-tooltip-summary.expanded + .gt-summary-actions .gt-summary-toggle:hover,
+.gene-tooltip-summary.expanded + .gt-summary-actions .gt-summary-toggle:focus-visible {
+  background-color: var(--gt-control-hover-background);
+}
+.gene-tooltip-box dl,
+.gt-tooltip-box dl { margin: 0; }
+
+/* Identifier actions are separate targets, rather than inline prose links. */
+.gt-tooltip-box .gt-chem-id-row a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  min-width: 24px;
 }

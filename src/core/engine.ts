@@ -8,8 +8,6 @@ import { installNestedListFilter } from '../utils.js';
 import { logTooltipTiming } from './timing.js';
 import { getOpenTopLevelTooltips } from './tooltip-registry.js';
 
-let isSummaryHandlerEnabled = false;
-
 interface TooltipEngineOptions<TData, TConfig extends CoreTooltipConfig> {
   profile: TooltipProfile<TData, TConfig>;
   mergeConfig: (userConfig?: Partial<TConfig>) => TConfig;
@@ -84,6 +82,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
         onHide: hideHandler,
         onDestroy: cleanupTooltipLifecycle,
       },
+      kind: 'dialog',
     }));
 
     instances.forEach(instance => {
@@ -105,16 +104,14 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
       options.profile.provider
     );
 
-    if (!isSummaryHandlerEnabled) {
-      enableSummaryExpand();
-      isSummaryHandlerEnabled = true;
-    }
+    const releaseSummaryHandlers = enableSummaryExpand();
     installNestedListFilter();
 
     return () => {
       instances.forEach(instance => {
         instance.destroy();
       });
+      releaseSummaryHandlers();
       disconnectThemeObserver();
       disconnectVisualPreloadWarmup();
       instances = [];

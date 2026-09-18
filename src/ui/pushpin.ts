@@ -2,12 +2,13 @@ import type { TooltipController } from '../core/tooltip-controller.js';
 
 export function attachPushpin(instance: TooltipController<any>) {
   // This guard is now the key. If we've already found and initialized the button, do nothing.
-  if (instance._pinButton) return;
+  if (instance._pinButton && instance.root.contains(instance._pinButton)) return;
 
   const tooltipRoot = instance.root;
   const btn = tooltipRoot.querySelector<HTMLButtonElement>('.gt-pin-button');
 
   if (!btn) return;
+  btn.setAttribute('aria-pressed', String(Boolean(instance._isPinned)));
 
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -22,6 +23,7 @@ export function attachPushpin(instance: TooltipController<any>) {
 
 function togglePin(instance: TooltipController<any>, btn: HTMLElement) {
   instance._isPinned = !instance._isPinned;
+  btn.setAttribute('aria-pressed', String(instance._isPinned));
 
   if (instance._isPinned) {
     btn.classList.add('gt-pin-active');

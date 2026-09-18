@@ -2,6 +2,7 @@ import DefaultTheme from 'vitepress/theme'
 import ChemicalDemo from './components/ChemicalDemo.vue'
 import ChemicalRDKitDemo from './components/ChemicalRDKitDemo.vue'
 import GeneDemo from './components/GeneDemo.vue'
+import './a11y.css'
 
 export default {
   // Use the Layout from the default theme

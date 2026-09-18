@@ -50,7 +50,7 @@ GeneTooltip.init({
 Use the MyChem.info adapter for chemical names, stable identifiers, structures, properties, pharmacology, safety notes, and source-aware records.
 
 ```html
-<span class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</span>
+<button type="button" class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</button>
 <span class="chemical-tooltip" data-query="CHEMBL25" data-scope="chembl">aspirin</span>
 ```
 
@@ -78,6 +78,10 @@ Full documentation and examples are available in the `docs` folder and at the pr
 
 https://mattjmeier.github.io/bio-tooltips/
 
+Span triggers receive keyboard focus and button semantics automatically. Enter or Space enters a named, non-modal details dialog; Tab reaches its controls and Escape dismisses it. Native links retain Enter navigation and use ArrowDown to enter the panel.
+
+Accessibility support, integration responsibilities, tested behavior, and current limitations are documented in [`docs/accessibility.md`](docs/accessibility.md). Bio Tooltips is designed to support WCAG 2.2 Level AA conforming implementations when used according to that guidance; this is not a claim that every integration or the package itself has completed a full WCAG conformance evaluation. The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
+
 ## Performance Benchmarks
 
 Run the reproducible renderer and controlled cache/prefetch benchmark with:
@@ -95,6 +99,7 @@ for methodology and fixture refresh instructions.
 Bio Tooltips keeps its user-facing dependency surface intentionally small:
 
 - Required runtime npm dependencies: none.
+- Accessibility test tooling: pinned `axe-core` is a development dependency used with Playwright; it is excluded from runtime bundles.
 - Bundled positioning foundation: `@floating-ui/dom`; consumers do not install or configure it separately.
 - Optional peer dependencies: `d3`, `ideogram`, and `@rdkit/rdkit`. These are not bundled into the package and are only needed for optional visual/structure-rendering features.
 - Published package contents: `dist`, `assets` (light + dark README preview images), `README.md`, `LICENSE`, and `package.json`.

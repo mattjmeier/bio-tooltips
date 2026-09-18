@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/dist/bio-tooltips.css"><title>Bio Tooltips accessibility fixture</title></head>
+<body>
+  <main><h1>Accessibility fixture</h1>
+    <p><span id="gene" class="gene-tooltip" data-species="human">TP53</span></p>
+    <p><button id="chemical" type="button" class="chemical-tooltip" data-query="2244" data-scope="pubchem">aspirin</button></p>
+  </main>
+  <script src="/node_modules/d3/dist/d3.min.js"></script>
+  <script src="/dist/bio-tooltips.global.js"></script>
+  <script>
+    window.__a11y = { cleanups: [] };
+    window.fetch = async (input) => {
+      const url = String(input);
+      if (url.includes('mygene')) return { ok: true, json: async () => [window.__fixtureGene] };
+      if (url.includes('mychem')) return { ok: true, json: async () => [window.__fixtureChemical] };
+      throw new Error('Unexpected fixture request: ' + url);
+    };
+    document.execCommand = () => true;
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => {} } });
+    const common = { prefetch:'none', visualPreload:'none', ideogram:{enabled:false}, display:{collapsible:true,collapsedByDefault:false,ideogram:false,geneTrack:true,pathways:true,domains:true,transcripts:true,structures:false,generifs:true}, tooltipOptions:{showDuration:0,hideDuration:0}, nestedTooltipOptions:{showDuration:0,hideDuration:0} };
+    window.__a11y.cleanups.push(window.GeneTooltip.init(common));
+    window.__a11y.cleanups.push(window.ChemicalTooltip.init({ ...common, selector:'.chemical-tooltip', structureRenderer:() => '<div role="img" aria-label="Chemical structure fixture"></div>' }));
+  </script>
+</body></html>

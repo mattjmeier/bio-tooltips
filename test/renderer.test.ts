@@ -7,6 +7,7 @@ import { myGeneProfile } from '../src/providers/mygene/profile';
 import { mergeConfig as mergeMyGeneConfig } from '../src/providers/mygene/config';
 import { myChemProfile } from '../src/providers/mychem/profile';
 import { mergeConfig as mergeMyChemConfig } from '../src/providers/mychem/config';
+import { renderCloseButton } from '../src/core/renderer';
 import type { MyGeneInfoResult } from '../src/providers/mygene/types';
 import type { MyChemInfoResult } from '../src/providers/mychem/types';
 
@@ -26,6 +27,18 @@ const mockGeneData: MyGeneInfoResult = {
 const MOCK_UNIQUE_ID = 'test-id-12345';
 
 describe('renderTooltipHTML', () => {
+  it('uses the same close glyph in primary headers and secondary dismiss controls', () => {
+    const geneHTML = renderTooltipHTML(mockGeneData, { uniqueId: MOCK_UNIQUE_ID });
+    const chemicalHTML = renderMyChemTooltipHTML({
+      _id: '2244',
+      query: 'aspirin',
+    }, { uniqueId: MOCK_UNIQUE_ID });
+
+    expect(geneHTML).toContain('aria-label="Close">×</button>');
+    expect(chemicalHTML).toContain('aria-label="Close">×</button>');
+    expect(renderCloseButton('Close details')).toContain('>×</button>');
+  });
+
   it('should return "not found" message for null or undefined data', () => {
     expect(renderTooltipHTML(null)).toContain('Gene not found.');
     expect(renderTooltipHTML(undefined)).toContain('Gene not found.');
@@ -129,14 +142,19 @@ describe('renderTooltipHTML', () => {
     expect(html).toContain('style="--line-clamp: 4;"');
     expect(html).toContain('gt-summary-copy-btn');
     expect(html).toContain(`id="summary-copy-${MOCK_UNIQUE_ID}"`);
+    expect(html).not.toContain('gt-summary-action-divider');
 
-    // The copy affordance sits inline at the end of the text, i.e. inside the
-    // summary paragraph rather than on a following line.
+    // The action group follows the clamped prose so it can sit on the final
+    // line when collapsed and move below the text when expanded.
     const pStart = html.indexOf('<p class="gene-tooltip-summary"');
     const pEnd = html.indexOf('</p>', pStart);
+    const actionsStart = html.indexOf('class="gt-summary-actions"', pEnd);
+    const toggleStart = html.indexOf('class="gt-summary-toggle"', actionsStart);
     const btnStart = html.indexOf(`id="summary-copy-${MOCK_UNIQUE_ID}"`);
-    expect(btnStart).toBeGreaterThan(pStart);
-    expect(btnStart).toBeLessThan(pEnd);
+    expect(actionsStart).toBeGreaterThan(pEnd);
+    expect(toggleStart).toBeGreaterThan(actionsStart);
+    expect(btnStart).toBeGreaterThan(pEnd);
+    expect(btnStart).toBeGreaterThan(toggleStart);
   });
   
   

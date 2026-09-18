@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const updatePosition = vi.fn().mockResolvedValue(undefined);
 const destroyPositioner = vi.fn();
@@ -10,8 +10,9 @@ vi.mock('../src/core/positioning', () => ({
   })),
 }));
 
-import { TooltipController } from '../src/core/tooltip-controller';
+import { TooltipController, createStaticTooltip } from '../src/core/tooltip-controller';
 import type { TooltipOptions } from '../src/core/config';
+import { getOpenTopLevelTooltips } from '../src/core/tooltip-registry';
 import { initializeThemeObserver } from '../src/ui/theme';
 
 const immediateOptions: TooltipOptions = {
@@ -54,6 +55,12 @@ describe('TooltipController', () => {
     destroyPositioner.mockClear();
   });
 
+  afterEach(() => {
+    [...getOpenTopLevelTooltips()].forEach(controller => controller.destroy());
+    vi.clearAllTimers();
+    vi.useRealTimers();
+  });
+
   it('lazily mounts owned markup and restores reference attributes on destroy', () => {
     const { reference, controller } = createController();
     expect(document.querySelector('[data-gt-tooltip-root]')).toBeNull();
@@ -65,7 +72,7 @@ describe('TooltipController', () => {
 
     expect(controller.status).toBe('open');
     expect(reference.getAttribute('aria-expanded')).toBe('true');
-    expect(document.querySelector('.gt-tooltip-box')?.getAttribute('role')).toBe('tooltip');
+    expect(document.querySelector('.gt-tooltip-box')?.getAttribute('role')).toBe('dialog');
     expect(document.querySelector('.gt-tooltip-content')?.innerHTML).toContain('TP53');
 
     controller.destroy();
@@ -74,6 +81,149 @@ describe('TooltipController', () => {
     expect(reference.hasAttribute('aria-expanded')).toBe(false);
     expect(reference.hasAttribute('data-gt-tooltip-reference')).toBe(false);
     expect(destroyPositioner).toHaveBeenCalledTimes(1);
+  });
+
+  it('makes plain text dialog triggers keyboard reachable and restores author attributes', () => {
+    const reference = document.createElement('span');
+    reference.textContent = 'BRCA1';
+    reference.setAttribute('aria-controls', 'author-control');
+    reference.setAttribute('tabindex', '2');
+    document.body.append(reference);
+    const controller = new TooltipController(reference, {
+      content: 'Details', tooltip: immediateOptions, theme: 'light', accessibleName: 'Gene details',
+    });
+    expect(reference.getAttribute('role')).toBe('button');
+    expect(reference.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(reference.getAttribute('aria-controls')).toContain('author-control');
+    reference.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(controller.status).toBe('open');
+    expect(document.activeElement).toBe(controller.box);
+    expect(controller.box.getAttribute('role')).toBe('dialog');
+    expect(controller.box.getAttribute('aria-label')).toBe('Gene details');
+    controller.destroy();
+    expect(reference.getAttribute('tabindex')).toBe('2');
+    expect(reference.getAttribute('role')).toBeNull();
+    expect(reference.getAttribute('aria-controls')).toBe('author-control');
+  });
+
+  it('uses tooltip semantics for static descriptive tooltips', () => {
+    const reference = document.createElement('span');
+    document.body.append(reference);
+    const controller = createStaticTooltip(reference, 'Description', {
+      tooltip: immediateOptions, theme: 'light',
+    });
+    controller.show();
+    vi.runAllTimers();
+    expect(controller.box.getAttribute('role')).toBe('tooltip');
+    expect(reference.getAttribute('aria-describedby')).toContain(controller.box.id);
+    expect(reference.hasAttribute('aria-expanded')).toBe(false);
+    controller.destroy();
+  });
+
+  it('closes the focused dialog on Escape and returns focus to its trigger', () => {
+    const { reference, controller } = createController();
+    reference.click();
+    expect(document.activeElement).toBe(controller.box);
+    controller.box.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    vi.runAllTimers();
+    expect(controller.status).toBe('idle');
+    expect(document.activeElement).toBe(reference);
+  });
+
+  it('keeps focus-owned content open on pointer departure and peer dismissal', () => {
+    const { controller } = createController();
+    controller.enter();
+    controller.root.dispatchEvent(new MouseEvent('mouseleave', { relatedTarget: document.body }));
+    controller.dismiss();
+    vi.runAllTimers();
+    expect(controller.status).toBe('open');
+    expect(document.activeElement).toBe(controller.box);
+  });
+
+  it('keeps an explicitly closing panel inert despite late pointer and resize events', () => {
+    const { reference, controller } = createController({ hideDuration: 100 });
+    controller.enter();
+    controller.close();
+    expect(document.activeElement).toBe(reference);
+    expect(controller.root.hasAttribute('inert')).toBe(true);
+    controller.root.dispatchEvent(new MouseEvent('mouseenter'));
+    controller.root.dispatchEvent(new CustomEvent('gt:content-resize'));
+    vi.runAllTimers();
+    expect(controller.status).toBe('idle');
+    expect(controller.root.isConnected).toBe(false);
+    reference.click();
+    expect(controller.status).toBe('open');
+    expect(document.activeElement).toBe(controller.box);
+  });
+
+  it('closes only the focused child and skips its closing content during parent Tab exit', () => {
+    const { reference, controller: parent } = createController();
+    const after = document.createElement('button');
+    document.body.append(after);
+    parent.setContent('<button id="child-ref">Child</button><button id="parent-last">Last</button>');
+    parent.enter();
+    const childReference = parent.root.querySelector<HTMLButtonElement>('#child-ref')!;
+    const child = new TooltipController(childReference, {
+      parent, tooltip: { ...immediateOptions, hideDuration: 100, appendTo: parent.root },
+      theme: 'light', content: '<input aria-label="Filter">',
+    });
+    parent.addNestedTooltip(child);
+    child.enter();
+    child.box.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(document.activeElement).toBe(childReference);
+    expect(parent.status).toBe('open');
+    const last = parent.root.querySelector<HTMLButtonElement>('#parent-last')!;
+    last.focus();
+    last.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }));
+    expect(document.activeElement).toBe(after);
+    expect(reference.isConnected).toBe(true);
+  });
+
+  it('dismisses a hover child before a focused parent without moving focus', () => {
+    const { controller: parent } = createController();
+    parent.setContent('<button>More</button>');
+    parent.enter();
+    const child = new TooltipController(parent.content.querySelector('button')!, {
+      parent, tooltip: { ...immediateOptions, appendTo: parent.root }, theme: 'light',
+    });
+    parent.addNestedTooltip(child);
+    child.show();
+    vi.runAllTimers();
+    parent.box.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(child.status).toBe('closing');
+    expect(parent.status).toBe('open');
+    expect(document.activeElement).toBe(parent.box);
+  });
+
+  it('preserves focus on the persistent box when asynchronous content replaces a control', () => {
+    const { controller } = createController();
+    controller.setContent('<button>Loading action</button>');
+    controller.enter();
+    controller.content.querySelector('button')!.focus();
+    controller.setContent('<p>Loaded</p>');
+    expect(document.activeElement).toBe(controller.box);
+  });
+
+  it('retains author roles and tab order while enhancing plain triggers', () => {
+    const reference = document.createElement('span');
+    reference.setAttribute('role', 'link');
+    reference.tabIndex = -1;
+    const controller = new TooltipController(reference, { theme: 'light', tooltip: immediateOptions });
+    expect(reference.getAttribute('role')).toBe('link');
+    expect(reference.tabIndex).toBe(-1);
+    controller.destroy();
+  });
+
+  it('preserves native link activation and enters its panel with ArrowDown', () => {
+    const reference = document.createElement('a');
+    reference.href = '#target';
+    document.body.append(reference);
+    const controller = new TooltipController(reference, { theme: 'light', tooltip: immediateOptions });
+    const enter = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+    reference.dispatchEvent(enter);
+    expect(enter.defaultPrevented).toBe(false);
+    reference.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+    expect(document.activeElement).toBe(controller.box);
   });
 
   it('supports delayed opening and cancels it when hiding', () => {
@@ -399,4 +549,25 @@ describe('TooltipController', () => {
     vi.runAllTimers();
     expect(controller.status).toBe('open');
   });
+  it.each(['close', 'destroy'] as const)('returns focus outside body-mounted descendants when a parent is %s', action => {
+    const { reference, controller: parent } = createController();
+    parent.enter();
+    const trigger = document.createElement('button');
+    parent.content.append(trigger);
+    const child = new TooltipController(trigger, {
+      content: '<input aria-label="Search">',
+      tooltip: immediateOptions,
+      theme: parent.theme,
+      parent,
+    });
+    parent.addNestedTooltip(child);
+    child.enter();
+    child.content.querySelector('input')!.focus();
+    parent[action]();
+    expect(document.activeElement).toBe(reference);
+    expect(child.state.isDestroyed).toBe(true);
+    vi.runAllTimers();
+    expect(parent.state.isMounted).toBe(false);
+  });
+
 });

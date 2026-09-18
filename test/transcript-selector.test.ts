@@ -12,6 +12,7 @@ import { renderGeneTrack } from '../src/providers/mygene/visuals/gene-track';
 import {
   getUsableTranscripts,
   initializeNativeTranscriptSelector,
+  renderGeneTextAlternative,
 } from '../src/providers/mygene/visuals/transcript-selector';
 
 function transcript(transcriptId: string, exonCount: number): MyGeneExon {
@@ -39,6 +40,59 @@ function geneData(exons: MyGeneExon[] | undefined): MyGeneInfoResult {
 }
 
 describe('native transcript selector', () => {
+  it('renders a compact accessible exon-data disclosure with strand and transcript identity', () => {
+    const container = document.createElement('div');
+    const selected = { ...transcript('ENST000009', 3), strand: -1 };
+
+    const alternative = renderGeneTextAlternative(container, selected, 'TP53');
+
+    expect(alternative.className).toBe('gt-gene-text-alternative');
+    const toggle = container.querySelector<HTMLButtonElement>('.gt-gene-text-alternative-toggle')!;
+    expect(toggle.textContent).toBe('Show exon data');
+    expect(toggle.querySelector('.gt-section-arrow')).toBeNull();
+    expect(toggle.getAttribute('aria-label')).toBe('Show exon data for TP53 gene model');
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(toggle.getAttribute('aria-controls')).toBe(alternative.id);
+    expect(alternative.hidden).toBe(true);
+    expect(container.querySelector('.gt-gene-track-label')?.textContent).toContain('TP53');
+    expect(alternative.textContent).toContain('ENST000009');
+    expect(alternative.textContent).toContain('strand: reverse (−)');
+    expect(alternative.querySelectorAll('tbody tr')).toHaveLength(3);
+    expect(alternative.querySelector('tbody tr th')?.textContent).toBe('3');
+    expect(alternative.querySelector('table caption')?.textContent).toContain('ENST000009');
+  });
+
+  it('updates the existing alternative without creating duplicate panels', () => {
+    const container = document.createElement('div');
+    renderGeneTextAlternative(container, transcript('ENST000001', 2), 'TP53');
+    renderGeneTextAlternative(container, transcript('ENST000002', 1), 'TP53');
+
+    expect(container.querySelectorAll('.gt-gene-text-alternative')).toHaveLength(1);
+    expect(container.textContent).toContain('ENST000002');
+    expect(container.textContent).not.toContain('ENST000001');
+  });
+
+  it('preserves a focused, open text disclosure during asynchronous visual updates', () => {
+    const container = document.createElement('div');
+    document.body.append(container);
+    const alternative = renderGeneTextAlternative(container, transcript('ENST000001', 2), 'TP53');
+    const toggle = container.querySelector<HTMLButtonElement>('.gt-gene-text-alternative-toggle')!;
+    toggle.click();
+    toggle.focus();
+
+    renderGeneTextAlternative(container, transcript('ENST000001', 2), 'TP53');
+    renderGeneTextAlternative(container, transcript('ENST000002', 3), 'TP53');
+
+    expect(container.querySelector('.gt-gene-text-alternative-toggle')).toBe(toggle);
+    expect(document.activeElement).toBe(toggle);
+    expect(toggle.textContent).toBe('Hide exon data');
+    expect(toggle.getAttribute('aria-label')).toBe('Hide exon data for TP53 gene model');
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(alternative.hidden).toBe(false);
+    expect(alternative.querySelectorAll('tbody tr')).toHaveLength(3);
+    container.remove();
+  });
+
   it('sorts native options, shows exon counts, and selects the longest transcript', () => {
     const selector = document.createElement('select');
     const transcripts = [
@@ -330,5 +384,30 @@ describe('native transcript selector', () => {
     expect(stylesheet).toContain('.gene-tooltip-transcript-selector::picker(select)');
     expect(stylesheet).toContain('--gt-transcript-selector-picker-background');
     expect(stylesheet).toContain('--gt-transcript-selector-option-selected');
+  });
+});
+
+// Keep the optional-dependency failure case last because the mocked dynamic
+// import is intentionally process-local to this test file.
+describe('gene track fallback', () => {
+  it('keeps the text alternative and removes the loader when D3 fails', async () => {
+    vi.resetModules();
+    vi.doMock('d3', () => { throw new Error('D3 unavailable'); });
+    const { renderGeneTrack: renderWithFailedD3 } = await import('../src/providers/mygene/visuals/gene-track');
+    const uniqueId = 'failed-d3-alternative';
+    const root = document.createElement('div');
+    root.innerHTML = `<select id="transcript-selector-${uniqueId}"></select><div id="gene-tooltip-track-${uniqueId}"><div class="gt-loader-container"><span>Loading...</span></div></div>`;
+
+    await renderWithFailedD3({ root } as TooltipController, geneData([transcript('ENST000001', 2)]), uniqueId, defaultCoreConfig);
+
+    expect(root.querySelector('.gt-gene-text-alternative')).not.toBeNull();
+    expect(root.querySelector('.gt-gene-text-alternative')?.textContent).toContain('ENST000001');
+    expect(root.querySelector('.gt-loader-container')).toBeNull();
+    expect(root.querySelector('[role="status"]')?.textContent).toContain('exon data shown below');
+    expect(root.querySelector('.gt-gene-text-alternative')?.hidden).toBe(false);
+    expect(root.querySelector('.gt-gene-text-alternative-toggle')?.getAttribute('aria-expanded')).toBe('true');
+    expect(root.querySelector('[role="status"]')?.nextElementSibling)
+      .toBe(root.querySelector('.gt-gene-text-alternative'));
+    vi.doUnmock('d3');
   });
 });
