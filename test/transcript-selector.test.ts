@@ -48,11 +48,9 @@ describe('native transcript selector', () => {
 
     expect(alternative.className).toBe('gt-gene-text-alternative');
     const toggle = container.querySelector<HTMLButtonElement>('.gt-gene-text-alternative-toggle')!;
-    const arrow = toggle.querySelector('.gt-gene-text-alternative-chevron')!;
-    expect(toggle.textContent).toContain('Exon data');
-    expect(arrow.classList.contains('gt-section-arrow')).toBe(true);
-    expect(arrow.textContent).toBe('');
-    expect(toggle.getAttribute('aria-label')).toBe('Exon data for TP53 gene model');
+    expect(toggle.textContent).toBe('Show exon data');
+    expect(toggle.querySelector('.gt-section-arrow')).toBeNull();
+    expect(toggle.getAttribute('aria-label')).toBe('Show exon data for TP53 gene model');
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
     expect(toggle.getAttribute('aria-controls')).toBe(alternative.id);
     expect(alternative.hidden).toBe(true);
@@ -87,7 +85,8 @@ describe('native transcript selector', () => {
 
     expect(container.querySelector('.gt-gene-text-alternative-toggle')).toBe(toggle);
     expect(document.activeElement).toBe(toggle);
-    expect(toggle.getAttribute('aria-label')).toBe('Exon data for TP53 gene model');
+    expect(toggle.textContent).toBe('Hide exon data');
+    expect(toggle.getAttribute('aria-label')).toBe('Hide exon data for TP53 gene model');
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
     expect(alternative.hidden).toBe(false);
     expect(alternative.querySelectorAll('tbody tr')).toHaveLength(3);

@@ -58,7 +58,11 @@ export function setGeneTextAlternativeExpanded(container: HTMLElement, expanded:
   const toggle = container.querySelector<HTMLButtonElement>('.gt-gene-text-alternative-toggle');
   const panel = container.querySelector<HTMLElement>('.gt-gene-text-alternative');
   if (!toggle || !panel) return;
+  const action = expanded ? 'Hide' : 'Show';
+  const geneContext = toggle.dataset.geneSymbol ? ` for ${toggle.dataset.geneSymbol} gene model` : '';
   toggle.setAttribute('aria-expanded', String(expanded));
+  toggle.setAttribute('aria-label', `${action} exon data${geneContext}`);
+  toggle.textContent = `${action} exon data`;
   panel.hidden = !expanded;
 }
 
@@ -99,16 +103,13 @@ export function renderGeneTextAlternative(
   }
 
   const expanded = toggle.getAttribute('aria-expanded') === 'true';
-  toggle.setAttribute('aria-expanded', String(expanded));
+  toggle.dataset.geneSymbol = symbol;
   toggle.setAttribute('aria-controls', alternativeId);
-  // Keep the accessible name stable while aria-expanded communicates state.
-  toggle.setAttribute('aria-label', `Exon data for ${symbol} gene model`);
-  toggle.innerHTML = '<span>Exon data</span><span class="gt-section-arrow gt-gene-text-alternative-chevron" aria-hidden="true"></span>';
   alternative.id = alternativeId;
   alternative.setAttribute('role', 'region');
   alternative.setAttribute('aria-label', `Exon data for ${symbol} gene model`);
-  alternative.hidden = !expanded;
   alternative.innerHTML = `<div class="gt-gene-text-alternative-content" data-transcript="${escapeHTML(transcript.transcript)}">${renderTextAlternativeContent(transcript, symbol)}</div>`;
+  setGeneTextAlternativeExpanded(container, expanded);
 
   const label = meta.querySelector<HTMLElement>('.gt-gene-track-label') ?? document.createElement('div');
   label.className = 'gt-gene-track-label';

@@ -270,13 +270,28 @@
 
 /* --- Reusable Section Components --- */
 
-.gt-section-arrow::after {
-  content: '▼';
-  display: inline-block;
-  transition: transform 0.2s ease, color 0.2s ease;
+/* Use a filled, symmetric triangle so the point has an exact visual midpoint
+   and does not shift with font glyph metrics or diagonal-stroke rasterization. */
+.gt-section-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 .8em;
+  width: .8em;
+  height: .8em;
   color: var(--gt-text-color-secondary);
-  font-size: 0.8em;
-  margin-right: 0.3em;
+}
+
+.gt-section-arrow::after {
+  content: '';
+  display: block;
+  width: .55em;
+  height: .45em;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform: rotate(0deg);
+  transform-origin: center;
+  transition: transform 0.2s ease;
 }
 
 .gt-section-arrow.collapsed::after {
@@ -1221,16 +1236,6 @@ ul.gene-tooltip-nested-list {
   color: var(--gt-text-color);
   outline: 2px solid var(--gt-accent-color);
   outline-offset: 2px;
-}
-.gt-gene-text-alternative-chevron {
-  flex: 0 0 auto;
-}
-.gt-gene-text-alternative-chevron::after {
-  margin-right: 0;
-  margin-left: .1em;
-}
-.gt-gene-text-alternative-toggle[aria-expanded='false'] .gt-gene-text-alternative-chevron::after {
-  transform: rotate(-90deg);
 }
 .gt-gene-text-alternative {
   min-width: 0;
