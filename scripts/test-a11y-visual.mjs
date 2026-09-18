@@ -27,7 +27,7 @@ try {
     }, { provider, gene, chemical });
     await page.locator('#trigger').focus();
     await page.keyboard.press('Enter');
-    await page.locator(provider === 'gene' ? '.gt-gene-text-alternative' : '.gt-chem-id-table').waitFor();
+    await page.locator(provider === 'gene' ? '.gt-gene-text-alternative-toggle, .gt-gene-text-alternative:not([hidden])' : '.gt-chem-id-table').waitFor();
     const panel = page.getByRole('dialog');
     await page.evaluate(() => document.querySelectorAll('details').forEach(el => { el.open = true; }));
     for (const mode of ['320px', 'text-spacing', '200-percent-text']) {

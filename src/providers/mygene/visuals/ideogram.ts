@@ -61,6 +61,28 @@ export async function getIdeogram() {
   return ideogramModulePromise;
 }
 
+// The Ideogram library (third-party) renders its chromosome bands into a
+// horizontally scrollable wrapper (#_ideogramMiddleWrap). WCAG 2.1.1
+// (Keyboard) requires scrollable regions to be reachable by keyboard, so
+// once the library has drawn, make the wrapper focusable when it actually
+// scrolls. Layout may settle after `onLoad`, so retry briefly.
+function ensureIdeogramScrollableKeyboardAccess(ideoDiv: HTMLElement, symbol: string, chromosome: string): void {
+  const attempt = (remaining: number): void => {
+    const wrap = ideoDiv.querySelector<HTMLElement>('#_ideogramMiddleWrap');
+    if (!wrap || !wrap.isConnected) return;
+    if (wrap.scrollWidth > wrap.clientWidth + 1) {
+      // The bands are purely graphical; role="img" lets the wrapper carry an
+      // accessible name (a bare div would raise aria-prohibited-attr).
+      wrap.setAttribute('role', 'img');
+      wrap.setAttribute('tabindex', '0');
+      wrap.setAttribute('aria-label', `${symbol} chromosome ${chromosome} ideogram, scrollable`);
+      return;
+    }
+    if (remaining > 0) setTimeout(() => attempt(remaining - 1), 250);
+  };
+  attempt(4);
+}
+
 // The render function with unique ID parameter
 export async function renderIdeogram(
   instance: TooltipController<any>,
@@ -167,6 +189,7 @@ export async function renderIdeogram(
     }));
 
     if (!isActiveIdeogramTarget(instance, ideoDiv)) return;
+    ensureIdeogramScrollableKeyboardAccess(ideoDiv, data.symbol, chromosome);
     logTooltipTiming(instance, timingConfig, 'ideogram render complete');
 
   } catch (error) {

@@ -1,0 +1,37 @@
+/* Accessibility overrides for the VitePress default theme.
+ *
+ * These raise a few default theme colors that fall just below the WCAG 2.2
+ * 4.5:1 (AA) text-contrast threshold. Values were measured with axe-core and
+ * hand-computed contrast ratios (see audits/accessibility/a11y-evaluation.md).
+ * Overrides are scoped per theme: light mode needs four, dark mode one.
+ */
+:root:not(.dark) {
+  /* Shiki "github-light" token colors were designed against a white code
+     background. Against the default #f6f6f7 block background several tokens
+     dip below 4.5:1 (e.g. #d73a49 at 4.24:1, #22863a at 4.28:1). */
+  --vp-code-block-bg: #ffffff;
+
+  /* Language label in the corner of code blocks: default #929295 measured
+     2.9:1. #6e6e73 measures 5.1:1 on white. */
+  --vp-code-lang-color: #6e6e73;
+
+  /* Brand call-to-action button: white on the default #5672cd measured
+     4.48:1. #4e6ad9 measures 4.8:1; hover is pinned to the same value so
+     the transient hover state keeps the same contrast. */
+  --vp-button-brand-bg: #4e6ad9;
+  --vp-button-brand-hover-bg: #4e6ad9;
+}
+
+/* Dark-mode code language label: default #6a6a71 on the #161618 code
+   background measured 3.4:1. #8c8c94 measures 5.5:1. */
+.dark {
+  --vp-code-lang-color: #8c8c94;
+}
+/* Shiki "github-light" numeric-constant token #e36209 measures 3.5:1 on
+   white (below the 4.5:1 AA threshold). VitePress applies token colors via
+   `color: var(--shiki-light)`, so only the custom property is inline and
+   this higher-specificity rule can override that one token in light mode.
+   #b45309 measures 5.0:1 on white. */
+html:not(.dark) .vp-code span[style*='E36209' i] {
+  color: #b45309;
+}

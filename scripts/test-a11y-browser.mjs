@@ -106,12 +106,29 @@ try {
   await page.keyboard.press('Escape');
   await waitFor(() => page.locator('[data-gt-tooltip-root]').count().then(count => count === 0));
   await gene.focus(); await page.keyboard.press('Enter');
-  await page.locator('.gt-gene-text-alternative').waitFor();
+  const textToggle = page.locator('.gt-gene-text-alternative-toggle').first();
+  await waitFor(() => textToggle.isVisible());
+  const textAlternative = page.locator('.gt-gene-text-alternative').first();
+  assert.equal(await textToggle.getAttribute('aria-expanded'), 'false', 'exon text alternative starts collapsed when D3 renders');
+  assert.equal(await textAlternative.getAttribute('hidden'), '', 'exon region must be hidden while collapsed');
+  const [exonControlsId, exonRegionId] = await page.evaluate(() => {
+    const toggle = document.querySelector('.gt-gene-text-alternative-toggle');
+    const region = document.querySelector('.gt-gene-text-alternative');
+    return [toggle?.getAttribute('aria-controls'), region?.id];
+  });
+  assert.ok(exonRegionId, 'exon region must expose an id');
+  assert.equal(exonControlsId, exonRegionId, 'toggle must reference the exon region');
+  await textToggle.click();
+  assert.equal(await textToggle.getAttribute('aria-expanded'), 'true');
+  assert.match(await textToggle.textContent(), /Hide exon data/);
+  assert.ok(await textAlternative.isVisible(), 'expanded exon region must be visible');
   const selector = rootPanel.locator('select').first();
   assert.ok(await selector.locator('option').count() > 1);
   await selector.focus(); await page.keyboard.press('ArrowDown');
   const transcript = await selector.inputValue();
-  assert.ok((await rootPanel.locator('.gt-gene-text-alternative').textContent()).includes(transcript));
+  assert.ok((await page.locator('.gt-gene-text-alternative').textContent()).includes(transcript));
+  await textToggle.click();
+  assert.equal(await textToggle.getAttribute('aria-expanded'), 'false', 'exon region must collapse again');
   const collapsible = page.locator('.gt-collapsible-header').first();
   assert.equal(await collapsible.count(), 1);
   { await collapsible.click(); assert.equal(await collapsible.getAttribute('aria-expanded'),'false'); assert.ok(await page.locator('.gt-collapsible-content').first().getAttribute('inert') !== null); await collapsible.click(); }

@@ -237,4 +237,64 @@ describe('gene ideogram', () => {
     expect(construct).not.toHaveBeenCalled();
     expect(root.textContent).toContain('Ideogram not available for this chromosome.');
   });
+
+  it('makes a scrollable Ideogram wrapper keyboard-focusable (WCAG 2.1.1)', async () => {
+    onConstruct = config => {
+      const container = document.querySelector(config.container);
+      const wrap = document.createElement('div');
+      wrap.id = '_ideogramMiddleWrap';
+      Object.defineProperty(wrap, 'scrollWidth', { value: 800, configurable: true });
+      Object.defineProperty(wrap, 'clientWidth', { value: 200, configurable: true });
+      container.append(wrap);
+      queueMicrotask(config.onLoad);
+    };
+    const root = document.createElement('div');
+    root.innerHTML = '<div class="gene-tooltip-ideo" id="gene-tooltip-ideo-scroll"></div>';
+    document.body.append(root);
+    const instance = {
+      root,
+      state: { isDestroyed: false, isMounted: true },
+    } as TooltipController;
+
+    await renderIdeogram(instance, {
+      _id: '7157',
+      query: 'TP53',
+      symbol: 'TP53',
+      taxid: 9606,
+      genomic_pos: { chr: '17', start: 7661779, end: 7687538, strand: -1 },
+    }, defaultConfig.ideogram, 'scroll', defaultConfig);
+
+    const wrap = document.querySelector('#_ideogramMiddleWrap');
+    expect(wrap?.getAttribute('tabindex')).toBe('0');
+    expect(wrap?.getAttribute('aria-label')).toContain('TP53');
+  });
+
+  it('leaves a non-scrollable Ideogram wrapper out of the tab order', async () => {
+    onConstruct = config => {
+      const container = document.querySelector(config.container);
+      const wrap = document.createElement('div');
+      wrap.id = '_ideogramMiddleWrap';
+      Object.defineProperty(wrap, 'scrollWidth', { value: 200, configurable: true });
+      Object.defineProperty(wrap, 'clientWidth', { value: 200, configurable: true });
+      container.append(wrap);
+      queueMicrotask(config.onLoad);
+    };
+    const root = document.createElement('div');
+    root.innerHTML = '<div class="gene-tooltip-ideo" id="gene-tooltip-ideo-notscroll"></div>';
+    document.body.append(root);
+    const instance = {
+      root,
+      state: { isDestroyed: false, isMounted: true },
+    } as TooltipController;
+
+    await renderIdeogram(instance, {
+      _id: '7157',
+      query: 'TP53',
+      symbol: 'TP53',
+      taxid: 9606,
+      genomic_pos: { chr: '17', start: 7661779, end: 7687538, strand: -1 },
+    }, defaultConfig.ideogram, 'notscroll', defaultConfig);
+
+    expect(document.querySelector('#_ideogramMiddleWrap')?.hasAttribute('tabindex')).toBe(false);
+  });
 });

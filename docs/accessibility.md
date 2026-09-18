@@ -6,7 +6,9 @@
 
 The current assessment covers the library-owned core, gene, and chemical tooltip behavior exercised by the repository's local test fixtures. It includes the shipped themes, common trigger elements, nested and pinned panels, asynchronous states, and selected responsive and user-preference conditions.
 
-It does not cover the surrounding markup, content, styles, or configuration supplied by a host application. Optional third-party visualizations, custom renderers, combinations of browsers and assistive technologies not listed in the verification record, and the documentation site as a whole are also outside the current assessment. A host application needs its own complete evaluation before making a WCAG conformance claim.
+It does not cover the surrounding markup, content, styles, or configuration supplied by a host application. Optional third-party visualizations, custom renderers, and combinations of browsers and assistive technologies not listed in the verification record are also outside the assessment. A host application needs its own complete evaluation before making a WCAG conformance claim.
+
+The documentation website is assessed separately (Scope B) in the repository's [accessibility evaluation record](https://github.com/mattjmeier/bio-tooltips/blob/main/audits/accessibility/a11y-evaluation.md); the two scopes are not conflated, and neither scope proves the other.
 
 ## Using the library accessibly
 
@@ -32,12 +34,20 @@ The gene-model header includes a compact **Show exon data** button whose control
 
 Short descriptive previews use `role="tooltip"` and `aria-describedby`; interactive parent and searchable child panels use named `role="dialog"` containers. Host applications should supply meaningful trigger text, preserve native link/button semantics, and avoid overriding the library’s focus and hidden-state styles. Optional third-party visualizations and custom renderers need their own accessibility assessment.
 
+## WCAG 2.2 Level AA evaluation
+
+A full WCAG 2.2 A/AA evaluation matrix for both scopes (library behavior and documentation website), with per-criterion evidence, tooling limits, the defects found and fixed (including six documentation-site contrast defects and a non-keyboard-focusable scrollable ideogram region), the five WCAG conformance requirements, and the conformance recommendation is recorded in the repository's [accessibility evaluation record](https://github.com/mattjmeier/bio-tooltips/blob/main/audits/accessibility/a11y-evaluation.md). The remaining checks that require a human with assistive technology or real OS/browser settings are itemized in the [manual accessibility checklist](https://github.com/mattjmeier/bio-tooltips/blob/main/audits/accessibility/a11y-manual-checklist.md).
+
+Because those manual checks are not yet complete, the project retains the "designed to support" wording above rather than making a formal conformance claim.
+
 ## Reporting an accessibility barrier
 
 If you encounter an accessibility problem, [open a GitHub issue](https://github.com/mattjmeier/bio-tooltips/issues) with the package version, browser and operating system, assistive technology if applicable, a minimal example, and the behavior you expected. Please do not include private or sensitive data.
 
 ## Verification record
 
-Validated in Chromium 151.0.7922.34 with local TP53 and aspirin records. The browser suite exercises span/button/link activation, logical Tab exit, nested search and dismissal, pinning, transcript changes, copy success/failure, delayed responses, request errors, empty results, and cleanup/reinitialization. Axe scans require an open panel and cover five shipped themes plus nested and pinned states. The unit suite has 120 passing tests. Production, declaration, documentation, and package dry-run checks also pass.
+Validated 2026-09-18 in headless Chromium 151.0.7922.34 (Playwright 1.52, axe-core 4.13.0 pinned, Node 24.19.0) with local TP53 and aspirin records. The library browser suite exercises span/button/link activation, logical Tab exit, nested search and dismissal, pinning, transcript changes, copy success/failure, delayed responses, request errors, empty results, and cleanup/reinitialization, with axe scans of open gene and chemical panels across the five shipped themes plus nested and pinned states. The visual suite asserts 320 CSS pixel reflow, WCAG text-spacing values, doubled text sizes, reduced-motion transitions, forced-colors panel boundaries, and focus indicators. The unit suite contains 126 passing tests across 31 files. Production, declaration, and documentation builds pass.
 
-Development dependency review found zero runtime vulnerabilities and eight existing development-tool findings (three moderate, five high); these were present before the axe-core addition. Registry verification checked 498 package signatures and 89 attestations. The environment used Node 24.14.0, below jsdom 30’s declared Node 24.15.0 minimum; tests passed, but use a supported Node version for release verification.
+The documentation site was scanned with the same axe configuration across all page templates in both themes, the interactive demos in open and closed states, the mobile menu, and 320 CSS pixel reflow. Six contrast defects in the VitePress default theme as shipped (light code-block background, the code language label in both themes, one shiki token color, and the hero brand button) were found and fixed in `docs/.vitepress/theme/a11y.css`; the post-fix scan is clean. Two best-practice observations remain documented: the VitePress home layout places hero content outside any landmark, and the generated `api/modules.html` page has no `<h1>`. The site has no search feature (VitePress local search is not configured). See the repository's [accessibility evaluation record](https://github.com/mattjmeier/bio-tooltips/blob/main/audits/accessibility/a11y-evaluation.md) for full details.
+
+Development dependency review found zero runtime vulnerabilities and eight existing development-tool findings (three moderate, five high); these predate the axe-core addition. Registry verification checked 498 package signatures and 89 attestations.
