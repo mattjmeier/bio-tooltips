@@ -60,15 +60,19 @@ export function createNestedContent(items: { name: string; url?: string }[]): st
   // The 'oninput' handler directly calls our filtering function, passing the input's value and the target list's ID.
   return `
     <div class="gene-tooltip-nested-container">
-      <div class="gt-tooltip-actions"><button type="button" class="gt-close-button" aria-label="Close details">×</button></div>
-      <label class="gt-nested-search-label" for="${listId}-search">Filter results</label>
-      <input id="${listId}-search"
-        type="search" 
-        class="gene-tooltip-nested-search" 
-        placeholder="Filter..." 
-        oninput="window.GeneTooltipRuntime.filterNestedList(this.value, '${listId}')"
-      />
-      <div class="gt-nested-status" role="status" aria-live="polite">${items.length} result${items.length === 1 ? '' : 's'}</div>
+      <div class="gt-nested-toolbar">
+        <div class="gt-nested-filter-meta">
+          <label class="gt-nested-search-label" for="${listId}-search">Filter</label>
+          <span class="gt-nested-status" role="status" aria-live="polite">${items.length} result${items.length === 1 ? '' : 's'}</span>
+        </div>
+        <input id="${listId}-search"
+          type="search"
+          class="gene-tooltip-nested-search"
+          placeholder="Search..."
+          oninput="window.GeneTooltipRuntime.filterNestedList(this.value, '${listId}')"
+        />
+        <button type="button" class="gt-close-button" aria-label="Close details">×</button>
+      </div>
       <ul id="${listId}" class="gene-tooltip-nested-list">${listItems}</ul>
     </div>
   `;
