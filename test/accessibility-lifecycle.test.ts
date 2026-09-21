@@ -12,7 +12,10 @@ vi.mock('../src/core/positioning', () => ({
 
 type Data = { label: string };
 let cleanup = () => {};
-function mount(overrides: Partial<TooltipProfile<Data>> = {}) {
+function mount(
+  overrides: Partial<TooltipProfile<Data>> = {},
+  presentation: CoreTooltipConfig['presentation'] = 'auto'
+) {
   const profile: TooltipProfile<Data> = {
     id: 'mygene',
     provider: {
@@ -25,6 +28,7 @@ function mount(overrides: Partial<TooltipProfile<Data>> = {}) {
   };
   const config: CoreTooltipConfig = {
     ...defaultCoreConfig, selector: '.trigger', prefetch: 'none', visualPreload: 'none',
+    presentation,
     display: { collapsible: true },
     tooltipOptions: { showDuration: 1000, hideDuration: 0 },
     nestedTooltipOptions: { showDuration: 0, hideDuration: 0 },
@@ -42,6 +46,18 @@ function mount(overrides: Partial<TooltipProfile<Data>> = {}) {
 async function settleData() {
   // Resolve the data/render promise without advancing the 1-second animation.
   for (let index = 0; index < 8; index++) await Promise.resolve();
+}
+
+function dispatchPointer(target: EventTarget, type: string, clientY: number): void {
+  const event = new Event(type, { bubbles: true, cancelable: true });
+  Object.defineProperties(event, {
+    pointerId: { value: 1 },
+    clientX: { value: 20 },
+    clientY: { value: clientY },
+    button: { value: 0 },
+    isPrimary: { value: true },
+  });
+  target.dispatchEvent(event);
 }
 
 describe('accessible data lifecycle', () => {
@@ -101,6 +117,30 @@ describe('accessible data lifecycle', () => {
     expect(status.textContent).toContain('loaded');
     expect(content.getAttribute('aria-busy')).toBe('false');
     expect(document.activeElement?.getAttribute('role')).toBe('dialog');
+  });
+
+  it('closes a drawer from its labelled handle and returns focus to the trigger', async () => {
+    mount({}, 'drawer');
+    await settleData();
+    const trigger = document.querySelector<HTMLElement>('.trigger')!;
+    const handle = document.querySelector<HTMLButtonElement>('.gt-drawer-handle')!;
+    const closeButton = document.querySelector<HTMLButtonElement>('.gt-tooltip-content .gt-close-button')!;
+
+    expect(handle.hidden).toBe(false);
+    expect(handle.getAttribute('aria-label')).toBe('Close');
+    expect(closeButton).not.toBe(handle);
+    handle.focus();
+
+    dispatchPointer(handle, 'pointerdown', 100);
+    dispatchPointer(handle, 'pointermove', 180);
+    dispatchPointer(handle, 'pointerup', 180);
+    handle.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }));
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+
+    handle.click();
+
+    expect(document.activeElement).toBe(trigger);
+    expect(document.querySelector('[data-gt-tooltip-root]')?.hasAttribute('inert')).toBe(true);
   });
 
   it('makes collapse immediately inert and restores focus, including during animation', async () => {

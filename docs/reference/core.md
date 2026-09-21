@@ -77,13 +77,19 @@ GeneTooltip.init({ presentation: 'drawer' });
 
 The drawer is a non-modal, full-width bottom sheet capped at roughly 75% of
 the dynamic viewport height. Its content scrolls internally and includes the
-device bottom safe area. The page remains scrollable and interactive: there is
-no backdrop, focus trap, `aria-modal`, inert background, or page scroll lock.
-The drawer closes from its Close control, Escape, opening another top-level
-tooltip, or a completed click outside the drawer and its trigger. Clicking
-inside the drawer or its trigger does not close it; scroll gestures are not
-treated as outside clicks. Pinning is hidden in drawer mode because a drawer
-already persists until deliberate dismissal.
+device bottom safe area. A 48px labelled handle at the top closes on tap and
+follows a downward drag; drags of 96px or more dismiss, while shorter drags
+snap back. Drawer content keeps its own scroll behavior. The page remains
+scrollable and interactive: there is no backdrop, focus trap, `aria-modal`,
+inert background, or page scroll lock. The drawer also closes with Escape,
+when another top-level tooltip opens, or after a completed click outside the
+drawer and its trigger. Clicking inside the drawer or its trigger does not
+close it; scroll gestures are not treated as outside clicks. Pinning is hidden
+in drawer mode because a drawer already persists until deliberate dismissal.
+
+The handle is present only while a top-level dialog uses drawer presentation.
+At wider widths, the anchored popover keeps its existing Close button; nested
+tooltips also keep their anchored popover behavior.
 
 Nested/descriptive tooltips remain anchored popovers regardless of this setting.
 Use `presentation: 'popover'` to retain the pre-drawer behavior at every width.

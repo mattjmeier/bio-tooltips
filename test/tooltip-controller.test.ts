@@ -41,6 +41,22 @@ function createController(overrides: Partial<TooltipOptions> = {}) {
   return { reference, controller };
 }
 
+function dispatchPointer(
+  target: EventTarget,
+  type: string,
+  values: Partial<Pick<PointerEvent, 'pointerId' | 'clientX' | 'clientY' | 'button' | 'isPrimary'>> = {}
+): void {
+  const event = new Event(type, { bubbles: true, cancelable: true });
+  Object.defineProperties(event, {
+    pointerId: { value: values.pointerId ?? 1 },
+    clientX: { value: values.clientX ?? 20 },
+    clientY: { value: values.clientY ?? 20 },
+    button: { value: values.button ?? 0 },
+    isPrimary: { value: values.isPrimary ?? true },
+  });
+  target.dispatchEvent(event);
+}
+
 describe('TooltipController', () => {
   beforeEach(() => {
     document.body.replaceChildren();
@@ -127,6 +143,10 @@ describe('TooltipController', () => {
 
     expect(controller.root.dataset.presentation).toBe('drawer');
     expect(controller.isDrawerPresentation()).toBe(true);
+    const handle = controller.root.querySelector<HTMLButtonElement>('.gt-drawer-handle');
+    expect(handle?.hidden).toBe(false);
+    expect(handle?.getAttribute('aria-label')).toBe('Close');
+    expect(controller.box.firstElementChild).toBe(handle);
     expect(controller.root.querySelector('.gt-tooltip-arrow')).not.toBeNull();
     expect(updatePosition).not.toHaveBeenCalled();
 
@@ -141,6 +161,35 @@ describe('TooltipController', () => {
     expect(controller.status).toBe('closing');
     vi.runAllTimers();
     expect(controller.status).toBe('idle');
+  });
+
+  it('tracks downward handle drags, snaps back when cancelled or short, and dismisses past the threshold', () => {
+    const { reference, controller } = createController();
+    controller.updateOptions({ presentation: 'drawer' });
+    controller.enter();
+    const handle = controller.root.querySelector<HTMLButtonElement>('.gt-drawer-handle')!;
+
+    dispatchPointer(handle, 'pointerdown', { pointerId: 1, clientY: 100 });
+    dispatchPointer(handle, 'pointermove', { pointerId: 1, clientY: 140 });
+    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('40px');
+    dispatchPointer(handle, 'pointercancel', { pointerId: 1, clientY: 140 });
+    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('');
+    expect(controller.status).toBe('open');
+
+    dispatchPointer(handle, 'pointerdown', { pointerId: 2, clientY: 100 });
+    dispatchPointer(handle, 'pointermove', { pointerId: 2, clientY: 180 });
+    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('80px');
+    dispatchPointer(handle, 'pointerup', { pointerId: 2, clientY: 180 });
+    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('');
+    expect(controller.status).toBe('open');
+
+    dispatchPointer(handle, 'pointerdown', { pointerId: 3, clientY: 100 });
+    dispatchPointer(handle, 'pointermove', { pointerId: 3, clientY: 205 });
+    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('105px');
+    dispatchPointer(handle, 'pointerup', { pointerId: 3, clientY: 205 });
+    expect(controller.status).toBe('closing');
+    expect(document.activeElement).toBe(reference);
+    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('');
   });
 
   it('resolves an explicitly requested drawer during construction and keeps its z-index', () => {
@@ -187,12 +236,16 @@ describe('TooltipController', () => {
     const { controller } = createController();
     controller.updateOptions({ presentation: 'auto' });
     expect(controller.root.dataset.presentation).toBe('drawer');
+    const handle = controller.root.querySelector<HTMLButtonElement>('.gt-drawer-handle')!;
+    expect(handle.hidden).toBe(false);
 
     mediaQuery.matches = false;
     listener?.({ matches: false } as MediaQueryListEvent);
     expect(controller.root.dataset.presentation).toBe('popover');
+    expect(handle.hidden).toBe(true);
 
     controller.updateOptions({ presentation: 'drawer' });
+    expect(handle.hidden).toBe(false);
     mediaQuery.matches = false;
     listener?.({ matches: false } as MediaQueryListEvent);
     expect(controller.root.dataset.presentation).toBe('drawer');

@@ -43,6 +43,16 @@ export interface TooltipControllerOptions<TData> {
   presentation?: TooltipPresentation;
 }
 
+interface DrawerPointerGesture {
+  pointerId: number;
+  startX: number;
+  startY: number;
+  dragging: boolean;
+}
+
+const DRAWER_DRAG_START_DISTANCE = 6;
+const DRAWER_DISMISS_DISTANCE = 96;
+
 export class TooltipController<TData = unknown> {
   readonly reference: Element;
   readonly root: HTMLDivElement;
@@ -115,6 +125,10 @@ export class TooltipController<TData = unknown> {
   private presentationSetting: TooltipPresentation;
   private presentation: 'popover' | 'drawer' = 'popover';
   private presentationMediaQuery?: MediaQueryList;
+  private readonly drawerHandle: HTMLButtonElement | null;
+  private drawerGesture?: DrawerPointerGesture;
+  private suppressNextDrawerClick = false;
+  private drawerClickResetTimer?: ReturnType<typeof setTimeout>;
 
   constructor(reference: Element, options: TooltipControllerOptions<TData>) {
     this.reference = reference;
@@ -158,6 +172,18 @@ export class TooltipController<TData = unknown> {
     this.content.dataset.state = 'hidden';
     this.content.innerHTML = options.content ?? '';
 
+    this.drawerHandle = !this.parent && this.kind === 'dialog'
+      ? document.createElement('button')
+      : null;
+    if (this.drawerHandle) {
+      this.drawerHandle.type = 'button';
+      this.drawerHandle.className = 'gt-close-button gt-drawer-handle';
+      this.drawerHandle.setAttribute('aria-label', 'Close');
+      this.drawerHandle.hidden = true;
+      this.drawerHandle.innerHTML = '<span class="gt-drawer-handle-indicator" aria-hidden="true"></span>';
+      this.box.append(this.drawerHandle);
+    }
+
     this.arrow = document.createElement('div');
     this.arrow.className = 'gt-tooltip-arrow';
     this.arrow.setAttribute('aria-hidden', 'true');
@@ -178,6 +204,7 @@ export class TooltipController<TData = unknown> {
       this.reference.setAttribute('aria-describedby', appendId(this.originalReferenceDescribedBy, this.tooltipId));
     }
     this.installInteractions();
+    this.installDrawerHandleInteractions();
   }
 
   /** The resolved presentation currently used by this controller. */
@@ -191,9 +218,14 @@ export class TooltipController<TData = unknown> {
     this.presentationSetting = presentation;
     if (presentation === 'auto') this.ensurePresentationMediaQuery();
     const next = this.resolvePresentation();
-    if (next === this.presentation && this.root.dataset.presentation === next) return;
+    if (next === this.presentation && this.root.dataset.presentation === next) {
+      this.syncDrawerHandle();
+      return;
+    }
+    if (next !== 'drawer') this.cancelDrawerGesture();
     this.presentation = next;
     this.root.dataset.presentation = next;
+    this.syncDrawerHandle();
 
     this.stopPositioning();
     this.clearPositioningStyles();
@@ -346,6 +378,9 @@ export class TooltipController<TData = unknown> {
 
   destroy(): void {
     if (this.state.isDestroyed) return;
+    this.cancelDrawerGesture();
+    if (this.drawerClickResetTimer) clearTimeout(this.drawerClickResetTimer);
+    this.drawerClickResetTimer = undefined;
     if (this.containsPanelFocus()) this.returnFocus();
     this.status = 'destroyed';
     this.state.isDestroyed = true;
@@ -454,6 +489,7 @@ export class TooltipController<TData = unknown> {
 
   private closeNow(): void {
     if (this.state.isDestroyed || (this.status !== 'open' && this.status !== 'opening')) return;
+    this.cancelDrawerGesture();
     this.hideTimer = undefined;
     const restoreFocus = this.kind === 'dialog' && this.containsPanelFocus();
     if (restoreFocus) this.returnFocus();
@@ -594,6 +630,110 @@ export class TooltipController<TData = unknown> {
     if (this.presentationSetting === 'drawer') return 'drawer';
     if (this.presentationSetting === 'popover') return 'popover';
     return this.presentationMediaQuery?.matches ? 'drawer' : 'popover';
+  }
+
+  private syncDrawerHandle(): void {
+    if (this.drawerHandle) this.drawerHandle.hidden = !this.isDrawerPresentation();
+  }
+
+  private installDrawerHandleInteractions(): void {
+    const handle = this.drawerHandle;
+    if (!handle) return;
+
+    this.listen(handle, 'pointerdown', event => this.handleDrawerPointerDown(event as PointerEvent));
+    this.listen(handle, 'pointermove', event => this.handleDrawerPointerMove(event as PointerEvent));
+    this.listen(handle, 'pointerup', event => this.handleDrawerPointerUp(event as PointerEvent));
+    this.listen(handle, 'pointercancel', event => this.handleDrawerPointerCancel(event as PointerEvent));
+    this.listen(handle, 'lostpointercapture', () => this.cancelDrawerGesture());
+    this.listen(handle, 'click', event => this.handleDrawerClick(event as MouseEvent));
+  }
+
+  private handleDrawerPointerDown(event: PointerEvent): void {
+    if (!this.isDrawerPresentation() || this.status !== 'open' || !this.state.isVisible
+      || !event.isPrimary || event.button !== 0) return;
+
+    this.drawerGesture = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      dragging: false,
+    };
+
+    if (typeof this.drawerHandle?.setPointerCapture === 'function') {
+      try {
+        this.drawerHandle.setPointerCapture(event.pointerId);
+      } catch {
+        // The window listeners still track the gesture if capture is unavailable.
+      }
+    }
+  }
+
+  private handleDrawerPointerMove(event: PointerEvent): void {
+    const gesture = this.drawerGesture;
+    if (!gesture || gesture.pointerId !== event.pointerId) return;
+
+    const deltaX = event.clientX - gesture.startX;
+    const deltaY = event.clientY - gesture.startY;
+    if (Math.abs(deltaX) >= DRAWER_DRAG_START_DISTANCE && Math.abs(deltaX) > Math.max(0, deltaY)) {
+      this.cancelDrawerGesture();
+      return;
+    }
+
+    const downwardDistance = Math.max(0, deltaY);
+    if (!gesture.dragging && downwardDistance < DRAWER_DRAG_START_DISTANCE) return;
+
+    gesture.dragging = true;
+    this.box.dataset.drawerDragging = 'true';
+    this.box.style.setProperty('--gt-drawer-drag-y', `${downwardDistance}px`);
+  }
+
+  private handleDrawerPointerUp(event: PointerEvent): void {
+    const gesture = this.drawerGesture;
+    if (!gesture || gesture.pointerId !== event.pointerId) return;
+
+    const shouldDismiss = gesture.dragging
+      && event.clientY - gesture.startY >= DRAWER_DISMISS_DISTANCE;
+    if (gesture.dragging) {
+      this.suppressNextDrawerClick = true;
+      this.drawerClickResetTimer = setTimeout(() => {
+        this.suppressNextDrawerClick = false;
+        this.drawerClickResetTimer = undefined;
+      }, 0);
+    }
+    this.cancelDrawerGesture();
+    if (shouldDismiss) this.close();
+  }
+
+  private handleDrawerClick(event: MouseEvent): void {
+    // Pointer drags ending on the handle also synthesize a click. Ignore that
+    // one event so a short drag can snap back without acting like a tap.
+    if (!this.suppressNextDrawerClick || event.detail === 0) return;
+    this.suppressNextDrawerClick = false;
+    if (this.drawerClickResetTimer) clearTimeout(this.drawerClickResetTimer);
+    this.drawerClickResetTimer = undefined;
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  private handleDrawerPointerCancel(event: PointerEvent): void {
+    if (this.drawerGesture?.pointerId === event.pointerId) this.cancelDrawerGesture();
+  }
+
+  private cancelDrawerGesture(): void {
+    const pointerId = this.drawerGesture?.pointerId;
+    this.drawerGesture = undefined;
+    this.box.removeAttribute('data-drawer-dragging');
+    this.box.style.removeProperty('--gt-drawer-drag-y');
+
+    if (pointerId !== undefined && this.drawerHandle
+      && typeof this.drawerHandle.hasPointerCapture === 'function'
+      && this.drawerHandle.hasPointerCapture(pointerId)) {
+      try {
+        this.drawerHandle.releasePointerCapture(pointerId);
+      } catch {
+        // Capture may already have been released by a pointer cancellation.
+      }
+    }
   }
 
   /** Synchronize a rendered pin control with the controller's current state. */
