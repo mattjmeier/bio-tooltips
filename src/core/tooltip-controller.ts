@@ -1,4 +1,4 @@
-import type { CoreTooltipConfig, TooltipOptions } from './config.js';
+import type { CoreTooltipConfig, TooltipOptions, TooltipPresentation } from './config.js';
 import { startPositioning, type ActivePositioner } from './positioning.js';
 import { logTooltipTiming } from './timing.js';
 import { generateUniqueTooltipId } from '../utils.js';
@@ -39,6 +39,8 @@ export interface TooltipControllerOptions<TData> {
   timingConfig?: CoreTooltipConfig;
   kind?: 'dialog' | 'tooltip';
   accessibleName?: string;
+  /** Presentation for top-level dialogs. Nested tooltips always use popovers. */
+  presentation?: TooltipPresentation;
 }
 
 export class TooltipController<TData = unknown> {
@@ -110,6 +112,9 @@ export class TooltipController<TData = unknown> {
   // proceeds with the hide that was deferred.
   private _pendingHide = false;
   private explicitClose = false;
+  private presentationSetting: TooltipPresentation;
+  private presentation: 'popover' | 'drawer' = 'popover';
+  private presentationMediaQuery?: MediaQueryList;
 
   constructor(reference: Element, options: TooltipControllerOptions<TData>) {
     this.reference = reference;
@@ -126,6 +131,11 @@ export class TooltipController<TData = unknown> {
     this.originalReferenceControls = reference.getAttribute('aria-controls');
     this.originalReferenceDescribedBy = reference.getAttribute('aria-describedby');
     this.kind = options.kind ?? 'dialog';
+    // Presentation is a top-level dialog concern. Nested and descriptive
+    // tooltip controllers always retain their anchored popover behavior.
+    this.presentationSetting = this.parent || this.kind !== 'dialog'
+      ? 'popover'
+      : (options.presentation ?? 'popover');
     this.tooltipId = `gt-tooltip-${generateUniqueTooltipId()}`;
 
     this.root = document.createElement('div');
@@ -154,6 +164,7 @@ export class TooltipController<TData = unknown> {
 
     this.box.append(this.content, this.arrow);
     this.root.append(this.box);
+    this.initializePresentation();
     this.reference.setAttribute('data-gt-tooltip-reference', '');
     if (this.kind === 'dialog') {
       this.reference.setAttribute('aria-expanded', 'false');
@@ -167,6 +178,34 @@ export class TooltipController<TData = unknown> {
       this.reference.setAttribute('aria-describedby', appendId(this.originalReferenceDescribedBy, this.tooltipId));
     }
     this.installInteractions();
+  }
+
+  /** The resolved presentation currently used by this controller. */
+  isDrawerPresentation(): boolean {
+    return this.presentation === 'drawer';
+  }
+
+  /** Update the presentation setting, including a live auto breakpoint change. */
+  setPresentation(presentation: TooltipPresentation): void {
+    if (this.parent || this.kind !== 'dialog') return;
+    this.presentationSetting = presentation;
+    if (presentation === 'auto') this.ensurePresentationMediaQuery();
+    const next = this.resolvePresentation();
+    if (next === this.presentation && this.root.dataset.presentation === next) return;
+    this.presentation = next;
+    this.root.dataset.presentation = next;
+
+    this.stopPositioning();
+    this.clearPositioningStyles();
+    if (next === 'drawer') {
+      this.root.style.zIndex = String(this.options.tooltip.zIndex ?? 9999);
+      // Pinning is a desktop persistence affordance. A drawer is deliberately
+      // non-modal and single-instance, so it cannot become a stacked pin.
+      this._isPinned = false;
+    } else {
+      this.restartPositioning();
+    }
+    this.syncPinButton();
   }
 
   show(): void {
@@ -223,7 +262,10 @@ export class TooltipController<TData = unknown> {
    */
   dismiss(): void {
     if (this.state.isDestroyed || this.status === 'idle' || this.status === 'closing') return;
-    if (this._isPinned || this.hasFocus()) return;
+    // A drawer is single-instance even when it owns keyboard focus. Opening a
+    // new top-level panel must replace it rather than stack another fixed sheet
+    // over the same viewport edge. Popovers retain their focus/pin protection.
+    if (!this.isDrawerPresentation() && (this._isPinned || this.hasFocus())) return;
     this._peerDismissed = true;
     if (this.timingConfig) {
       logTooltipTiming(this, this.timingConfig, 'dismissed by peer', { status: this.status });
@@ -257,6 +299,7 @@ export class TooltipController<TData = unknown> {
       tooltip: { ...this.options.tooltip, ...options.tooltip } as TooltipOptions,
     };
     if (options.theme) this.setTheme(options.theme);
+    if (options.presentation !== undefined && !this.parent) this.setPresentation(options.presentation);
     if (options.accessibleName && this.kind === 'dialog') this.box.setAttribute('aria-label', options.accessibleName);
     if (this.state.isMounted) this.restartPositioning();
   }
@@ -286,7 +329,13 @@ export class TooltipController<TData = unknown> {
   }
 
   setPinned(pinned: boolean): void {
+    if (this.isDrawerPresentation()) {
+      this._isPinned = false;
+      this.syncPinButton();
+      return;
+    }
     this._isPinned = pinned;
+    this.syncPinButton();
     if (pinned) {
       this.clearHideTimers();
       this.show();
@@ -475,7 +524,7 @@ export class TooltipController<TData = unknown> {
 
   private restartPositioning(): void {
     this.stopPositioning();
-    if (!this.state.isMounted) return;
+    if (!this.state.isMounted || this.isDrawerPresentation()) return;
     this.positioner = startPositioning({
       reference: this.reference,
       root: this.root,
@@ -494,6 +543,71 @@ export class TooltipController<TData = unknown> {
   private stopPositioning(): void {
     this.positioner?.destroy();
     this.positioner = undefined;
+  }
+
+  private clearPositioningStyles(): void {
+    this.root.style.removeProperty('position');
+    this.root.style.removeProperty('z-index');
+    this.root.style.removeProperty('left');
+    this.root.style.removeProperty('top');
+    this.root.style.removeProperty('right');
+    this.root.style.removeProperty('bottom');
+    this.root.style.removeProperty('width');
+    this.root.style.removeProperty('max-width');
+    this.box.style.removeProperty('width');
+    this.box.style.removeProperty('max-width');
+    this.content.style.removeProperty('max-height');
+    this.content.style.removeProperty('--gt-available-width');
+    this.content.style.removeProperty('--gt-available-height');
+    this.arrow.style.cssText = '';
+  }
+
+  private initializePresentation(): void {
+    this.root.dataset.presentation = this.presentation;
+    if (this.parent || this.kind !== 'dialog') return;
+    this.setPresentation(this.presentationSetting);
+  }
+
+  private ensurePresentationMediaQuery(): void {
+    if (this.presentationMediaQuery || typeof window === 'undefined') return;
+    const matchMedia = window.matchMedia;
+    if (typeof matchMedia !== 'function') return;
+
+    const mediaQuery = matchMedia('(max-width: 600px)');
+    const update = () => {
+      // The listener can outlive a runtime switch from auto to a forced mode.
+      // Do not let a later viewport change overwrite that explicit choice.
+      if (this.presentationSetting === 'auto') this.setPresentation('auto');
+    };
+    this.presentationMediaQuery = mediaQuery;
+    if (typeof mediaQuery.addEventListener === 'function'
+      && typeof mediaQuery.removeEventListener === 'function') {
+      mediaQuery.addEventListener('change', update);
+      this.cleanupListeners.push(() => mediaQuery.removeEventListener('change', update));
+    } else if (typeof mediaQuery.addListener === 'function' && typeof mediaQuery.removeListener === 'function') {
+      mediaQuery.addListener(update);
+      this.cleanupListeners.push(() => mediaQuery.removeListener(update));
+    }
+  }
+
+  private resolvePresentation(): 'popover' | 'drawer' {
+    if (this.presentationSetting === 'drawer') return 'drawer';
+    if (this.presentationSetting === 'popover') return 'popover';
+    return this.presentationMediaQuery?.matches ? 'drawer' : 'popover';
+  }
+
+  /** Synchronize a rendered pin control with the controller's current state. */
+  syncPinButton(): void {
+    if (!this._pinButton) return;
+    const drawer = this.isDrawerPresentation();
+    const pinned = Boolean(this._isPinned) && !drawer;
+    this._pinButton.hidden = drawer;
+    if (drawer) this._pinButton.setAttribute('disabled', '');
+    else this._pinButton.removeAttribute('disabled');
+    this._pinButton.setAttribute('aria-hidden', String(drawer));
+    this._pinButton.setAttribute('aria-pressed', String(pinned));
+    this._pinButton.classList.toggle('gt-pin-active', pinned);
+    this._pinButton.setAttribute('aria-label', pinned ? 'Unpin tooltip' : 'Pin tooltip');
   }
 
   private setChildVisible(child: TooltipController<any>, visible: boolean): void {
@@ -561,6 +675,12 @@ export class TooltipController<TData = unknown> {
       if (!event.defaultPrevented) this.handlePanelKeydown(event as KeyboardEvent);
     });
     this.listen(this.root, 'gt:content-resize', () => this.handleContentResize());
+    this.listen(document, 'click', (event: Event) => {
+      if (!this.isDrawerPresentation() || !this.state.isMounted || this.status !== 'open' || this._isPinned) return;
+      const target = event.target;
+      if (target instanceof Node && (this.root.contains(target) || this.reference.contains(target))) return;
+      this.close();
+    }, { capture: true });
   }
 
   private makeVisible(): void {
@@ -669,6 +789,7 @@ export class TooltipController<TData = unknown> {
   }
 
   private handlePointerLeave(event: MouseEvent): void {
+    if (this.isDrawerPresentation()) return;
     const next = event.relatedTarget;
     if (next instanceof Node && (this.reference.contains(next) || this.root.contains(next))) return;
     this._isPointerInside = false;
@@ -721,6 +842,7 @@ export class TooltipController<TData = unknown> {
   }
 
   private handleFocusLeave(): void {
+    if (this.isDrawerPresentation()) return;
     setTimeout(() => {
       const active = document.activeElement;
       if (this.hasFocus() || this._isPointerInside) return;

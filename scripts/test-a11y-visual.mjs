@@ -29,6 +29,25 @@ try {
     await page.keyboard.press('Enter');
     await page.locator(provider === 'gene' ? '.gt-gene-text-alternative-toggle, .gt-gene-text-alternative:not([hidden])' : '.gt-chem-id-table').waitFor();
     const panel = page.getByRole('dialog');
+    const drawerRoot = page.locator('[data-gt-tooltip-root][data-presentation="drawer"]');
+    assert.equal(await drawerRoot.count(), 1, `${provider}: 320px presentation must use the drawer`);
+    assert.equal(await panel.getAttribute('aria-modal'), null, `${provider}: drawer must remain non-modal`);
+    assert.equal(await page.locator('.gt-pin-button').first().isHidden(), true, `${provider}: pinning is hidden in drawer mode`);
+    const drawerBounds = await panel.boundingBox();
+    const drawerContentBounds = await page.locator('.gt-tooltip-content').boundingBox();
+    assert.ok(drawerBounds && drawerBounds.x >= -1 && drawerBounds.y >= -1
+      && drawerBounds.width <= 320 + 1 && drawerBounds.height <= 720 * 0.75 + 1,
+    `${provider}: drawer must fit the viewport and 75vh cap`);
+    assert.ok(drawerContentBounds && drawerContentBounds.height <= 720 * 0.75 + 1,
+      `${provider}: drawer content must scroll within the 75vh cap`);
+    assert.notEqual(await page.evaluate(() => document.documentElement.style.overflow), 'hidden', `${provider}: drawer must not lock page scrolling`);
+    await page.locator('.gt-tooltip-content').click({ position: { x: 5, y: 5 } });
+    assert.equal(await drawerRoot.count(), 1, `${provider}: clicking inside drawer must not close it`);
+    await page.mouse.click(2, 2);
+    await page.waitForFunction(() => !document.querySelector('[data-gt-tooltip-root]'));
+    await page.locator('#trigger').focus();
+    await page.keyboard.press('Enter');
+    await page.locator(provider === 'gene' ? '.gt-gene-text-alternative-toggle, .gt-gene-text-alternative:not([hidden])' : '.gt-chem-id-table').waitFor();
     await page.evaluate(() => document.querySelectorAll('details').forEach(el => { el.open = true; }));
     for (const mode of ['320px', 'text-spacing', '200-percent-text']) {
       if (mode === 'text-spacing') await page.addStyleTag({ content: '.gt-tooltip-box, .gt-tooltip-box * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } .gt-tooltip-box p { margin-bottom: 2em !important; }' });
@@ -48,7 +67,7 @@ try {
       const close = panel.locator('.gt-close-button').first();
       await close.focus();
       const bounds = await close.boundingBox();
-      assert.ok(bounds && bounds.width >= 24 && bounds.height >= 24, `${provider} ${mode}: close target below 24px`);
+      assert.ok(bounds && bounds.width >= 44 && bounds.height >= 44, `${provider} ${mode}: drawer close target below 44px`);
       assert.ok(await close.evaluate(el => getComputedStyle(el).outlineStyle !== 'none'), 'Focused close button must have a visible outline');
     }
     await page.emulateMedia({ reducedMotion: 'reduce' });

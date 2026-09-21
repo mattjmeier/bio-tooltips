@@ -83,6 +83,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
         onDestroy: cleanupTooltipLifecycle,
       },
       kind: 'dialog',
+      presentation: config.presentation ?? 'auto',
     }));
 
     instances.forEach(instance => {

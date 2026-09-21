@@ -73,6 +73,21 @@ describe('tooltip engine lifecycle', () => {
     vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: false })));
   });
 
+  it('forwards a forced presentation through merged public configuration', () => {
+    const engine = createHarness(vi.fn().mockResolvedValue(new Map()));
+    const reference = document.createElement('span');
+    reference.className = 'test-tooltip';
+    reference.textContent = 'CONFIG-PRESENTATION';
+    document.body.append(reference);
+
+    const cleanup = engine.init({ presentation: 'drawer' });
+    reference.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.runAllTimers();
+
+    expect(document.querySelector('[data-gt-tooltip-root]')?.getAttribute('data-presentation')).toBe('drawer');
+    cleanup();
+  });
+
   it('does not remount or mutate detached UI when a fetch resolves after cleanup', async () => {
     let resolveFetch!: (value: Map<string, TestData>) => void;
     const fetchPromise = new Promise<Map<string, TestData>>(resolve => {

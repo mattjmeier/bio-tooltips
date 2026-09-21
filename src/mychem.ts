@@ -9,6 +9,7 @@ export type {
   SectionVariant,
   TooltipOptions,
   TooltipPlacementOptions,
+  TooltipPresentation,
   TooltipTimingEvent,
   TooltipTimingObserver,
 } from './core/config.js';

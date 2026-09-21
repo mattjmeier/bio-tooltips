@@ -120,6 +120,109 @@ describe('TooltipController', () => {
     controller.destroy();
   });
 
+  it('uses a non-modal bottom drawer without starting anchored positioning', () => {
+    const { reference, controller } = createController();
+    controller.updateOptions({ presentation: 'drawer' });
+    controller.enter();
+
+    expect(controller.root.dataset.presentation).toBe('drawer');
+    expect(controller.isDrawerPresentation()).toBe(true);
+    expect(controller.root.querySelector('.gt-tooltip-arrow')).not.toBeNull();
+    expect(updatePosition).not.toHaveBeenCalled();
+
+    const inside = document.createElement('button');
+    controller.content.append(inside);
+    inside.click();
+    expect(controller.status).toBe('open');
+    reference.click();
+    expect(controller.status).toBe('open');
+
+    document.body.click();
+    expect(controller.status).toBe('closing');
+    vi.runAllTimers();
+    expect(controller.status).toBe('idle');
+  });
+
+  it('resolves an explicitly requested drawer during construction and keeps its z-index', () => {
+    const reference = document.createElement('button');
+    document.body.append(reference);
+    const controller = new TooltipController(reference, {
+      content: 'Details',
+      presentation: 'drawer',
+      tooltip: { ...immediateOptions, zIndex: 4321 },
+      theme: 'light',
+    });
+
+    expect(controller.root.dataset.presentation).toBe('drawer');
+    controller.enter();
+    expect(controller.root.style.zIndex).toBe('4321');
+    expect(updatePosition).not.toHaveBeenCalled();
+    controller.destroy();
+  });
+
+  it('lets a new top-level tooltip dismiss a keyboard-focused drawer', () => {
+    const { reference, controller } = createController();
+    controller.updateOptions({ presentation: 'drawer' });
+    controller.enter();
+    expect(document.activeElement).toBe(controller.box);
+
+    controller.dismiss();
+
+    expect(controller.status).toBe('closing');
+    expect(document.activeElement).toBe(reference);
+  });
+
+  it('switches automatic presentation at the inclusive 600px breakpoint and cleans up', () => {
+    let listener: ((event: MediaQueryListEvent) => void) | undefined;
+    const removeListener = vi.fn();
+    const mediaQuery = {
+      matches: true,
+      addEventListener: vi.fn((_type: string, callback: (event: MediaQueryListEvent) => void) => {
+        listener = callback;
+      }),
+      removeEventListener: removeListener,
+    } as unknown as MediaQueryList;
+    vi.stubGlobal('matchMedia', vi.fn(() => mediaQuery));
+
+    const { controller } = createController();
+    controller.updateOptions({ presentation: 'auto' });
+    expect(controller.root.dataset.presentation).toBe('drawer');
+
+    mediaQuery.matches = false;
+    listener?.({ matches: false } as MediaQueryListEvent);
+    expect(controller.root.dataset.presentation).toBe('popover');
+
+    controller.updateOptions({ presentation: 'drawer' });
+    mediaQuery.matches = false;
+    listener?.({ matches: false } as MediaQueryListEvent);
+    expect(controller.root.dataset.presentation).toBe('drawer');
+
+    controller.destroy();
+    expect(removeListener).toHaveBeenCalledTimes(1);
+    vi.unstubAllGlobals();
+  });
+
+  it('keeps nested tooltip controllers anchored when the parent is a drawer', () => {
+    const { controller: parent } = createController();
+    parent.updateOptions({ presentation: 'drawer' });
+    parent.enter();
+    const childReference = document.createElement('button');
+    parent.content.append(childReference);
+    const child = new TooltipController(childReference, {
+      content: 'Nested content',
+      tooltip: { ...immediateOptions, appendTo: parent.root },
+      theme: parent.theme,
+      parent,
+    });
+    parent.addNestedTooltip(child);
+    child.show();
+    vi.runAllTimers();
+
+    expect(parent.isDrawerPresentation()).toBe(true);
+    expect(child.isDrawerPresentation()).toBe(false);
+    expect(child.root.dataset.presentation).toBe('popover');
+  });
+
   it('closes the focused dialog on Escape and returns focus to its trigger', () => {
     const { reference, controller } = createController();
     reference.click();

@@ -7,14 +7,14 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const gene = JSON.parse(await readFile(root + 'benchmark/fixtures/mygene-tp53.json', 'utf8')).data;
 const chemical = JSON.parse(await readFile(root + 'benchmark/fixtures/mychem-aspirin.json', 'utf8')).data;
 const browser = await chromium.launch();
-async function fixture(provider, mode = 'ready', tag = 'span') {
+async function fixture(provider, mode = 'ready', tag = 'span', presentation = 'auto') {
   const page = await browser.newPage();
   await page.route('**/*', route => route.abort());
   const attrs = tag === 'a' ? 'href="#destination"' : tag === 'button' ? 'type="button"' : '';
   await page.setContent(`<html lang="en"><head><title>Keyboard fixture</title></head><body><main><button id="before">Before</button><${tag} id="trigger" ${attrs} class="${provider}-tooltip" data-species="human" ${provider === 'chemical' ? 'data-scope="pubchem" data-query="2244"' : ''} aria-controls="author-details" aria-describedby="description">${provider === 'gene' ? 'TP53' : 'aspirin'}</${tag}><button id="after">After</button><p id="description">Biological details</p><div id="author-details"></div><div id="destination"></div></main></body></html>`);
   await page.addStyleTag({ path: root + 'dist/bio-tooltips.css' });
   await page.addScriptTag({ path: root + 'dist/bio-tooltips.global.js' });
-  await page.evaluate(({ provider, mode, gene, chemical }) => {
+  await page.evaluate(({ provider, mode, gene, chemical, presentation }) => {
     window.fetch = async () => {
       if (mode === 'delayed') await new Promise(resolve => { window.releaseResponse = resolve; });
       if (mode === 'error') throw new Error('Local fixture failure');
@@ -22,10 +22,11 @@ async function fixture(provider, mode = 'ready', tag = 'span') {
     };
     const options = { prefetch: 'none', visualPreload: 'none', ideogram: { enabled: false },
       display: { geneTrack: false }, tooltipOptions: { showDuration: 0, hideDuration: 0 },
+      presentation,
       structureRenderer: () => '<div role="img" aria-label="Chemical fixture"></div>' };
     window.initialize = () => (provider === 'gene' ? GeneTooltip : ChemicalTooltip).init(options);
     window.cleanup = window.initialize();
-  }, { provider, mode, gene, chemical });
+  }, { provider, mode, gene, chemical, presentation });
   return page;
 }
 try {
@@ -79,6 +80,27 @@ try {
       assert.equal(await page.locator('[data-gt-tooltip-root]').count(), 0);
       await page.close();
     }
+    const drawerPage = await fixture(provider, 'ready', 'span', 'drawer');
+    const drawerTrigger = drawerPage.locator('#trigger');
+    await drawerTrigger.focus();
+    await drawerPage.keyboard.press('Enter');
+    const drawer = drawerPage.getByRole('dialog');
+    await drawer.waitFor();
+    assert.equal(await drawer.evaluate(el => el.closest('[data-presentation="drawer"]')?.getAttribute('data-presentation')), 'drawer');
+    assert.equal(await drawer.getAttribute('aria-modal'), null, `${provider}: forced drawer remains non-modal`);
+    await drawer.focus();
+    await drawerPage.keyboard.press('Tab');
+    assert.equal(await drawer.evaluate(el => el.contains(document.activeElement) && el !== document.activeElement), true,
+      `${provider}: drawer Tab enters its controls without trapping the page`);
+    await drawerPage.keyboard.press('Escape');
+    assert.equal(await drawerPage.evaluate(() => document.activeElement.id), 'trigger');
+    await drawerPage.locator('#trigger').focus();
+    await drawerPage.keyboard.press('Enter');
+    await drawer.waitFor();
+    await drawerPage.mouse.click(2, 2);
+    await drawerPage.waitForFunction(() => !document.querySelector('[data-gt-tooltip-root]'));
+    await drawerPage.evaluate(() => window.cleanup());
+    await drawerPage.close();
     for (const mode of ['delayed', 'error', 'empty']) {
       const page = await fixture(provider, mode);
       await page.locator('#trigger').focus();
