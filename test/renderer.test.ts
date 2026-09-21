@@ -63,6 +63,17 @@ describe('renderTooltipHTML', () => {
     );
   });
 
+  it('styles the drawer handle as a touch target and keeps it separate from popover close controls', () => {
+    const stylesheet = readFileSync(resolve('src/css/main.css'), 'utf8');
+
+    expect(stylesheet).toContain('.gt-drawer-handle-indicator');
+    expect(stylesheet).toContain('flex: 0 0 48px;');
+    expect(stylesheet).toContain('touch-action: pan-x;');
+    expect(stylesheet).toContain("[data-gt-tooltip-root][data-presentation='drawer'] .gt-tooltip-content .gt-close-button");
+    expect(stylesheet).toContain('data-drawer-dragging');
+    expect(stylesheet).toContain('prefers-reduced-motion: reduce');
+  });
+
   it('should render the divider section variant when requested', () => {
     const html = renderTooltipHTML(mockGeneData, {
       sectionVariant: 'dividers',

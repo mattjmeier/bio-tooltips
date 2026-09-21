@@ -117,7 +117,7 @@ try {
       const status = await panel.locator('.gt-panel-status').textContent();
       assert.match(status, mode === 'delayed' ? /loaded/ : mode === 'error' ? /Error/ : /not found/);
       assert.equal(await panel.evaluate(el => document.activeElement === el), true, 'Async rendering retains entry focus');
-      await panel.locator('.gt-close-button').first().focus();
+      await panel.locator('.gt-tooltip-content .gt-close-button').first().focus();
       await page.keyboard.press('Enter');
       assert.equal(await page.evaluate(() => document.activeElement.id), 'trigger');
       await page.close();
