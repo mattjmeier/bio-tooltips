@@ -1405,7 +1405,8 @@ ul.gene-tooltip-nested-list {
 }
 .gene-tooltip-more-btn,
 .gt-summary-toggle,
-.gt-collapsible-header[role='button'] {
+.gt-collapsible-header[role='button'],
+button.gt-collapsible-header {
   box-sizing: border-box;
   font: inherit;
   color: inherit;

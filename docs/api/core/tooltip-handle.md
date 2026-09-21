@@ -6,7 +6,7 @@
 
 ### TooltipHandle
 
-Defined in: core/tooltip-handle.ts:8
+Defined in: [core/tooltip-handle.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-handle.ts#L8)
 
 Public controls for one tooltip attached to a DOM element.
 
@@ -16,7 +16,7 @@ Public controls for one tooltip attached to a DOM element.
 
 > **close**(): `void`
 
-Defined in: core/tooltip-handle.ts:12
+Defined in: [core/tooltip-handle.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-handle.ts#L12)
 
 Close the tooltip, allowing its configured hide transition to finish.
 
@@ -28,7 +28,7 @@ Close the tooltip, allowing its configured hide transition to finish.
 
 > **destroy**(): `void`
 
-Defined in: core/tooltip-handle.ts:14
+Defined in: [core/tooltip-handle.ts:14](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-handle.ts#L14)
 
 Close and remove the tooltip, restoring the anchor's original attributes.
 
@@ -40,7 +40,7 @@ Close and remove the tooltip, restoring the anchor's original attributes.
 
 > **open**(`options?`): `void`
 
-Defined in: core/tooltip-handle.ts:10
+Defined in: [core/tooltip-handle.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-handle.ts#L10)
 
 Open immediately, using the anchor's current text and data attributes.
 
@@ -58,7 +58,7 @@ Open immediately, using the anchor's current text and data attributes.
 
 ### TooltipOpenOptions
 
-Defined in: core/tooltip-handle.ts:2
+Defined in: [core/tooltip-handle.ts:2](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-handle.ts#L2)
 
 Options for opening a tooltip attached to a single element.
 
@@ -68,6 +68,6 @@ Options for opening a tooltip attached to a single element.
 
 > `optional` **focus?**: `boolean`
 
-Defined in: core/tooltip-handle.ts:4
+Defined in: [core/tooltip-handle.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-handle.ts#L4)
 
 Move focus into the tooltip dialog after it opens. Defaults to `false`.

@@ -54,6 +54,20 @@ try {
     await page.keyboard.press('Enter');
     await page.locator(provider === 'gene' ? '.gt-gene-text-alternative-toggle, .gt-gene-text-alternative:not([hidden])' : '.gt-chem-id-table').waitFor();
     await page.evaluate(() => document.querySelectorAll('details').forEach(el => { el.open = true; }));
+    const sectionHeader = page.locator('.gt-collapsible-header.gt-is-collapsible').first();
+    const headerDefaults = await sectionHeader.evaluate(el => {
+      const style = getComputedStyle(el);
+      return {
+        backgroundColor: style.backgroundColor,
+        borderTopWidth: style.borderTopWidth,
+        fontFamily: style.fontFamily,
+        inheritedFontFamily: getComputedStyle(el.parentElement).fontFamily,
+      };
+    });
+    assert.equal(headerDefaults.backgroundColor, 'rgba(0, 0, 0, 0)', `${provider}: section buttons have no native button background`);
+    assert.equal(headerDefaults.borderTopWidth, '0px', `${provider}: section buttons have no native button border`);
+    assert.equal(headerDefaults.fontFamily, headerDefaults.inheritedFontFamily,
+      `${provider}: section buttons inherit the tooltip font instead of native button typography`);
     for (const mode of ['320px', 'text-spacing', '200-percent-text']) {
       if (mode === 'text-spacing') await page.addStyleTag({ content: '.gt-tooltip-box, .gt-tooltip-box * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } .gt-tooltip-box p { margin-bottom: 2em !important; }' });
       if (mode === '200-percent-text') await panel.evaluate(el => {

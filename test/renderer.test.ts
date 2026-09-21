@@ -63,6 +63,19 @@ describe('renderTooltipHTML', () => {
     );
   });
 
+  it('resets native collapsible header buttons while retaining their keyboard focus indicator', () => {
+    const stylesheet = readFileSync(resolve('src/css/main.css'), 'utf8');
+    const resetStart = stylesheet.indexOf('button.gt-collapsible-header');
+    const resetEnd = stylesheet.indexOf('\n}', resetStart);
+    const resetRule = stylesheet.slice(resetStart, resetEnd);
+
+    expect(resetStart).toBeGreaterThan(-1);
+    expect(resetRule).toContain('background: transparent;');
+    expect(resetRule).toContain('border: 0;');
+    expect(stylesheet).toContain('.gt-collapsible-header.gt-is-collapsible:focus-visible');
+    expect(stylesheet).toContain('outline: 3px solid var(--gt-focus-color');
+  });
+
   it('styles the drawer handle as a touch target and keeps it separate from popover close controls', () => {
     const stylesheet = readFileSync(resolve('src/css/main.css'), 'utf8');
 
