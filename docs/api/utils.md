@@ -8,7 +8,7 @@
 
 > **createNestedContent**(`items`): `string`
 
-Defined in: [utils.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/main/src/utils.ts#L46)
+Defined in: [utils.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/main/src/utils.ts#L51)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: [utils.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/main/sr
 
 > **getSectionBackgroundColor**(`instance`): `string` \| `null`
 
-Defined in: [utils.ts:74](https://github.com/mattjmeier/bio-tooltips/blob/main/src/utils.ts#L74)
+Defined in: [utils.ts:86](https://github.com/mattjmeier/bio-tooltips/blob/main/src/utils.ts#L86)
 
 Gets the computed background color from a tooltip instance's root.
 
@@ -84,7 +84,7 @@ The background color string (e.g., 'rgb(255, 255, 255)') or null if not found.
 
 > **installNestedListFilter**(): `void`
 
-Defined in: [utils.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/main/src/utils.ts#L38)
+Defined in: [utils.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/main/src/utils.ts#L43)
 
 #### Returns
 

@@ -46,11 +46,29 @@ Defined in: [core/renderer.ts:7](https://github.com/mattjmeier/bio-tooltips/blob
 
 ***
 
+### renderCloseButton()
+
+> **renderCloseButton**(`label?`): `string`
+
+Defined in: [core/renderer.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L48)
+
+#### Parameters
+
+##### label?
+
+`string` = `'Close'`
+
+#### Returns
+
+`string`
+
+***
+
 ### renderCollapseButton()
 
 > **renderCollapseButton**(`id`, `text`): `string`
 
-Defined in: [core/renderer.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L56)
+Defined in: [core/renderer.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L61)
 
 #### Parameters
 
@@ -72,7 +90,7 @@ Defined in: [core/renderer.ts:56](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderListContent**(`items`, `initialCount`, `moreButtonId`): `string`
 
-Defined in: [core/renderer.ts:103](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L103)
+Defined in: [core/renderer.ts:114](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L114)
 
 #### Parameters
 
@@ -98,7 +116,7 @@ Defined in: [core/renderer.ts:103](https://github.com/mattjmeier/bio-tooltips/bl
 
 > **renderMoreButton**(`id`, `text`): `string`
 
-Defined in: [core/renderer.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L48)
+Defined in: [core/renderer.ts:53](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L53)
 
 #### Parameters
 
@@ -120,7 +138,7 @@ Defined in: [core/renderer.ts:48](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderParagraphContent**(`items`, `initialCount`, `moreButtonId`): `string`
 
-Defined in: [core/renderer.ts:76](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L76)
+Defined in: [core/renderer.ts:87](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L87)
 
 #### Parameters
 
@@ -142,24 +160,63 @@ Defined in: [core/renderer.ts:76](https://github.com/mattjmeier/bio-tooltips/blo
 
 ***
 
-### renderSummaryCopyButton()
+### renderSummaryActions()
 
-> **renderSummaryCopyButton**(`uniqueId`): `string`
+> **renderSummaryActions**(`uniqueId`, `expanded?`): `string`
 
-Defined in: [core/renderer.ts:68](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L68)
-
-A small copy affordance for the summary. It is rendered inline at the end of
-the `.gene-tooltip-summary` paragraph's text. The icon button carries no text
-itself (accessibility is via aria-label/title); the click handler reads the
-owning `.gene-tooltip-summary` paragraph's full text (truncation is CSS-only,
-so `textContent` is always the complete value) after stripping the button. The
-inline SVG follows the same convention as the pin button icon.
+Defined in: [core/renderer.ts:74](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L74)
 
 #### Parameters
 
 ##### uniqueId
 
 `string`
+
+##### expanded?
+
+`boolean` = `false`
+
+#### Returns
+
+`string`
+
+***
+
+### renderSummaryCopyButton()
+
+> **renderSummaryCopyButton**(`uniqueId`): `string`
+
+Defined in: [core/renderer.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L66)
+
+A small, labelled copy affordance for the summary action row.
+
+#### Parameters
+
+##### uniqueId
+
+`string`
+
+#### Returns
+
+`string`
+
+***
+
+### renderSummaryToggle()
+
+> **renderSummaryToggle**(`uniqueId`, `expanded?`): `string`
+
+Defined in: [core/renderer.ts:82](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L82)
+
+#### Parameters
+
+##### uniqueId
+
+`string`
+
+##### expanded?
+
+`boolean` = `false`
 
 #### Returns
 

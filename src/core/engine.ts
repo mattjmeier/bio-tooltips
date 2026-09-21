@@ -1,5 +1,6 @@
 import type { CoreTooltipConfig, TooltipProfile } from './types.js';
-import { TooltipController } from './tooltip-controller.js';
+import { TooltipController, type TooltipControllerHooks, type TooltipControllerOptions } from './tooltip-controller.js';
+import type { TooltipHandle } from './tooltip-handle.js';
 import { cleanupTooltipLifecycle, createHideHandler, createShowHandler, createShownHandler } from './lifecycle.js';
 import { runPrefetch } from './prefetch.js';
 import { enableSummaryExpand } from '../ui/summaryExpand.js';
@@ -19,6 +20,59 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
 ) {
   const inFlightRequests = new Map<string, Promise<Map<string, TData>>>();
   let lastPrefetchPromise: Promise<void> = Promise.resolve();
+
+  function createHooks(config: TConfig): TooltipControllerHooks<TData> {
+    const baseShowHandler = createShowHandler(config, options.profile, inFlightRequests);
+    const showHandler = (instance: TooltipController<TData>) => {
+      const dismissedSiblings: string[] = [];
+      for (const sibling of getOpenTopLevelTooltips()) {
+        if (sibling === instance) continue;
+        if (sibling.state.isDestroyed || sibling.status === 'idle' || sibling.status === 'closing') {
+          continue;
+        }
+        sibling.dismiss();
+        dismissedSiblings.push(sibling._uniqueId ?? '(no-id)');
+      }
+      logTooltipTiming(instance, config, 'sibling dismiss check', {
+        dismissed: dismissedSiblings.length,
+        siblings: dismissedSiblings,
+      });
+      return baseShowHandler(instance);
+    };
+
+    return {
+      onShow: showHandler,
+      onShown: createShownHandler(config, options.profile),
+      onHide: createHideHandler<TData>(),
+      onDestroy: cleanupTooltipLifecycle,
+    };
+  }
+
+  function createControllerOptions(
+    config: TConfig,
+    theme: string,
+    hooks: TooltipControllerHooks<TData>
+  ): TooltipControllerOptions<TData> {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tooltipOptions = {
+      ...config.tooltipOptions,
+      ...(prefersReducedMotion ? { showDuration: 0, hideDuration: 0 } : {}),
+    } as TConfig['tooltipOptions'];
+
+    return {
+      tooltip: tooltipOptions,
+      theme,
+      maxWidth: config.tooltipWidth,
+      maxHeight: config.tooltipHeight,
+      constrainToViewport: config.constrainToViewport,
+      interactiveBorder: 2,
+      interactiveDebounce: 75,
+      timingConfig: config,
+      hooks,
+      kind: 'dialog',
+      presentation: config.presentation ?? 'auto',
+    };
+  }
 
   function init(userConfig: Partial<TConfig> = {}): () => void {
     const config = options.mergeConfig(userConfig);
@@ -123,12 +177,52 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
     return options.profile.preload?.() ?? Promise.resolve([]);
   }
 
+  function attach(anchor: HTMLElement, userConfig: Partial<TConfig> = {}): TooltipHandle {
+    const config = options.mergeConfig(userConfig);
+    const effectiveTheme = getEffectiveTheme(config.theme);
+    const isAutoTheme = config.theme === 'auto' || typeof config.theme === 'undefined';
+    const instance = new TooltipController<TData>(anchor, createControllerOptions(
+      config,
+      effectiveTheme,
+      createHooks(config)
+    ));
+    instance._themeIntent = isAutoTheme ? 'auto' : config.theme;
+
+    const disconnectThemeObserver = initializeThemeObserver([instance], isAutoTheme);
+    const disconnectVisualPreloadWarmup = initializeVisualPreloadWarmup(
+      [anchor],
+      config,
+      options.profile
+    );
+    const releaseSummaryHandlers = enableSummaryExpand();
+    installNestedListFilter();
+    let destroyed = false;
+
+    return {
+      open(openOptions) {
+        if (!destroyed) instance.open(openOptions);
+      },
+      close() {
+        if (!destroyed) instance.close();
+      },
+      destroy() {
+        if (destroyed) return;
+        destroyed = true;
+        instance.destroy();
+        releaseSummaryHandlers();
+        disconnectThemeObserver();
+        disconnectVisualPreloadWarmup();
+      },
+    };
+  }
+
   function whenPrefetchReady(): Promise<void> {
     return lastPrefetchPromise;
   }
 
   return {
     init,
+    attach,
     preload,
     whenPrefetchReady,
   };

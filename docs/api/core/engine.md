@@ -8,7 +8,7 @@
 
 > **createTooltipEngine**\<`TData`, `TConfig`\>(`options`): `object`
 
-Defined in: [core/engine.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/engine.ts#L19)
+Defined in: [core/engine.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/engine.ts#L18)
 
 #### Type Parameters
 
@@ -29,6 +29,24 @@ Defined in: [core/engine.ts:19](https://github.com/mattjmeier/bio-tooltips/blob/
 #### Returns
 
 `object`
+
+##### attach
+
+> **attach**: (`anchor`, `userConfig`) => [`TooltipHandle`](tooltip-handle.md#tooltiphandle)
+
+###### Parameters
+
+###### anchor
+
+[`HTMLElement`](https://developer.mozilla.org/docs/Web/API/HTMLElement)
+
+###### userConfig?
+
+[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<`TConfig`\> = `{}`
+
+###### Returns
+
+[`TooltipHandle`](tooltip-handle.md#tooltiphandle)
 
 ##### init
 

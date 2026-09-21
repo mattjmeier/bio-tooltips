@@ -8,7 +8,7 @@
 
 > **getD3**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`__module` \| `null`\>
 
-Defined in: [providers/mygene/visuals/gene-track.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/gene-track.ts#L16)
+Defined in: [providers/mygene/visuals/gene-track.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/gene-track.ts#L18)
 
 #### Returns
 
@@ -20,7 +20,7 @@ Defined in: [providers/mygene/visuals/gene-track.ts:16](https://github.com/mattj
 
 > **renderGeneTrack**(`instance`, `data`, `uniqueId`, `config`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [providers/mygene/visuals/gene-track.ts:128](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/gene-track.ts#L128)
+Defined in: [providers/mygene/visuals/gene-track.ts:143](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/gene-track.ts#L143)
 
 Main rendering function
 

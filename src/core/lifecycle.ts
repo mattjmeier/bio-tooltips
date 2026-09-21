@@ -350,15 +350,10 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
         instance._uniqueId = generateUniqueTooltipId();
         logTooltipTiming(instance, config, 'unique id assigned');
       }
-      if (instance._entityData !== undefined) {
-        logTooltipTiming(instance, config, 'instance data already available');
-        attachNestedTooltips(instance, config, profile);
-        scheduleVisualsAndNestedTooltips(instance, config, profile, 'existing-instance-data');
-        return;
-      }
-
       const ref = profile.provider.parseElement(instance.reference as HTMLElement);
       if (!ref) {
+        instance._entityCacheKey = undefined;
+        instance._entityData = undefined;
         const message = profile.invalidElementMessage ?? 'Invalid tooltip element';
         setMessageContent(instance, message);
         announce(instance, message);
@@ -369,6 +364,14 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
       const panelName = `${entityKind} details for ${ref.query}`;
       instance.updateOptions({ accessibleName: panelName });
       const cacheKey = profile.provider.getCacheKey(ref);
+      if (instance._entityCacheKey === cacheKey && instance._entityData !== undefined) {
+        logTooltipTiming(instance, config, 'instance data already available', { cacheKey });
+        attachNestedTooltips(instance, config, profile);
+        scheduleVisualsAndNestedTooltips(instance, config, profile, 'existing-instance-data');
+        return;
+      }
+      instance._entityCacheKey = cacheKey;
+      instance._entityData = undefined;
 
       const renderContent = (data: TData | null) => {
         if (instance.state.isDestroyed) return;
@@ -413,10 +416,10 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
         logTooltipTiming(instance, config, 'fetch complete', { cacheKey });
         const data = resultsMap.get(cacheKey) || null;
         cache.set(cacheKey, data);
-        if (!instance.state.isDestroyed) renderContent(data);
+        if (!instance.state.isDestroyed && instance._entityCacheKey === cacheKey) renderContent(data);
       } catch (error) {
         console.error(`Failed to fetch data for ${describeRef(ref)}`, error);
-        if (!instance.state.isDestroyed) {
+        if (!instance.state.isDestroyed && instance._entityCacheKey === cacheKey) {
           setMessageContent(instance, 'Error loading data.');
           announce(instance, 'Error loading data.');
         }

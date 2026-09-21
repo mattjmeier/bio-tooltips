@@ -8,9 +8,29 @@
 
 > `const` **GeneTooltip**: `object`
 
-Defined in: [mygene.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L48)
+Defined in: [mygene.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L59)
 
 #### Type Declaration
+
+##### attach
+
+> **attach**: (`anchor`, `userConfig`) => [`TooltipHandle`](core/tooltip-handle.md#tooltiphandle)
+
+Attach a GeneTooltip to one element without querying the document.
+
+###### Parameters
+
+###### anchor
+
+[`HTMLElement`](https://developer.mozilla.org/docs/Web/API/HTMLElement)
+
+###### userConfig?
+
+[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`GeneTooltipConfig`](providers/mygene/config.md#genetooltipconfig)\> = `{}`
+
+###### Returns
+
+[`TooltipHandle`](core/tooltip-handle.md#tooltiphandle)
 
 ##### cacheSize
 
@@ -81,11 +101,35 @@ are ready when tooltips are first shown.
 
 ## Functions
 
+### attach()
+
+> **attach**(`anchor`, `userConfig?`): [`TooltipHandle`](core/tooltip-handle.md#tooltiphandle)
+
+Defined in: [mygene.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L32)
+
+Attach a GeneTooltip to one element without querying the document.
+
+#### Parameters
+
+##### anchor
+
+[`HTMLElement`](https://developer.mozilla.org/docs/Web/API/HTMLElement)
+
+##### userConfig?
+
+[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`GeneTooltipConfig`](providers/mygene/config.md#genetooltipconfig)\> = `{}`
+
+#### Returns
+
+[`TooltipHandle`](core/tooltip-handle.md#tooltiphandle)
+
+***
+
 ### cacheSize()
 
 > **cacheSize**(): `number`
 
-Defined in: [mygene.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L44)
+Defined in: [mygene.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L55)
 
 #### Returns
 
@@ -97,7 +141,7 @@ Defined in: [mygene.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **clearCache**(): `void`
 
-Defined in: [mygene.ts:40](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L40)
+Defined in: [mygene.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L51)
 
 #### Returns
 
@@ -131,7 +175,7 @@ Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/main/s
 
 > **init**(`userConfig?`): () => `void`
 
-Defined in: [mygene.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L24)
+Defined in: [mygene.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L27)
 
 #### Parameters
 
@@ -149,7 +193,7 @@ Defined in: [mygene.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mygene.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L32)
+Defined in: [mygene.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L43)
 
 Preloads the optional heavy dependencies (d3, ideogram) so they
 are ready when tooltips are first shown.
@@ -164,7 +208,7 @@ are ready when tooltips are first shown.
 
 > **whenPrefetchReady**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [mygene.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L36)
+Defined in: [mygene.ts:47](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L47)
 
 #### Returns
 
@@ -436,6 +480,18 @@ Re-exports [TooltipDisplayConfig](providers/mygene/config.md#tooltipdisplayconfi
 
 ***
 
+### TooltipHandle
+
+Re-exports [TooltipHandle](core/tooltip-handle.md#tooltiphandle)
+
+***
+
+### TooltipOpenOptions
+
+Re-exports [TooltipOpenOptions](core/tooltip-handle.md#tooltipopenoptions)
+
+***
+
 ### TooltipOptions
 
 Re-exports [TooltipOptions](core/config.md#tooltipoptions-1)
@@ -445,6 +501,12 @@ Re-exports [TooltipOptions](core/config.md#tooltipoptions-1)
 ### TooltipPlacementOptions
 
 Re-exports [TooltipPlacementOptions](core/config.md#tooltipplacementoptions)
+
+***
+
+### TooltipPresentation
+
+Re-exports [TooltipPresentation](core/config.md#tooltippresentation)
 
 ***
 

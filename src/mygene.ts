@@ -4,6 +4,7 @@ import { findGeneElements } from './providers/mygene/parser.js';
 import { myGeneProfile } from './providers/mygene/profile.js';
 import { filterNestedList } from './utils.js';
 import { clear as clearTooltipCache, size as getTooltipCacheSize } from './core/cache.js';
+import type { TooltipHandle } from './core/tooltip-handle.js';
 
 export { filterNestedList };
 export type {
@@ -15,6 +16,7 @@ export type {
   TooltipTimingEvent,
   TooltipTimingObserver,
 } from './core/config.js';
+export type { TooltipHandle, TooltipOpenOptions } from './core/tooltip-handle.js';
 
 const geneTooltipEngine = createTooltipEngine({
   profile: myGeneProfile,
@@ -24,6 +26,14 @@ const geneTooltipEngine = createTooltipEngine({
 
 export function init(userConfig: Partial<GeneTooltipConfig> = {}): () => void {
   return geneTooltipEngine.init(userConfig);
+}
+
+/** Attach a GeneTooltip to one element without querying the document. */
+export function attach(
+  anchor: HTMLElement,
+  userConfig: Partial<GeneTooltipConfig> = {}
+): TooltipHandle {
+  return geneTooltipEngine.attach(anchor, userConfig);
 }
 
 /**
@@ -48,6 +58,7 @@ export function cacheSize(): number {
 
 export const GeneTooltip = {
   init,
+  attach,
   preload,
   whenPrefetchReady,
   clearCache,
@@ -60,6 +71,7 @@ if (typeof window !== 'undefined') {
     (window as any).GeneTooltip = {};
   }
   (window as any).GeneTooltip.init = init;
+  (window as any).GeneTooltip.attach = attach;
   (window as any).GeneTooltip.preload = preload;
   (window as any).GeneTooltip.whenPrefetchReady = whenPrefetchReady;
   (window as any).GeneTooltip.clearCache = clearCache;
@@ -74,6 +86,7 @@ declare global {
   interface Window {
     GeneTooltip: {
       init: (userConfig?: Partial<GeneTooltipConfig>) => void;
+      attach: (anchor: HTMLElement, userConfig?: Partial<GeneTooltipConfig>) => TooltipHandle;
       preload: () => Promise<unknown>;
       whenPrefetchReady: () => Promise<void>;
       clearCache: () => void;

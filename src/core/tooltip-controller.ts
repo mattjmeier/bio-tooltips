@@ -1,4 +1,5 @@
 import type { CoreTooltipConfig, TooltipOptions, TooltipPresentation } from './config.js';
+import type { TooltipOpenOptions } from './tooltip-handle.js';
 import { startPositioning, type ActivePositioner } from './positioning.js';
 import { logTooltipTiming } from './timing.js';
 import { generateUniqueTooltipId } from '../utils.js';
@@ -72,6 +73,7 @@ export class TooltipController<TData = unknown> {
 
   _nestedTooltips: TooltipController<any>[] = [];
   _entityData?: TData | null;
+  _entityCacheKey?: string;
   _uniqueId?: string;
   _themeIntent?: 'auto' | string;
   _sectionToggleHandler?: (event: Event) => void;
@@ -416,20 +418,26 @@ export class TooltipController<TData = unknown> {
     restoreAttribute(this.reference, 'aria-describedby', this.originalReferenceDescribedBy);
   }
 
-  /** Explicitly enter a dialog from keyboard activation. */
-  enter(): void {
-    if (this.kind !== 'dialog' || this.state.isDestroyed) return;
+  /** Open immediately, optionally moving focus into the dialog. */
+  open(options: TooltipOpenOptions = {}): void {
+    if (this.state.isDestroyed) return;
     this.explicitClose = false;
     this._peerDismissed = false;
     this.clearHideTimers();
     this.clearShowTimer();
     if (this.status === 'open') {
       this.makeVisible();
-      this.box.focus();
+      if (options.focus) this.box.focus();
       return;
     }
     this.status = 'opening';
-    this.openNow(true);
+    this.openNow(options.focus ?? false);
+  }
+
+  /** Explicitly enter a dialog from keyboard activation. */
+  enter(): void {
+    if (this.kind !== 'dialog' || this.state.isDestroyed) return;
+    this.open({ focus: true });
   }
 
   /** Explicitly dismiss this controller, including pinned dialogs. */

@@ -6,7 +6,7 @@
 
 ### CoreTooltipConfig
 
-Defined in: [core/config.ts:54](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L54)
+Defined in: [core/config.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L55)
 
 #### Extended by
 
@@ -19,91 +19,99 @@ Defined in: [core/config.ts:54](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **constrainToViewport**: `boolean`
 
-Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L67)
+Defined in: [core/config.ts:70](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L70)
 
 ##### debugTimings
 
 > **debugTimings**: `boolean`
 
-Defined in: [core/config.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L59)
+Defined in: [core/config.ts:62](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L62)
 
 ##### display?
 
 > `optional` **display?**: `unknown`
 
-Defined in: [core/config.ts:68](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L68)
+Defined in: [core/config.ts:71](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L71)
 
 ##### nestedTooltipOptions
 
 > **nestedTooltipOptions**: [`TooltipOptions`](#tooltipoptions-1)
 
-Defined in: [core/config.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L64)
+Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L67)
 
 ##### onTiming?
 
 > `optional` **onTiming?**: [`TooltipTimingObserver`](#tooltiptimingobserver)
 
-Defined in: [core/config.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L60)
+Defined in: [core/config.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L63)
 
 ##### prefetch
 
 > **prefetch**: [`PrefetchMode`](#prefetchmode)
 
-Defined in: [core/config.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L56)
+Defined in: [core/config.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L59)
 
 ##### prefetchThreshold
 
 > **prefetchThreshold**: `number`
 
-Defined in: [core/config.ts:57](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L57)
+Defined in: [core/config.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L60)
+
+##### presentation?
+
+> `optional` **presentation?**: [`TooltipPresentation`](#tooltippresentation)
+
+Defined in: [core/config.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L58)
+
+How top-level tooltip dialogs are presented. Nested tooltips remain popovers.
 
 ##### sectionVariant
 
 > **sectionVariant**: [`SectionVariant`](#sectionvariant-1)
 
-Defined in: [core/config.ts:62](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L62)
+Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L65)
 
 ##### selector
 
 > **selector**: `string`
 
-Defined in: [core/config.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L55)
+Defined in: [core/config.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L56)
 
 ##### theme
 
 > **theme**: [`TooltipTheme`](#tooltiptheme)
 
-Defined in: [core/config.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L61)
+Defined in: [core/config.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L64)
 
 ##### tooltipHeight?
 
 > `optional` **tooltipHeight?**: `number`
 
-Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L66)
+Defined in: [core/config.ts:69](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L69)
 
 ##### tooltipOptions
 
 > **tooltipOptions**: [`TooltipOptions`](#tooltipoptions-1)
 
-Defined in: [core/config.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L63)
+Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L66)
 
 ##### tooltipWidth?
 
 > `optional` **tooltipWidth?**: `number`
 
-Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L65)
+Defined in: [core/config.ts:68](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L68)
 
 ##### visualPreload
 
 > **visualPreload**: [`VisualPreloadMode`](#visualpreloadmode)
 
-Defined in: [core/config.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L58)
+Defined in: [core/config.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L61)
 
 ***
 
 ### TooltipTimingEvent
 
-Defined in: [core/config.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L44)
+Defined in: [core/config.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L45)
 
 #### Properties
 
@@ -111,31 +119,31 @@ Defined in: [core/config.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **details?**: [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)\<`string`, `unknown`\>
 
-Defined in: [core/config.ts:49](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L49)
+Defined in: [core/config.ts:50](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L50)
 
 ##### elapsedMs
 
 > **elapsedMs**: `number`
 
-Defined in: [core/config.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L46)
+Defined in: [core/config.ts:47](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L47)
 
 ##### label
 
 > **label**: `string`
 
-Defined in: [core/config.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L45)
+Defined in: [core/config.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L46)
 
 ##### timestampMs
 
 > **timestampMs**: `number`
 
-Defined in: [core/config.ts:47](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L47)
+Defined in: [core/config.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L48)
 
 ##### tooltipId?
 
 > `optional` **tooltipId?**: `string`
 
-Defined in: [core/config.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L48)
+Defined in: [core/config.ts:49](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L49)
 
 ## Type Aliases
 
@@ -143,7 +151,7 @@ Defined in: [core/config.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **FixedPlacement** = `"top"` \| `"top-start"` \| `"top-end"` \| `"right"` \| `"right-start"` \| `"right-end"` \| `"bottom"` \| `"bottom-start"` \| `"bottom-end"` \| `"left"` \| `"left-start"` \| `"left-end"`
 
-Defined in: [core/config.ts:6](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L6)
+Defined in: [core/config.ts:7](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L7)
 
 ***
 
@@ -167,7 +175,7 @@ Defined in: [core/config.ts:4](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > **TooltipOptions** = [`TooltipPlacementOptions`](#tooltipplacementoptions) & `object`
 
-Defined in: [core/config.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L32)
+Defined in: [core/config.ts:33](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L33)
 
 #### Type Declaration
 
@@ -213,7 +221,15 @@ Defined in: [core/config.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **TooltipPlacementOptions** = \{ `allowedPlacements?`: `never`; `fallbackPlacements?`: [`FixedPlacement`](#fixedplacement)[]; `placement?`: [`FixedPlacement`](#fixedplacement); \} \| \{ `allowedPlacements?`: [`FixedPlacement`](#fixedplacement)[]; `fallbackPlacements?`: `never`; `placement`: `"auto"`; \}
 
-Defined in: [core/config.ts:20](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L20)
+Defined in: [core/config.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L21)
+
+***
+
+### TooltipPresentation
+
+> **TooltipPresentation** = `"auto"` \| `"popover"` \| `"drawer"`
+
+Defined in: [core/config.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L5)
 
 ***
 
@@ -229,7 +245,7 @@ Defined in: [core/config.ts:2](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > **TooltipTimingObserver** = (`event`) => `void`
 
-Defined in: [core/config.ts:52](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L52)
+Defined in: [core/config.ts:53](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L53)
 
 #### Parameters
 
@@ -255,4 +271,4 @@ Defined in: [core/config.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > `const` **defaultCoreConfig**: [`CoreTooltipConfig`](#coretooltipconfig)
 
-Defined in: [core/config.ts:71](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L71)
+Defined in: [core/config.ts:74](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L74)

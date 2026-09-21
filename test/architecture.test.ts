@@ -85,6 +85,7 @@ describe('architecture compatibility', () => {
     expect(transcripts[0].url).toBe('https://www.ensembl.org/id/ENST1');
     expect(html).toContain('<strong>TP53</strong>');
     expect(RootGeneTooltip.init).toBe(MyGeneTooltip.init);
+    expect(RootGeneTooltip.attach).toBe(MyGeneTooltip.attach);
     expect(RootGeneTooltip.preload).toBe(MyGeneTooltip.preload);
     expect(RootGeneTooltip.whenPrefetchReady).toBe(MyGeneTooltip.whenPrefetchReady);
     expect(typeof RootGeneTooltip.clearCache).toBe('function');

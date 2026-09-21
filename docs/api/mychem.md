@@ -8,9 +8,29 @@
 
 > `const` **ChemicalTooltip**: `object`
 
-Defined in: [mychem.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L42)
+Defined in: [mychem.ts:53](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L53)
 
 #### Type Declaration
+
+##### attach
+
+> **attach**: (`anchor`, `userConfig`) => [`TooltipHandle`](core/tooltip-handle.md#tooltiphandle)
+
+Attach a ChemicalTooltip to one element without querying the document.
+
+###### Parameters
+
+###### anchor
+
+[`HTMLElement`](https://developer.mozilla.org/docs/Web/API/HTMLElement)
+
+###### userConfig?
+
+[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`MyChemTooltipConfig`](providers/mychem/config.md#mychemtooltipconfig)\> = `{}`
+
+###### Returns
+
+[`TooltipHandle`](core/tooltip-handle.md#tooltiphandle)
 
 ##### cacheSize
 
@@ -60,11 +80,35 @@ Defined in: [mychem.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 ## Functions
 
+### attach()
+
+> **attach**(`anchor`, `userConfig?`): [`TooltipHandle`](core/tooltip-handle.md#tooltiphandle)
+
+Defined in: [mychem.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L30)
+
+Attach a ChemicalTooltip to one element without querying the document.
+
+#### Parameters
+
+##### anchor
+
+[`HTMLElement`](https://developer.mozilla.org/docs/Web/API/HTMLElement)
+
+##### userConfig?
+
+[`Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)\<[`MyChemTooltipConfig`](providers/mychem/config.md#mychemtooltipconfig)\> = `{}`
+
+#### Returns
+
+[`TooltipHandle`](core/tooltip-handle.md#tooltiphandle)
+
+***
+
 ### cacheSize()
 
 > **cacheSize**(): `number`
 
-Defined in: [mychem.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L38)
+Defined in: [mychem.ts:49](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L49)
 
 #### Returns
 
@@ -76,7 +120,7 @@ Defined in: [mychem.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **clearCache**(): `void`
 
-Defined in: [mychem.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L34)
+Defined in: [mychem.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L45)
 
 #### Returns
 
@@ -88,7 +132,7 @@ Defined in: [mychem.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **init**(`userConfig?`): () => `void`
 
-Defined in: [mychem.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L22)
+Defined in: [mychem.ts:25](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L25)
 
 #### Parameters
 
@@ -106,7 +150,7 @@ Defined in: [mychem.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mychem.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L26)
+Defined in: [mychem.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L37)
 
 #### Returns
 
@@ -118,7 +162,7 @@ Defined in: [mychem.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **whenPrefetchReady**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [mychem.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L30)
+Defined in: [mychem.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L41)
 
 #### Returns
 
@@ -408,6 +452,18 @@ Re-exports [SourceValue](providers/mychem/types.md#sourcevalue)
 
 ***
 
+### TooltipHandle
+
+Re-exports [TooltipHandle](core/tooltip-handle.md#tooltiphandle)
+
+***
+
+### TooltipOpenOptions
+
+Re-exports [TooltipOpenOptions](core/tooltip-handle.md#tooltipopenoptions)
+
+***
+
 ### TooltipOptions
 
 Re-exports [TooltipOptions](core/config.md#tooltipoptions-1)
@@ -417,6 +473,12 @@ Re-exports [TooltipOptions](core/config.md#tooltipoptions-1)
 ### TooltipPlacementOptions
 
 Re-exports [TooltipPlacementOptions](core/config.md#tooltipplacementoptions)
+
+***
+
+### TooltipPresentation
+
+Re-exports [TooltipPresentation](core/config.md#tooltippresentation)
 
 ***
 

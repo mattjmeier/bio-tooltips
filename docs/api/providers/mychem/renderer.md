@@ -8,7 +8,7 @@
 
 > **getMyChemNestedTooltipDefinitions**(`data`, `config`, `uniqueId`): [`NestedTooltipDefinition`](../../core/types.md#nestedtooltipdefinition)[]
 
-Defined in: [providers/mychem/renderer.ts:693](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L693)
+Defined in: [providers/mychem/renderer.ts:694](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L694)
 
 #### Parameters
 
@@ -34,7 +34,7 @@ Defined in: [providers/mychem/renderer.ts:693](https://github.com/mattjmeier/bio
 
 > **renderMyChemTooltipFromConfig**(`data`, `uniqueId`, `config`): `string`
 
-Defined in: [providers/mychem/renderer.ts:151](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L151)
+Defined in: [providers/mychem/renderer.ts:152](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L152)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: [providers/mychem/renderer.ts:151](https://github.com/mattjmeier/bio
 
 > **renderTooltipHTML**(`data`, `options?`): `string`
 
-Defined in: [providers/mychem/renderer.ts:69](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L69)
+Defined in: [providers/mychem/renderer.ts:70](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L70)
 
 #### Parameters
 

@@ -20,7 +20,7 @@ Defined in: [providers/mygene/visuals/ideogram.ts:33](https://github.com/mattjme
 
 > **renderIdeogram**(`instance`, `data`, `ideogramConfig`, `uniqueId`, `timingConfig`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [providers/mygene/visuals/ideogram.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/ideogram.ts#L65)
+Defined in: [providers/mygene/visuals/ideogram.ts:87](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/ideogram.ts#L87)
 
 #### Parameters
 

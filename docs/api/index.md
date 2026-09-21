@@ -32,6 +32,12 @@ Re-exports [asArray](providers/mygene/formatters.md#asarray)
 
 ***
 
+### attach
+
+Re-exports [attach](mygene.md#attach-1)
+
+***
+
 ### cacheSize
 
 Re-exports [cacheSize](mygene.md#cachesize-1)
@@ -344,6 +350,18 @@ Re-exports [TooltipDisplayConfig](providers/mygene/config.md#tooltipdisplayconfi
 
 ***
 
+### TooltipHandle
+
+Re-exports [TooltipHandle](core/tooltip-handle.md#tooltiphandle)
+
+***
+
+### TooltipOpenOptions
+
+Re-exports [TooltipOpenOptions](core/tooltip-handle.md#tooltipopenoptions)
+
+***
+
 ### TooltipOptions
 
 Re-exports [TooltipOptions](core/config.md#tooltipoptions-1)
@@ -353,6 +371,12 @@ Re-exports [TooltipOptions](core/config.md#tooltipoptions-1)
 ### TooltipPlacementOptions
 
 Re-exports [TooltipPlacementOptions](core/config.md#tooltipplacementoptions)
+
+***
+
+### TooltipPresentation
+
+Re-exports [TooltipPresentation](core/config.md#tooltippresentation)
 
 ***
 

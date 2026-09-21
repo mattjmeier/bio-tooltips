@@ -98,6 +98,12 @@ Defined in: [core/types.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 #### Properties
 
+##### accessibleName?
+
+> `optional` **accessibleName?**: `string`
+
+Defined in: [core/types.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L24)
+
 ##### items
 
 > **items**: [`FormattedItem`](#formatteditem)[]
@@ -114,7 +120,7 @@ Defined in: [core/types.ts:22](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 ### RenderTooltipOptions
 
-Defined in: [core/types.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L26)
+Defined in: [core/types.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L27)
 
 #### Properties
 
@@ -122,13 +128,13 @@ Defined in: [core/types.ts:26](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > **uniqueId**: `string`
 
-Defined in: [core/types.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L27)
+Defined in: [core/types.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L28)
 
 ***
 
 ### TooltipProfile
 
-Defined in: [core/types.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L38)
+Defined in: [core/types.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L39)
 
 #### Type Parameters
 
@@ -146,7 +152,7 @@ Defined in: [core/types.ts:38](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > `optional` **getNestedTooltipDefinitions?**: (`data`, `config`, `uniqueId`) => [`NestedTooltipDefinition`](#nestedtooltipdefinition)[]
 
-Defined in: [core/types.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L45)
+Defined in: [core/types.ts:46](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L46)
 
 ###### Parameters
 
@@ -170,25 +176,25 @@ Defined in: [core/types.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > **id**: `string`
 
-Defined in: [core/types.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L39)
+Defined in: [core/types.ts:40](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L40)
 
 ##### invalidElementMessage?
 
 > `optional` **invalidElementMessage?**: `string`
 
-Defined in: [core/types.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L41)
+Defined in: [core/types.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L42)
 
 ##### notFoundHTML?
 
 > `optional` **notFoundHTML?**: `string`
 
-Defined in: [core/types.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L42)
+Defined in: [core/types.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L43)
 
 ##### preload?
 
 > `optional` **preload?**: () => [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [core/types.ts:50](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L50)
+Defined in: [core/types.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L51)
 
 ###### Returns
 
@@ -198,13 +204,13 @@ Defined in: [core/types.ts:50](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > **provider**: [`DataProvider`](#dataprovider)\<`TData`\>
 
-Defined in: [core/types.ts:40](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L40)
+Defined in: [core/types.ts:41](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L41)
 
 ##### renderTooltipHTML
 
 > **renderTooltipHTML**: (`data`, `options`, `config`) => `string`
 
-Defined in: [core/types.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L43)
+Defined in: [core/types.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L44)
 
 ###### Parameters
 
@@ -228,7 +234,7 @@ Defined in: [core/types.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > `optional` **renderVisuals?**: (`ctx`) => `void` \| [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [core/types.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L44)
+Defined in: [core/types.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L45)
 
 ###### Parameters
 
@@ -244,7 +250,7 @@ Defined in: [core/types.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 ### VisualRenderContext
 
-Defined in: [core/types.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L30)
+Defined in: [core/types.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L31)
 
 #### Type Parameters
 
@@ -262,31 +268,31 @@ Defined in: [core/types.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > **config**: `TConfig`
 
-Defined in: [core/types.ts:33](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L33)
+Defined in: [core/types.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L34)
 
 ##### data
 
 > **data**: `TData`
 
-Defined in: [core/types.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L32)
+Defined in: [core/types.ts:33](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L33)
 
 ##### instance
 
 > **instance**: [`TooltipController`](tooltip-controller.md#tooltipcontroller)\<`TData`\>
 
-Defined in: [core/types.ts:31](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L31)
+Defined in: [core/types.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L32)
 
 ##### sectionKey?
 
 > `optional` **sectionKey?**: `string`
 
-Defined in: [core/types.ts:35](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L35)
+Defined in: [core/types.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L36)
 
 ##### uniqueId
 
 > **uniqueId**: `string`
 
-Defined in: [core/types.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L34)
+Defined in: [core/types.ts:35](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/types.ts#L35)
 
 ## Type Aliases
 

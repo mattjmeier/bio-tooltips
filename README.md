@@ -72,6 +72,26 @@ import { GeneTooltip, ChemicalTooltip } from 'bio-tooltips';
 
 Subpath imports remain preferred when an application wants to load only one tooltip module.
 
+## Programmatic Adapters
+
+Visualization adapters can attach a tooltip directly to one real DOM element and control it through a small handle:
+
+```ts
+const handle = GeneTooltip.attach(anchor, { visualPreload: 'none' });
+
+// Update the existing anchor before opening; its current text and data attributes are read on each open.
+anchor.textContent = 'TP53';
+anchor.dataset.species = 'human';
+handle.open({ focus: false });
+
+handle.close();
+handle.destroy(); // removes the tooltip and restores the anchor's original accessibility attributes
+```
+
+`ChemicalTooltip.attach(anchor, config)` works the same way. Its query comes from the anchor's current `data-query` value, or its text when that attribute is absent, and its lookup context comes from the current `data-scope` and `data-lookup` attributes. The optional config has the same shape as the corresponding `init()` config. `open()` opens immediately and leaves focus where it is by default; pass `{ focus: true }` to move focus into the dialog. Normal hover and keyboard interactions on the anchor remain available.
+
+The returned `TooltipHandle` type exposes only `open(options?: TooltipOpenOptions)`, `close()`, and `destroy()`. Reopening with unchanged query and context reuses fetched data; changes to either are parsed and looked up on the next open.
+
 ## Documentation
 
 Full documentation and examples are available in the `docs` folder and at the project site:

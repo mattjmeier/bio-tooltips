@@ -4,6 +4,24 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.1.0] - 2026-09-21
+
+### Added
+
+- Added `GeneTooltip.attach()` and `ChemicalTooltip.attach()` for attaching to one DOM element and controlling it with the exported `TooltipHandle` API. Each open reads the anchor's current query and context, and unchanged cache keys reuse fetched data.
+- Added a responsive bottom drawer for top-level tooltips at 600 CSS pixels and below, with a touch-sized close control and optional drag-to-dismiss. `presentation` can force drawer or popover mode.
+- Added browser accessibility checks and published an accessibility evaluation record, integration guidance, and a manual checklist that documents tested scope and remaining human checks.
+
+### Changed
+
+- Improved keyboard and focus behavior, dialog naming and status announcements, collapsed-section navigation, and text alternatives for gene-model visuals.
+- Reorganized the documentation into core, gene, and chemical guides and reference pages; refreshed the README examples and preview screenshots.
+
+### Fixed
+
+- Prevented tooltips from remaining open after pointer exit while nested panels were closing, and reserved header space so action buttons no longer overlap long titles.
+- Fixed the documentation site's RDKit demo to load its WASM file through the package's exported asset path.
+
 ## [2.0.8] - 2026-08-19
 
 ### Fixed

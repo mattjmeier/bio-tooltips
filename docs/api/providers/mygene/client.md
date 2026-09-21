@@ -6,7 +6,7 @@
 
 ### fetchMyGeneBatch()
 
-> **fetchMyGeneBatch**(`geneSymbols`, `species`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyGeneInfoResult`](types.md#mygeneinforesult)\>\>
+> **fetchMyGeneBatch**(`geneSymbols`, `species`, `throwOnError?`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyGeneInfoResult`](types.md#mygeneinforesult)\>\>
 
 Defined in: [providers/mygene/client.ts:10](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/client.ts#L10)
 
@@ -26,6 +26,10 @@ An array of gene symbols.
 
 The species for all genes in this batch.
 
+##### throwOnError?
+
+`boolean` = `false`
+
 #### Returns
 
 [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyGeneInfoResult`](types.md#mygeneinforesult)\>\>
@@ -38,7 +42,7 @@ A Map of gene symbols to data.
 
 > **fetchMyGeneRefs**(`refs`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<[`Map`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map)\<`string`, [`MyGeneInfoResult`](types.md#mygeneinforesult)\>\>
 
-Defined in: [providers/mygene/client.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/client.ts#L64)
+Defined in: [providers/mygene/client.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/client.ts#L66)
 
 #### Parameters
 
@@ -56,7 +60,7 @@ Defined in: [providers/mygene/client.ts:64](https://github.com/mattjmeier/bio-to
 
 > **getMyGeneCacheKey**(`symbol`, `taxid`): `string`
 
-Defined in: [providers/mygene/client.ts:91](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/client.ts#L91)
+Defined in: [providers/mygene/client.ts:95](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/client.ts#L95)
 
 #### Parameters
 
