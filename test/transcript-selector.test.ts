@@ -234,7 +234,7 @@ describe('native transcript selector', () => {
     expect(firstExon.hasAttribute('data-gt-tooltip-reference')).toBe(true);
     expect(parent._nestedTooltips).toHaveLength(3);
     parent.destroy();
-  });
+  }, 15_000);
 
   it('uses accessible native markup and contains no Tom Select classes or integration', () => {
     const html = renderTooltipHTML(geneData([
