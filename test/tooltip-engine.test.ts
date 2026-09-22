@@ -209,18 +209,21 @@ describe('tooltip engine lifecycle', () => {
     document.body.append(first, second);
     const cleanup = engine.init();
 
-    // The first interaction on a page leaves focus on the first trigger
-    // (keyboard tab or mouse mousedown), so its panel may still be focus-owned.
+    // Put keyboard focus inside the first panel. Opening a peer should still
+    // replace it, while returning focus safely to the first trigger.
     first.dispatchEvent(new MouseEvent('mouseenter'));
     vi.runAllTimers();
     await flushAsync();
-    first.focus();
+    const firstPanel = document.querySelector<HTMLElement>('.gt-tooltip-box')!;
+    firstPanel.focus();
+    expect(document.activeElement).toBe(firstPanel);
 
     second.dispatchEvent(new MouseEvent('mouseenter'));
     vi.runAllTimers();
     await flushAsync();
     expect(document.querySelectorAll('[data-gt-tooltip-root]')).toHaveLength(1);
     expect(document.querySelector('.gt-tooltip-content')?.textContent).toContain('Second gene label');
+    expect(document.activeElement).toBe(first);
     cleanup();
   });
 

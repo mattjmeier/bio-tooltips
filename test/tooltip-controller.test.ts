@@ -286,15 +286,25 @@ describe('TooltipController', () => {
     expect(document.activeElement).toBe(reference);
   });
 
-  it('keeps focus-owned content open on pointer departure and peer dismissal', () => {
+  it('keeps focus-owned content open on pointer departure', () => {
     const { controller } = createController();
     controller.enter();
     controller.root.dispatchEvent(new MouseEvent('mouseleave', { relatedTarget: document.body }));
-    controller.dismiss();
     vi.runAllTimers();
     expect(controller.status).toBe('open');
     expect(document.activeElement).toBe(controller.box);
   });
+
+  it('lets a peer dismiss focus-owned content and restores focus to its trigger', () => {
+    const { reference, controller } = createController();
+    controller.enter();
+
+    controller.dismiss();
+
+    expect(controller.status).toBe('closing');
+    expect(document.activeElement).toBe(reference);
+  });
+
   it('closes on pointer departure when only the trigger itself holds focus', () => {
     const { reference, controller } = createController();
     controller.show();

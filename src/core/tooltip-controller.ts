@@ -291,8 +291,9 @@ export class TooltipController<TData = unknown> {
    * the pointer bridge that otherwise keep an open panel alive while the cursor
    * drifts toward the next trigger. The engine calls this on the open siblings
    * whenever a tooltip opens so only one top-level tooltip is visible at a time.
-   * Pinned tooltips and tooltips whose panel holds keyboard focus are left
-   * untouched — a focus on the trigger alone does not protect a peer dismissal.
+   * Pinned tooltips are left untouched. Keyboard focus inside an unpinned panel
+   * is restored to its trigger as the panel closes, preserving focus while still
+   * enforcing the single-open-tooltip rule.
    *
    * The `_peerDismissed` flag marks this close as "lost to a sibling" so that
    * hovering this tooltip's own panel cannot revive it (its panel may still be
@@ -301,10 +302,9 @@ export class TooltipController<TData = unknown> {
    */
   dismiss(): void {
     if (this.state.isDestroyed || this.status === 'idle' || this.status === 'closing') return;
-    // A drawer is single-instance even when it owns keyboard focus. Opening a
-    // new top-level panel must replace it rather than stack another fixed sheet
-    // over the same viewport edge. Popovers retain their focus/pin protection.
-    if (!this.isDrawerPresentation() && (this._isPinned || this.containsPanelFocus())) return;
+    // Drawers cannot be pinned. Popovers remain open only when the user has
+    // explicitly pinned them; focus alone must not allow unpinned peers to stack.
+    if (!this.isDrawerPresentation() && this._isPinned) return;
     this._peerDismissed = true;
     if (this.timingConfig) {
       logTooltipTiming(this, this.timingConfig, 'dismissed by peer', { status: this.status });
