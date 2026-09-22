@@ -767,6 +767,166 @@ describe('TooltipController', () => {
     expect(controller.status).toBe('idle');
   });
 
+  it('freezes a top-level popover in place and exposes accessible move controls', () => {
+    const { controller } = createController();
+    controller.setContent('<div class="gene-tooltip-header"><div class="gene-tooltip-title"><strong>TP53</strong></div><div class="gt-tooltip-actions"><button class="gt-pin-button" type="button">Pin</button><button class="gt-close-button" type="button">Close</button></div></div>');
+    controller.show();
+    vi.runAllTimers();
+    vi.spyOn(controller.root, 'getBoundingClientRect').mockReturnValue({
+      left: 120, top: 140, width: 240, height: 180, right: 360, bottom: 320,
+      x: 120, y: 140, toJSON: () => ({}),
+    } as DOMRect);
+
+    controller.setPinned(true);
+
+    expect(controller.root.dataset.pinned).toBe('true');
+    expect(controller.root.style.position).toBe('fixed');
+    expect(controller.root.style.left).toBe('120px');
+    expect(controller.root.style.top).toBe('140px');
+    expect(controller.arrow.hidden).toBe(true);
+    const move = controller.root.querySelector<HTMLButtonElement>('.gt-move-button');
+    expect(move?.getAttribute('aria-label')).toBe('Move tooltip');
+    expect(move?.getAttribute('aria-expanded')).toBe('false');
+    expect(move?.textContent).toBe('');
+    expect(move?.querySelector('.gt-move-icon')?.getAttribute('aria-hidden')).toBe('true');
+    expect(move?.closest('.gt-tooltip-move-controls')?.parentElement)
+      .toBe(controller.root.querySelector('.gt-tooltip-actions'));
+    expect(controller.root.querySelector('.gt-tooltip-actions')?.firstElementChild)
+      .toBe(move?.closest('.gt-tooltip-move-controls'));
+    expect(controller.root.querySelectorAll('.gt-tooltip-move-option')).toHaveLength(5);
+    expect(controller.root.querySelector('.gt-tooltip-actions')?.lastElementChild?.classList
+      .contains('gt-close-button')).toBe(true);
+
+    updatePosition.mockClear();
+    void controller.updatePosition();
+    expect(updatePosition).not.toHaveBeenCalled();
+  });
+
+  it('drags pinned panels with threshold and excludes header controls', () => {
+    const { controller } = createController();
+    controller.setContent('<div class="gene-tooltip-header"><div class="gene-tooltip-title"><strong>TP53</strong></div><div class="gt-tooltip-actions"><button class="gt-pin-button" type="button">Pin</button><button class="gt-close-button" type="button">Close</button></div></div>');
+    controller.show();
+    vi.runAllTimers();
+    vi.spyOn(controller.root, 'getBoundingClientRect').mockReturnValue({
+      left: 120, top: 140, width: 240, height: 180, right: 360, bottom: 320,
+      x: 120, y: 140, toJSON: () => ({}),
+    } as DOMRect);
+    controller.setPinned(true);
+    const header = controller.root.querySelector<HTMLElement>('.gene-tooltip-header')!;
+    const title = controller.root.querySelector<HTMLElement>('.gene-tooltip-title')!;
+    dispatchPointer(title, 'pointerdown', { pointerId: 7, clientX: 10, clientY: 10 });
+    dispatchPointer(header, 'pointermove', { pointerId: 7, clientX: 13, clientY: 13 });
+    expect(controller.root.style.left).toBe('120px');
+    expect(controller.root.style.top).toBe('140px');
+    dispatchPointer(header, 'pointermove', { pointerId: 7, clientX: 70, clientY: 80 });
+    expect(controller.root.style.left).toBe('180px');
+    expect(controller.root.style.top).toBe('210px');
+    expect(controller.root.dataset.pinnedDragging).toBe('true');
+    dispatchPointer(header, 'pointercancel', { pointerId: 7, clientX: 70, clientY: 80 });
+    expect(controller.root.style.left).toBe('120px');
+    expect(controller.root.style.top).toBe('140px');
+    expect(controller.root.style.userSelect).toBe('');
+    expect(controller.root.hasAttribute('data-pinned-dragging')).toBe(false);
+
+    dispatchPointer(title, 'pointerdown', { pointerId: 9, clientX: 10, clientY: 10 });
+    dispatchPointer(header, 'pointermove', { pointerId: 9, clientX: 2000, clientY: 2000 });
+    dispatchPointer(header, 'pointerup', { pointerId: 9, clientX: 2000, clientY: 2000 });
+    expect(controller.root.style.left).toBe('776px');
+    expect(controller.root.style.top).toBe('580px');
+
+    const pin = controller.root.querySelector<HTMLElement>('.gt-pin-button')!;
+    dispatchPointer(pin, 'pointerdown', { pointerId: 8, clientX: 10, clientY: 10 });
+    dispatchPointer(pin, 'pointermove', { pointerId: 8, clientX: 90, clientY: 90 });
+    expect(controller.root.style.left).toBe('776px');
+    expect(controller.root.style.top).toBe('580px');
+  });
+
+  it('supports preset and keyboard moves while keeping drawers and nested tooltips anchored', () => {
+    const { controller } = createController();
+    controller.setContent('<div class="gene-tooltip-header"><div class="gene-tooltip-title">TP53</div></div>');
+    controller.show();
+    vi.runAllTimers();
+    vi.spyOn(controller.root, 'getBoundingClientRect').mockReturnValue({
+      left: 120, top: 140, width: 240, height: 180, right: 360, bottom: 320,
+      x: 120, y: 140, toJSON: () => ({}),
+    } as DOMRect);
+    controller.setPinned(true);
+    const move = controller.root.querySelector<HTMLButtonElement>('.gt-move-button')!;
+    move.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    expect(controller.root.style.left).toBe('128px');
+    move.click();
+    const topLeft = controller.root.querySelector<HTMLButtonElement>('[data-position="top-left"]')!;
+    topLeft.click();
+    expect(controller.root.style.left).toBe('8px');
+    expect(controller.root.style.top).toBe('8px');
+
+    controller.updateOptions({ presentation: 'drawer' });
+    expect(controller.root.dataset.pinned).toBeUndefined();
+    expect(controller.root.querySelector('.gt-move-button')).toBeNull();
+
+    const nestedReference = document.createElement('button');
+    controller.content.append(nestedReference);
+    const nested = new TooltipController(nestedReference, {
+      content: 'Nested', tooltip: immediateOptions, theme: 'light', parent: controller,
+    });
+    controller.addNestedTooltip(nested);
+    nested.show();
+    vi.runAllTimers();
+    nested.setPinned(true);
+    expect(nested._isPinned).toBe(false);
+    expect(nested.root.querySelector('.gt-move-button')).toBeNull();
+  });
+
+  it('clamps pinned panels after viewport resize and cleans up without reanchoring on close', () => {
+    const { controller } = createController({ hideDuration: 100 });
+    controller.setContent('<div class="gene-tooltip-header"><div class="gene-tooltip-title">TP53</div><div class="gt-tooltip-actions"><button class="gt-pin-button" type="button">Pin</button><button class="gt-close-button" type="button">Close</button></div></div>');
+    controller.show();
+    vi.runAllTimers();
+    vi.spyOn(controller.root, 'getBoundingClientRect').mockReturnValue({
+      left: 700, top: 500, width: 240, height: 180, right: 940, bottom: 680,
+      x: 700, y: 500, toJSON: () => ({}),
+    } as DOMRect);
+    controller.setPinned(true);
+
+    const originalWidth = window.innerWidth;
+    const originalHeight = window.innerHeight;
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 600 });
+    Object.defineProperty(window, 'innerHeight', { configurable: true, value: 500 });
+    window.dispatchEvent(new Event('resize'));
+    expect(controller.root.style.left).toBe('352px');
+    expect(controller.root.style.top).toBe('312px');
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: originalWidth });
+    Object.defineProperty(window, 'innerHeight', { configurable: true, value: originalHeight });
+
+    destroyPositioner.mockClear();
+    controller.close();
+    expect(controller.root.dataset.pinned).toBeUndefined();
+    expect(controller.root.querySelector('.gt-move-button')).toBeNull();
+    expect(controller.arrow.hidden).toBe(false);
+    expect(controller.root.style.position).toBe('fixed');
+    vi.runAllTimers();
+    expect(destroyPositioner).not.toHaveBeenCalled();
+    expect(controller.status).toBe('idle');
+  });
+
+  it('restores trigger focus when Escape closes from a pinned move control', () => {
+    const { reference, controller } = createController();
+    controller.setContent('<div class="gene-tooltip-header"><div class="gene-tooltip-title">TP53</div><div class="gt-tooltip-actions"><button class="gt-pin-button" type="button">Pin</button><button class="gt-close-button" type="button">Close</button></div></div>');
+    controller.show();
+    vi.runAllTimers();
+    vi.spyOn(controller.root, 'getBoundingClientRect').mockReturnValue({
+      left: 120, top: 140, width: 240, height: 180, right: 360, bottom: 320,
+      x: 120, y: 140, toJSON: () => ({}),
+    } as DOMRect);
+    controller.setPinned(true);
+    controller.root.querySelector<HTMLButtonElement>('.gt-move-button')!.focus();
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+    expect(document.activeElement).toBe(reference);
+    expect(controller.status).toBe('closing');
+  });
+
   it('propagates automatic theme changes to the owned shell', async () => {
     const { controller } = createController();
     controller._themeIntent = 'auto';

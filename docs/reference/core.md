@@ -91,6 +91,16 @@ The handle is present only while a top-level dialog uses drawer presentation.
 At wider widths, the anchored popover keeps its existing Close button; nested
 tooltips also keep their anchored popover behavior.
 
+On a wide-screen popover, the pin control is labelled **Pin tooltip in place**.
+Pinning freezes the current viewport position, stops anchor tracking, hides the
+arrow, and keeps the panel open until **Unpin and close tooltip**, **Close**, or
+Escape. The pinned header can be dragged from its non-interactive area and is
+clamped to the visual viewport. A four-direction icon labelled **Move tooltip**
+appears to the left of the existing pin and close glyphs and provides
+top-left, top-right, bottom-left, bottom-right, and reset presets; Arrow keys
+move the panel in small steps and Shift+Arrow uses a larger step. Drawers and
+nested tooltips cannot be pinned.
+
 Nested/descriptive tooltips remain anchored popovers regardless of this setting.
 Use `presentation: 'popover'` to retain the pre-drawer behavior at every width.
 

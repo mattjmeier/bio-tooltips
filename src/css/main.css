@@ -337,6 +337,106 @@
   gap: 0.5em;
 }
 
+/* A pinned popover is a movable viewport panel. The header remains a plain
+   container because it also contains the pin, move, and close controls. */
+[data-gt-tooltip-root][data-pinned='true'] {
+  position: fixed;
+}
+
+[data-gt-tooltip-root][data-pinned='true'] .gt-tooltip-arrow {
+  display: none;
+}
+
+[data-gt-tooltip-root][data-pinned='true'] .gene-tooltip-header {
+  cursor: grab;
+  touch-action: none;
+}
+
+[data-gt-tooltip-root][data-pinned='true'][data-pinned-dragging='true'] .gene-tooltip-header {
+  cursor: grabbing;
+}
+
+[data-gt-tooltip-root][data-pinned='true'] .gene-tooltip-header button,
+[data-gt-tooltip-root][data-pinned='true'] .gene-tooltip-header a,
+[data-gt-tooltip-root][data-pinned='true'] .gene-tooltip-header input,
+[data-gt-tooltip-root][data-pinned='true'] .gene-tooltip-header select,
+[data-gt-tooltip-root][data-pinned='true'] .gene-tooltip-header textarea {
+  touch-action: manipulation;
+}
+
+.gt-tooltip-move-controls {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.gt-move-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: .4rem;
+  color: var(--gt-text-color);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.gt-move-button:hover,
+.gt-move-button:focus-visible {
+  color: var(--gt-accent-color);
+  background-color: var(--gt-control-hover-background);
+}
+
+.gt-move-icon {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+}
+
+.gt-tooltip-move-menu {
+  position: absolute;
+  top: calc(100% + .25rem);
+  right: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: .25rem;
+  padding: .35rem;
+  margin-top: .25rem;
+  color: var(--gt-text-color);
+  background: var(--gt-background-color-base, #fff);
+  border: 1px solid var(--gt-border-color);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+}
+
+.gt-tooltip-move-menu[hidden] {
+  display: none;
+}
+
+.gt-tooltip-move-option {
+  min-height: 2rem;
+  padding: .25rem .5rem;
+  color: var(--gt-text-color);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.gt-tooltip-move-option:hover,
+.gt-tooltip-move-option:focus-visible {
+  color: var(--gt-accent-color);
+  background-color: var(--gt-control-hover-background);
+}
+
 .gene-tooltip-header .gt-tooltip-actions { flex: 0 0 auto; }
 
 .gene-tooltip-title {

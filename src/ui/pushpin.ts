@@ -13,7 +13,7 @@ export function attachPushpin(instance: TooltipController<any>) {
   if (!btn) return;
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
-    togglePin(instance, btn);
+    instance.setPinned(!instance._isPinned);
   });
 
   // Store the button element. This persists across hide/show cycles.
@@ -22,22 +22,4 @@ export function attachPushpin(instance: TooltipController<any>) {
   // while presentation changes. Synchronize all state immediately, not just
   // visibility, so the newly rendered control is truthful on first paint.
   instance.syncPinButton?.();
-}
-
-
-
-function togglePin(instance: TooltipController<any>, btn: HTMLElement) {
-  instance._isPinned = !instance._isPinned;
-  btn.setAttribute('aria-pressed', String(instance._isPinned));
-
-  if (instance._isPinned) {
-    btn.classList.add('gt-pin-active');
-    btn.setAttribute('aria-label', 'Unpin tooltip');
-    instance.setPinned(true);
-
-  } else {
-    btn.classList.remove('gt-pin-active');
-    btn.setAttribute('aria-label', 'Pin tooltip');
-    instance.setPinned(false);
-  }
 }

@@ -3,7 +3,13 @@ import type { TooltipOpenOptions } from './tooltip-handle.js';
 import { startPositioning, type ActivePositioner } from './positioning.js';
 import { logTooltipTiming } from './timing.js';
 import { generateUniqueTooltipId } from '../utils.js';
-import { registerTopLevelTooltip, unregisterTopLevelTooltip, registerOpenTooltip, unregisterOpenTooltip } from './tooltip-registry.js';
+import {
+  getOpenTopLevelTooltips,
+  registerTopLevelTooltip,
+  unregisterTopLevelTooltip,
+  registerOpenTooltip,
+  unregisterOpenTooltip,
+} from './tooltip-registry.js';
 
 function isNativeInteractive(element: Element): boolean {
   return element instanceof HTMLButtonElement || element instanceof HTMLAnchorElement
@@ -51,8 +57,23 @@ interface DrawerPointerGesture {
   dragging: boolean;
 }
 
+interface PinnedPointerGesture {
+  pointerId: number;
+  startX: number;
+  startY: number;
+  originLeft: number;
+  originTop: number;
+  dragging: boolean;
+}
+
 const DRAWER_DRAG_START_DISTANCE = 6;
 const DRAWER_DISMISS_DISTANCE = 96;
+const PINNED_DRAG_START_DISTANCE = 6;
+const PINNED_NUDGE_DISTANCE = 8;
+const PINNED_NUDGE_LARGE_DISTANCE = 24;
+const PINNED_Z_INDEX_BASE = 11000;
+const PINNED_Z_INDEX_LIMIT = 11099;
+let nextPinnedZIndex = PINNED_Z_INDEX_BASE;
 
 export class TooltipController<TData = unknown> {
   readonly reference: Element;
@@ -131,6 +152,13 @@ export class TooltipController<TData = unknown> {
   private drawerGesture?: DrawerPointerGesture;
   private suppressNextDrawerClick = false;
   private drawerClickResetTimer?: ReturnType<typeof setTimeout>;
+  private pinnedPosition?: { left: number; top: number; originalLeft: number; originalTop: number };
+  private pinnedGesture?: PinnedPointerGesture;
+  private pinnedDragElement?: HTMLElement;
+  private pinnedControlsCleanup?: () => void;
+  private pinnedViewportCleanup?: () => void;
+  private suppressPinnedClick = false;
+  private pinnedClickResetTimer?: ReturnType<typeof setTimeout>;
 
   constructor(reference: Element, options: TooltipControllerOptions<TData>) {
     this.reference = reference;
@@ -225,6 +253,14 @@ export class TooltipController<TData = unknown> {
       return;
     }
     if (next !== 'drawer') this.cancelDrawerGesture();
+    if (next === 'drawer' && this._isPinned) {
+      const active = document.activeElement;
+      if (active instanceof Node && (
+        this.root.querySelector('.gt-move-button')?.contains(active)
+        || this.root.querySelector('.gt-tooltip-move-menu')?.contains(active)
+      )) this.box.focus({ preventScroll: true });
+      this.clearPinnedPresentation();
+    }
     this.presentation = next;
     this.root.dataset.presentation = next;
     this.syncDrawerHandle();
@@ -340,7 +376,8 @@ export class TooltipController<TData = unknown> {
     if (options.theme) this.setTheme(options.theme);
     if (options.presentation !== undefined && !this.parent) this.setPresentation(options.presentation);
     if (options.accessibleName && this.kind === 'dialog') this.box.setAttribute('aria-label', options.accessibleName);
-    if (this.state.isMounted) this.restartPositioning();
+    if (this.state.isMounted && !this._isPinned) this.restartPositioning();
+    else if (this._isPinned) this.clampPinnedPosition();
   }
 
   async updatePosition(): Promise<void> {
@@ -368,27 +405,30 @@ export class TooltipController<TData = unknown> {
   }
 
   setPinned(pinned: boolean): void {
-    if (this.isDrawerPresentation()) {
+    if (this.parent || this.kind !== 'dialog' || this.isDrawerPresentation()) {
       this._isPinned = false;
+      this.clearPinnedPresentation();
       this.syncPinButton();
       return;
     }
     this._isPinned = pinned;
-    this.syncPinButton();
     if (pinned) {
       this.clearHideTimers();
-      this.show();
+      if (this.status === 'open' && this.state.isMounted) this.pinAtCurrentPosition();
+      else this.show();
     } else {
       this.close();
     }
+    this.syncPinButton();
   }
 
   destroy(): void {
     if (this.state.isDestroyed) return;
+    if (this.containsPanelFocus()) this.returnFocus();
     this.cancelDrawerGesture();
+    this.clearPinnedPresentation(false);
     if (this.drawerClickResetTimer) clearTimeout(this.drawerClickResetTimer);
     this.drawerClickResetTimer = undefined;
-    if (this.containsPanelFocus()) this.returnFocus();
     this.status = 'destroyed';
     this.state.isDestroyed = true;
     this.state.isShown = false;
@@ -447,12 +487,14 @@ export class TooltipController<TData = unknown> {
 
   /** Explicitly dismiss this controller, including pinned dialogs. */
   close(): void {
+    if (this.kind === 'dialog' && this.containsPanelFocus()) this.returnFocus();
     this.explicitClose = true;
     this.clearShowTimer();
     this.clearHideTimers();
     this._isPinned = false;
+    this.clearPinnedPresentation(false);
     this._pinButton?.classList.remove('gt-pin-active');
-    this._pinButton?.setAttribute('aria-label', 'Pin tooltip');
+    this._pinButton?.setAttribute('aria-label', 'Pin tooltip in place');
     this._pinButton?.setAttribute('aria-pressed', 'false');
     this.closeNow();
   }
@@ -472,6 +514,7 @@ export class TooltipController<TData = unknown> {
     this.status = 'open';
     this._peerDismissed = false;
     this.state.isShown = true;
+    if (this._isPinned) this.pinAtCurrentPosition();
     // Top-level only: nested tooltips carry a parent and are dismissed with
     // theirs, so they never participate in the cross-engine "one at a time" set.
     if (!this.parent) registerTopLevelTooltip(this);
@@ -555,6 +598,7 @@ export class TooltipController<TData = unknown> {
 
   private unmount(): void {
     this._isPointerInside = false;
+    this.cancelPinnedGesture();
     this.stopPositioning();
     this.root.style.visibility = 'hidden';
     this.state.isMounted = false;
@@ -573,7 +617,7 @@ export class TooltipController<TData = unknown> {
 
   private restartPositioning(): void {
     this.stopPositioning();
-    if (!this.state.isMounted || this.isDrawerPresentation()) return;
+    if (!this.state.isMounted || this.isDrawerPresentation() || this._isPinned) return;
     this.positioner = startPositioning({
       reference: this.reference,
       root: this.root,
@@ -609,6 +653,127 @@ export class TooltipController<TData = unknown> {
     this.content.style.removeProperty('--gt-available-width');
     this.content.style.removeProperty('--gt-available-height');
     this.arrow.style.cssText = '';
+  }
+
+  private isPinnedPopover(): boolean {
+    return Boolean(this._isPinned) && !this.parent && this.kind === 'dialog' && !this.isDrawerPresentation();
+  }
+
+  private currentViewport(): { left: number; top: number; width: number; height: number } {
+    const viewport = window.visualViewport;
+    return {
+      left: viewport?.offsetLeft ?? 0,
+      top: viewport?.offsetTop ?? 0,
+      width: viewport?.width ?? window.innerWidth,
+      height: viewport?.height ?? window.innerHeight,
+    };
+  }
+
+  private clampPinnedCoordinates(left: number, top: number): { left: number; top: number } {
+    const padding = this.options.tooltip.viewportPadding ?? 8;
+    const viewport = this.currentViewport();
+    const rect = this.root.getBoundingClientRect();
+    const width = Math.max(0, rect.width);
+    const height = Math.max(0, rect.height);
+    const minLeft = viewport.left + padding;
+    const minTop = viewport.top + padding;
+    const maxLeft = Math.max(minLeft, viewport.left + viewport.width - width - padding);
+    const maxTop = Math.max(minTop, viewport.top + viewport.height - height - padding);
+    return {
+      left: Math.min(maxLeft, Math.max(minLeft, left)),
+      top: Math.min(maxTop, Math.max(minTop, top)),
+    };
+  }
+
+  private pinAtCurrentPosition(): void {
+    if (!this.isPinnedPopover() || !this.state.isMounted || this.status !== 'open') return;
+    if (this.pinnedPosition) {
+      this.applyPinnedPosition(this.pinnedPosition.left, this.pinnedPosition.top);
+      return;
+    }
+
+    const rect = this.root.getBoundingClientRect();
+    const styledLeft = Number.parseFloat(this.root.style.left);
+    const styledTop = Number.parseFloat(this.root.style.top);
+    const left = Number.isFinite(rect.left) && (rect.width || rect.height || rect.left || rect.top)
+      ? rect.left
+      : (Number.isFinite(styledLeft) ? styledLeft : 0);
+    const top = Number.isFinite(rect.top) && (rect.width || rect.height || rect.left || rect.top)
+      ? rect.top
+      : (Number.isFinite(styledTop) ? styledTop : 0);
+    const clamped = this.clampPinnedCoordinates(left, top);
+    this.pinnedPosition = { ...clamped, originalLeft: clamped.left, originalTop: clamped.top };
+    this.stopPositioning();
+    this.root.style.position = 'fixed';
+    this.root.style.right = 'auto';
+    this.root.style.bottom = 'auto';
+    this.root.dataset.pinned = 'true';
+    this.arrow.hidden = true;
+    this.bringPinnedToFront();
+    this.applyPinnedPosition(clamped.left, clamped.top);
+    this.installPinnedViewportListener();
+    this.ensurePinnedControls();
+  }
+
+  private applyPinnedPosition(left: number, top: number): void {
+    if (!this.pinnedPosition) return;
+    const clamped = this.clampPinnedCoordinates(left, top);
+    this.pinnedPosition.left = clamped.left;
+    this.pinnedPosition.top = clamped.top;
+    this.root.style.left = `${clamped.left}px`;
+    this.root.style.top = `${clamped.top}px`;
+  }
+
+  private clampPinnedPosition(): void {
+    if (!this.isPinnedPopover() || !this.pinnedPosition) return;
+    this.applyPinnedPosition(this.pinnedPosition.left, this.pinnedPosition.top);
+  }
+
+  private clearPinnedPresentation(restartAnchored = true): void {
+    const wasPinned = Boolean(this.pinnedPosition) || this.root.dataset.pinned === 'true';
+    this.cancelPinnedGesture();
+    if (this.pinnedClickResetTimer) clearTimeout(this.pinnedClickResetTimer);
+    this.pinnedClickResetTimer = undefined;
+    this.suppressPinnedClick = false;
+    this.pinnedViewportCleanup?.();
+    this.pinnedViewportCleanup = undefined;
+    this.pinnedPosition = undefined;
+    this.root.removeAttribute('data-pinned');
+    this.root.removeAttribute('data-pinned-dragging');
+    this.root.style.removeProperty('user-select');
+    this.arrow.hidden = false;
+    this.pinnedControlsCleanup?.();
+    this.pinnedControlsCleanup = undefined;
+    if (restartAnchored && wasPinned && this.state.isMounted && !this.isDrawerPresentation()) {
+      this.restartPositioning();
+    }
+  }
+
+  private bringPinnedToFront(): void {
+    if (!this.isPinnedPopover()) return;
+    if (nextPinnedZIndex > PINNED_Z_INDEX_LIMIT) {
+      let zIndex = PINNED_Z_INDEX_BASE;
+      for (const controller of getOpenTopLevelTooltips()) {
+        if (controller === this || controller.root.dataset.pinned !== 'true') continue;
+        controller.root.style.zIndex = String(Math.min(zIndex, PINNED_Z_INDEX_LIMIT - 1));
+        zIndex += 1;
+      }
+      nextPinnedZIndex = Math.min(zIndex, PINNED_Z_INDEX_LIMIT);
+    }
+    this.root.style.zIndex = String(nextPinnedZIndex);
+    nextPinnedZIndex += 1;
+  }
+
+  private installPinnedViewportListener(): void {
+    if (this.pinnedViewportCleanup) return;
+    const resize = () => this.clampPinnedPosition();
+    const viewport = window.visualViewport;
+    viewport?.addEventListener('resize', resize);
+    window.addEventListener('resize', resize);
+    this.pinnedViewportCleanup = () => {
+      viewport?.removeEventListener('resize', resize);
+      window.removeEventListener('resize', resize);
+    };
   }
 
   private initializePresentation(): void {
@@ -760,7 +925,242 @@ export class TooltipController<TData = unknown> {
     this._pinButton.setAttribute('aria-hidden', String(drawer));
     this._pinButton.setAttribute('aria-pressed', String(pinned));
     this._pinButton.classList.toggle('gt-pin-active', pinned);
-    this._pinButton.setAttribute('aria-label', pinned ? 'Unpin tooltip' : 'Pin tooltip');
+    this._pinButton.setAttribute('aria-label', pinned ? 'Unpin and close tooltip' : 'Pin tooltip in place');
+    if (pinned) this.ensurePinnedControls();
+    else {
+      this.pinnedControlsCleanup?.();
+      this.pinnedControlsCleanup = undefined;
+    }
+  }
+
+  private ensurePinnedControls(): void {
+    if (!this.isPinnedPopover()) return;
+    const header = this.root.querySelector<HTMLElement>('.gene-tooltip-header');
+    if (!header) return;
+    if (this.pinnedControlsCleanup && this.pinnedDragElement === header) return;
+    this.cancelPinnedGesture();
+    this.pinnedControlsCleanup?.();
+    this.pinnedControlsCleanup = undefined;
+
+    let actions = header.querySelector<HTMLElement>('.gt-tooltip-actions');
+    if (!actions) {
+      actions = document.createElement('div');
+      actions.className = 'gt-tooltip-actions';
+      header.append(actions);
+    }
+
+    const controls = document.createElement('div');
+    controls.className = 'gt-tooltip-move-controls';
+    const move = document.createElement('button');
+    move.type = 'button';
+    move.className = 'gt-move-button';
+    move.setAttribute('aria-label', 'Move tooltip');
+    move.setAttribute('title', 'Move tooltip');
+    const menuId = `${this.tooltipId}-move-options`;
+    move.setAttribute('aria-controls', menuId);
+    move.innerHTML = '<svg class="gt-move-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708zM.146 8.354a.5.5 0 0 1 0-.708l2-2a.5.5 0 1 1 .708.708L1.707 7.5H5.5a.5.5 0 0 1 0 1H1.707l1.147 1.146a.5.5 0 0 1-.708.708zM15.854 7.646a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L14.293 8.5H10.5a.5.5 0 0 1 0-1h3.793l-1.147-1.146a.5.5 0 0 1 .708-.708zM8.354 15.854a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5a.5.5 0 0 1 1 0v3.793l1.146-1.147a.5.5 0 0 1 .708.708z"/></svg>';
+
+    const menu = document.createElement('div');
+    menu.className = 'gt-tooltip-move-menu';
+    menu.id = menuId;
+    menu.hidden = true;
+    menu.setAttribute('role', 'group');
+    menu.setAttribute('aria-label', 'Tooltip positions');
+    const presets = [
+      ['top-left', 'Move tooltip to top left'],
+      ['top-right', 'Move tooltip to top right'],
+      ['bottom-left', 'Move tooltip to bottom left'],
+      ['bottom-right', 'Move tooltip to bottom right'],
+      ['reset', 'Reset tooltip position'],
+    ] as const;
+    const presetButtons: HTMLButtonElement[] = [];
+    for (const [preset, label] of presets) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'gt-tooltip-move-option';
+      button.dataset.position = preset;
+      button.setAttribute('aria-label', label);
+      button.textContent = label.replace('Move tooltip to ', '').replace('Reset tooltip position', 'Reset');
+      menu.append(button);
+      presetButtons.push(button);
+    }
+    const status = document.createElement('span');
+    status.className = 'gt-tooltip-move-status gt-sr-only';
+    status.setAttribute('role', 'status');
+    status.setAttribute('aria-live', 'polite');
+    controls.append(move, menu, status);
+    actions.insertBefore(controls, actions.firstElementChild);
+    const moveHeader = header;
+    const onMoveClick = (event: MouseEvent) => {
+      event.stopPropagation();
+      menu.hidden = !menu.hidden;
+      move.setAttribute('aria-expanded', String(!menu.hidden));
+    };
+    const onMoveKeydown = (event: KeyboardEvent) => {
+      if (!this.isPinnedPopover()) return;
+      const distances = event.shiftKey ? PINNED_NUDGE_LARGE_DISTANCE : PINNED_NUDGE_DISTANCE;
+      const deltas: Record<string, [number, number]> = {
+        ArrowLeft: [-distances, 0], ArrowRight: [distances, 0],
+        ArrowUp: [0, -distances], ArrowDown: [0, distances],
+      };
+      const delta = deltas[event.key];
+      if (!delta) return;
+      event.preventDefault();
+      event.stopPropagation();
+      this.movePinnedBy(delta[0], delta[1], true);
+    };
+    const onPresetClick = (event: Event) => {
+      const target = event.currentTarget as HTMLButtonElement;
+      this.movePinnedToPreset(target.dataset.position ?? 'reset');
+      menu.hidden = true;
+      move.setAttribute('aria-expanded', 'false');
+    };
+    move.setAttribute('aria-expanded', 'false');
+    move.addEventListener('click', onMoveClick);
+    move.addEventListener('keydown', onMoveKeydown);
+    presetButtons.forEach(button => button.addEventListener('click', onPresetClick));
+    this.pinnedDragElement = moveHeader;
+    const dragCleanup = this.installPinnedHeaderInteractions(moveHeader);
+    this.pinnedControlsCleanup = () => {
+      move.removeEventListener('click', onMoveClick);
+      move.removeEventListener('keydown', onMoveKeydown);
+      presetButtons.forEach(button => button.removeEventListener('click', onPresetClick));
+      dragCleanup();
+      move.remove();
+      menu.remove();
+      status.remove();
+      controls.remove();
+      this.pinnedDragElement = undefined;
+    };
+  }
+
+  private installPinnedHeaderInteractions(header: HTMLElement): () => void {
+    const onPointerDown = (event: PointerEvent) => this.handlePinnedPointerDown(event, header);
+    const onPointerMove = (event: PointerEvent) => this.handlePinnedPointerMove(event);
+    const onPointerUp = (event: PointerEvent) => this.handlePinnedPointerUp(event);
+    const onPointerCancel = (event: PointerEvent) => this.handlePinnedPointerCancel(event);
+    const onLostPointerCapture = (event: PointerEvent) => this.handlePinnedPointerCancel(event);
+    header.addEventListener('pointerdown', onPointerDown as EventListener);
+    header.addEventListener('pointermove', onPointerMove as EventListener);
+    header.addEventListener('pointerup', onPointerUp as EventListener);
+    header.addEventListener('pointercancel', onPointerCancel as EventListener);
+    header.addEventListener('lostpointercapture', onLostPointerCapture as EventListener);
+    return () => {
+      header.removeEventListener('pointerdown', onPointerDown as EventListener);
+      header.removeEventListener('pointermove', onPointerMove as EventListener);
+      header.removeEventListener('pointerup', onPointerUp as EventListener);
+      header.removeEventListener('pointercancel', onPointerCancel as EventListener);
+      header.removeEventListener('lostpointercapture', onLostPointerCapture as EventListener);
+    };
+  }
+
+  private handlePinnedPointerDown(event: PointerEvent, header: HTMLElement): void {
+    if (!this.isPinnedPopover() || this.status !== 'open' || !event.isPrimary || event.button !== 0) return;
+    const target = event.target;
+    if (!(target instanceof Element) || !header.contains(target)
+      || target.closest('button, a, input, select, textarea, summary, [contenteditable="true"]')) return;
+    this.bringPinnedToFront();
+    const left = this.pinnedPosition?.left ?? (Number.parseFloat(this.root.style.left) || 0);
+    const top = this.pinnedPosition?.top ?? (Number.parseFloat(this.root.style.top) || 0);
+    this.pinnedGesture = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originLeft: left,
+      originTop: top,
+      dragging: false,
+    };
+    try {
+      header.setPointerCapture(event.pointerId);
+    } catch {
+      // Pointer capture is not available in a few test/embedded DOMs.
+    }
+  }
+
+  private handlePinnedPointerMove(event: PointerEvent): void {
+    const gesture = this.pinnedGesture;
+    if (!gesture || gesture.pointerId !== event.pointerId || !this.isPinnedPopover()) return;
+    const deltaX = event.clientX - gesture.startX;
+    const deltaY = event.clientY - gesture.startY;
+    if (!gesture.dragging && Math.hypot(deltaX, deltaY) < PINNED_DRAG_START_DISTANCE) return;
+    gesture.dragging = true;
+    event.preventDefault();
+    this.root.dataset.pinnedDragging = 'true';
+    this.root.style.userSelect = 'none';
+    this.movePinnedTo(gesture.originLeft + deltaX, gesture.originTop + deltaY, false);
+  }
+
+  private handlePinnedPointerUp(event: PointerEvent): void {
+    const gesture = this.pinnedGesture;
+    if (!gesture || gesture.pointerId !== event.pointerId) return;
+    const wasDragging = gesture.dragging;
+    this.cancelPinnedGesture();
+    if (wasDragging) {
+      this.suppressPinnedClick = true;
+      this.pinnedClickResetTimer = setTimeout(() => {
+        this.suppressPinnedClick = false;
+        this.pinnedClickResetTimer = undefined;
+      }, 0);
+    }
+  }
+
+  private handlePinnedPointerCancel(event: PointerEvent): void {
+    const gesture = this.pinnedGesture;
+    if (!gesture || gesture.pointerId !== event.pointerId) return;
+    this.cancelPinnedGesture();
+    this.movePinnedTo(gesture.originLeft, gesture.originTop, false);
+  }
+
+  private cancelPinnedGesture(): void {
+    const pointerId = this.pinnedGesture?.pointerId;
+    const element = this.pinnedDragElement;
+    this.pinnedGesture = undefined;
+    this.root.removeAttribute('data-pinned-dragging');
+    this.root.style.removeProperty('user-select');
+    if (pointerId !== undefined && element?.hasPointerCapture?.(pointerId)) {
+      try {
+        element.releasePointerCapture(pointerId);
+      } catch {
+        // Capture may already have been released by cancellation.
+      }
+    }
+  }
+
+  private movePinnedBy(deltaX: number, deltaY: number, announce: boolean): void {
+    if (!this.pinnedPosition) return;
+    this.movePinnedTo(this.pinnedPosition.left + deltaX, this.pinnedPosition.top + deltaY, announce);
+  }
+
+  private movePinnedTo(left: number, top: number, announce: boolean): void {
+    if (!this.isPinnedPopover() || !this.pinnedPosition) return;
+    this.applyPinnedPosition(left, top);
+    if (announce) this.announcePinnedMovement();
+  }
+
+  private movePinnedToPreset(preset: string): void {
+    if (!this.isPinnedPopover() || !this.pinnedPosition) return;
+    const padding = this.options.tooltip.viewportPadding ?? 8;
+    const viewport = this.currentViewport();
+    const rect = this.root.getBoundingClientRect();
+    const width = Math.max(0, rect.width);
+    const height = Math.max(0, rect.height);
+    const right = viewport.left + viewport.width - width - padding;
+    const bottom = viewport.top + viewport.height - height - padding;
+    const positions: Record<string, [number, number]> = {
+      'top-left': [viewport.left + padding, viewport.top + padding],
+      'top-right': [right, viewport.top + padding],
+      'bottom-left': [viewport.left + padding, bottom],
+      'bottom-right': [right, bottom],
+      reset: [this.pinnedPosition.originalLeft, this.pinnedPosition.originalTop],
+    };
+    const target = positions[preset] ?? positions.reset;
+    this.movePinnedTo(target[0], target[1], true);
+  }
+
+  private announcePinnedMovement(): void {
+    const status = this.root.querySelector<HTMLElement>('.gt-tooltip-move-status');
+    if (!status || !this.pinnedPosition) return;
+    status.textContent = `Tooltip moved to ${Math.round(this.pinnedPosition.left)}, ${Math.round(this.pinnedPosition.top)}.`;
   }
 
   private setChildVisible(child: TooltipController<any>, visible: boolean): void {
@@ -826,7 +1226,19 @@ export class TooltipController<TData = unknown> {
       this.clearHideTimers();
     });
     this.listen(this.root, 'mouseleave', (event: Event) => this.handlePointerLeave(event as MouseEvent));
-    this.listen(this.root, 'focusin', () => this.clearHideTimers());
+    this.listen(this.root, 'focusin', () => {
+      this.bringPinnedToFront();
+      this.clearHideTimers();
+    });
+    this.listen(this.root, 'pointerdown', () => this.bringPinnedToFront());
+    this.listen(this.root, 'click', (event: Event) => {
+      if (!this.suppressPinnedClick) return;
+      this.suppressPinnedClick = false;
+      if (this.pinnedClickResetTimer) clearTimeout(this.pinnedClickResetTimer);
+      this.pinnedClickResetTimer = undefined;
+      event.preventDefault();
+      event.stopPropagation();
+    }, { capture: true });
     this.listen(this.root, 'focusout', () => this.handleFocusLeave());
     this.listen(this.root, 'keydown', (event: Event) => {
       if (!event.defaultPrevented) this.handlePanelKeydown(event as KeyboardEvent);
@@ -938,6 +1350,10 @@ export class TooltipController<TData = unknown> {
 
   private handleContentResize(): void {
     if (!this.state.isMounted) return;
+    if (this.isPinnedPopover()) {
+      this.clampPinnedPosition();
+      return;
+    }
     this.preservedInteractiveRect = this.root.getBoundingClientRect();
     this.clearHideTimers();
     queueMicrotask(() => {

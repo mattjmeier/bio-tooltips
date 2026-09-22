@@ -157,7 +157,7 @@ describe('tooltip engine lifecycle', () => {
     reference.dispatchEvent(new MouseEvent('mouseleave', { relatedTarget: document.body }));
     vi.runAllTimers();
     expect(document.querySelector('[data-gt-tooltip-root]')).not.toBeNull();
-    expect(pin.getAttribute('aria-label')).toBe('Unpin tooltip');
+    expect(pin.getAttribute('aria-label')).toBe('Unpin and close tooltip');
 
     pin.click();
     vi.runAllTimers();
