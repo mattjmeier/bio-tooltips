@@ -794,6 +794,16 @@ describe('TooltipController', () => {
     expect(controller.root.querySelector('.gt-tooltip-actions')?.firstElementChild)
       .toBe(move?.closest('.gt-tooltip-move-controls'));
     expect(controller.root.querySelectorAll('.gt-tooltip-move-option')).toHaveLength(5);
+    expect(Array.from(
+      controller.root.querySelectorAll<HTMLButtonElement>('.gt-tooltip-move-option'),
+      (button) => [button.dataset.position, button.textContent],
+    )).toEqual([
+      ['top-left', 'Top left'],
+      ['top-right', 'Top right'],
+      ['bottom-left', 'Bottom left'],
+      ['bottom-right', 'Bottom right'],
+      ['reset', 'Reset'],
+    ]);
     expect(controller.root.querySelector('.gt-tooltip-actions')?.lastElementChild?.classList
       .contains('gt-close-button')).toBe(true);
 

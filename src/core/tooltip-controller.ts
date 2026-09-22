@@ -967,20 +967,20 @@ export class TooltipController<TData = unknown> {
     menu.setAttribute('role', 'group');
     menu.setAttribute('aria-label', 'Tooltip positions');
     const presets = [
-      ['top-left', 'Move tooltip to top left'],
-      ['top-right', 'Move tooltip to top right'],
-      ['bottom-left', 'Move tooltip to bottom left'],
-      ['bottom-right', 'Move tooltip to bottom right'],
-      ['reset', 'Reset tooltip position'],
+      ['top-left', 'Move tooltip to top left', 'Top left'],
+      ['top-right', 'Move tooltip to top right', 'Top right'],
+      ['bottom-left', 'Move tooltip to bottom left', 'Bottom left'],
+      ['bottom-right', 'Move tooltip to bottom right', 'Bottom right'],
+      ['reset', 'Reset tooltip position', 'Reset'],
     ] as const;
     const presetButtons: HTMLButtonElement[] = [];
-    for (const [preset, label] of presets) {
+    for (const [preset, label, text] of presets) {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'gt-tooltip-move-option';
       button.dataset.position = preset;
       button.setAttribute('aria-label', label);
-      button.textContent = label.replace('Move tooltip to ', '').replace('Reset tooltip position', 'Reset');
+      button.textContent = text;
       menu.append(button);
       presetButtons.push(button);
     }
