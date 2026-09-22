@@ -490,17 +490,23 @@ export function cleanupTooltipLifecycle<TData>(instance: TooltipController<TData
 }
 
 function constrainTooltipHeight(instance: TooltipController<any>, config: CoreTooltipConfig): void {
-  if (!config.constrainToViewport) return;
-
   const content = instance.content;
   if (!content) return;
+
+  // Drawer geometry is owned by the flex column and its selected detent. An
+  // inline popover-era max-height would cap the scroll owner at 75dvh even
+  // after the outer sheet expands, leaving unusable whitespace below it.
+  if (instance.isDrawerPresentation()) {
+    content.style.removeProperty('max-height');
+    return;
+  }
+
+  if (!config.constrainToViewport) return;
 
   const padding = config.tooltipOptions.viewportPadding ?? 8;
 
   const availableHeight = window.visualViewport?.height || window.innerHeight;
-  const viewportLimit = instance.isDrawerPresentation()
-    ? availableHeight * 0.75
-    : availableHeight - (padding * 2);
+  const viewportLimit = availableHeight - (padding * 2);
   const configuredLimit = config.tooltipHeight ?? Number.POSITIVE_INFINITY;
   (content as HTMLElement).style.maxHeight = `${Math.max(0, Math.min(viewportLimit, configuredLimit))}px`;
 }

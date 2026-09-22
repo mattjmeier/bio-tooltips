@@ -75,17 +75,26 @@ GeneTooltip.init({ presentation: 'popover' });
 GeneTooltip.init({ presentation: 'drawer' });
 ```
 
-The drawer is a non-modal, full-width bottom sheet capped at roughly 75% of
-the dynamic viewport height. Its content scrolls internally and includes the
-device bottom safe area. A 48px labelled handle at the top closes on tap and
-follows a downward drag; drags of 96px or more dismiss, while shorter drags
-snap back. Drawer content keeps its own scroll behavior. The page remains
-scrollable and interactive: there is no backdrop, focus trap, `aria-modal`,
-inert background, or page scroll lock. The drawer also closes with Escape,
-when another top-level tooltip opens, or after a completed click outside the
-drawer and its trigger. Clicking inside the drawer or its trigger does not
-close it; scroll gestures are not treated as outside clicks. Pinning is hidden
-in drawer mode because a drawer already persists until deliberate dismissal.
+The drawer is a non-modal, full-width bottom sheet. It opens at the reading
+position (`50dvh`) and can be resized with its top handle between five resting positions: peek
+(`max(120px, 15dvh)`), a lower intermediate position, reading (`50dvh`), an
+upper intermediate position, and expanded (the dynamic viewport minus top
+safe-area clearance). The intermediate positions evenly divide their adjacent
+ranges. The handle follows vertical pointer movement
+in both directions and settles at the nearest position; it is restricted to
+the handle so drawer content retains normal scrolling. A deliberate downward
+gesture from the peek position can dismiss the drawer, while ordinary drags
+resize it. The separate 44px Close control and Escape remain available as
+explicit dismissal paths. The page remains scrollable and interactive at the
+four partial positions: there is no backdrop, focus trap, `aria-modal`, or
+inert background. At the expanded position, background scrolling is locked so
+scroll input stays with the full-height drawer; the lock is released as soon
+as the drawer leaves that position or closes. The drawer also closes when
+another top-level tooltip opens or after a
+completed click outside the drawer and its trigger. Clicking inside the drawer
+or its trigger does not close it; scroll gestures are not treated as outside
+clicks. Pinning is hidden in drawer mode because a drawer already persists
+until deliberate dismissal.
 
 The handle is present only while a top-level dialog uses drawer presentation.
 At wider widths, the anchored popover keeps its existing Close button; nested

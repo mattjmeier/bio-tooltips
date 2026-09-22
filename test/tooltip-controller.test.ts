@@ -144,8 +144,15 @@ describe('TooltipController', () => {
     expect(controller.root.dataset.presentation).toBe('drawer');
     expect(controller.isDrawerPresentation()).toBe(true);
     const handle = controller.root.querySelector<HTMLButtonElement>('.gt-drawer-handle');
+    const closeButton = controller.root.querySelector<HTMLButtonElement>('.gt-drawer-close-button');
     expect(handle?.hidden).toBe(false);
-    expect(handle?.getAttribute('aria-label')).toBe('Close');
+    expect(handle?.getAttribute('aria-label')).toBe('Resize tooltip drawer');
+    expect(handle?.getAttribute('role')).toBe('slider');
+    expect(handle?.getAttribute('aria-valuetext')).toContain('Reading drawer');
+    expect(Number.parseFloat(controller.box.style.getPropertyValue('--gt-drawer-height')))
+      .toBeCloseTo(window.innerHeight * 0.5);
+    expect(closeButton?.getAttribute('aria-label')).toBe('Close');
+    expect(closeButton?.hidden).toBe(false);
     expect(controller.box.firstElementChild).toBe(handle);
     expect(controller.root.querySelector('.gt-tooltip-arrow')).not.toBeNull();
     expect(updatePosition).not.toHaveBeenCalled();
@@ -163,7 +170,7 @@ describe('TooltipController', () => {
     expect(controller.status).toBe('idle');
   });
 
-  it('tracks downward handle drags, snaps back when cancelled or short, and dismisses past the threshold', () => {
+  it('resizes the drawer in both directions, snaps to detents, and dismisses from peek', () => {
     const { reference, controller } = createController();
     controller.updateOptions({ presentation: 'drawer' });
     controller.enter();
@@ -171,25 +178,107 @@ describe('TooltipController', () => {
 
     dispatchPointer(handle, 'pointerdown', { pointerId: 1, clientY: 100 });
     dispatchPointer(handle, 'pointermove', { pointerId: 1, clientY: 140 });
-    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('40px');
+    expect(controller.box.style.getPropertyValue('--gt-drawer-height')).not.toBe('');
     dispatchPointer(handle, 'pointercancel', { pointerId: 1, clientY: 140 });
-    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('');
     expect(controller.status).toBe('open');
 
     dispatchPointer(handle, 'pointerdown', { pointerId: 2, clientY: 100 });
-    dispatchPointer(handle, 'pointermove', { pointerId: 2, clientY: 180 });
-    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('80px');
-    dispatchPointer(handle, 'pointerup', { pointerId: 2, clientY: 180 });
-    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('');
+    dispatchPointer(handle, 'pointermove', { pointerId: 2, clientX: 30, clientY: 20 });
+    expect(Number.parseFloat(controller.box.style.getPropertyValue('--gt-drawer-height'))).toBeGreaterThan(0);
+    dispatchPointer(handle, 'pointerup', { pointerId: 2, clientY: 20 });
+    expect(controller.box.style.getPropertyValue('--gt-drawer-height')).not.toBe('');
     expect(controller.status).toBe('open');
 
-    dispatchPointer(handle, 'pointerdown', { pointerId: 3, clientY: 100 });
-    dispatchPointer(handle, 'pointermove', { pointerId: 3, clientY: 205 });
-    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('105px');
-    dispatchPointer(handle, 'pointerup', { pointerId: 3, clientY: 205 });
+    handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
+    const peekHeight = Number.parseFloat(controller.box.style.getPropertyValue('--gt-drawer-height'));
+    expect(peekHeight).toBeGreaterThan(0);
+
+    dispatchPointer(handle, 'pointerdown', { pointerId: 2, clientY: 100 });
+    dispatchPointer(handle, 'pointermove', { pointerId: 2, clientY: 220 });
+    dispatchPointer(handle, 'pointerup', { pointerId: 2, clientY: 220 });
     expect(controller.status).toBe('closing');
     expect(document.activeElement).toBe(reference);
-    expect(controller.box.style.getPropertyValue('--gt-drawer-drag-y')).toBe('');
+  });
+
+  it('settles on capture loss and keeps resized height through the close transition', () => {
+    const { controller } = createController();
+    controller.updateOptions({ presentation: 'drawer' });
+    controller.enter();
+    const handle = controller.root.querySelector<HTMLButtonElement>('.gt-drawer-handle')!;
+
+    dispatchPointer(handle, 'pointerdown', { pointerId: 4, clientY: 100 });
+    dispatchPointer(handle, 'pointermove', { pointerId: 4, clientY: 200 });
+    handle.dispatchEvent(new Event('lostpointercapture', { bubbles: true }));
+    expect(controller.box.hasAttribute('data-drawer-dragging')).toBe(false);
+    const peekHeight = Math.max(120, window.innerHeight * 0.15);
+    expect(Number.parseFloat(controller.box.style.getPropertyValue('--gt-drawer-height')))
+      .toBeCloseTo((peekHeight + window.innerHeight * 0.5) / 2);
+
+    handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+    const beforeClose = controller.box.style.getPropertyValue('--gt-drawer-height');
+    expect(document.documentElement.classList.contains('gt-drawer-expanded-open')).toBe(true);
+    controller.close();
+    expect(controller.status).toBe('closing');
+    expect(document.documentElement.classList.contains('gt-drawer-expanded-open')).toBe(false);
+    expect(controller.box.style.getPropertyValue('--gt-drawer-height')).toBe(beforeClose);
+    vi.runAllTimers();
+    expect(controller.box.style.getPropertyValue('--gt-drawer-height')).toBe('');
+  });
+
+  it('prefers visual viewport height and resynchronizes drawer semantics on resize and content changes', async () => {
+    const originalViewport = Object.getOwnPropertyDescriptor(window, 'visualViewport');
+    const addEventListener = vi.fn();
+    const removeEventListener = vi.fn();
+    const visualViewport = {
+      height: 1000,
+      addEventListener,
+      removeEventListener,
+    };
+    Object.defineProperty(window, 'visualViewport', { configurable: true, value: visualViewport });
+    try {
+      const { controller } = createController();
+      controller.updateOptions({ presentation: 'drawer' });
+      controller.enter();
+      const handle = controller.root.querySelector<HTMLButtonElement>('.gt-drawer-handle')!;
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
+      expect(handle.getAttribute('aria-valuenow')).toBe('150');
+      expect(addEventListener).toHaveBeenCalledWith('resize', expect.any(Function));
+
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', bubbles: true }));
+      expect(handle.getAttribute('aria-valuenow')).toBe('325');
+      expect(handle.getAttribute('aria-valuetext')).toContain('Lower drawer');
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', bubbles: true }));
+      expect(handle.getAttribute('aria-valuenow')).toBe('500');
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', bubbles: true }));
+      expect(handle.getAttribute('aria-valuenow')).toBe('746');
+      expect(handle.getAttribute('aria-valuetext')).toContain('Upper drawer');
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+      expect(handle.getAttribute('aria-valuenow')).toBe('992');
+      expect(document.documentElement.classList.contains('gt-drawer-expanded-open')).toBe(true);
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', bubbles: true }));
+      expect(handle.getAttribute('aria-valuenow')).toBe('746');
+      expect(document.documentElement.classList.contains('gt-drawer-expanded-open')).toBe(false);
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
+
+      visualViewport.height = 600;
+      const resize = addEventListener.mock.calls[0][1] as () => void;
+      resize();
+      expect(controller.box.style.getPropertyValue('--gt-drawer-height')).toBe('120px');
+      expect(handle.getAttribute('aria-valuenow')).toBe('120');
+
+      vi.spyOn(controller.box, 'getBoundingClientRect').mockReturnValue({ height: 222 } as DOMRect);
+      controller.setContent('new content');
+      await Promise.resolve();
+      expect(handle.getAttribute('aria-valuenow')).toBe('222');
+      controller.root.dispatchEvent(new Event('gt:content-resize', { bubbles: true }));
+      expect(handle.getAttribute('aria-valuenow')).toBe('222');
+
+      controller.destroy();
+      expect(removeEventListener).toHaveBeenCalledWith('resize', expect.any(Function));
+    } finally {
+      if (originalViewport) Object.defineProperty(window, 'visualViewport', originalViewport);
+      else delete (window as Window & { visualViewport?: VisualViewport }).visualViewport;
+    }
   });
 
   it('resolves an explicitly requested drawer during construction and keeps its z-index', () => {

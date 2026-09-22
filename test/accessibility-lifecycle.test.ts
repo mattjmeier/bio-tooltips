@@ -124,10 +124,14 @@ describe('accessible data lifecycle', () => {
     await settleData();
     const trigger = document.querySelector<HTMLElement>('.trigger')!;
     const handle = document.querySelector<HTMLButtonElement>('.gt-drawer-handle')!;
+    const drawerClose = document.querySelector<HTMLButtonElement>('.gt-drawer-close-button')!;
     const closeButton = document.querySelector<HTMLButtonElement>('.gt-tooltip-content .gt-close-button')!;
 
     expect(handle.hidden).toBe(false);
-    expect(handle.getAttribute('aria-label')).toBe('Close');
+    expect(handle.getAttribute('aria-label')).toBe('Resize tooltip drawer');
+    expect(handle.getAttribute('role')).toBe('slider');
+    expect(drawerClose.getAttribute('aria-label')).toBe('Close');
+    expect(document.querySelector<HTMLElement>('.gt-tooltip-content')!.style.maxHeight).toBe('');
     expect(closeButton).not.toBe(handle);
     handle.focus();
 
@@ -137,7 +141,7 @@ describe('accessible data lifecycle', () => {
     handle.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }));
     expect(trigger.getAttribute('aria-expanded')).toBe('true');
 
-    handle.click();
+    drawerClose.click();
 
     expect(document.activeElement).toBe(trigger);
     expect(document.querySelector('[data-gt-tooltip-root]')?.hasAttribute('inert')).toBe(true);

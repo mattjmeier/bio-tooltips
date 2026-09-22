@@ -80,8 +80,14 @@ describe('renderTooltipHTML', () => {
     const stylesheet = readFileSync(resolve('src/css/main.css'), 'utf8');
 
     expect(stylesheet).toContain('.gt-drawer-handle-indicator');
+    expect(stylesheet).toContain('flex: 1 1 0;');
     expect(stylesheet).toContain('flex: 0 0 48px;');
-    expect(stylesheet).toContain('touch-action: pan-x;');
+    expect(stylesheet).toContain('align-items: center;');
+    expect(stylesheet).toContain('justify-content: center;');
+    expect(stylesheet).toContain('appearance: none;');
+    expect(stylesheet).toContain('touch-action: none;');
+    expect(stylesheet).toContain('html.gt-drawer-expanded-open');
+    expect(stylesheet).toContain('overscroll-behavior: none;');
     expect(stylesheet).toContain("[data-gt-tooltip-root][data-presentation='drawer'] .gt-tooltip-content .gt-close-button");
     expect(stylesheet).toContain('data-drawer-dragging');
     expect(stylesheet).toContain('prefers-reduced-motion: reduce');

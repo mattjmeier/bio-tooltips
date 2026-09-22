@@ -76,20 +76,34 @@
   max-width: none;
 }
 
+/* Partial drawers remain non-modal. At the expanded detent the sheet covers
+   the page, so keep wheel/touch scrolling inside its content instead of
+   scrolling the obscured document behind it. */
+html.gt-drawer-expanded-open,
+html.gt-drawer-expanded-open body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 [data-gt-tooltip-root][data-presentation='drawer'] > .gt-tooltip-box {
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: none;
-  max-height: min(75dvh, calc(100dvh - 1rem));
+  height: var(--gt-drawer-height, auto);
+  max-height: min(
+    var(--gt-drawer-max-height, min(75dvh, calc(100dvh - 1rem))),
+    calc(100dvh - env(safe-area-inset-top, 0px) - 8px)
+  );
   overflow: hidden;
   border-radius: 12px 12px 0 0;
   box-shadow: 0 -8px 28px rgb(0 0 0 / 18%);
   transform: translateY(100%);
+  transition-property: opacity, transform, height;
 }
 
 [data-gt-tooltip-root][data-presentation='drawer'] > .gt-tooltip-box[data-state='visible'] {
-  transform: translateY(var(--gt-drawer-drag-y, 0px));
+  transform: translateY(0);
 }
 
 [data-gt-tooltip-root][data-presentation='drawer'] > .gt-tooltip-box[data-drawer-dragging='true'] {
@@ -102,7 +116,7 @@
 }
 
 [data-gt-tooltip-root][data-presentation='drawer'] .gt-tooltip-content {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-height: 0;
   max-height: none;
   padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
@@ -111,16 +125,25 @@
 }
 
 [data-gt-tooltip-root][data-presentation='drawer'] .gt-drawer-handle {
+  position: relative;
+  z-index: 1;
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 48px;
+  box-sizing: border-box;
   width: 100%;
   height: 48px;
   min-width: 44px;
   min-height: 48px;
   padding: 0;
+  color: inherit;
+  font: inherit;
+  appearance: none;
+  background: transparent;
   border: 0;
   border-radius: 0;
-  touch-action: pan-x;
+  touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   cursor: grab;
@@ -162,7 +185,8 @@
 
 .gt-close-button, .gt-tooltip-actions, .gt-summary-actions { display: flex; align-items: center; gap: .35rem; }
 .gt-close-button { box-sizing: border-box; flex: 0 0 auto; justify-content: center; width: 1.5rem; height: 1.5rem; min-width: 1.5rem; min-height: 1.5rem; padding: .25rem; line-height: 1; color: var(--gt-text-color); background: transparent; border: 1px solid transparent; border-radius: 4px; cursor: pointer; }
-.gt-drawer-handle[hidden] { display: none; }
+.gt-drawer-handle[hidden],
+.gt-drawer-close-button[hidden] { display: none; }
 .gene-tooltip-header .gt-close-button { width: 2rem; height: 2rem; min-width: 2rem; min-height: 2rem; }
 .gt-close-button:hover, .gt-close-button:focus-visible, .gt-pin-button:hover, .gt-pin-button:focus-visible, .gt-summary-copy-btn:hover, .gt-summary-copy-btn:focus-visible { color: var(--gt-accent-color); background-color: var(--gt-control-hover-background); opacity: 1; }
 .gt-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -176,11 +200,11 @@
   }
 
   [data-gt-tooltip-root][data-presentation='drawer'] > .gt-tooltip-box {
-    transform: translateY(var(--gt-drawer-drag-y, 0px));
+    transform: translateY(0);
   }
 
   [data-gt-tooltip-root][data-presentation='drawer'] > .gt-tooltip-box[data-state='visible'] {
-    transform: translateY(var(--gt-drawer-drag-y, 0px));
+    transform: translateY(0);
   }
 }
 
@@ -335,6 +359,38 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
   gap: 0.5em;
+}
+
+[data-gt-tooltip-root][data-presentation='drawer'] .gt-drawer-close-button {
+  position: absolute;
+  z-index: 2;
+  top: 4px;
+  right: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  color: var(--gt-text-color-secondary, currentColor);
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+[data-gt-tooltip-root][data-presentation='drawer'] .gt-drawer-close-button:hover {
+  color: var(--gt-text-color, currentColor);
+  background: color-mix(in srgb, var(--gt-accent-color) 10%, transparent);
+}
+
+[data-gt-tooltip-root][data-presentation='drawer'] .gt-drawer-close-button:focus-visible {
+  outline-offset: -2px;
 }
 
 /* A pinned popover is a movable viewport panel. The header remains a plain

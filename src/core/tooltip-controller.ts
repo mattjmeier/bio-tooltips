@@ -54,6 +54,11 @@ interface DrawerPointerGesture {
   pointerId: number;
   startX: number;
   startY: number;
+  startHeight: number;
+  startHeightStyle: string;
+  startMaxHeightStyle: string;
+  startExplicitHeight: boolean;
+  startDetentIndex?: number;
   dragging: boolean;
 }
 
@@ -67,13 +72,24 @@ interface PinnedPointerGesture {
 }
 
 const DRAWER_DRAG_START_DISTANCE = 6;
+const DRAWER_PEEK_MIN_HEIGHT = 120;
+const DRAWER_PEEK_VIEWPORT_RATIO = 0.15;
+const DRAWER_READING_VIEWPORT_RATIO = 0.5;
+const DRAWER_TOP_CLEARANCE = 8;
 const DRAWER_DISMISS_DISTANCE = 96;
+const DRAWER_KEYBOARD_STEP = 32;
 const PINNED_DRAG_START_DISTANCE = 6;
 const PINNED_NUDGE_DISTANCE = 8;
 const PINNED_NUDGE_LARGE_DISTANCE = 24;
 const PINNED_Z_INDEX_BASE = 11000;
 const PINNED_Z_INDEX_LIMIT = 11099;
+const DRAWER_EXPANDED_PAGE_CLASS = 'gt-drawer-expanded-open';
+const expandedDrawerRoots = new Set<HTMLElement>();
 let nextPinnedZIndex = PINNED_Z_INDEX_BASE;
+
+function syncExpandedDrawerPageLock(): void {
+  document.documentElement.classList.toggle(DRAWER_EXPANDED_PAGE_CLASS, expandedDrawerRoots.size > 0);
+}
 
 export class TooltipController<TData = unknown> {
   readonly reference: Element;
@@ -149,7 +165,11 @@ export class TooltipController<TData = unknown> {
   private presentation: 'popover' | 'drawer' = 'popover';
   private presentationMediaQuery?: MediaQueryList;
   private readonly drawerHandle: HTMLButtonElement | null;
+  private readonly drawerCloseButton: HTMLButtonElement | null;
   private drawerGesture?: DrawerPointerGesture;
+  private drawerViewportCleanup?: () => void;
+  private drawerExplicitHeight = false;
+  private drawerDetentIndex?: number;
   private suppressNextDrawerClick = false;
   private drawerClickResetTimer?: ReturnType<typeof setTimeout>;
   private pinnedPosition?: { left: number; top: number; originalLeft: number; originalTop: number };
@@ -205,13 +225,26 @@ export class TooltipController<TData = unknown> {
     this.drawerHandle = !this.parent && this.kind === 'dialog'
       ? document.createElement('button')
       : null;
+    this.drawerCloseButton = !this.parent && this.kind === 'dialog'
+      ? document.createElement('button')
+      : null;
     if (this.drawerHandle) {
       this.drawerHandle.type = 'button';
-      this.drawerHandle.className = 'gt-close-button gt-drawer-handle';
-      this.drawerHandle.setAttribute('aria-label', 'Close');
+      this.drawerHandle.className = 'gt-drawer-handle';
+      this.drawerHandle.setAttribute('role', 'slider');
+      this.drawerHandle.setAttribute('aria-label', 'Resize tooltip drawer');
+      this.drawerHandle.setAttribute('aria-orientation', 'vertical');
       this.drawerHandle.hidden = true;
       this.drawerHandle.innerHTML = '<span class="gt-drawer-handle-indicator" aria-hidden="true"></span>';
       this.box.append(this.drawerHandle);
+    }
+    if (this.drawerCloseButton) {
+      this.drawerCloseButton.type = 'button';
+      this.drawerCloseButton.className = 'gt-drawer-close-button';
+      this.drawerCloseButton.setAttribute('aria-label', 'Close');
+      this.drawerCloseButton.hidden = true;
+      this.drawerCloseButton.innerHTML = '<span aria-hidden="true">×</span>';
+      this.box.append(this.drawerCloseButton);
     }
 
     this.arrow = document.createElement('div');
@@ -250,9 +283,13 @@ export class TooltipController<TData = unknown> {
     const next = this.resolvePresentation();
     if (next === this.presentation && this.root.dataset.presentation === next) {
       this.syncDrawerHandle();
+      if (next === 'drawer') this.installDrawerViewportListener();
       return;
     }
-    if (next !== 'drawer') this.cancelDrawerGesture();
+    if (next !== 'drawer') {
+      this.cancelDrawerGesture();
+      this.setDrawerExpandedState(false);
+    }
     if (next === 'drawer' && this._isPinned) {
       const active = document.activeElement;
       if (active instanceof Node && (
@@ -261,6 +298,7 @@ export class TooltipController<TData = unknown> {
       )) this.box.focus({ preventScroll: true });
       this.clearPinnedPresentation();
     }
+    if (next === 'drawer' && this.presentation !== 'drawer') this.clearDrawerSizing();
     this.presentation = next;
     this.root.dataset.presentation = next;
     this.syncDrawerHandle();
@@ -268,11 +306,14 @@ export class TooltipController<TData = unknown> {
     this.stopPositioning();
     this.clearPositioningStyles();
     if (next === 'drawer') {
+      this.installDrawerViewportListener();
       this.root.style.zIndex = String(this.options.tooltip.zIndex ?? 9999);
       // Pinning is a desktop persistence affordance. A drawer is deliberately
       // non-modal and single-instance, so it cannot become a stacked pin.
       this._isPinned = false;
     } else {
+      this.drawerViewportCleanup?.();
+      this.drawerViewportCleanup = undefined;
       this.restartPositioning();
     }
     this.syncPinButton();
@@ -355,6 +396,9 @@ export class TooltipController<TData = unknown> {
     if (this.content.contains(document.activeElement) && this.state.isMounted) this.box.focus();
     this.content.innerHTML = content;
     queueMicrotask(() => {
+      if (this.isDrawerPresentation() && this.state.isMounted) {
+        this.syncDrawerHandleValue(this.readDrawerHeight());
+      }
       void this.updatePosition();
     });
   }
@@ -435,6 +479,9 @@ export class TooltipController<TData = unknown> {
     this.state.isVisible = false;
     this.state.isMounted = false;
     this.clearAllTimers();
+    this.drawerViewportCleanup?.();
+    this.drawerViewportCleanup = undefined;
+    this.clearDrawerSizing();
     // clearAllTimers() cancels the unmount timer that would otherwise drop this
     // tooltip from the shared set, so remove it here when it is torn down early.
     unregisterTopLevelTooltip(this);
@@ -550,6 +597,7 @@ export class TooltipController<TData = unknown> {
     const restoreFocus = this.kind === 'dialog' && this.containsPanelFocus();
     if (restoreFocus) this.returnFocus();
     if (this.hooks.onHide?.(this) === false) return;
+    this.setDrawerExpandedState(false);
 
     this.destroyNestedTooltips();
     this.root.setAttribute('inert', '');
@@ -594,12 +642,17 @@ export class TooltipController<TData = unknown> {
     target.append(this.root);
     this.state.isMounted = true;
     this.restartPositioning();
+    if (this.isDrawerPresentation()) {
+      const detents = this.drawerDetents();
+      this.setDrawerHeight(detents[Math.floor(detents.length / 2)], false, true);
+    }
   }
 
   private unmount(): void {
     this._isPointerInside = false;
     this.cancelPinnedGesture();
     this.stopPositioning();
+    this.clearDrawerSizing();
     this.root.style.visibility = 'hidden';
     this.state.isMounted = false;
 
@@ -776,6 +829,28 @@ export class TooltipController<TData = unknown> {
     };
   }
 
+  private installDrawerViewportListener(): void {
+    if (this.drawerViewportCleanup || typeof window === 'undefined') return;
+    const resize = () => this.handleDrawerViewportResize();
+    const viewport = window.visualViewport;
+    viewport?.addEventListener('resize', resize);
+    window.addEventListener('resize', resize);
+    this.drawerViewportCleanup = () => {
+      viewport?.removeEventListener('resize', resize);
+      window.removeEventListener('resize', resize);
+    };
+  }
+
+  private handleDrawerViewportResize(): void {
+    if (!this.isDrawerPresentation()) return;
+    if (this.drawerExplicitHeight && this.drawerDetentIndex !== undefined) {
+      const detents = this.drawerDetents();
+      this.setDrawerHeight(detents[this.drawerDetentIndex], false, true);
+      return;
+    }
+    this.syncDrawerHandleValue(this.readDrawerHeight());
+  }
+
   private initializePresentation(): void {
     this.root.dataset.presentation = this.presentation;
     if (this.parent || this.kind !== 'dialog') return;
@@ -811,7 +886,10 @@ export class TooltipController<TData = unknown> {
   }
 
   private syncDrawerHandle(): void {
-    if (this.drawerHandle) this.drawerHandle.hidden = !this.isDrawerPresentation();
+    const drawer = this.isDrawerPresentation();
+    if (this.drawerHandle) this.drawerHandle.hidden = !drawer;
+    if (this.drawerCloseButton) this.drawerCloseButton.hidden = !drawer;
+    if (drawer) this.syncDrawerHandleValue(this.readDrawerHeight());
   }
 
   private installDrawerHandleInteractions(): void {
@@ -822,8 +900,98 @@ export class TooltipController<TData = unknown> {
     this.listen(handle, 'pointermove', event => this.handleDrawerPointerMove(event as PointerEvent));
     this.listen(handle, 'pointerup', event => this.handleDrawerPointerUp(event as PointerEvent));
     this.listen(handle, 'pointercancel', event => this.handleDrawerPointerCancel(event as PointerEvent));
-    this.listen(handle, 'lostpointercapture', () => this.cancelDrawerGesture());
+    this.listen(handle, 'lostpointercapture', () => this.handleDrawerLostPointerCapture());
+    this.listen(handle, 'keydown', event => this.handleDrawerKeydown(event as KeyboardEvent));
     this.listen(handle, 'click', event => this.handleDrawerClick(event as MouseEvent));
+    if (this.drawerCloseButton) this.listen(this.drawerCloseButton, 'click', () => this.close());
+  }
+
+  private drawerViewportHeight(): number {
+    const visualViewportHeight = typeof window !== 'undefined' && window.visualViewport?.height;
+    const viewport = visualViewportHeight && visualViewportHeight > 0
+      ? visualViewportHeight
+      : typeof window !== 'undefined' && window.innerHeight > 0
+        ? window.innerHeight
+        : document.documentElement.clientHeight || 800;
+    return viewport;
+  }
+
+  private drawerDetents(): number[] {
+    const viewport = this.drawerViewportHeight();
+    const peek = Math.min(viewport - DRAWER_TOP_CLEARANCE, Math.max(DRAWER_PEEK_MIN_HEIGHT, viewport * DRAWER_PEEK_VIEWPORT_RATIO));
+    const reading = Math.max(peek, viewport * DRAWER_READING_VIEWPORT_RATIO);
+    const expanded = Math.max(reading, viewport - DRAWER_TOP_CLEARANCE);
+    const lower = peek + (reading - peek) / 2;
+    const upper = reading + (expanded - reading) / 2;
+    return [peek, lower, reading, upper, expanded];
+  }
+
+  private readDrawerHeight(): number {
+    const rectHeight = this.box.getBoundingClientRect().height;
+    if (rectHeight > 0) return rectHeight;
+    const cssHeight = Number.parseFloat(this.box.style.getPropertyValue('--gt-drawer-height'));
+    if (Number.isFinite(cssHeight) && cssHeight > 0) return cssHeight;
+    const viewport = this.drawerViewportHeight();
+    return Math.min(viewport * 0.75, viewport - 16);
+  }
+
+  private syncDrawerHandleValue(height: number): void {
+    if (!this.drawerHandle) return;
+    const detents = this.drawerDetents();
+    const peek = detents[0];
+    const expanded = detents[detents.length - 1];
+    const clamped = Math.min(expanded, Math.max(peek, height));
+    const exactIndex = detents.findIndex(detent => Math.abs(detent - clamped) < 1);
+    const detentNames = ['Peek', 'Lower', 'Reading', 'Upper', 'Expanded'];
+    const detent = exactIndex >= 0 ? detentNames[exactIndex] : 'Custom';
+    this.drawerHandle.setAttribute('aria-valuemin', String(Math.round(peek)));
+    this.drawerHandle.setAttribute('aria-valuemax', String(Math.round(expanded)));
+    this.drawerHandle.setAttribute('aria-valuenow', String(Math.round(clamped)));
+    this.drawerHandle.setAttribute('aria-valuetext', `${detent} drawer, ${Math.round(clamped)} pixels high`);
+  }
+
+  private nearestDrawerDetentIndex(height: number): number {
+    const detents = this.drawerDetents();
+    return detents.reduce((nearest, detent, index) =>
+      Math.abs(detent - height) < Math.abs(detents[nearest] - height) ? index : nearest, 0);
+  }
+
+  private setDrawerHeight(height: number, dragging = false, explicit = false): void {
+    const detents = this.drawerDetents();
+    const peek = detents[0];
+    const expanded = detents[detents.length - 1];
+    const clamped = Math.min(expanded, Math.max(peek, height));
+    this.box.style.setProperty('--gt-drawer-height', `${clamped}px`);
+    this.box.style.setProperty('--gt-drawer-max-height', `${expanded}px`);
+    if (explicit) {
+      this.drawerExplicitHeight = true;
+      const exactIndex = detents.findIndex(detent => Math.abs(detent - clamped) < 1);
+      this.drawerDetentIndex = exactIndex >= 0 ? exactIndex : undefined;
+      this.setDrawerExpandedState(exactIndex === detents.length - 1);
+    }
+    this.syncDrawerHandleValue(clamped);
+    if (dragging) this.box.dataset.drawerDragging = 'true';
+  }
+
+  private snapDrawerToNearest(height: number): void {
+    const detents = this.drawerDetents();
+    const index = this.nearestDrawerDetentIndex(height);
+    this.setDrawerHeight(detents[index], false, true);
+  }
+
+  private clearDrawerSizing(): void {
+    this.setDrawerExpandedState(false);
+    this.box.style.removeProperty('--gt-drawer-height');
+    this.box.style.removeProperty('--gt-drawer-max-height');
+    this.drawerExplicitHeight = false;
+    this.drawerDetentIndex = undefined;
+  }
+
+  private setDrawerExpandedState(expanded: boolean): void {
+    this.root.toggleAttribute('data-drawer-expanded', expanded);
+    if (expanded) expandedDrawerRoots.add(this.root);
+    else expandedDrawerRoots.delete(this.root);
+    syncExpandedDrawerPageLock();
   }
 
   private handleDrawerPointerDown(event: PointerEvent): void {
@@ -834,6 +1002,11 @@ export class TooltipController<TData = unknown> {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
+      startHeight: this.readDrawerHeight(),
+      startHeightStyle: this.box.style.getPropertyValue('--gt-drawer-height'),
+      startMaxHeightStyle: this.box.style.getPropertyValue('--gt-drawer-max-height'),
+      startExplicitHeight: this.drawerExplicitHeight,
+      startDetentIndex: this.drawerDetentIndex,
       dragging: false,
     };
 
@@ -852,25 +1025,27 @@ export class TooltipController<TData = unknown> {
 
     const deltaX = event.clientX - gesture.startX;
     const deltaY = event.clientY - gesture.startY;
-    if (Math.abs(deltaX) >= DRAWER_DRAG_START_DISTANCE && Math.abs(deltaX) > Math.max(0, deltaY)) {
+    if (Math.abs(deltaX) >= DRAWER_DRAG_START_DISTANCE && Math.abs(deltaX) > Math.abs(deltaY)) {
       this.cancelDrawerGesture();
       return;
     }
 
-    const downwardDistance = Math.max(0, deltaY);
-    if (!gesture.dragging && downwardDistance < DRAWER_DRAG_START_DISTANCE) return;
+    const verticalDistance = Math.abs(deltaY);
+    if (!gesture.dragging && verticalDistance < DRAWER_DRAG_START_DISTANCE) return;
 
     gesture.dragging = true;
-    this.box.dataset.drawerDragging = 'true';
-    this.box.style.setProperty('--gt-drawer-drag-y', `${downwardDistance}px`);
+    this.setDrawerHeight(gesture.startHeight - deltaY, true);
   }
 
   private handleDrawerPointerUp(event: PointerEvent): void {
     const gesture = this.drawerGesture;
     if (!gesture || gesture.pointerId !== event.pointerId) return;
 
+    const deltaY = event.clientY - gesture.startY;
+    const [peek] = this.drawerDetents();
     const shouldDismiss = gesture.dragging
-      && event.clientY - gesture.startY >= DRAWER_DISMISS_DISTANCE;
+      && gesture.startHeight <= peek + DRAWER_DRAG_START_DISTANCE
+      && deltaY >= DRAWER_DISMISS_DISTANCE;
     if (gesture.dragging) {
       this.suppressNextDrawerClick = true;
       this.drawerClickResetTimer = setTimeout(() => {
@@ -880,6 +1055,7 @@ export class TooltipController<TData = unknown> {
     }
     this.cancelDrawerGesture();
     if (shouldDismiss) this.close();
+    else if (gesture.dragging) this.snapDrawerToNearest(this.readDrawerHeight());
   }
 
   private handleDrawerClick(event: MouseEvent): void {
@@ -894,14 +1070,34 @@ export class TooltipController<TData = unknown> {
   }
 
   private handleDrawerPointerCancel(event: PointerEvent): void {
-    if (this.drawerGesture?.pointerId === event.pointerId) this.cancelDrawerGesture();
+    const gesture = this.drawerGesture;
+    if (!gesture || gesture.pointerId !== event.pointerId) return;
+    if (gesture.dragging) {
+      if (gesture.startHeightStyle) this.box.style.setProperty('--gt-drawer-height', gesture.startHeightStyle);
+      else this.box.style.removeProperty('--gt-drawer-height');
+      if (gesture.startMaxHeightStyle) this.box.style.setProperty('--gt-drawer-max-height', gesture.startMaxHeightStyle);
+      else this.box.style.removeProperty('--gt-drawer-max-height');
+      this.drawerExplicitHeight = gesture.startExplicitHeight;
+      this.drawerDetentIndex = gesture.startDetentIndex;
+      this.setDrawerExpandedState(
+        gesture.startDetentIndex === this.drawerDetents().length - 1
+      );
+      this.syncDrawerHandleValue(gesture.startHeight);
+    }
+    this.cancelDrawerGesture();
+  }
+
+  private handleDrawerLostPointerCapture(): void {
+    const gesture = this.drawerGesture;
+    if (!gesture) return;
+    this.cancelDrawerGesture();
+    if (gesture.dragging) this.snapDrawerToNearest(this.readDrawerHeight());
   }
 
   private cancelDrawerGesture(): void {
     const pointerId = this.drawerGesture?.pointerId;
     this.drawerGesture = undefined;
     this.box.removeAttribute('data-drawer-dragging');
-    this.box.style.removeProperty('--gt-drawer-drag-y');
 
     if (pointerId !== undefined && this.drawerHandle
       && typeof this.drawerHandle.hasPointerCapture === 'function'
@@ -912,6 +1108,22 @@ export class TooltipController<TData = unknown> {
         // Capture may already have been released by a pointer cancellation.
       }
     }
+  }
+
+  private handleDrawerKeydown(event: KeyboardEvent): void {
+    if (!this.isDrawerPresentation() || this.status !== 'open') return;
+    const detents = this.drawerDetents();
+    const current = this.readDrawerHeight();
+    let next: number | undefined;
+    if (event.key === 'ArrowUp') next = current + (event.shiftKey ? DRAWER_KEYBOARD_STEP * 2 : DRAWER_KEYBOARD_STEP);
+    else if (event.key === 'ArrowDown') next = current - (event.shiftKey ? DRAWER_KEYBOARD_STEP * 2 : DRAWER_KEYBOARD_STEP);
+    else if (event.key === 'Home') next = detents[0];
+    else if (event.key === 'End') next = detents[detents.length - 1];
+    else if (event.key === 'PageUp') next = detents.find(detent => detent > current + 1) ?? detents[detents.length - 1];
+    else if (event.key === 'PageDown') next = [...detents].reverse().find(detent => detent < current - 1) ?? detents[0];
+    if (next === undefined) return;
+    event.preventDefault();
+    this.setDrawerHeight(next, false, true);
   }
 
   /** Synchronize a rendered pin control with the controller's current state. */
@@ -1258,6 +1470,7 @@ export class TooltipController<TData = unknown> {
     this.box.dataset.state = 'visible';
     this.content.dataset.state = 'visible';
     this.state.isVisible = true;
+    if (this.isDrawerPresentation()) this.syncDrawerHandleValue(this.readDrawerHeight());
   }
 
   hasFocus(): boolean {
@@ -1350,6 +1563,10 @@ export class TooltipController<TData = unknown> {
 
   private handleContentResize(): void {
     if (!this.state.isMounted) return;
+    if (this.isDrawerPresentation()) {
+      this.syncDrawerHandleValue(this.readDrawerHeight());
+      return;
+    }
     if (this.isPinnedPopover()) {
       this.clampPinnedPosition();
       return;
