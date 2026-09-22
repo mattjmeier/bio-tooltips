@@ -4,6 +4,20 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.1.0] - 2026-09-22
+
+### Added
+
+- Improved pinning: users can now move the tooltips around by dragging while pinned, as well as a menu for setting position to corners. This is more in line with expected behaviour.
+
+### Improved
+
+- Better drawer behaviour for mobile (improved hide/reveal settings)
+
+### Fixed
+
+- Lifecycle bugs: clicking outside a tooltip will now dismiss by default.
+
 ## [2.1.0] - 2026-09-21
 
 ### Added
