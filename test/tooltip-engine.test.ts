@@ -195,6 +195,35 @@ describe('tooltip engine lifecycle', () => {
     cleanup();
   });
 
+  it('dismisses a first-opened tooltip that still holds focus when the second opens', async () => {
+    const engine = createHarness(vi.fn().mockResolvedValue(new Map([
+      ['test:GENE1', { label: 'First gene label' }],
+      ['test:GENE2', { label: 'Second gene label' }],
+    ])));
+    const first = document.createElement('span');
+    first.className = 'test-tooltip';
+    first.textContent = 'GENE1';
+    const second = document.createElement('span');
+    second.className = 'test-tooltip';
+    second.textContent = 'GENE2';
+    document.body.append(first, second);
+    const cleanup = engine.init();
+
+    // The first interaction on a page leaves focus on the first trigger
+    // (keyboard tab or mouse mousedown), so its panel may still be focus-owned.
+    first.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.runAllTimers();
+    await flushAsync();
+    first.focus();
+
+    second.dispatchEvent(new MouseEvent('mouseenter'));
+    vi.runAllTimers();
+    await flushAsync();
+    expect(document.querySelectorAll('[data-gt-tooltip-root]')).toHaveLength(1);
+    expect(document.querySelector('.gt-tooltip-content')?.textContent).toContain('Second gene label');
+    cleanup();
+  });
+
   it('dismisses an open tooltip owned by a DIFFERENT engine when a new one opens', async () => {
     // Each docs demo calls init() with its own selector, so it is its own
     // single-controller engine. A per-engine sibling list can never see a

@@ -295,6 +295,46 @@ describe('TooltipController', () => {
     expect(controller.status).toBe('open');
     expect(document.activeElement).toBe(controller.box);
   });
+  it('closes on pointer departure when only the trigger itself holds focus', () => {
+    const { reference, controller } = createController();
+    controller.show();
+    vi.runAllTimers();
+    expect(controller.status).toBe('open');
+
+    // A trigger keeps focus after a keyboard tab or a mouse mousedown
+    // (tabindex=0). That pointer-origin focus must not pin the panel open.
+    reference.focus();
+    controller.root.dispatchEvent(new MouseEvent('mouseleave', { relatedTarget: document.body }));
+    vi.runAllTimers();
+
+    expect(controller.status).toBe('idle');
+    expect(document.activeElement).toBe(reference);
+  });
+
+  it('lets a peer tooltip dismiss one whose trigger holds focus', () => {
+    const { reference, controller } = createController();
+    controller.show();
+    vi.runAllTimers();
+    reference.focus();
+
+    controller.dismiss();
+
+    expect(controller.status).toBe('closing');
+  });
+
+  it('opens from a mouse click without moving focus into the panel', () => {
+    const { reference, controller } = createController();
+    reference.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }));
+    vi.runAllTimers();
+
+    expect(controller.status).toBe('open');
+    expect(document.activeElement).not.toBe(controller.box);
+
+    // And mouse departure still closes a panel opened that way.
+    controller.root.dispatchEvent(new MouseEvent('mouseleave', { relatedTarget: document.body }));
+    vi.runAllTimers();
+    expect(controller.status).toBe('idle');
+  });
 
   it('keeps an explicitly closing panel inert despite late pointer and resize events', () => {
     const { reference, controller } = createController({ hideDuration: 100 });

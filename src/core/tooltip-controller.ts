@@ -263,7 +263,11 @@ export class TooltipController<TData = unknown> {
 
   hide(): void {
     if (this.state.isDestroyed || this.status === 'idle' || this.status === 'closing') return;
-    if (this._isPinned || this.hasFocus()) return;
+    // Only focus INSIDE the panel protects the tooltip: a keyboard user is
+    // navigating its content. Focus on the trigger itself (keyboard tab or
+    // mouse mousedown) is just a disclosure state and must not pin the panel,
+    // or a mouse-opened first tooltip could never be closed by mouse-off.
+    if (this._isPinned || this.containsPanelFocus()) return;
     if (this.visibleChildren.size > 0) {
       // The pointer left while a nested tooltip is still animating closed.
       // Remember that we want to hide; setChildVisible(child, false) will
@@ -278,7 +282,7 @@ export class TooltipController<TData = unknown> {
       this.options.interactiveDebounce ?? 0
     );
     this.hideTimer = setTimeout(() => {
-      if (!this.hasFocus() && !this._isPinned) this.closeNow();
+      if (!this.containsPanelFocus() && !this._isPinned) this.closeNow();
     }, delay);
   }
 
@@ -287,7 +291,8 @@ export class TooltipController<TData = unknown> {
    * the pointer bridge that otherwise keep an open panel alive while the cursor
    * drifts toward the next trigger. The engine calls this on the open siblings
    * whenever a tooltip opens so only one top-level tooltip is visible at a time.
-   * Pinned tooltips are left untouched.
+   * Pinned tooltips and tooltips whose panel holds keyboard focus are left
+   * untouched — a focus on the trigger alone does not protect a peer dismissal.
    *
    * The `_peerDismissed` flag marks this close as "lost to a sibling" so that
    * hovering this tooltip's own panel cannot revive it (its panel may still be
@@ -299,7 +304,7 @@ export class TooltipController<TData = unknown> {
     // A drawer is single-instance even when it owns keyboard focus. Opening a
     // new top-level panel must replace it rather than stack another fixed sheet
     // over the same viewport edge. Popovers retain their focus/pin protection.
-    if (!this.isDrawerPresentation() && (this._isPinned || this.hasFocus())) return;
+    if (!this.isDrawerPresentation() && (this._isPinned || this.containsPanelFocus())) return;
     this._peerDismissed = true;
     if (this.timingConfig) {
       logTooltipTiming(this, this.timingConfig, 'dismissed by peer', { status: this.status });
@@ -795,9 +800,13 @@ export class TooltipController<TData = unknown> {
       this.clearHideTimers();
       this.show();
     });
-    this.listen(this.reference, 'click', () => {
+    this.listen(this.reference, 'click', (event: Event) => {
       if (this.kind !== 'dialog') return;
-      if (isNativeButton(this.reference) || !isNativeInteractive(this.reference)) this.enter();
+      // Mouse clicks (detail > 0) open the panel without stealing keyboard
+      // focus into it; keyboard activation (Enter/Space dispatch click with
+      // detail 0) still focuses the dialog so keyboard users land inside it.
+      if ((event as MouseEvent).detail > 0) this.show();
+      else if (isNativeButton(this.reference) || !isNativeInteractive(this.reference)) this.enter();
       else this.show();
     });
     this.listen(this.reference, 'blur', () => this.handleFocusLeave());
