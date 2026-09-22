@@ -833,7 +833,7 @@ export class TooltipController<TData = unknown> {
     });
     this.listen(this.root, 'gt:content-resize', () => this.handleContentResize());
     this.listen(document, 'click', (event: Event) => {
-      if (!this.isDrawerPresentation() || !this.state.isMounted || this.status !== 'open' || this._isPinned) return;
+      if (!this.state.isMounted || this.status !== 'open' || this._isPinned) return;
       const target = event.target;
       if (target instanceof Node && (this.root.contains(target) || this.reference.contains(target))) return;
       this.close();

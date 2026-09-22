@@ -512,6 +512,36 @@ describe('TooltipController', () => {
     document.activeElement.blur();
     expect(document.activeElement).toBe(document.body);
     controller.root.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+    controller.root.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    vi.runAllTimers();
+
+    expect(controller.status).toBe('open');
+  });
+
+  it('closes when clicking outside after focusing a control in the panel', () => {
+    const { controller } = createController();
+    controller.show();
+    vi.runAllTimers();
+
+    const control = document.createElement('button');
+    controller.content.append(control);
+    control.focus();
+
+    // A click on non-focusable page content commonly drops focus to <body>.
+    control.blur();
+    document.body.click();
+    vi.runAllTimers();
+
+    expect(controller.status).toBe('idle');
+  });
+
+  it('keeps a pinned popover open when clicking outside', () => {
+    const { controller } = createController();
+    controller.show();
+    vi.runAllTimers();
+    controller.setPinned(true);
+
+    document.body.click();
     vi.runAllTimers();
 
     expect(controller.status).toBe('open');
@@ -692,6 +722,30 @@ describe('TooltipController', () => {
     expect(secondChild.status).toBe('open');
     expect(parent.status).toBe('open');
     expect(parent.root.querySelectorAll('[data-gt-tooltip-root]')).toHaveLength(1);
+  });
+
+  it('closes only the nested tooltip when clicking elsewhere in its parent', () => {
+    const { controller: parent } = createController();
+    parent.show();
+    vi.runAllTimers();
+
+    const childReference = document.createElement('button');
+    parent.content.append(childReference);
+    const child = new TooltipController(childReference, {
+      content: 'Nested content',
+      tooltip: { ...immediateOptions, appendTo: parent.root },
+      theme: parent.theme,
+      parent,
+    });
+    parent.addNestedTooltip(child);
+    child.show();
+    vi.runAllTimers();
+
+    parent.content.click();
+    vi.runAllTimers();
+
+    expect(child.status).toBe('idle');
+    expect(parent.status).toBe('open');
   });
 
   it('pins, updates content and theme, then hides when unpinned', () => {
