@@ -4,6 +4,12 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.2.2] - 2026-09-22
+
+### Fixed
+
+- Optimize mobile swiping behaviour (dismissal, etc.) and mobile nested tooltip buttons
+
 ## [2.2.1] - 2026-09-22
 
 ### Added
