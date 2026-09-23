@@ -4,6 +4,12 @@ All notable changes to this project will be documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.3.1] - 2026-09-23
+
+### Fixed
+
+- Kept pinned tooltips scrollable after they are moved or their sections are expanded, preventing newly revealed content from overflowing beyond the viewport.
+
 ## [2.3.0] - 2026-09-23
 
 ### Added
