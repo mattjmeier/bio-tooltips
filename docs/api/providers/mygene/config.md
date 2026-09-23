@@ -24,7 +24,7 @@ Defined in: [providers/mygene/config.ts:36](https://github.com/mattjmeier/bio-to
 
 > **constrainToViewport**: `boolean`
 
-Defined in: [core/config.ts:70](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L70)
+Defined in: [core/config.ts:77](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L77)
 
 ###### Inherited from
 
@@ -34,7 +34,7 @@ Defined in: [core/config.ts:70](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **debugTimings**: `boolean`
 
-Defined in: [core/config.ts:62](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L62)
+Defined in: [core/config.ts:69](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L69)
 
 ###### Inherited from
 
@@ -72,7 +72,7 @@ Defined in: [providers/mygene/config.ts:39](https://github.com/mattjmeier/bio-to
 
 > **nestedTooltipOptions**: [`TooltipOptions`](../../core/config.md#tooltipoptions-1)
 
-Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L67)
+Defined in: [core/config.ts:74](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L74)
 
 ###### Inherited from
 
@@ -82,7 +82,7 @@ Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **onTiming?**: [`TooltipTimingObserver`](../../core/config.md#tooltiptimingobserver)
 
-Defined in: [core/config.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L63)
+Defined in: [core/config.ts:70](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L70)
 
 ###### Inherited from
 
@@ -104,7 +104,7 @@ Defined in: [providers/mygene/config.ts:40](https://github.com/mattjmeier/bio-to
 
 > **prefetch**: [`PrefetchMode`](../../core/config.md#prefetchmode)
 
-Defined in: [core/config.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L59)
+Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L66)
 
 ###### Inherited from
 
@@ -114,7 +114,7 @@ Defined in: [core/config.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **prefetchThreshold**: `number`
 
-Defined in: [core/config.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L60)
+Defined in: [core/config.ts:67](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L67)
 
 ###### Inherited from
 
@@ -124,7 +124,7 @@ Defined in: [core/config.ts:60](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **presentation?**: [`TooltipPresentation`](../../core/config.md#tooltippresentation)
 
-Defined in: [core/config.ts:58](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L58)
+Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L65)
 
 How top-level tooltip dialogs are presented. Nested tooltips remain popovers.
 
@@ -136,7 +136,7 @@ How top-level tooltip dialogs are presented. Nested tooltips remain popovers.
 
 > **sectionVariant**: [`SectionVariant`](../../core/config.md#sectionvariant-1)
 
-Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L65)
+Defined in: [core/config.ts:72](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L72)
 
 ###### Inherited from
 
@@ -146,7 +146,7 @@ Defined in: [core/config.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **selector**: `string`
 
-Defined in: [core/config.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L56)
+Defined in: [core/config.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L61)
 
 ###### Inherited from
 
@@ -162,7 +162,7 @@ Defined in: [providers/mygene/config.ts:44](https://github.com/mattjmeier/bio-to
 
 > **theme**: [`TooltipTheme`](../../core/config.md#tooltiptheme)
 
-Defined in: [core/config.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L64)
+Defined in: [core/config.ts:71](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L71)
 
 ###### Inherited from
 
@@ -172,7 +172,7 @@ Defined in: [core/config.ts:64](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **tooltipHeight?**: `number`
 
-Defined in: [core/config.ts:69](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L69)
+Defined in: [core/config.ts:76](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L76)
 
 ###### Inherited from
 
@@ -182,7 +182,7 @@ Defined in: [core/config.ts:69](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > **tooltipOptions**: [`TooltipOptions`](../../core/config.md#tooltipoptions-1)
 
-Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L66)
+Defined in: [core/config.ts:73](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L73)
 
 ###### Inherited from
 
@@ -192,7 +192,7 @@ Defined in: [core/config.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/
 
 > `optional` **tooltipWidth?**: `number`
 
-Defined in: [core/config.ts:68](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L68)
+Defined in: [core/config.ts:75](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L75)
 
 ###### Inherited from
 
@@ -204,6 +204,18 @@ Defined in: [core/config.ts:68](https://github.com/mattjmeier/bio-tooltips/blob/
 
 Defined in: [providers/mygene/config.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/config.ts#L43)
 
+##### triggerStyle
+
+> **triggerStyle**: [`TooltipTriggerStyle`](../../core/config.md#tooltiptriggerstyle)
+
+Defined in: [core/config.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L63)
+
+Visual cue applied to initialized tooltip triggers. Defaults to none.
+
+###### Inherited from
+
+[`CoreTooltipConfig`](../../core/config.md#coretooltipconfig).[`triggerStyle`](../../core/config.md#triggerstyle)
+
 ##### truncateSummary
 
 > **truncateSummary**: `number`
@@ -214,7 +226,7 @@ Defined in: [providers/mygene/config.ts:37](https://github.com/mattjmeier/bio-to
 
 > **visualPreload**: [`VisualPreloadMode`](../../core/config.md#visualpreloadmode)
 
-Defined in: [core/config.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L61)
+Defined in: [core/config.ts:68](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/config.ts#L68)
 
 ###### Inherited from
 

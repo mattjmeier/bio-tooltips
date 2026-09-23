@@ -392,6 +392,18 @@ Re-exports [TooltipTimingObserver](core/config.md#tooltiptimingobserver)
 
 ***
 
+### TooltipTriggerStyle
+
+Re-exports [TooltipTriggerStyle](core/config.md#tooltiptriggerstyle)
+
+***
+
+### TooltipTriggerStylePreset
+
+Re-exports [TooltipTriggerStylePreset](core/config.md#tooltiptriggerstylepreset)
+
+***
+
 ### whenPrefetchReady
 
 Re-exports [whenPrefetchReady](mygene.md#whenprefetchready-1)

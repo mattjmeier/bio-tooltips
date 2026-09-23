@@ -8,7 +8,7 @@
 
 > `const` **GeneTooltip**: `object`
 
-Defined in: [mygene.ts:59](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L59)
+Defined in: [mygene.ts:61](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L61)
 
 #### Type Declaration
 
@@ -105,7 +105,7 @@ are ready when tooltips are first shown.
 
 > **attach**(`anchor`, `userConfig?`): [`TooltipHandle`](core/tooltip-handle.md#tooltiphandle)
 
-Defined in: [mygene.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L32)
+Defined in: [mygene.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L34)
 
 Attach a GeneTooltip to one element without querying the document.
 
@@ -129,7 +129,7 @@ Attach a GeneTooltip to one element without querying the document.
 
 > **cacheSize**(): `number`
 
-Defined in: [mygene.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L55)
+Defined in: [mygene.ts:57](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L57)
 
 #### Returns
 
@@ -141,7 +141,7 @@ Defined in: [mygene.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **clearCache**(): `void`
 
-Defined in: [mygene.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L51)
+Defined in: [mygene.ts:53](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L53)
 
 #### Returns
 
@@ -175,7 +175,7 @@ Defined in: [utils.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/main/s
 
 > **init**(`userConfig?`): () => `void`
 
-Defined in: [mygene.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L27)
+Defined in: [mygene.ts:29](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L29)
 
 #### Parameters
 
@@ -193,7 +193,7 @@ Defined in: [mygene.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mygene.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L43)
+Defined in: [mygene.ts:45](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L45)
 
 Preloads the optional heavy dependencies (d3, ideogram) so they
 are ready when tooltips are first shown.
@@ -208,7 +208,7 @@ are ready when tooltips are first shown.
 
 > **whenPrefetchReady**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [mygene.ts:47](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L47)
+Defined in: [mygene.ts:49](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mygene.ts#L49)
 
 #### Returns
 
@@ -519,3 +519,15 @@ Re-exports [TooltipTimingEvent](core/config.md#tooltiptimingevent)
 ### TooltipTimingObserver
 
 Re-exports [TooltipTimingObserver](core/config.md#tooltiptimingobserver)
+
+***
+
+### TooltipTriggerStyle
+
+Re-exports [TooltipTriggerStyle](core/config.md#tooltiptriggerstyle)
+
+***
+
+### TooltipTriggerStylePreset
+
+Re-exports [TooltipTriggerStylePreset](core/config.md#tooltiptriggerstylepreset)
