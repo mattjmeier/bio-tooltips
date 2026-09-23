@@ -32,8 +32,8 @@ import { GeneTooltip, ChemicalTooltip } from 'bio-tooltips';
 Use pinned package versions in production CDN URLs:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.3.0/dist/bio-tooltips.css">
-<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@2.3.0/dist/bio-tooltips.global.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.3.1/dist/bio-tooltips.css">
+<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@2.3.1/dist/bio-tooltips.global.js"></script>
 ```
 
 The global bundle exposes the module globals used by browser examples:

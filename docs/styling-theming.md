@@ -24,7 +24,7 @@ All live docs examples use a dotted underline by default. Set `triggerStyle: 'no
 For a browser build, load the stylesheet from a pinned package version:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.3.0/dist/bio-tooltips.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.3.1/dist/bio-tooltips.css">
 ```
 
 ## Themes
