@@ -2,7 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { renderTooltipHTML } from '../src/providers/mygene/renderer';
-import { renderTooltipHTML as renderMyChemTooltipHTML } from '../src/providers/mychem/renderer';
+import {
+  installChemicalStructureImageFallback,
+  renderTooltipHTML as renderMyChemTooltipHTML,
+} from '../src/providers/mychem/renderer';
 import { myGeneProfile } from '../src/providers/mygene/profile';
 import { mergeConfig as mergeMyGeneConfig } from '../src/providers/mygene/config';
 import { myChemProfile } from '../src/providers/mychem/profile';
@@ -393,7 +396,7 @@ describe('renderMyChemTooltipHTML', () => {
     expect(html).not.toContain('<script>');
   });
 
-  it('uses an opt-in structure renderer without changing the default PubChem PNG path', () => {
+  it('uses the PubChem image service for CID structures and supports an opt-in renderer', () => {
     const mockChemicalData: MyChemInfoResult = {
       _id: '2244',
       query: 'aspirin',
@@ -405,7 +408,8 @@ describe('renderMyChemTooltipHTML', () => {
     };
 
     const defaultHTML = renderMyChemTooltipHTML(mockChemicalData, { uniqueId: 'mychem-default-structure' });
-    expect(defaultHTML).toContain('/compound/cid/2244/PNG?image_size=large');
+    expect(defaultHTML).toContain('/image/imgsrv.fcgi?cid=2244&amp;t=l');
+    expect(defaultHTML).toContain('data-gt-chemical-structure-image');
 
     const html = renderMyChemTooltipHTML(mockChemicalData, {
       uniqueId: 'mychem-custom-structure',
@@ -419,7 +423,26 @@ describe('renderMyChemTooltipHTML', () => {
     expect(html).toContain('class="custom-structure"');
     expect(html).toContain('data-kind="cid"');
     expect(html).toContain('data-smiles="CC(=O)OC1=CC=CC=C1C(=O)O"');
-    expect(html).not.toContain('/compound/cid/2244/PNG?image_size=large');
+    expect(html).not.toContain('/image/imgsrv.fcgi?cid=2244&amp;t=l');
+  });
+
+  it('keeps the PUG image fallback for SMILES and replaces failed images with a message', () => {
+    const html = renderMyChemTooltipHTML({
+      _id: 'aspirin-no-cid',
+      query: 'aspirin',
+      smiles: 'CC(=O)OC1=CC=CC=C1C(=O)O',
+    }, { uniqueId: 'mychem-smiles-structure' });
+
+    expect(html).toContain('/rest/pug/compound/smiles/');
+
+    const root = document.createElement('div');
+    root.innerHTML = html;
+    installChemicalStructureImageFallback(root);
+    root.querySelector<HTMLImageElement>('[data-gt-chemical-structure-image]')
+      ?.dispatchEvent(new Event('error'));
+
+    expect(root.querySelector('[data-gt-chemical-structure-image]')).toBeNull();
+    expect(root.querySelector('.gt-chem-structure-empty')?.textContent).toBe('Structure unavailable');
   });
 
   it('allows structure, summary, and detailed properties sections to be collapsed independently', () => {

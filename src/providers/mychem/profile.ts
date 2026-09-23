@@ -8,7 +8,11 @@ import {
 } from './client.js';
 import { parseChemicalElement } from './parser.js';
 import type { MyChemInfoResult } from './types.js';
-import { getMyChemNestedTooltipDefinitions, renderMyChemTooltipFromConfig } from './renderer.js';
+import {
+  getMyChemNestedTooltipDefinitions,
+  installChemicalStructureImageFallback,
+  renderMyChemTooltipFromConfig,
+} from './renderer.js';
 
 export const myChemProfile: TooltipProfile<MyChemInfoResult, MyChemTooltipConfig> = {
   id: 'mychem',
@@ -25,6 +29,9 @@ export const myChemProfile: TooltipProfile<MyChemInfoResult, MyChemTooltipConfig
   },
   renderTooltipHTML(data, options, config) {
     return renderMyChemTooltipFromConfig(data, options.uniqueId, config);
+  },
+  renderVisuals({ instance }) {
+    installChemicalStructureImageFallback(instance.content);
   },
   getNestedTooltipDefinitions(data, config, uniqueId) {
     return getMyChemNestedTooltipDefinitions(data, config, uniqueId);

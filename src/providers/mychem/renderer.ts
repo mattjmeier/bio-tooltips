@@ -298,14 +298,27 @@ function renderStructureImage(
   if (rendered) return rendered;
 
   const encoded = encodeURIComponent(structure.value);
-  const path = structure.kind === 'cid'
-    ? `cid/${encoded}`
-    : `${structure.kind}/${encoded}`;
-  const src = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/${path}/PNG?image_size=large`;
+  const src = structure.kind === 'cid'
+    ? `https://pubchem.ncbi.nlm.nih.gov/image/imgsrv.fcgi?cid=${encoded}&t=l`
+    : `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/${structure.kind}/${encoded}/PNG?image_size=large`;
 
   return `
-    <img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="lazy" />
+    <img src="${escapeAttr(src)}" alt="${escapeAttr(alt)}" loading="lazy" data-gt-chemical-structure-image />
   `;
+}
+
+/** Replace an unavailable remote structure image with an explicit fallback. */
+export function installChemicalStructureImageFallback(root: ParentNode): void {
+  root.querySelectorAll<HTMLImageElement>('img[data-gt-chemical-structure-image]').forEach(image => {
+    if (image.hasAttribute('data-gt-structure-fallback-bound')) return;
+    image.setAttribute('data-gt-structure-fallback-bound', '');
+    image.addEventListener('error', () => {
+      const fallback = document.createElement('div');
+      fallback.className = 'gt-chem-structure-empty';
+      fallback.textContent = 'Structure unavailable';
+      image.replaceWith(fallback);
+    }, { once: true });
+  });
 }
 
 function renderCustomStructureImage(
