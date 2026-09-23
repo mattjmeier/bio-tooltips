@@ -5,12 +5,13 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'src/**'
-      - 'screenshots/**'
-      - 'benchmark/fixtures/**'
-      - 'package.json'
-      - 'package-lock.json'
+
+# Only the newest main-branch state should be rendered. A push made with this
+# workflow's GITHUB_TOKEN does not start another workflow run, so the screenshot
+# commit itself cannot create an infinite loop.
+concurrency:
+  group: readme-screenshots-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -19,6 +20,7 @@ jobs:
   capture:
     name: Capture Tooltips Screenshot
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repository
@@ -52,8 +54,17 @@ jobs:
           if git diff --cached --quiet; then
             echo "Screenshots unchanged, nothing to commit."
           else
+            # Never put screenshots rendered from an older revision on top of
+            # newer source. Because every main push starts this workflow, the
+            # newer run will render and commit the current state instead.
+            git fetch origin main
+            if [ "$(git rev-parse origin/main)" != "$GITHUB_SHA" ]; then
+              echo "::error::main advanced while screenshots were rendering; the newer run will regenerate them."
+              exit 1
+            fi
+
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git commit -m "chore: update README tooltip screenshots"
-            git push
+            git push origin HEAD:main
           fi

@@ -15,6 +15,9 @@ const geneFixture = JSON.parse(
 const chemFixture = JSON.parse(
   await readFile(path.join(projectRoot, 'benchmark/fixtures/mychem-aspirin.json'), 'utf8')
 );
+const aspirinStructure = await readFile(
+  path.join(__dirname, 'fixtures/aspirin.png')
+);
 
 // Serve the project root over HTTP so relative paths work in the browser
 const mimeTypes = {
@@ -90,6 +93,18 @@ async function captureScreenshot(browser, theme, outputFile) {
     });
   });
 
+  // Keep the README composition independent of PubChem availability and image
+  // service changes. The application still renders its production URL; only
+  // this capture replaces the response with a checked-in fixture.
+  await page.route(/^https:\/\/pubchem\.ncbi\.nlm\.nih\.gov\/image\/imgsrv\.fcgi\?/, route => {
+    console.log(`[mock:${theme}] PubChem structure image hit`);
+    return route.fulfill({
+      status: 200,
+      contentType: 'image/png',
+      body: aspirinStructure,
+    });
+  });
+
   await page.goto(`${baseUrl}/screenshots/screenshot.html?theme=${theme}`, { waitUntil: 'networkidle' });
 
   // Wait for the engine to be ready
@@ -107,20 +122,22 @@ async function captureScreenshot(browser, theme, outputFile) {
       const roots = document.querySelectorAll('[data-gt-tooltip-root]');
       return roots.length >= 1 && [...roots].some(r => r.textContent && r.textContent.length > 50);
     },
+    undefined,
     { timeout: 15000 }
   );
   console.log(`[capture:${theme}] Chemical tooltip rendered`);
 
-  // Wait for the PubChem structure image to load (it has loading="lazy")
+  // The structure is part of the expected README composition. Fail the run if
+  // the application stops requesting it or the fixture cannot be rendered.
   await page.waitForFunction(
     () => {
       const imgs = document.querySelectorAll('[data-gt-tooltip-root] img');
-      return imgs.length === 0 || [...imgs].every(img => img.naturalWidth > 0);
+      return imgs.length === 1
+        && [...imgs].every(img => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0);
     },
+    undefined,
     { timeout: 10000 }
-  ).catch(() => {
-    // Structure image may not be present if rdkit renders it; that's fine
-  });
+  );
   console.log(`[capture:${theme}] Chemical structure image ready`);
 
   // 2. Pin the chemical tooltip
@@ -143,6 +160,7 @@ async function captureScreenshot(browser, theme, outputFile) {
       const roots = document.querySelectorAll('[data-gt-tooltip-root]');
       return roots.length >= 2 && [...roots].every(r => r.textContent && r.textContent.length > 50);
     },
+    undefined,
     { timeout: 20000 }
   );
   console.log(`[capture:${theme}] Gene tooltip rendered`);
@@ -165,6 +183,7 @@ async function captureScreenshot(browser, theme, outputFile) {
         roots[0].getBoundingClientRect().top - roots[1].getBoundingClientRect().top
       ) <= 0.5;
     },
+    undefined,
     { timeout: 5000 }
   );
 
