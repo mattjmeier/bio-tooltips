@@ -791,6 +791,15 @@ export class TooltipController<TData = unknown> {
     this.pinnedPosition.top = clamped.top;
     this.root.style.left = `${clamped.left}px`;
     this.root.style.top = `${clamped.top}px`;
+    this.syncPinnedContentHeight(clamped.top);
+  }
+
+  private syncPinnedContentHeight(top: number): void {
+    const padding = this.options.tooltip.viewportPadding ?? 8;
+    const viewport = this.currentViewport();
+    const availableHeight = Math.max(0, viewport.top + viewport.height - top - padding);
+    const configuredHeight = this.options.maxHeight ?? Number.POSITIVE_INFINITY;
+    this.content.style.maxHeight = `${Math.min(availableHeight, configuredHeight)}px`;
   }
 
   private clampPinnedPosition(): void {
@@ -810,6 +819,7 @@ export class TooltipController<TData = unknown> {
     this.root.removeAttribute('data-pinned');
     this.root.removeAttribute('data-pinned-dragging');
     this.root.style.removeProperty('user-select');
+    if (wasPinned) this.content.style.removeProperty('max-height');
     this.arrow.hidden = false;
     this.pinnedControlsCleanup?.();
     this.pinnedControlsCleanup = undefined;

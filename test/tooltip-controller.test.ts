@@ -941,6 +941,28 @@ describe('TooltipController', () => {
     expect(updatePosition).not.toHaveBeenCalled();
   });
 
+  it('keeps pinned content scrollable within the viewport after moving it', () => {
+    const { controller } = createController();
+    controller.setContent('<div class="gene-tooltip-header"><div class="gene-tooltip-title">TP53</div></div><div>Expandable content</div>');
+    controller.show();
+    vi.runAllTimers();
+    vi.spyOn(controller.root, 'getBoundingClientRect').mockReturnValue({
+      left: 120, top: 140, width: 240, height: 180, right: 360, bottom: 320,
+      x: 120, y: 140, toJSON: () => ({}),
+    } as DOMRect);
+
+    controller.setPinned(true);
+    expect(controller.content.style.maxHeight).toBe(`${window.innerHeight - 140 - 8}px`);
+
+    const move = controller.root.querySelector<HTMLButtonElement>('.gt-move-button')!;
+    move.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'ArrowDown', shiftKey: true, bubbles: true,
+    }));
+
+    expect(controller.root.style.top).toBe('164px');
+    expect(controller.content.style.maxHeight).toBe(`${window.innerHeight - 164 - 8}px`);
+  });
+
   it('drags pinned panels with threshold and excludes header controls', () => {
     const { controller } = createController();
     controller.setContent('<div class="gene-tooltip-header"><div class="gene-tooltip-title"><strong>TP53</strong></div><div class="gt-tooltip-actions"><button class="gt-pin-button" type="button">Pin</button><button class="gt-close-button" type="button">Close</button></div></div>');
