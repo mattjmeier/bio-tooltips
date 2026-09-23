@@ -2,6 +2,8 @@
 
 Chemical-specific options extend the shared core config.
 
+The shared `triggerStyle` option can be set to `'dotted'`, `'solid'`, or `'bold'`, or composed as `['dotted', 'bold']`. It defaults to `'none'`; see [trigger affordance styling](./styling-theming.md#tooltip-trigger-affordance).
+
 ## Common Options
 
 ```ts

@@ -1,6 +1,6 @@
 # Mixed Entity Demo
 
-Gene and chemical tooltip modules can coexist on the same page. Hover over the entities below.
+Gene and chemical tooltip modules can coexist on the same page. Hover, focus, or activate the dotted-underlined entities below.
 
 <p>
   <GeneDemo genes="TP53" species="human" />
@@ -27,6 +27,6 @@ import { GeneTooltip } from 'bio-tooltips/mygene';
 import { ChemicalTooltip } from 'bio-tooltips/mychem';
 import 'bio-tooltips/style.css';
 
-const cleanupGenes = GeneTooltip.init({ selector: '.gene-tooltip' });
-const cleanupChemicals = ChemicalTooltip.init({ selector: '.chemical-tooltip' });
+const cleanupGenes = GeneTooltip.init({ selector: '.gene-tooltip', triggerStyle: 'dotted' });
+const cleanupChemicals = ChemicalTooltip.init({ selector: '.chemical-tooltip', triggerStyle: 'dotted' });
 ```

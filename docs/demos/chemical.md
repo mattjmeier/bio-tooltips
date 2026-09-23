@@ -1,6 +1,6 @@
 # Chemical Demo
 
-Hover over the chemical names and identifiers below to see the MyChem.info adapter in action.
+Hover, focus, or activate the dotted-underlined chemical names and identifiers below to see the MyChem.info adapter in action. Live examples enable `triggerStyle: 'dotted'` so the triggers are easy to spot.
 
 ## Common Names
 

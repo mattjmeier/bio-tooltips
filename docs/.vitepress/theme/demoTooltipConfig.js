@@ -81,6 +81,7 @@ export function withDocsTooltipConfig(config = {}) {
   }
 
   const finalConfig = {
+    triggerStyle: 'dotted',
     ...config,
     ...docsConfig,
   };

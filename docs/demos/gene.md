@@ -1,6 +1,6 @@
 # Gene Demo
 
-Hover over the gene names below to see the MyGene.info adapter in action.
+Hover, focus, or activate the dotted-underlined gene names below to see the MyGene.info adapter in action. Live examples enable `triggerStyle: 'dotted'` so the triggers are easy to spot.
 
 ## Example Genes
 

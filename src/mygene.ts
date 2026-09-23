@@ -13,6 +13,8 @@ export type {
   TooltipOptions,
   TooltipPlacementOptions,
   TooltipPresentation,
+  TooltipTriggerStyle,
+  TooltipTriggerStylePreset,
   TooltipTimingEvent,
   TooltipTimingObserver,
 } from './core/config.js';

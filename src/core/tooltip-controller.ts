@@ -1,4 +1,4 @@
-import type { CoreTooltipConfig, TooltipOptions, TooltipPresentation } from './config.js';
+import type { CoreTooltipConfig, TooltipOptions, TooltipPresentation, TooltipTriggerStyle, TooltipTriggerStylePreset } from './config.js';
 import type { TooltipOpenOptions } from './tooltip-handle.js';
 import { startPositioning, type ActivePositioner } from './positioning.js';
 import { logTooltipTiming } from './timing.js';
@@ -48,6 +48,8 @@ export interface TooltipControllerOptions<TData> {
   accessibleName?: string;
   /** Presentation for top-level dialogs. Nested tooltips always use popovers. */
   presentation?: TooltipPresentation;
+  /** Explicitly managed for configured triggers; omitted nested controllers are untouched. */
+  triggerStyle?: TooltipTriggerStyle;
 }
 
 interface DrawerPointerGesture {
@@ -171,6 +173,7 @@ export class TooltipController<TData = unknown> {
   private presentationMediaQuery?: MediaQueryList;
   private readonly drawerHandle: HTMLButtonElement | null;
   private readonly drawerCloseButton: HTMLButtonElement | null;
+  private readonly releaseTriggerStyle: () => void;
   private drawerGesture?: DrawerPointerGesture;
   private drawerViewportCleanup?: () => void;
   private drawerExplicitHeight = false;
@@ -186,6 +189,9 @@ export class TooltipController<TData = unknown> {
   private pinnedClickResetTimer?: ReturnType<typeof setTimeout>;
 
   constructor(reference: Element, options: TooltipControllerOptions<TData>) {
+    const normalizedTriggerStyle = options.triggerStyle === undefined
+      ? undefined
+      : normalizeTriggerStyle(options.triggerStyle);
     this.reference = reference;
     this.options = options;
     this.hooks = options.hooks ?? {};
@@ -194,6 +200,7 @@ export class TooltipController<TData = unknown> {
     this.parent = options.parent;
     this.originalAriaExpanded = reference.getAttribute('aria-expanded');
     this.originalReferenceMarker = reference.getAttribute('data-gt-tooltip-reference');
+    this.releaseTriggerStyle = () => {};
     this.originalReferenceTabIndex = reference.getAttribute('tabindex');
     this.originalReferenceRole = reference.getAttribute('role');
     this.originalReferenceHaspopup = reference.getAttribute('aria-haspopup');
@@ -260,6 +267,9 @@ export class TooltipController<TData = unknown> {
     this.root.append(this.box);
     this.initializePresentation();
     this.reference.setAttribute('data-gt-tooltip-reference', '');
+    if (normalizedTriggerStyle !== undefined) {
+      this.releaseTriggerStyle = acquireTriggerStyle(this.reference, normalizedTriggerStyle);
+    }
     if (this.kind === 'dialog') {
       this.reference.setAttribute('aria-expanded', 'false');
       this.reference.setAttribute('aria-haspopup', 'dialog');
@@ -513,6 +523,7 @@ export class TooltipController<TData = unknown> {
     restoreAttribute(this.reference, 'aria-haspopup', this.originalReferenceHaspopup);
     restoreAttribute(this.reference, 'aria-controls', this.originalReferenceControls);
     restoreAttribute(this.reference, 'aria-describedby', this.originalReferenceDescribedBy);
+    this.releaseTriggerStyle();
   }
 
   /** Open immediately, optionally moving focus into the dialog. */
@@ -1747,6 +1758,64 @@ function isNativeButton(element: Element): boolean {
 function restoreAttribute(element: Element, name: string, value: string | null): void {
   if (value == null) element.removeAttribute(name);
   else element.setAttribute(name, value);
+}
+
+function normalizeTriggerStyle(style: TooltipTriggerStyle): TooltipTriggerStylePreset[] {
+  if (style === 'none') return [];
+  const styles = typeof style === 'string' ? [style] : [...style];
+  const allowed = new Set(['dotted', 'solid', 'bold']);
+  if (styles.some(value => !allowed.has(value))) {
+    throw new TypeError(`Invalid tooltip trigger style: ${styles.join(', ')}`);
+  }
+  if (styles.includes('dotted') && styles.includes('solid')) {
+    throw new TypeError("Tooltip trigger styles 'dotted' and 'solid' cannot be combined.");
+  }
+  return (['dotted', 'solid', 'bold'] as const).filter(value => styles.includes(value));
+}
+
+interface ActiveTriggerStyles {
+  original: string | null;
+  originalMarker: string | null;
+  requests: Map<symbol, string | null>;
+}
+
+const activeTriggerStyles = new WeakMap<Element, ActiveTriggerStyles>();
+
+function acquireTriggerStyle(reference: Element, styles: TooltipTriggerStylePreset[]): () => void {
+  let active = activeTriggerStyles.get(reference);
+  if (!active) {
+    active = {
+      original: reference.getAttribute('data-gt-trigger-style'),
+      originalMarker: reference.getAttribute('data-gt-trigger-style-active'),
+      requests: new Map(),
+    };
+    activeTriggerStyles.set(reference, active);
+  }
+
+  const token = Symbol('tooltip-trigger-style');
+  active.requests.set(token, styles.length ? styles.join(' ') : null);
+  applyActiveTriggerStyle(reference, active);
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    active?.requests.delete(token);
+    if (!active || active.requests.size === 0) {
+      restoreAttribute(reference, 'data-gt-trigger-style', active?.original ?? null);
+      restoreAttribute(reference, 'data-gt-trigger-style-active', active?.originalMarker ?? null);
+      activeTriggerStyles.delete(reference);
+      return;
+    }
+    applyActiveTriggerStyle(reference, active);
+  };
+}
+
+function applyActiveTriggerStyle(reference: Element, active: ActiveTriggerStyles): void {
+  reference.setAttribute('data-gt-trigger-style-active', '');
+  let current: string | null = null;
+  for (const style of active.requests.values()) current = style;
+  if (current == null) reference.removeAttribute('data-gt-trigger-style');
+  else reference.setAttribute('data-gt-trigger-style', current);
 }
 
 function getFocusable(root: Element): HTMLElement[] {

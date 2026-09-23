@@ -13,6 +13,26 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+[data-gt-trigger-style-active][data-gt-trigger-style~='dotted'] {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--gt-trigger-decoration-color, currentColor);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+[data-gt-trigger-style-active][data-gt-trigger-style~='solid'] {
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-color: var(--gt-trigger-decoration-color, currentColor);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+[data-gt-trigger-style-active][data-gt-trigger-style~='bold'] {
+  font-weight: 700;
+}
+
 :where([data-gt-tooltip-reference], .gt-tooltip-box, .gt-tooltip-box button,
   .gt-tooltip-box [role="button"], .gt-tooltip-box a, .gt-tooltip-box select,
   .gt-tooltip-box input, .gt-tooltip-box summary):focus-visible {

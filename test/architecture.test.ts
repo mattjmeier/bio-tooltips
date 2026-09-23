@@ -42,6 +42,10 @@ describe('architecture compatibility', () => {
     expect(defaultMyChemConfig.sectionVariant).toBe('cards');
     expect(mergeConfig({ sectionVariant: 'dividers' }).sectionVariant).toBe('dividers');
     expect(mergeMyChemConfig({ sectionVariant: 'dividers' }).sectionVariant).toBe('dividers');
+    expect(defaultConfig.triggerStyle).toBe('none');
+    expect(defaultMyChemConfig.triggerStyle).toBe('none');
+    expect(mergeConfig({ triggerStyle: ['dotted', 'bold'] }).triggerStyle).toEqual(['dotted', 'bold']);
+    expect(mergeMyChemConfig({ triggerStyle: 'solid' }).triggerStyle).toBe('solid');
   });
 
   it('merges the owned tooltip option bags without legacy Tippy configuration', () => {

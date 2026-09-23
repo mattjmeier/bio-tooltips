@@ -3,6 +3,11 @@ export type TooltipTheme = 'light' | 'dark' | 'auto' | 'material' | 'translucent
 export type VisualPreloadMode = 'none' | 'hover' | 'init';
 export type SectionVariant = 'cards' | 'dividers';
 export type TooltipPresentation = 'auto' | 'popover' | 'drawer';
+export type TooltipTriggerStylePreset = 'dotted' | 'solid' | 'bold';
+export type TooltipTriggerStyle =
+  | 'none'
+  | TooltipTriggerStylePreset
+  | readonly TooltipTriggerStylePreset[];
 
 export type FixedPlacement =
   | 'top'
@@ -54,6 +59,8 @@ export type TooltipTimingObserver = (event: TooltipTimingEvent) => void;
 
 export interface CoreTooltipConfig {
   selector: string;
+  /** Visual cue applied to initialized tooltip triggers. Defaults to none. */
+  triggerStyle: TooltipTriggerStyle;
   /** How top-level tooltip dialogs are presented. Nested tooltips remain popovers. */
   presentation?: TooltipPresentation;
   prefetch: PrefetchMode;
@@ -73,6 +80,7 @@ export interface CoreTooltipConfig {
 
 export const defaultCoreConfig: CoreTooltipConfig = {
   selector: '.gene-tooltip',
+  triggerStyle: 'none',
   presentation: 'auto',
   prefetch: 'smart',
   prefetchThreshold: 15,

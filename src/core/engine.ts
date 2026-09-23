@@ -71,6 +71,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
       hooks,
       kind: 'dialog',
       presentation: config.presentation ?? 'auto',
+      triggerStyle: config.triggerStyle,
     };
   }
 
@@ -138,6 +139,7 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
       },
       kind: 'dialog',
       presentation: config.presentation ?? 'auto',
+      triggerStyle: config.triggerStyle,
     }));
 
     instances.forEach(instance => {

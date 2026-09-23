@@ -169,6 +169,97 @@ describe('single-element tooltip adapters', () => {
     expect(anchor.getAttribute('aria-haspopup')).toBeNull();
   });
 
+  it('applies composed trigger styles and restores author styling on destroy', () => {
+    const geneAnchor = document.createElement('span');
+    geneAnchor.textContent = 'TP53';
+    geneAnchor.setAttribute('data-gt-trigger-style', 'author-value');
+    document.body.append(geneAnchor);
+    const geneHandle = GeneTooltip.attach(geneAnchor, {
+      triggerStyle: ['bold', 'dotted'],
+      prefetch: 'none',
+      visualPreload: 'none',
+      ideogram: { enabled: false },
+    });
+
+    expect(geneAnchor.getAttribute('data-gt-trigger-style')).toBe('dotted bold');
+    geneHandle.destroy();
+    expect(geneAnchor.getAttribute('data-gt-trigger-style')).toBe('author-value');
+    expect(geneAnchor.hasAttribute('data-gt-tooltip-reference')).toBe(false);
+
+    const chemicalAnchor = document.createElement('span');
+    chemicalAnchor.textContent = 'aspirin';
+    chemicalAnchor.setAttribute('data-gt-trigger-style', 'old-style');
+    document.body.append(chemicalAnchor);
+    const chemicalHandle = ChemicalTooltip.attach(chemicalAnchor, {
+      triggerStyle: 'solid',
+      prefetch: 'none',
+      visualPreload: 'none',
+    });
+
+    expect(chemicalAnchor.getAttribute('data-gt-trigger-style')).toBe('solid');
+    chemicalHandle.destroy();
+    expect(chemicalAnchor.getAttribute('data-gt-trigger-style')).toBe('old-style');
+  });
+
+  it('applies an opt-in trigger style to initialized elements and restores attributes on cleanup', () => {
+    const anchor = document.createElement('span');
+    anchor.className = 'gene-tooltip';
+    anchor.textContent = 'TP53';
+    anchor.setAttribute('data-gt-trigger-style', 'author-value');
+    document.body.append(anchor);
+
+    const cleanup = GeneTooltip.init({
+      selector: '.gene-tooltip',
+      triggerStyle: 'bold',
+      prefetch: 'none',
+      visualPreload: 'none',
+      ideogram: { enabled: false },
+    });
+    expect(anchor.getAttribute('data-gt-trigger-style')).toBe('bold');
+    cleanup();
+    expect(anchor.getAttribute('data-gt-trigger-style')).toBe('author-value');
+    expect(anchor.hasAttribute('data-gt-tooltip-reference')).toBe(false);
+  });
+
+  it('rejects conflicting underline presets before modifying an attached trigger', () => {
+    const anchor = document.createElement('span');
+    anchor.textContent = 'TP53';
+    document.body.append(anchor);
+    expect(() => GeneTooltip.attach(anchor, {
+      triggerStyle: ['dotted', 'solid'],
+      prefetch: 'none',
+      visualPreload: 'none',
+    })).toThrow("Tooltip trigger styles 'dotted' and 'solid' cannot be combined.");
+    expect(anchor.hasAttribute('data-gt-tooltip-reference')).toBe(false);
+    expect(anchor.hasAttribute('data-gt-trigger-style')).toBe(false);
+  });
+
+  it('keeps the newest trigger style active until the final duplicate controller is destroyed', () => {
+    const anchor = document.createElement('span');
+    anchor.textContent = 'TP53';
+    anchor.setAttribute('data-gt-trigger-style', 'author-value');
+    document.body.append(anchor);
+    const first = GeneTooltip.attach(anchor, {
+      triggerStyle: 'dotted',
+      prefetch: 'none',
+      visualPreload: 'none',
+    });
+    const second = ChemicalTooltip.attach(anchor, {
+      triggerStyle: ['solid', 'bold'],
+      prefetch: 'none',
+      visualPreload: 'none',
+    });
+
+    expect(anchor.getAttribute('data-gt-trigger-style')).toBe('solid bold');
+    expect(anchor.hasAttribute('data-gt-trigger-style-active')).toBe(true);
+    first.destroy();
+    expect(anchor.getAttribute('data-gt-trigger-style')).toBe('solid bold');
+    expect(anchor.hasAttribute('data-gt-trigger-style-active')).toBe(true);
+    second.destroy();
+    expect(anchor.getAttribute('data-gt-trigger-style')).toBe('author-value');
+    expect(anchor.hasAttribute('data-gt-trigger-style-active')).toBe(false);
+  });
+
   it('uses the automatic mobile drawer presentation for an attached tooltip', async () => {
     setupBrowser(true);
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(response([]));

@@ -8,6 +8,19 @@ import 'bio-tooltips/style.css';
 
 The stylesheet includes the owned Bio Tooltips shell, layout rules, module section styling, themes, and CSS variables.
 
+## Tooltip Trigger Affordance
+
+Trigger styling is opt-in and defaults to `none`, so existing pages keep their typography. Choose dotted or solid underline, bold type, or combine bold with one underline style:
+
+```ts
+GeneTooltip.init({ triggerStyle: ['dotted', 'bold'] });
+ChemicalTooltip.init({ triggerStyle: 'solid' });
+```
+
+Available presets are `'dotted'`, `'solid'`, and `'bold'`; use `'none'` to leave triggers unchanged. Dotted and solid underline cannot be combined. Styling is applied only while a trigger is initialized, and cleanup restores any existing trigger-style attributes. The stylesheet uses `--gt-trigger-decoration-color` for underline color and otherwise inherits the text color.
+
+All live docs examples use a dotted underline by default. Set `triggerStyle: 'none'` in an example config to compare the unstyled appearance.
+
 For a browser build, load the stylesheet from a pinned package version:
 
 ```html
