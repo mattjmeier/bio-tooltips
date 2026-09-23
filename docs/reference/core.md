@@ -76,16 +76,19 @@ GeneTooltip.init({ presentation: 'drawer' });
 ```
 
 The drawer is a non-modal, full-width bottom sheet. It opens at the reading
-position (`50dvh`) and can be resized with its top handle between five resting positions: peek
-(`max(120px, 15dvh)`), a lower intermediate position, reading (`50dvh`), an
-upper intermediate position, and expanded (the dynamic viewport minus top
-safe-area clearance). The intermediate positions evenly divide their adjacent
-ranges. The handle follows vertical pointer movement
-in both directions and settles at the nearest position; it is restricted to
-the handle so drawer content retains normal scrolling. A deliberate downward
-gesture from the peek position can dismiss the drawer, while ordinary drags
-resize it. The separate 44px Close control and Escape remain available as
-explicit dismissal paths. The page remains scrollable and interactive at the
+position (two-thirds of the dynamic viewport) and can be resized with its top
+handle between five resting positions: peek (`max(120px, 15dvh)`), a lower
+intermediate position, reading, an upper intermediate position, and expanded
+(the dynamic viewport minus top
+safe-area clearance). The lower and upper positions evenly divide the adjacent
+ranges. The handle follows vertical pointer movement in both directions and
+settles at the nearest position; it is restricted to the handle so drawer
+content retains normal scrolling. A downward fling (at least 0.7 CSS pixels
+per millisecond across at least 24 pixels of recent movement) dismisses from
+any position. A fast upward gesture advances one position, while slower drags
+resize and settle at the nearest position. A deliberate downward pull of at
+least 96 pixels from peek also dismisses. The separate 44px Close control and
+Escape remain available as explicit dismissal paths. The page remains scrollable and interactive at the
 four partial positions: there is no backdrop, focus trap, `aria-modal`, or
 inert background. At the expanded position, background scrolling is locked so
 scroll input stays with the full-height drawer; the lock is released as soon

@@ -44,7 +44,7 @@ function createController(overrides: Partial<TooltipOptions> = {}) {
 function dispatchPointer(
   target: EventTarget,
   type: string,
-  values: Partial<Pick<PointerEvent, 'pointerId' | 'clientX' | 'clientY' | 'button' | 'isPrimary'>> = {}
+  values: Partial<Pick<PointerEvent, 'pointerId' | 'clientX' | 'clientY' | 'button' | 'isPrimary' | 'timeStamp'>> = {}
 ): void {
   const event = new Event(type, { bubbles: true, cancelable: true });
   Object.defineProperties(event, {
@@ -53,6 +53,7 @@ function dispatchPointer(
     clientY: { value: values.clientY ?? 20 },
     button: { value: values.button ?? 0 },
     isPrimary: { value: values.isPrimary ?? true },
+    timeStamp: { value: values.timeStamp ?? performance.now() },
   });
   target.dispatchEvent(event);
 }
@@ -150,7 +151,7 @@ describe('TooltipController', () => {
     expect(handle?.getAttribute('role')).toBe('slider');
     expect(handle?.getAttribute('aria-valuetext')).toContain('Reading drawer');
     expect(Number.parseFloat(controller.box.style.getPropertyValue('--gt-drawer-height')))
-      .toBeCloseTo(window.innerHeight * 0.5);
+      .toBeCloseTo(window.innerHeight * (2 / 3));
     expect(closeButton?.getAttribute('aria-label')).toBe('Close');
     expect(closeButton?.hidden).toBe(false);
     expect(controller.box.firstElementChild).toBe(handle);
@@ -200,6 +201,44 @@ describe('TooltipController', () => {
     expect(document.activeElement).toBe(reference);
   });
 
+  it('dismisses on a fast downward fling from a non-peek detent', () => {
+    const { controller } = createController();
+    controller.updateOptions({ presentation: 'drawer' });
+    controller.enter();
+    const handle = controller.root.querySelector<HTMLButtonElement>('.gt-drawer-handle')!;
+
+    dispatchPointer(handle, 'pointerdown', { pointerId: 9, clientY: 100, timeStamp: 0 });
+    dispatchPointer(handle, 'pointermove', { pointerId: 9, clientY: 110, timeStamp: 150 });
+    dispatchPointer(handle, 'pointermove', { pointerId: 9, clientY: 150, timeStamp: 200 });
+    dispatchPointer(handle, 'pointerup', { pointerId: 9, clientY: 150, timeStamp: 200 });
+
+    expect(controller.status).toBe('closing');
+  });
+
+  it('advances one detent on a fast upward fling and lets slow downward drags snap normally', () => {
+    const { controller } = createController();
+    controller.updateOptions({ presentation: 'drawer' });
+    controller.enter();
+    const handle = controller.root.querySelector<HTMLButtonElement>('.gt-drawer-handle')!;
+    const readingHeight = Number.parseFloat(controller.box.style.getPropertyValue('--gt-drawer-height'));
+    const expandedHeight = window.innerHeight - 8;
+    const upperHeight = readingHeight + (expandedHeight - readingHeight) / 2;
+
+    dispatchPointer(handle, 'pointerdown', { pointerId: 10, clientY: 200, timeStamp: 0 });
+    dispatchPointer(handle, 'pointermove', { pointerId: 10, clientY: 160, timeStamp: 50 });
+    dispatchPointer(handle, 'pointerup', { pointerId: 10, clientY: 160, timeStamp: 50 });
+    expect(controller.status).toBe('open');
+    expect(Number.parseFloat(controller.box.style.getPropertyValue('--gt-drawer-height'))).toBeCloseTo(upperHeight);
+
+    dispatchPointer(handle, 'pointerdown', { pointerId: 11, clientY: 200, timeStamp: 1000 });
+    dispatchPointer(handle, 'pointermove', { pointerId: 11, clientY: 550, timeStamp: 1500 });
+    dispatchPointer(handle, 'pointerup', { pointerId: 11, clientY: 550, timeStamp: 1500 });
+    const lowerHeight = Math.max(120, window.innerHeight * 0.15)
+      + (readingHeight - Math.max(120, window.innerHeight * 0.15)) / 2;
+    expect(controller.status).toBe('open');
+    expect(Number.parseFloat(controller.box.style.getPropertyValue('--gt-drawer-height'))).toBeCloseTo(lowerHeight);
+  });
+
   it('settles on capture loss and keeps resized height through the close transition', () => {
     const { controller } = createController();
     controller.updateOptions({ presentation: 'drawer' });
@@ -211,8 +250,9 @@ describe('TooltipController', () => {
     handle.dispatchEvent(new Event('lostpointercapture', { bubbles: true }));
     expect(controller.box.hasAttribute('data-drawer-dragging')).toBe(false);
     const peekHeight = Math.max(120, window.innerHeight * 0.15);
+    const readingHeight = window.innerHeight * (2 / 3);
     expect(Number.parseFloat(controller.box.style.getPropertyValue('--gt-drawer-height')))
-      .toBeCloseTo((peekHeight + window.innerHeight * 0.5) / 2);
+      .toBeCloseTo((peekHeight + readingHeight) / 2);
 
     handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
     const beforeClose = controller.box.style.getPropertyValue('--gt-drawer-height');
@@ -245,18 +285,18 @@ describe('TooltipController', () => {
       expect(addEventListener).toHaveBeenCalledWith('resize', expect.any(Function));
 
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', bubbles: true }));
-      expect(handle.getAttribute('aria-valuenow')).toBe('325');
+      expect(handle.getAttribute('aria-valuenow')).toBe('408');
       expect(handle.getAttribute('aria-valuetext')).toContain('Lower drawer');
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', bubbles: true }));
-      expect(handle.getAttribute('aria-valuenow')).toBe('500');
+      expect(handle.getAttribute('aria-valuenow')).toBe('667');
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageUp', bubbles: true }));
-      expect(handle.getAttribute('aria-valuenow')).toBe('746');
+      expect(handle.getAttribute('aria-valuenow')).toBe('829');
       expect(handle.getAttribute('aria-valuetext')).toContain('Upper drawer');
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
       expect(handle.getAttribute('aria-valuenow')).toBe('992');
       expect(document.documentElement.classList.contains('gt-drawer-expanded-open')).toBe(true);
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', bubbles: true }));
-      expect(handle.getAttribute('aria-valuenow')).toBe('746');
+      expect(handle.getAttribute('aria-valuenow')).toBe('829');
       expect(document.documentElement.classList.contains('gt-drawer-expanded-open')).toBe(false);
       handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
 
