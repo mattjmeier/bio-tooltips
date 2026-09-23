@@ -323,7 +323,7 @@ Explicitly enter a dialog from keyboard activation.
 
 > **hasFocus**(): `boolean`
 
-Defined in: [core/tooltip-controller.ts:1523](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1523)
+Defined in: [core/tooltip-controller.ts:1533](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1533)
 
 ###### Returns
 
@@ -465,7 +465,7 @@ Defined in: [core/tooltip-controller.ts:337](https://github.com/mattjmeier/bio-t
 
 > **syncPinButton**(): `void`
 
-Defined in: [core/tooltip-controller.ts:1177](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1177)
+Defined in: [core/tooltip-controller.ts:1187](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1187)
 
 Synchronize a rendered pin control with the controller's current state.
 
@@ -699,7 +699,7 @@ Defined in: [core/tooltip-controller.ts:24](https://github.com/mattjmeier/bio-to
 
 > **createStaticTooltip**(`reference`, `content`, `options`): [`TooltipController`](#tooltipcontroller)
 
-Defined in: [core/tooltip-controller.ts:1746](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1746)
+Defined in: [core/tooltip-controller.ts:1756](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1756)
 
 #### Parameters
 
