@@ -93,7 +93,7 @@ describe('renderTooltipHTML', () => {
     expect(stylesheet).toContain('overscroll-behavior: none;');
     expect(stylesheet).toContain("[data-gt-tooltip-root][data-presentation='drawer'] > .gt-tooltip-box > .gt-tooltip-content > .gene-tooltip-content > .gene-tooltip-header .gt-close-button");
     expect(stylesheet).toContain("[data-gt-tooltip-root][data-presentation='drawer'] .gt-drawer-close-button");
-    expect(stylesheet).not.toContain("[data-gt-tooltip-root] > .gt-tooltip-box[role='dialog'] > .gt-drawer-close-button");
+    expect(stylesheet).toContain("[data-gt-tooltip-root][data-presentation='drawer'] > .gt-tooltip-box[role='dialog'] > .gt-drawer-close-button");
     expect(stylesheet).toContain('width: 44px;');
     expect(stylesheet).toContain('height: 44px;');
     expect(stylesheet).toContain('min-width: 44px;');
