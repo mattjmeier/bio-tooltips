@@ -76,7 +76,7 @@ describe('renderTooltipHTML', () => {
     expect(stylesheet).toContain('outline: 3px solid var(--gt-focus-color');
   });
 
-  it('styles the drawer handle as a touch target and keeps it separate from popover close controls', () => {
+  it('styles drawer gestures and preserves the nested mobile close target', () => {
     const stylesheet = readFileSync(resolve('src/css/main.css'), 'utf8');
 
     expect(stylesheet).toContain('.gt-drawer-handle-indicator');
@@ -88,7 +88,11 @@ describe('renderTooltipHTML', () => {
     expect(stylesheet).toContain('touch-action: none;');
     expect(stylesheet).toContain('html.gt-drawer-expanded-open');
     expect(stylesheet).toContain('overscroll-behavior: none;');
-    expect(stylesheet).toContain("[data-gt-tooltip-root][data-presentation='drawer'] .gt-tooltip-content .gt-close-button");
+    expect(stylesheet).toContain("[data-gt-tooltip-root][data-presentation='drawer'] > .gt-tooltip-box > .gt-tooltip-content > .gene-tooltip-content > .gene-tooltip-header .gt-close-button");
+    expect(stylesheet).toContain('width: 44px;');
+    expect(stylesheet).toContain('height: 44px;');
+    expect(stylesheet).toContain('min-width: 44px;');
+    expect(stylesheet).toContain('min-height: 44px;');
     expect(stylesheet).toContain('data-drawer-dragging');
     expect(stylesheet).toContain('prefers-reduced-motion: reduce');
   });

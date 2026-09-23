@@ -166,7 +166,8 @@ html.gt-drawer-expanded-open body {
   opacity: .35;
 }
 
-[data-gt-tooltip-root][data-presentation='drawer'] .gt-tooltip-content .gt-close-button {
+[data-gt-tooltip-root][data-presentation='drawer'] > .gt-tooltip-box > .gt-tooltip-content > .gt-close-button,
+[data-gt-tooltip-root][data-presentation='drawer'] > .gt-tooltip-box > .gt-tooltip-content > .gene-tooltip-content > .gene-tooltip-header .gt-close-button {
   display: none;
 }
 
@@ -671,6 +672,15 @@ html.gt-drawer-expanded-open body {
 
 .gt-nested-toolbar .gt-close-button {
   color: var(--gt-text-color-secondary);
+}
+
+@media (max-width: 600px) {
+  .gt-nested-toolbar .gt-close-button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
 }
 
 .gene-tooltip-nested-search {

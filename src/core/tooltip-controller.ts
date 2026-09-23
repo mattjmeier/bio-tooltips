@@ -59,6 +59,7 @@ interface DrawerPointerGesture {
   startMaxHeightStyle: string;
   startExplicitHeight: boolean;
   startDetentIndex?: number;
+  samples: Array<{ y: number; time: number }>;
   dragging: boolean;
 }
 
@@ -74,9 +75,13 @@ interface PinnedPointerGesture {
 const DRAWER_DRAG_START_DISTANCE = 6;
 const DRAWER_PEEK_MIN_HEIGHT = 120;
 const DRAWER_PEEK_VIEWPORT_RATIO = 0.15;
-const DRAWER_READING_VIEWPORT_RATIO = 0.5;
+const DRAWER_READING_VIEWPORT_RATIO = 2 / 3;
 const DRAWER_TOP_CLEARANCE = 8;
 const DRAWER_DISMISS_DISTANCE = 96;
+const DRAWER_FLING_MIN_DISTANCE = 24;
+const DRAWER_FLING_MIN_DURATION = 16;
+const DRAWER_FLING_WINDOW = 100;
+const DRAWER_FLING_VELOCITY = 0.7;
 const DRAWER_KEYBOARD_STEP = 32;
 const PINNED_DRAG_START_DISTANCE = 6;
 const PINNED_NUDGE_DISTANCE = 8;
@@ -1007,6 +1012,7 @@ export class TooltipController<TData = unknown> {
       startMaxHeightStyle: this.box.style.getPropertyValue('--gt-drawer-max-height'),
       startExplicitHeight: this.drawerExplicitHeight,
       startDetentIndex: this.drawerDetentIndex,
+      samples: [{ y: event.clientY, time: event.timeStamp }],
       dragging: false,
     };
 
@@ -1034,7 +1040,28 @@ export class TooltipController<TData = unknown> {
     if (!gesture.dragging && verticalDistance < DRAWER_DRAG_START_DISTANCE) return;
 
     gesture.dragging = true;
+    this.recordDrawerPointerSample(gesture, event);
     this.setDrawerHeight(gesture.startHeight - deltaY, true);
+  }
+
+  private recordDrawerPointerSample(gesture: DrawerPointerGesture, event: PointerEvent): void {
+    const time = event.timeStamp;
+    if (!Number.isFinite(time)) return;
+    gesture.samples.push({ y: event.clientY, time });
+    const cutoff = time - DRAWER_FLING_WINDOW;
+    while (gesture.samples.length > 1 && gesture.samples[0].time < cutoff) gesture.samples.shift();
+  }
+
+  private drawerFlingVelocity(gesture: DrawerPointerGesture, event: PointerEvent): number | undefined {
+    this.recordDrawerPointerSample(gesture, event);
+    const last = gesture.samples[gesture.samples.length - 1];
+    const first = gesture.samples.find(sample => last.time - sample.time >= DRAWER_FLING_MIN_DURATION);
+    if (!first) return undefined;
+    const duration = last.time - first.time;
+    if (duration <= 0 || duration > DRAWER_FLING_WINDOW) return undefined;
+    const displacement = last.y - first.y;
+    if (Math.abs(displacement) < DRAWER_FLING_MIN_DISTANCE) return undefined;
+    return displacement / duration;
   }
 
   private handleDrawerPointerUp(event: PointerEvent): void {
@@ -1043,9 +1070,13 @@ export class TooltipController<TData = unknown> {
 
     const deltaY = event.clientY - gesture.startY;
     const [peek] = this.drawerDetents();
-    const shouldDismiss = gesture.dragging
-      && gesture.startHeight <= peek + DRAWER_DRAG_START_DISTANCE
-      && deltaY >= DRAWER_DISMISS_DISTANCE;
+    const velocity = gesture.dragging ? this.drawerFlingVelocity(gesture, event) : undefined;
+    const shouldDismiss = gesture.dragging && (
+      velocity !== undefined && velocity >= DRAWER_FLING_VELOCITY
+      || gesture.startHeight <= peek + DRAWER_DRAG_START_DISTANCE
+        && deltaY >= DRAWER_DISMISS_DISTANCE
+    );
+    const shouldExpand = gesture.dragging && velocity !== undefined && velocity <= -DRAWER_FLING_VELOCITY;
     if (gesture.dragging) {
       this.suppressNextDrawerClick = true;
       this.drawerClickResetTimer = setTimeout(() => {
@@ -1055,6 +1086,11 @@ export class TooltipController<TData = unknown> {
     }
     this.cancelDrawerGesture();
     if (shouldDismiss) this.close();
+    else if (shouldExpand) {
+      const detents = this.drawerDetents();
+      const startIndex = gesture.startDetentIndex ?? this.nearestDrawerDetentIndex(gesture.startHeight);
+      this.setDrawerHeight(detents[Math.min(detents.length - 1, startIndex + 1)], false, true);
+    }
     else if (gesture.dragging) this.snapDrawerToNearest(this.readDrawerHeight());
   }
 
