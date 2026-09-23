@@ -314,6 +314,12 @@ Re-exports [getPubChemCid](providers/mychem/formatters.md#getpubchemcid)
 
 ***
 
+### installChemicalStructureImageFallback
+
+Re-exports [installChemicalStructureImageFallback](providers/mychem/renderer.md#installchemicalstructureimagefallback)
+
+***
+
 ### mergeConfig
 
 Re-exports [mergeConfig](providers/mychem/config.md#mergeconfig)

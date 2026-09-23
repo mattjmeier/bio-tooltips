@@ -8,7 +8,7 @@
 
 > **getMyChemNestedTooltipDefinitions**(`data`, `config`, `uniqueId`): [`NestedTooltipDefinition`](../../core/types.md#nestedtooltipdefinition)[]
 
-Defined in: [providers/mychem/renderer.ts:694](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L694)
+Defined in: [providers/mychem/renderer.ts:707](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L707)
 
 #### Parameters
 
@@ -27,6 +27,26 @@ Defined in: [providers/mychem/renderer.ts:694](https://github.com/mattjmeier/bio
 #### Returns
 
 [`NestedTooltipDefinition`](../../core/types.md#nestedtooltipdefinition)[]
+
+***
+
+### installChemicalStructureImageFallback()
+
+> **installChemicalStructureImageFallback**(`root`): `void`
+
+Defined in: [providers/mychem/renderer.ts:311](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L311)
+
+Replace an unavailable remote structure image with an explicit fallback.
+
+#### Parameters
+
+##### root
+
+`ParentNode`
+
+#### Returns
+
+`void`
 
 ***
 
