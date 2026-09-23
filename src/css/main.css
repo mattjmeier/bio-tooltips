@@ -218,6 +218,13 @@ html.gt-drawer-expanded-open body {
     border-radius: 8px;
   }
 
+  /* Main tooltips are dialogs; nested tooltips retain their own close control. */
+  [data-gt-tooltip-root] > .gt-tooltip-box[role='dialog'] > .gt-drawer-close-button,
+  [data-gt-tooltip-root] > .gt-tooltip-box[role='dialog'] > .gt-tooltip-content > .gt-close-button,
+  [data-gt-tooltip-root] > .gt-tooltip-box[role='dialog'] > .gt-tooltip-content > .gene-tooltip-content > .gene-tooltip-header .gt-close-button {
+    display: none;
+  }
+
   .gt-tooltip-content {
     padding: 8px 10px;
     overscroll-behavior: contain;
