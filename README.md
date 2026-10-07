@@ -151,3 +151,7 @@ Browser CDN paths also move to the new package and artifact names:
 ## Package History
 
 This package was originally developed as `gene-tooltips` and renamed to `bio-tooltips` as chemical and future entity modules were added.
+
+## AI-assisted development
+
+Generative AI tools have been used during development to assist with code generation, refactoring, testing, documentation, and debugging. All software design decisions, integration, code review, and testing are performed by me (a human), who is responsible for the resulting code and documentation.
