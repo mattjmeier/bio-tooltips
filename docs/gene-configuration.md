@@ -70,6 +70,27 @@ GeneTooltip.init({
 
 These examples show how configuration choices change the rendered tooltip. See the [Gene Demo](./demos/gene.md) for a broader gallery of genes, lists, and species.
 
+### Lazy-Loaded Sections
+
+Open TP53 below, then expand **GeneRIFs** or **Pathways**. The initial request includes the header and expanded sections; annotations needed only by collapsed sections are fetched on first expansion. You may briefly see “Loading details…” while the request completes.
+
+<GeneDemo genes="TP53" species="human" :config="{ prefetch: 'none', display: { summary: 'expanded', pathways: 'collapsed', generifs: 'collapsed' } }" />
+
+```ts
+GeneTooltip.init({
+  prefetch: 'none',
+  display: {
+    summary: 'expanded',
+    pathways: 'collapsed',
+    generifs: 'collapsed'
+  }
+});
+```
+
+Lazy loading follows the existing display settings; no extra switch is needed. Set a section to `'expanded'` to request its fields initially, or `false` to hide it and omit its fields. `true` follows `display.collapsedByDefault`. Set `display.collapsible: false` to load all enabled sections initially. Pathways request only the configured `pathwaySource`.
+
+This example disables prefetch to make the first opening easier to inspect. With `prefetch: 'smart'` or `'all'`, prefetch also selects initial fields and leaves collapsed sections for expansion. Successfully loaded fields are reused while cached; another example on this page may already have loaded the same annotation. If a request fails, collapse and expand to retry. A successful response without annotations shows “No data available.”
+
 ### Wide Tooltip
 
 <GeneDemo genes="TP53" species="human" :config="{ tooltipWidth: 600, tooltipHeight: 400, truncateSummary: 6 }" />

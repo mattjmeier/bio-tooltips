@@ -1,4 +1,5 @@
 import * as cache from './cache.js';
+import { fetchRecords, requestKey } from './requests.js';
 import type {
   CoreTooltipConfig,
   EntityRef,
@@ -204,6 +205,76 @@ function createNestedTooltip<TData>(
   instance.addNestedTooltip(nestedInstance);
 }
 
+const sectionRequests = new Map<string, Promise<Map<string, any>>>();
+
+function deferredSections<TData, TConfig extends CoreTooltipConfig>(
+  cacheKey: string, config: TConfig, profile: TooltipProfile<TData, TConfig>
+): string[] {
+  return Object.entries(profile.getFieldPlan?.(config).deferred ?? {})
+    .filter(([, fields]) => !cache.has(cacheKey, fields)).map(([key]) => key);
+}
+
+async function loadSection<TData, TConfig extends CoreTooltipConfig>(
+  instance: TooltipController<TData>, section: Element, sectionKey: string,
+  config: TConfig, profile: TooltipProfile<TData, TConfig>
+): Promise<boolean> {
+  if (!section.hasAttribute('data-deferred')) return true;
+  const fields = profile.getFieldPlan?.(config).deferred[sectionKey];
+  const ref = profile.provider.parseElement(instance.reference as HTMLElement);
+  const cacheKey = instance._entityCacheKey;
+  const content = section.querySelector<HTMLElement>('.gt-collapsible-content');
+  if (!fields || !ref || !cacheKey || !content) return false;
+  if (!cache.has(cacheKey, [])) {
+    const plan = profile.getFieldPlan!(config);
+    const loaded = Object.entries(plan.deferred).filter(([key]) =>
+      instance.root.querySelector(`[data-section="${key}"]`)?.getAttribute('data-deferred') !== 'true'
+    ).flatMap(([, sectionFields]) => sectionFields);
+    cache.set(cacheKey, instance._entityData!, [...plan.initial, ...loaded]);
+  }
+  content.setAttribute('aria-busy', 'true');
+  content.innerHTML = '<p role="status">Loading details…</p>';
+  try {
+    logTooltipTiming(instance, config, 'section data load start', { sectionKey, fields });
+    const results = await fetchRecords([ref], profile.provider, sectionRequests, fields);
+    logTooltipTiming(instance, config, 'section data load complete', { sectionKey });
+    if (instance.state.isDestroyed
+        || instance._entityCacheKey !== cacheKey || !instance.root.contains(section)) return false;
+    const data = results.get(cacheKey);
+    if (!data) throw new Error('Record annotation is no longer available.');
+    instance._entityData = data;
+    const template = document.createElement('template');
+    template.innerHTML = profile.renderTooltipHTML(data, {
+      uniqueId: instance._uniqueId!, deferredSections: deferredSections(cacheKey, config, profile),
+    }, config);
+    const replacement = template.content.querySelector(`[data-section="${sectionKey}"]`);
+    content.innerHTML = replacement?.querySelector('.gt-collapsible-content')?.innerHTML
+      || '<p>No data available.</p>';
+    // Preserve the focused expansion button, replacing only supplementary controls.
+    const header = section.querySelector('.gene-tooltip-section-header');
+    if (header) {
+      [...header.children].slice(1).forEach(child => child.remove());
+      const extra = replacement?.querySelector('.gene-tooltip-section-header');
+      if (extra) [...extra.children].slice(1).forEach(child => header.append(child));
+    }
+    section.removeAttribute('data-deferred');
+    content.style.removeProperty('--gt-collapsible-content-height');
+    attachNestedTooltips(instance, config, profile);
+    if (instance.state.isMounted) {
+      announce(instance, `${section.querySelector('.gt-section-title')?.textContent ?? 'Section'} loaded.`);
+    }
+    return instance.state.isMounted;
+  } catch (error) {
+    if (!instance.state.isDestroyed && instance.root.contains(section)) {
+      content.innerHTML = '<p role="status">Error loading details. Collapse and expand to retry.</p>';
+      announce(instance, 'Error loading section details. Collapse and expand to retry.');
+    }
+    console.error(`[${profile.id}] Failed to load section data.`, error);
+    return false;
+  } finally {
+    content.removeAttribute('aria-busy');
+  }
+}
+
 function installSectionControls<TData, TConfig extends CoreTooltipConfig>(
   instance: TooltipController<TData>, config: TConfig, profile: TooltipProfile<TData, TConfig>
 ): void {
@@ -291,15 +362,21 @@ function installSectionControls<TData, TConfig extends CoreTooltipConfig>(
         }
 
         if (sectionKey) renderingSections.add(sectionKey);
-        void Promise.resolve(profile.renderVisuals?.({
-          instance,
-          data: instance._entityData,
-          config,
-          uniqueId: instance._uniqueId!,
-          sectionKey,
-        }))
-          .then(() => {
-            if (sectionKey) renderedSections.add(sectionKey);
+        void (async () => {
+          if (sectionKey && !await loadSection(instance, section, sectionKey, config, profile)) return false;
+          if (instance.state.isDestroyed
+              || section.getAttribute('data-collapsed') === 'true') return false;
+          await profile.renderVisuals?.({
+            instance,
+            data: instance._entityData!,
+            config,
+            uniqueId: instance._uniqueId!,
+            sectionKey,
+          });
+          return true;
+        })()
+          .then(rendered => {
+            if (rendered && sectionKey) renderedSections.add(sectionKey);
           })
           .catch(error => {
             console.error(`[${profile.id}] Failed to render section visuals.`, error);
@@ -379,7 +456,9 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
         instance._renderedVisualSections = new Set();
         instance._renderingVisualSections = new Set();
         logTooltipTiming(instance, config, 'content render start');
-        instance.setContent(profile.renderTooltipHTML(data, { uniqueId: instance._uniqueId! }, config));
+        instance.setContent(profile.renderTooltipHTML(data, {
+          uniqueId: instance._uniqueId!, deferredSections: deferredSections(cacheKey, config, profile),
+        }, config));
         if (!instance.content.querySelector('.gt-close-button')) {
           instance.content.insertAdjacentHTML('afterbegin', renderCloseButton('Close details'));
         }
@@ -391,7 +470,8 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
         scheduleVisualsAndNestedTooltips(instance, config, profile, 'content-set');
       };
 
-      const cachedData = cache.get<TData>(cacheKey);
+      const fields = profile.getFieldPlan?.(config).initial;
+      const cachedData = cache.get<TData>(cacheKey, fields);
       if (typeof cachedData !== 'undefined') {
         logTooltipTiming(instance, config, 'cache hit');
         renderContent(cachedData);
@@ -402,20 +482,14 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
       announce(instance, `Loading ${panelName.toLowerCase()}.`, true);
       logTooltipTiming(instance, config, 'loading content set');
 
-      let fetchPromise = inFlightRequests.get(cacheKey);
-      if (!fetchPromise) {
-        logTooltipTiming(instance, config, 'fetch start', { cacheKey });
-        fetchPromise = profile.provider.fetchBatch([ref]);
-        inFlightRequests.set(cacheKey, fetchPromise);
-      } else {
-        logTooltipTiming(instance, config, 'fetch joined', { cacheKey });
-      }
+      const pendingKey = requestKey(cacheKey, fields ? cache.missingFields(cacheKey, fields) : undefined);
+      logTooltipTiming(instance, config, inFlightRequests.has(pendingKey) ? 'fetch joined' : 'fetch start', { cacheKey, fields });
+      const fetchPromise = fetchRecords([ref], profile.provider, inFlightRequests, fields);
 
       try {
         const resultsMap = await fetchPromise;
         logTooltipTiming(instance, config, 'fetch complete', { cacheKey });
         const data = resultsMap.get(cacheKey) || null;
-        cache.set(cacheKey, data);
         if (!instance.state.isDestroyed && instance._entityCacheKey === cacheKey) renderContent(data);
       } catch (error) {
         console.error(`Failed to fetch data for ${describeRef(ref)}`, error);
@@ -423,8 +497,6 @@ export function createShowHandler<TData, TConfig extends CoreTooltipConfig>(
           setMessageContent(instance, 'Error loading data.');
           announce(instance, 'Error loading data.');
         }
-      } finally {
-        inFlightRequests.delete(cacheKey);
       }
     })();
   };

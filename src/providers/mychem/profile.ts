@@ -1,3 +1,4 @@
+import { getMyChemFieldPlan } from './fields.js';
 import type { TooltipProfile } from '../../core/types.js';
 import type { MyChemTooltipConfig } from './config.js';
 import {
@@ -16,6 +17,7 @@ import {
 
 export const myChemProfile: TooltipProfile<MyChemInfoResult, MyChemTooltipConfig> = {
   id: 'mychem',
+  getFieldPlan: getMyChemFieldPlan,
   invalidElementMessage: 'Invalid chemical element',
   notFoundHTML: '<p>Chemical not found.</p>',
   provider: {
@@ -28,7 +30,7 @@ export const myChemProfile: TooltipProfile<MyChemInfoResult, MyChemTooltipConfig
     fetchBatch: fetchMyChemRefs,
   },
   renderTooltipHTML(data, options, config) {
-    return renderMyChemTooltipFromConfig(data, options.uniqueId, config);
+    return renderMyChemTooltipFromConfig(data, options.uniqueId, config, options.deferredSections);
   },
   renderVisuals({ instance }) {
     installChemicalStructureImageFallback(instance.content);

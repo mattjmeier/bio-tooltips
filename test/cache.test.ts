@@ -70,4 +70,43 @@ describe('cache', () => {
     cache.clear();
     expect(cache.size()).toBe(0);
   });
+  it('tracks requested coverage, including fields absent from the response', () => {
+    cache.set('partial', { _id: '1' }, ['summary']);
+    expect(cache.has('partial', ['summary'])).toBe(true);
+    expect(cache.has('partial', ['exons'])).toBe(false);
+    expect(cache.get('partial')).toBeUndefined();
+    expect(cache.get('partial', ['summary'])).toEqual({ _id: '1' });
+  });
+
+  it('merges nested projections without losing sibling annotations', () => {
+    cache.set('partial', { ensembl: { gene: 'ENSG1' } }, ['ensembl.gene']);
+    cache.set('partial', { ensembl: { transcript: ['ENST1'] } }, ['ensembl.transcript']);
+    expect(cache.get('partial', ['ensembl.gene', 'ensembl.transcript'])).toEqual({
+      ensembl: { gene: 'ENSG1', transcript: ['ENST1'] },
+    });
+    expect(cache.has('partial', ['ensembl'])).toBe(false);
+    cache.set('parent', { ensembl: {} }, ['ensembl']);
+    expect(cache.has('parent', ['ensembl.transcript'])).toBe(true);
+  });
+
+  it('keeps coverage synchronized with eviction and does not evict on enrichment', () => {
+    for (let i = 0; i < 500; i++) cache.set(String(i), {}, ['summary']);
+    cache.set('499', { exons: [] }, ['exons']);
+    expect(cache.has('0', ['summary'])).toBe(true);
+    cache.set('500', {}, ['summary']);
+    expect(cache.has('0', ['summary'])).toBe(false);
+    expect(cache.missingFields('0', ['summary'])).toEqual(['summary']);
+    expect(cache.size()).toBe(500);
+  });
+
+  it('preserves full and negative cache entries for projected reads', () => {
+    cache.set('full', { name: 'test' });
+    cache.set('full', { summary: 'text' }, ['summary']);
+    expect(cache.get('full')).toEqual({ name: 'test', summary: 'text' });
+    cache.set('all', { name: 'all' }, ['all']);
+    expect(cache.has('all', ['exons'])).toBe(true);
+    cache.set('missing', null, ['summary']);
+    expect(cache.get('missing', ['exons'])).toBeNull();
+  });
+
 });

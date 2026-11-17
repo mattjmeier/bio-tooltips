@@ -7,7 +7,7 @@ import {
   renderTooltipShell,
   renderCloseButton,
 } from '../../core/renderer.js';
-import { getSectionState, renderCollapsibleSection } from '../../core/sections.js';
+import { getSectionKey, getSectionState, renderCollapsibleSection } from '../../core/sections.js';
 import {
   myGeneSections,
   renderSpecies,
@@ -15,6 +15,7 @@ import {
 } from './sections/index.js';
 
 interface RenderOptions {
+  deferredSections?: string[];
   truncate?: number;
   display?: Partial<TooltipDisplayConfig>;
   pathwaySource?: 'reactome' | 'kegg' | 'wikipathways';
@@ -66,6 +67,8 @@ export function renderTooltipHTML(
     content: string,
     extraHeaderHtml: string = ''
   ) => {
+    const deferred = options.deferredSections?.includes(getSectionKey(title));
+    if (deferred) content = '<p>Expand to load details.</p>';
     if (!content) return '';
 
     const setting = display[key] as SectionVisibility | undefined;
@@ -79,7 +82,8 @@ export function renderTooltipHTML(
       uniqueId,
       collapsible,
       startCollapsed,
-      extraHeaderHtml
+      extraHeaderHtml,
+      deferred
     );
   };
 

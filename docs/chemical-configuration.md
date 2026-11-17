@@ -98,6 +98,28 @@ Install `@rdkit/rdkit` in applications that use this option. Tooltips fall back 
 
 These examples show how configuration choices change the rendered tooltip. See the [Chemical Demo](./demos/chemical.md) for a broader gallery of names and identifier scopes.
 
+### Lazy-Loaded Sections
+
+Open aspirin below, then expand **Pharmacology & Targets** or **Safety & Reported Effects**. The tooltip loads its header and expanded sections first, then requests missing annotations when you expand a collapsed section. You may briefly see “Loading details…” while the request completes.
+
+<ChemicalDemo query="aspirin" :config="{ prefetch: 'none', display: { summary: 'expanded', pharmacology: 'collapsed', safety: 'collapsed', rawJson: false } }" />
+
+```ts
+ChemicalTooltip.init({
+  prefetch: 'none',
+  display: {
+    summary: 'expanded',
+    pharmacology: 'collapsed',
+    safety: 'collapsed',
+    rawJson: false
+  }
+});
+```
+
+Lazy loading follows the existing display settings. `'expanded'` requests a section's fields initially, `'collapsed'` defers missing fields, and `false` hides the section and adds no fields for it. `true` follows `display.collapsedByDefault`. Fields shared with the header or other expanded sections can still be fetched initially; name searches also include identity and synonym fields for match ranking.
+
+This example disables prefetch to make the first opening easier to inspect. With `prefetch: 'smart'` or `'all'`, prefetch also selects initial fields. Successfully loaded fields are reused while cached, including across examples. Collapse and expand to retry a failed request; a successful response without annotations shows “No data available.” Set `display.collapsible: false` to fetch all enabled sections initially. `display.rawJson: true` requests the complete record immediately, so leave it disabled to demonstrate deferred fetching.
+
 ### Compact Tooltip
 
 <ChemicalDemo query="caffeine" :config="{ tooltipWidth: 360, display: { pharmacology: false, regulatory: false, safety: false, identifiers: 'collapsed' } }" />

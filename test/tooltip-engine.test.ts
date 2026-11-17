@@ -55,10 +55,9 @@ function createHarness(
 }
 
 async function flushAsync(): Promise<void> {
-  await Promise.resolve();
-  await Promise.resolve();
+  for (let index = 0; index < 12; index++) await Promise.resolve();
   vi.runAllTimers();
-  await Promise.resolve();
+  for (let index = 0; index < 12; index++) await Promise.resolve();
 }
 
 describe('tooltip engine lifecycle', () => {

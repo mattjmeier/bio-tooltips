@@ -158,7 +158,8 @@ export function createTooltipEngine<TData, TConfig extends CoreTooltipConfig>(
       elements,
       config.prefetchThreshold,
       inFlightRequests,
-      options.profile.provider
+      options.profile.provider,
+      options.profile.getFieldPlan?.(config).initial
     );
 
     const releaseSummaryHandlers = enableSummaryExpand();
