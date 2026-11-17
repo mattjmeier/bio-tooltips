@@ -150,6 +150,7 @@ Bio Tooltips keeps its user-facing dependency surface intentionally small:
 
 - Required runtime npm dependencies: none.
 - Accessibility test tooling: pinned `axe-core` is a development dependency used with Playwright; it is excluded from runtime bundles.
+- Build and documentation tooling: esbuild bundles the library, rimraf cleans build output, and VitePress and TypeDoc build the documentation. Vite is overridden to the patched `6.4.6` release shared by VitePress and Vitest.
 - Coverage tooling: Vitest's matching `@vitest/coverage-v8` development provider writes local and CI reports under the ignored `coverage/` directory.
 - Bundled positioning foundation: `@floating-ui/dom`; consumers do not install or configure it separately.
 - Optional peer dependencies: `d3`, `ideogram`, and `@rdkit/rdkit`. These are not bundled into the package and are only needed for optional visual/structure-rendering features.

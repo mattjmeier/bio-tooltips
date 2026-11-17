@@ -103,15 +103,13 @@
     "@types/d3": "^7.4.3",
     "@types/node": "^26.0.0",
     "@vitest/coverage-v8": "^5.1.0",
-    "axe-core": "4.13.0",
+    "axe-core": "4.14.0",
     "bootstrap": "^5.3.8",
-    "cpx2": "^9.0.0",
     "d3": "^7.9.0",
     "esbuild": "^0.28.1",
     "esbuild-sass-plugin": "^3.3.1",
-    "glob": "^13.0.6",
     "ideogram": "^1.53.0",
-    "jsdom": "^30.0.1",
+    "jsdom": "^31.0.0",
     "npm-run-all": "^4.1.5",
     "playwright": "^1.52.0",
     "rimraf": "^6.0.1",
@@ -143,6 +141,6 @@
   "overrides": {
     "@ranfdev/deepobj": "1.0.3",
     "esbuild": "$esbuild",
-    "vite": "6.4.3"
+    "vite": "6.4.6"
   }
 }
