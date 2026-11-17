@@ -12,6 +12,7 @@ notes
 
 # Dist
 dist/
+coverage/
 
 # Generated benchmark reports
 benchmark/results/

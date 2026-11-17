@@ -11,6 +11,13 @@ This repo keeps generated API reference markdown under `docs/api/**`.
 
 On Windows PowerShell, `npm` may be blocked by script execution policy. Use `npm` for npm scripts.
 
+## Internal Testing Documentation
+
+- Treat `docs/**` as public documentation: Markdown pages there can be published even when they are absent from the navigation.
+- Keep internal testing notes, benchmark investigations, diagnostic reports, and review working documents outside `docs/**` unless the user explicitly requests their inclusion in the public documentation.
+- Use Git-ignored locations for local-only reports, such as `benchmark/results/` for benchmark investigations. Do not add links to these reports from public documentation.
+- A request to investigate, test, or summarize findings does not by itself authorize publishing an internal report.
+
 ## Supply Chain Notes
 
 Keep user-facing dependencies minimal and documented:
