@@ -958,6 +958,25 @@ ul.gene-tooltip-nested-list {
   transform: translateY(-70%) rotate(45deg);
 }
 
+.gene-tooltip-track-controls--single {
+  flex-basis: auto;
+  user-select: text;
+}
+
+.gene-tooltip-track-controls--single::after {
+  content: none;
+}
+
+.gene-tooltip-transcript-summary {
+  padding: 0.32em 0;
+  color: var(--gt-text-color-secondary);
+  font-size: 0.86em;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
 .gene-tooltip-transcript-selector {
   appearance: none;
   box-sizing: border-box;
