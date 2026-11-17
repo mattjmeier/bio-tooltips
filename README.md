@@ -118,7 +118,7 @@ gene_tt("TP53", species = "human")
 chem_tt("aspirin", query = "2244", scope = "pubchem")
 ```
 
-The repository's [examples](examples/) provide additional integration starting points.
+The repository's [examples](https://github.com/mattjmeier/bio-tooltips/tree/main/examples) provide additional integration starting points.
 
 ## Performance Benchmarks
 
