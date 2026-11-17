@@ -1,3 +1,4 @@
+import { myChemLookupFields } from './fields.js';
 import type { EntityRef } from '../../core/types.js';
 import type { MyChemInfoResult, MyChemLookupMode, MyChemRecord, MyChemScope } from './types.js';
 
@@ -90,7 +91,8 @@ const DIRECT_ANNOTATION_SCOPES = new Set<MyChemScope>([
 export async function fetchMyChemBatch(
   queries: string[],
   scope: MyChemScope = 'name',
-  throwOnError = false
+  throwOnError = false,
+  fields: string = MYCHEM_FIELDS
 ): Promise<Map<string, MyChemInfoResult>> {
   if (!queries || queries.length === 0) {
     return new Map();
@@ -100,7 +102,7 @@ export async function fetchMyChemBatch(
     const body = new URLSearchParams({
       q: queries.join(','),
       scopes: scope,
-      fields: MYCHEM_FIELDS,
+      fields,
     });
 
     const response = await fetch('https://mychem.info/v1/query', {
@@ -133,7 +135,8 @@ export async function fetchMyChemBatch(
 
 export async function fetchMyChemAnnotationBatch(
   ids: string[],
-  throwOnError = false
+  throwOnError = false,
+  fields: string = MYCHEM_FIELDS
 ): Promise<Map<string, MyChemInfoResult>> {
   if (!ids || ids.length === 0) {
     return new Map();
@@ -142,7 +145,7 @@ export async function fetchMyChemAnnotationBatch(
   try {
     const body = new URLSearchParams({
       ids: ids.join(','),
-      fields: MYCHEM_FIELDS,
+      fields,
     });
 
     const response = await fetch('https://mychem.info/v1/chem', {
@@ -176,7 +179,8 @@ export async function fetchMyChemAnnotationBatch(
 
 export async function fetchMyChemBestGuessBatch(
   queries: string[],
-  throwOnError = false
+  throwOnError = false,
+  fields: string = MYCHEM_FIELDS
 ): Promise<Map<string, MyChemInfoResult>> {
   if (!queries || queries.length === 0) {
     return new Map();
@@ -186,7 +190,7 @@ export async function fetchMyChemBestGuessBatch(
 
   const batches = await Promise.allSettled(
     queries.map(async query => {
-      const result = await fetchBestGuessResult(query);
+      const result = await fetchBestGuessResult(query, fields);
       if (result) {
         resultsMap.set(query, result);
       }
@@ -198,7 +202,23 @@ export async function fetchMyChemBestGuessBatch(
   return resultsMap;
 }
 
-export async function fetchMyChemRefs(refs: EntityRef[]): Promise<Map<string, MyChemInfoResult>> {
+export async function fetchMyChemRefs(refs: EntityRef[], fields?: readonly string[]): Promise<Map<string, MyChemInfoResult>> {
+  if (refs.some(ref => ref.context?.recordId)) {
+    const results = new Map<string, MyChemInfoResult>();
+    const resolved = refs.filter(ref => ref.context?.recordId);
+    const unresolved = refs.filter(ref => !ref.context?.recordId);
+    const [annotations, lookups] = await Promise.all([
+      fetchMyChemAnnotationBatch(resolved.map(ref => String(ref.context!.recordId)), true, fields?.join(',')),
+      fetchMyChemRefs(unresolved, fields),
+    ]);
+    lookups.forEach((value, key) => results.set(key, value));
+    resolved.forEach(ref => {
+      const data = annotations.get(String(ref.context!.recordId));
+      const scope = normalizeMyChemScope(ref.context!.scope);
+      if (data) results.set(getMyChemCacheKey(ref.query, scope, normalizeMyChemLookupMode(ref.context!.lookup, scope)), { ...data, query: ref.query });
+    });
+    return results;
+  }
   const refsByLookup = new Map<string, { lookup: MyChemLookupMode; scope: MyChemScope; refs: EntityRef[] }>();
 
   refs.forEach(ref => {
@@ -215,11 +235,13 @@ export async function fetchMyChemRefs(refs: EntityRef[]): Promise<Map<string, My
   const batches = await Promise.allSettled(
     Array.from(refsByLookup.values()).map(async ({ lookup, scope, refs: scopedRefs }) => {
       const queries = scopedRefs.map(ref => ref.query);
+      const searchFields = fields?.includes('all') ? 'all'
+        : fields ? [...new Set([...fields, ...myChemLookupFields])].join(',') : undefined;
       const batchResults = lookup === 'best-guess'
-        ? await fetchMyChemBestGuessBatch(queries, true)
+        ? await fetchMyChemBestGuessBatch(queries, true, searchFields)
         : DIRECT_ANNOTATION_SCOPES.has(scope)
-          ? await fetchMyChemAnnotationBatch(queries, true)
-          : await fetchMyChemBatch(queries, scope, true);
+          ? await fetchMyChemAnnotationBatch(queries, true, fields?.join(','))
+          : await fetchMyChemBatch(queries, scope, true, fields?.join(','));
 
       batchResults.forEach((data, query) => {
         results.set(getMyChemCacheKey(query, scope, lookup), data);
@@ -283,20 +305,20 @@ export function normalizeMyChemLookupMode(
   return scope === 'name' ? 'best-guess' : 'id';
 }
 
-async function fetchBestGuessResult(query: string): Promise<MyChemInfoResult | undefined> {
-  const constrainedHits = await queryMyChemSearch(buildBestGuessQuery(query), 10);
+async function fetchBestGuessResult(query: string, fields: string): Promise<MyChemInfoResult | undefined> {
+  const constrainedHits = await queryMyChemSearch(buildBestGuessQuery(query), 10, fields);
   const unconstrainedHits = constrainedHits.length > 0
     ? []
-    : await queryMyChemSearch(query, 10);
+    : await queryMyChemSearch(query, 10, fields);
   const hits = constrainedHits.length > 0 ? constrainedHits : unconstrainedHits;
 
   return selectBestGuessHit(hits, query);
 }
 
-async function queryMyChemSearch(query: string, size: number): Promise<MyChemInfoResult[]> {
+async function queryMyChemSearch(query: string, size: number, fields: string): Promise<MyChemInfoResult[]> {
   const params = new URLSearchParams({
     q: query,
-    fields: MYCHEM_FIELDS,
+    fields,
     size: String(size),
   });
 

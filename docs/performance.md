@@ -89,6 +89,29 @@ renderer-only timings. The visible endpoint includes DOM insertion and browser s
 but does not measure GPU paint. Optional D3/Ideogram visual preload is disabled so it is
 independent of annotation prefetch.
 
+## Section-Aware Loading
+
+Initial requests and prefetches select the fields needed for the tooltip header and
+expanded sections. Disabled sections add no fields. When collapsible sections start
+collapsed, their remaining annotations load on first expansion. Set a section to
+`'expanded'` to fetch it immediately; `display.collapsible: false` fetches all enabled
+sections immediately. MyGene pathway requests select only `pathwaySource`.
+
+The shared cache tracks requested fields, including annotations absent from a
+successful response. Expansions fetch missing fields by the resolved record ID and
+merge them into the cached record. Different tooltip configurations can share partial
+records without mistaking them for complete responses. Failed section loads can be
+retried by collapsing and expanding the section.
+
+A collapsed section initially appears even when its annotation availability is unknown.
+If the API returns no annotation, expansion shows “No data available.” MyChem name
+searches also request the identity and synonym fields needed for stable match ranking.
+Enabling MyChem `display.rawJson` requests the complete record immediately.
+
+Measure initial opening and section expansion separately when evaluating network
+performance. Pure-renderer benchmarks use stored records and do not measure this
+request behavior.
+
 ## Interpreting results
 
 The Markdown table reports medians and IQR (first to third quartile). Percentiles use

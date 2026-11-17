@@ -1,3 +1,4 @@
+import { getMyGeneFieldPlan } from './fields.js';
 import type { TooltipProfile } from '../../core/types.js';
 import type { TooltipController } from '../../core/tooltip-controller.js';
 import type { GeneTooltipConfig } from './config.js';
@@ -61,6 +62,7 @@ async function renderMyGeneVisuals(
 
 export const myGeneProfile: TooltipProfile<MyGeneInfoResult, GeneTooltipConfig> = {
   id: 'mygene',
+  getFieldPlan: getMyGeneFieldPlan,
   invalidElementMessage: 'Invalid gene element',
   notFoundHTML: '<p>Gene not found.</p>',
   provider: {
@@ -73,6 +75,7 @@ export const myGeneProfile: TooltipProfile<MyGeneInfoResult, GeneTooltipConfig> 
   },
   renderTooltipHTML(data, options, config) {
     return renderTooltipHTML(data, {
+      deferredSections: options.deferredSections,
       truncate: config.truncateSummary,
       display: config.display,
       pathwaySource: config.pathwaySource,

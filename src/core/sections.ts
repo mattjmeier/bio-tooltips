@@ -37,7 +37,8 @@ export function renderCollapsibleSection(
   uniqueId: string,
   collapsible: boolean,
   isCollapsed: boolean,
-  headerRightHTML: string = ''
+  headerRightHTML: string = '',
+  deferred = false
 ): string {
   const collapsedState = collapsible ? isCollapsed : false;
   const sectionKey = getSectionKey(title);
@@ -59,7 +60,7 @@ export function renderCollapsibleSection(
   return `
     <div class="gene-tooltip-section-container ${collapsible ? 'gt-collapsible' : ''}" 
         data-collapsed="${collapsedState ? 'true' : 'false'}"
-        data-section="${sectionKey}">
+        data-section="${sectionKey}"${deferred ? ' data-deferred="true"' : ''}>
 
       <div class="gene-tooltip-section-header">
         <${collapsible ? 'button' : 'div'} class="${triggerClasses}" ${triggerAttributes}>

@@ -31,9 +31,10 @@ import {
   renderTooltipShell,
   renderCloseButton,
 } from '../../core/renderer.js';
-import { getSectionState, renderCollapsibleSection } from '../../core/sections.js';
+import { getSectionKey, getSectionState, renderCollapsibleSection } from '../../core/sections.js';
 
 interface RenderOptions {
+  deferredSections?: string[];
   uniqueId?: string;
   truncate?: number;
   synonymCount?: number;
@@ -102,6 +103,8 @@ export function renderTooltipHTML(
     content: string,
     headerRightHTML = ''
   ) => {
+    const deferred = options.deferredSections?.includes(getSectionKey(title));
+    if (deferred) content = '<p>Expand to load details.</p>';
     if (!content) return '';
 
     const setting = display[key] as MyChemSectionVisibility | undefined;
@@ -115,7 +118,8 @@ export function renderTooltipHTML(
       uniqueId,
       collapsible,
       startCollapsed,
-      headerRightHTML
+      headerRightHTML,
+      deferred
     );
   };
 
@@ -152,10 +156,12 @@ export function renderTooltipHTML(
 export function renderMyChemTooltipFromConfig(
   data: MyChemInfoResult | null | undefined,
   uniqueId: string,
-  config: MyChemTooltipConfig
+  config: MyChemTooltipConfig,
+  deferredSections?: string[]
 ): string {
   return renderTooltipHTML(data, {
     uniqueId,
+    deferredSections,
     truncate: config.truncateSummary,
     synonymCount: config.synonymCount,
     listCount: config.listCount,

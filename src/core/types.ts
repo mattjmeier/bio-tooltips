@@ -13,7 +13,8 @@ export interface DataProvider<TData> {
   id: string;
   parseElement: (el: HTMLElement) => EntityRef | null;
   getCacheKey: (ref: EntityRef) => string;
-  fetchBatch: (refs: EntityRef[]) => Promise<EntityDataMap<TData>>;
+  /** Fetch only the requested annotation fields when supplied. */
+  fetchBatch: (refs: EntityRef[], fields?: readonly string[]) => Promise<EntityDataMap<TData>>;
 }
 
 export type FormattedItem = { name: string; url?: string };
@@ -26,6 +27,7 @@ export interface NestedTooltipDefinition {
 
 export interface RenderTooltipOptions {
   uniqueId: string;
+  deferredSections?: string[];
 }
 
 export interface VisualRenderContext<TData, TConfig extends CoreTooltipConfig> {
@@ -48,5 +50,7 @@ export interface TooltipProfile<TData, TConfig extends CoreTooltipConfig = CoreT
     config: TConfig,
     uniqueId: string
   ) => NestedTooltipDefinition[];
+  /** Initial field projection and field groups deferred until section expansion. */
+  getFieldPlan?: (config: TConfig) => { initial: string[]; deferred: Record<string, string[]> };
   preload?: () => Promise<unknown>;
 }
