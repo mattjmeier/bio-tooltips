@@ -13,13 +13,12 @@ export const liveGeneSymbols = Object.freeze([
   'ATR', 'CHEK1', 'CHEK2', 'PALB2', 'RAD51', 'MLH1', 'MSH2', 'MSH6',
 ]);
 
-export function identifiersForPage(elements, live = false) {
+export function identifiersForPage(elements) {
   const count = Math.ceil(elements * 0.8);
-  if (live && count > liveGeneSymbols.length) {
-    throw new Error(`Live benchmark supports at most ${liveGeneSymbols.length} distinct identifiers (10/100-element scenarios).`);
+  if (count > liveGeneSymbols.length) {
+    throw new Error(`Browser benchmark supports at most ${liveGeneSymbols.length} distinct identifiers (10/100-element scenarios).`);
   }
-  const identifiers = live ? liveGeneSymbols.slice(0, count)
-    : Array.from({ length: count }, (_, index) => `BTG${String(index).padStart(4, '0')}`);
+  const identifiers = liveGeneSymbols.slice(0, count);
   return Array.from({ length: elements }, (_, index) => {
     const identifierIndex = index < 5 ? index : index === 5 ? 0 : index < count + 1 ? index - 1 : index - count;
     return identifiers[identifierIndex];

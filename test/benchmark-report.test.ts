@@ -42,19 +42,19 @@ describe('live browser benchmark data and reporting', () => {
     expect(liveGeneSymbols).toHaveLength(80);
     expect(new Set(liveGeneSymbols).size).toBe(80);
     for (const size of [10, 100]) {
-      const identifiers = identifiersForPage(size, true);
+      const identifiers = identifiersForPage(size);
       expect(identifiers).toHaveLength(size);
       expect(new Set(identifiers).size).toBe(size * 0.8);
       expect(identifiers.slice(0, 5)).toEqual(['TP53', 'BRCA1', 'EGFR', 'MYC', 'MAPK1']);
       expect(identifiers[5]).toBe(identifiers[0]);
       expect(identifiers.every(identifier => liveGeneSymbols.includes(identifier))).toBe(true);
     }
-    expect(() => identifiersForPage(500, true)).toThrow('at most 80 distinct');
-    expect(identifiersForPage(500)).toHaveLength(500);
+    expect(() => identifiersForPage(500)).toThrow('at most 80 distinct');
   });
 
-  it('keeps controlled and live runs separate and reports failures without zero-valued latencies', () => {
+  it('combines live and fixture rows with source labels and retains failures without zero latencies', () => {
     const live = {
+      measurementVersion: 2, condition: 'live',
       startedAt: '2026-11-16T12:00:00Z', generatedAt: '2026-11-16T12:01:00Z',
       environment: { browserVersion: 'Chromium', node: 'v24', platform: 'linux', cpu: 'test' },
       settings: { repetitions: 2, warmups: 1, networkLabel: 'test|network\nlocation unspecified' },
@@ -63,19 +63,82 @@ describe('live browser benchmark data and reporting', () => {
       warmupFailures: [{ strategy: 'none', annotatedElements: 10, error: 'Network failure' }],
     };
     const section = renderLiveSection(live);
-    expect(section).toContain('| none | 10 | 8 | 0 / 2 | — |');
+    expect(section).toContain('| Live API | none | 10 | 8 | 0 / 2 | — |');
     expect(section).toContain('HTTP 503');
     expect(section).toContain('Failed warm-up');
     expect(section).toContain('test\\|network location unspecified');
-    expect(section).toContain('No interception or artificial request delay');
-    const combined = combineBrowserReports('# Controlled\n\nOriginal results\n', live);
-    expect(combined).toContain('Original results\n\n## Live MyGene.info');
-    expect(combineBrowserReports(null, live)).toContain('No controlled browser result is saved');
+    expect(section).toContain('no interception or artificial request delay');
+    const fixture = { ...live, condition: 'fixture', startedAt: 'fixture-start',
+      environment: { ...live.environment, cpu: 'fixture CPU' } };
+    const combined = combineBrowserReports(fixture, live);
+    expect(combined).toContain('| Live API | none |');
+    expect(combined).toContain('| Fixture | none |');
+    expect(combined.match(/\| Source \| Strategy/g)).toHaveLength(1);
+    expect(browserCsvRows([{ ...live.summaries[0], source: 'live' }])[0]).toMatchObject({ source: 'live' });
+    expect(combined).toContain('fixture-start');
+    expect(combined).toContain('fixture CPU');
+    expect(combined).toContain('not a paired estimate of network overhead');
+    expect(combineBrowserReports(null, live)).toContain('| Live API | none |');
+    expect(combineBrowserReports(fixture, null)).toContain('| Fixture | none |');
+    expect(combineBrowserReports(null, null)).toContain('No current live API or fixture');
+    expect(combineBrowserReports({ ...fixture, measurementVersion: 1 }, null)).not.toContain('| Fixture |');
+    expect(combineBrowserReports({ ...fixture, condition: 'controlled' }, null)).not.toContain('| Fixture |');
     expect(renderLiveSection(null)).toBe('');
     expect(browserCsvRows(live.summaries)).toEqual([{
       strategy: 'none', annotatedElements: 10, uniqueIdentifiers: 8,
       attemptedTrials: 2, failedTrials: 2, metric: 'trial-count', observations: 0, units: 'count',
     }]);
+  });
+
+  it('trims trailing decimal zeros while preserving fractional timings, counts and small payloads', () => {
+    const timing = { medianMs: 1.8, q1Ms: 0.875, q3Ms: 2 };
+    const result = {
+      condition: 'live', startedAt: 'start', generatedAt: 'end',
+      settings: { repetitions: 2, warmups: 0 },
+      environment: { browserVersion: 'browser', node: 'node', platform: 'linux', cpu: 'CPU' },
+      rawObservations: [],
+      summaries: [{ strategy: 'none', annotatedElements: 10, uniqueIdentifiers: 8,
+        trials: 2, attemptedTrials: 2, failedTrials: 0,
+        pageLoad: { medianMs: 22, q1Ms: 20, q3Ms: 24 },
+        readiness: { medianMs: 18, q1Ms: 17, q3Ms: 19 },
+        interactionToContent: timing, prefetchCompletion: { medianMs: 100, q1Ms: 99.5, q3Ms: 101 },
+        prefetchRequests: { median: 1, q1: 0.30000000000000004, q3: 2 },
+        transferredBytes: { median: 3000, q1: 0, q3: 1000000 } }],
+    };
+    for (const report of [renderLiveSection(result), renderFieldSelectionSection(result)]) {
+      expect(report).toContain('1.8 (0.875–2)');
+      expect(report).toContain('100 (99.5–101)');
+      expect(report).toContain('1 (0.3–2)');
+      expect(report).toContain('0.003 (0–1)');
+      expect(report).not.toContain('1.800');
+      expect(report).not.toContain('0.30000000000000004');
+    }
+    const browserReport = renderLiveSection(result);
+    expect(browserReport).toContain('| DOM loaded (ms) | Tooltips ready (ms) |');
+    expect(browserReport).toContain('| 22 (20–24) | 18 (17–19) |');
+    expect(browserReport).toContain('not browser paint');
+    // Presentation rounding must not change the raw CSV measurements.
+    expect(browserCsvRows(result.summaries).find(row => row.metric === 'prefetchRequests')?.q1)
+      .toBe(0.30000000000000004);
+  });
+
+  it('places matching live/fixture scenarios together and preserves small response sizes', () => {
+    const run = {
+      measurementVersion: 2, condition: 'live', startedAt: 'start', generatedAt: 'end',
+      settings: { repetitions: 1, warmups: 0 },
+      environment: { browserVersion: 'browser', node: 'node', platform: 'linux', cpu: 'CPU' },
+      rawObservations: [],
+      summaries: [10, 100].map(annotatedElements => ({ strategy: 'none', annotatedElements,
+        uniqueIdentifiers: annotatedElements * 0.8, trials: 1, attemptedTrials: 1, failedTrials: 0,
+        transferredBytes: { median: 3000, q1: 3000, q3: 3000 } })),
+    };
+    const report = combineBrowserReports({ ...run, condition: 'fixture' }, run);
+    const rows = report.split('\n').filter(line => /^\| (Live API|Fixture) \|/.test(line));
+    expect(rows.map(row => row.split(' | ').slice(0, 3).join(' | '))).toEqual([
+      '| Live API | none | 10', '| Fixture | none | 10',
+      '| Live API | none | 100', '| Fixture | none | 100',
+    ]);
+    expect(report).toContain('0.003 (0.003–0.003)');
   });
 });
 
@@ -101,7 +164,7 @@ describe('live field selection benchmark', () => {
     expect(fieldsForVariant('reference')).toEqual(referenceGeneFields);
   });
 
-  it('keeps all three report conditions separate and preserves variant identity in CSV and failures', () => {
+  it('keeps the field-selection table separate and preserves variant identity in CSV and failures', () => {
     const result = {
       startedAt: 'start', generatedAt: 'end',
       settings: { repetitions: 2, warmups: 1, networkLabel: 'network' },
@@ -117,9 +180,9 @@ describe('live field selection benchmark', () => {
     expect(section).toContain('Failed without-generif/all/100, trial 2: HTTP 503');
     expect(section).toContain('Failed warm-up reference/none/10: offline');
     expect(section).toContain('benchmark overrides only');
-    expect(combineBrowserReports('# Controlled', null, result)).toContain('# Controlled\n\n## Live field selection');
-    const combined = combineBrowserReports('# Controlled', result, result);
-    expect(combined.indexOf('## Live MyGene.info')).toBeLessThan(combined.indexOf('## Live field selection'));
+    const combined = combineBrowserReports(null, { ...result, condition: 'live', measurementVersion: 2 }, result);
+    expect(combined.indexOf('## Browser prefetch')).toBeLessThan(combined.indexOf('## Live field selection'));
+    expect(combined).toContain('| Live API | all |');
     expect(browserCsvRows(result.summaries)[0]).toMatchObject({ fieldVariant: 'without-generif', metric: 'trial-count', observations: 0 });
     const success = { ...result.summaries[0], trials: 1, transferredBytes: { observations: 1, median: 100, q1: 100, q3: 100, p95: 100 } };
     expect(browserCsvRows([success])[0]).toMatchObject({ fieldVariant: 'without-generif', metric: 'transferredBytes', median: 100, units: 'bytes' });

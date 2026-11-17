@@ -1,0 +1,1831 @@
+{
+  "schemaVersion": 1,
+  "renderer": {
+    "schemaVersion": 2,
+    "packageVersion": "2.3.2",
+    "gitCommit": "75d3d2ef5bc394b813936cd58adde55f2b8cdd2b",
+    "gitWorkingTreeDirty": true,
+    "inputSha256": {
+      "package.json": "d280d711e62ae675bf2fa382ca6ac4d68d2062d76e64556ab5a4512b7bb883a0",
+      "package-lock.json": "3b9b6fef286c0b2af2fe9bd6b6c4c44892be31ba84e6b460c8edc610bc72c6aa",
+      "esbuild.config.js": "820626c695c4adefac1525cf8a1e0f3042fd09219ea65fdaadda13d3a78bba2a",
+      "benchmark/run.mjs": "0c63f5ad2ebb28145a8558d1e590168b038b1dc00cbd80f14336f8327fbb8901",
+      "benchmark/report.mjs": "552a0b6ff5e40bcc567b2e74d67ce10058f69481c50ab559d13dafd69a1a02fe",
+      "benchmark/provenance.mjs": "10f97ad38ebcc07c9d29b9809113c5781b84e499fbf71398edb687e8b2ddceaa",
+      "benchmark/fixtures/mygene-tp53.json": "23212e03c72152f9835717e86a596febba3feb6c2db8ab1283829ddd0bd9ab86",
+      "benchmark/fixtures/mygene-brca1.json": "4f9b92efd96772fcaa05375568d03c2327e09ff943ad91f42021550dd5bb0741",
+      "benchmark/fixtures/mychem-aspirin.json": "7e8b64cd68ca62678b729e176f40fac05d2ef1290909a1ece6137a053c58a398",
+      "dist/bio-tooltips.esm.js": "d967e9ae4426b1e3437ae0b999c99cb3bc310fcb2aca22a90f2d91879b2e0bbe",
+      "dist/bio-tooltips.mygene.esm.js": "6c750c3d7533977af2d9c38282148f052f32a7a5ee550ebe92ac9d0d071042b2",
+      "dist/bio-tooltips.mychem.esm.js": "b44794c5524205d295468bc903f3f78ed02ab7fa596e7773d8aac35b83942090",
+      "dist/bio-tooltips.css": "5e2279a8df77cd3aa03329f0d57ca562ebf34c33164bae106b0107fd5ecf71db"
+    },
+    "generatedAt": "2026-11-17T18:02:22.194Z",
+    "environment": {
+      "node": "v24.14.0",
+      "platform": "linux 7.0.0-42-generic x64",
+      "cpu": "AMD Ryzen 9 3950X 16-Core Processor",
+      "logicalCpus": 32,
+      "totalMemoryBytes": 134968143872
+    },
+    "settings": {
+      "samples": 100,
+      "operationsPerSample": 20
+    },
+    "summaries": [
+      {
+        "caseId": "mygene-tp53",
+        "label": "MyGene TP53",
+        "operations": 2000,
+        "observations": 100,
+        "medianMs": 0.020725800000001016,
+        "q1Ms": 0.015958850000000167,
+        "q3Ms": 0.024901587500000488,
+        "p95Ms": 0.058530682500000014,
+        "htmlBytes": 11672
+      },
+      {
+        "caseId": "mygene-brca1",
+        "label": "MyGene BRCA1",
+        "operations": 2000,
+        "observations": 100,
+        "medianMs": 0.016457899999999623,
+        "q1Ms": 0.015238749999999966,
+        "q3Ms": 0.021380912500000446,
+        "p95Ms": 0.04488398250000015,
+        "htmlBytes": 10724
+      },
+      {
+        "caseId": "mychem-aspirin",
+        "label": "MyChem aspirin",
+        "operations": 2000,
+        "observations": 100,
+        "medianMs": 0.321493049999998,
+        "q1Ms": 0.20835199999999857,
+        "q3Ms": 0.3777255750000009,
+        "p95Ms": 0.5371055800000029,
+        "htmlBytes": 18927
+      }
+    ]
+  },
+  "browser": [
+    {
+      "schemaVersion": 2,
+      "measurementVersion": 2,
+      "packageVersion": "2.3.2",
+      "gitCommit": "75d3d2ef5bc394b813936cd58adde55f2b8cdd2b",
+      "gitWorkingTreeDirty": true,
+      "inputSha256": {
+        "package.json": "d280d711e62ae675bf2fa382ca6ac4d68d2062d76e64556ab5a4512b7bb883a0",
+        "package-lock.json": "3b9b6fef286c0b2af2fe9bd6b6c4c44892be31ba84e6b460c8edc610bc72c6aa",
+        "esbuild.config.js": "820626c695c4adefac1525cf8a1e0f3042fd09219ea65fdaadda13d3a78bba2a",
+        "benchmark/browser.mjs": "ac6ac4ec3fd0d1173c4b8a3134141888b3f7d89aa971a46e779c0ddf03ec9437",
+        "benchmark/browser-report.mjs": "9f75326e80075f2605729db57307a88a249fa579876ba65d2325c0f06238b73a",
+        "benchmark/report.mjs": "552a0b6ff5e40bcc567b2e74d67ce10058f69481c50ab559d13dafd69a1a02fe",
+        "benchmark/live-genes.mjs": "8fb0093899b18bdc39153b4988ade700a06b0b1843cac1c1c8115d2d955aa865",
+        "benchmark/field-selection.mjs": "3ee7bb32878607d05a1c35d29bc38dc4cda5f7b394b271d5b2192ea0fc9b5e1d",
+        "benchmark/provenance.mjs": "10f97ad38ebcc07c9d29b9809113c5781b84e499fbf71398edb687e8b2ddceaa",
+        "benchmark/fixtures/mygene-tp53.json": "23212e03c72152f9835717e86a596febba3feb6c2db8ab1283829ddd0bd9ab86",
+        "dist/bio-tooltips.mygene.esm.js": "6c750c3d7533977af2d9c38282148f052f32a7a5ee550ebe92ac9d0d071042b2",
+        "dist/bio-tooltips.css": "5e2279a8df77cd3aa03329f0d57ca562ebf34c33164bae106b0107fd5ecf71db"
+      },
+      "startedAt": "2026-11-17T18:04:57.939Z",
+      "generatedAt": "2026-11-17T18:09:19.136Z",
+      "environment": {
+        "node": "v24.14.0",
+        "platform": "linux 7.0.0-42-generic x64",
+        "cpu": "AMD Ryzen 9 3950X 16-Core Processor",
+        "logicalCpus": 32,
+        "totalMemoryBytes": 134968143872,
+        "browserVersion": "153.0.8010.12"
+      },
+      "settings": {
+        "browser": "Chromium",
+        "repetitions": 30,
+        "warmups": 2,
+        "pageSizes": [
+          10,
+          100
+        ],
+        "strategies": [
+          "none",
+          "smart",
+          "all"
+        ],
+        "interactionsPerTrial": 5,
+        "cacheState": "Fresh document and JavaScript realm per trial; Chromium HTTP cache disabled; first five interactions use distinct identifiers; repeat interaction uses the in-memory annotation cache. Browser connections and provider caches may be reused.",
+        "visualPreload": "none",
+        "viewport": {
+          "width": 1280,
+          "height": 900
+        },
+        "uniqueRatio": 0.8,
+        "networkLabel": "Not specified (runner network)",
+        "trialPauseMs": 250,
+        "timeoutMs": 15000,
+        "identifiers": [
+          "TP53",
+          "BRCA1",
+          "EGFR",
+          "MYC",
+          "MAPK1",
+          "BRCA2",
+          "APOE",
+          "APC",
+          "KRAS",
+          "NRAS",
+          "HRAS",
+          "BRAF",
+          "PTEN",
+          "AKT1",
+          "MTOR",
+          "PIK3CA",
+          "RB1",
+          "CDKN2A",
+          "CDK2",
+          "CDK4",
+          "CDK6",
+          "CCND1",
+          "CCNE1",
+          "ERBB2",
+          "ERBB3",
+          "ERBB4",
+          "ESR1",
+          "AR",
+          "VDR",
+          "STAT3",
+          "STAT1",
+          "JAK1",
+          "JAK2",
+          "IL6",
+          "TNF",
+          "IL1B",
+          "IL10",
+          "IFNG",
+          "VEGFA",
+          "HIF1A",
+          "NFKB1",
+          "RELA",
+          "FOS",
+          "JUN",
+          "MAPK3",
+          "MAPK8",
+          "MAPK14",
+          "RAF1",
+          "MAP2K1",
+          "MAP2K2",
+          "SRC",
+          "ABL1",
+          "KIT",
+          "PDGFRA",
+          "PDGFRB",
+          "FGFR1",
+          "FGFR2",
+          "FGFR3",
+          "MET",
+          "RET",
+          "ALK",
+          "ROS1",
+          "NTRK1",
+          "NTRK2",
+          "NTRK3",
+          "BCL2",
+          "BAX",
+          "CASP3",
+          "CASP8",
+          "CASP9",
+          "MDM2",
+          "ATM",
+          "ATR",
+          "CHEK1",
+          "CHEK2",
+          "PALB2",
+          "RAD51",
+          "MLH1",
+          "MSH2",
+          "MSH6"
+        ],
+        "endpoint": "https://mygene.info/v3/query",
+        "species": 9606,
+        "scopes": "symbol"
+      },
+      "condition": "live",
+      "summaries": [
+        {
+          "strategy": "none",
+          "annotatedElements": 10,
+          "uniqueIdentifiers": 8,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 24.550000071525574,
+            "q1Ms": 22.399999976158142,
+            "q3Ms": 27.90000009536743,
+            "p95Ms": 30.47500014305114,
+            "meanMs": 24.713333320617675
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 1,
+            "q1Ms": 0.9250000715255737,
+            "q3Ms": 1.175000011920929,
+            "p95Ms": 4.110000026226043,
+            "meanMs": 1.400000007947286
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 24.50000011920929,
+            "q1Ms": 22.30000001192093,
+            "q3Ms": 27.87500011920929,
+            "p95Ms": 30.03500003814697,
+            "meanMs": 24.636666655540466
+          },
+          "prefetchCompletion": null,
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 4651,
+            "q1": 4651,
+            "q3": 4651,
+            "p95": 4651,
+            "mean": 4651
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 82.59999990463257,
+            "q1Ms": 82.02499997615814,
+            "q3Ms": 83.77499997615814,
+            "p95Ms": 84.99500005245208,
+            "meanMs": 82.79666664600373
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 82.59999990463257,
+            "q1Ms": 82.02499997615814,
+            "q3Ms": 83.84999990463257,
+            "p95Ms": 85.05,
+            "meanMs": 82.82666664123535
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.1999998688697815,
+            "q3Ms": 1.3000001907348633,
+            "p95Ms": 1.5,
+            "meanMs": 1.2066666762034097
+          },
+          "providerRequest": {
+            "observations": 30,
+            "medianMs": 80.26599999999999,
+            "q1Ms": 79.137,
+            "q3Ms": 81.28225,
+            "p95Ms": 82.7987,
+            "meanMs": 80.27910000000001
+          }
+        },
+        {
+          "strategy": "smart",
+          "annotatedElements": 10,
+          "uniqueIdentifiers": 8,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 22,
+            "q1Ms": 16.52500009536743,
+            "q3Ms": 26.500000059604645,
+            "p95Ms": 32.44000010490417,
+            "meanMs": 22.05333333015442
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 1.4000000953674316,
+            "q1Ms": 1.300000011920929,
+            "q3Ms": 2.175000011920929,
+            "p95Ms": 2.9199999690055836,
+            "meanMs": 1.7300000190734863
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 21.90000009536743,
+            "q1Ms": 16.44999998807907,
+            "q3Ms": 26.37500011920929,
+            "p95Ms": 31.574999952316283,
+            "meanMs": 21.773333366711935
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 103.19999992847443,
+            "q1Ms": 96.17499995231628,
+            "q3Ms": 107.30000001192093,
+            "p95Ms": 183.55499998331055,
+            "meanMs": 128.2133333126704
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 1,
+            "mean": 0.2
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 8,
+            "q1": 8,
+            "q3": 8,
+            "p95": 8,
+            "mean": 8
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 3813,
+            "q1": 3813,
+            "q3": 3813,
+            "p95": 3813,
+            "mean": 3813
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 1,
+            "q1Ms": 0.8000001907348633,
+            "q3Ms": 1.1000000834465027,
+            "p95Ms": 1.2000000476837158,
+            "meanMs": 0.9533333778381348
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 17,
+            "q1Ms": 16.925000071525574,
+            "q3Ms": 17.09999990463257,
+            "p95Ms": 17.15500009059906,
+            "meanMs": 17.006666684150694
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.1000001430511475,
+            "q3Ms": 1.3000001311302185,
+            "p95Ms": 1.5549999475479122,
+            "meanMs": 1.2333333492279053
+          },
+          "providerRequest": {
+            "observations": 30,
+            "medianMs": 89.4745,
+            "q1Ms": 87.40575,
+            "q3Ms": 92.44300000000001,
+            "p95Ms": 170.27074999999988,
+            "meanMs": 116.88593333333333
+          }
+        },
+        {
+          "strategy": "all",
+          "annotatedElements": 10,
+          "uniqueIdentifiers": 8,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 24.399999976158142,
+            "q1Ms": 21.25,
+            "q3Ms": 28.900000035762787,
+            "p95Ms": 35.10500007867813,
+            "meanMs": 24.620000036557517
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 1.9000000953674316,
+            "q1Ms": 1.4250000715255737,
+            "q3Ms": 2.8000000715255737,
+            "p95Ms": 4.199999940395355,
+            "meanMs": 2.259999982515971
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 23.299999952316284,
+            "q1Ms": 21.15000009536743,
+            "q3Ms": 27.87499988079071,
+            "p95Ms": 34.05000009536742,
+            "meanMs": 23.98333334128062
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 98.04999995231628,
+            "q1Ms": 92.97499990463257,
+            "q3Ms": 106.6000000834465,
+            "p95Ms": 109.6850000858307,
+            "meanMs": 102.16333332856496
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 1,
+            "mean": 0.23333333333333334
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 8,
+            "q1": 8,
+            "q3": 8,
+            "p95": 8,
+            "mean": 8
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 3813,
+            "q1": 3813,
+            "q3": 3813,
+            "p95": 3813,
+            "mean": 3813
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 0.8999998569488525,
+            "q1Ms": 0.7999999523162842,
+            "q3Ms": 1,
+            "p95Ms": 1.1549999833106992,
+            "meanMs": 0.8999999920527141
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 16.950000047683716,
+            "q1Ms": 16.899999916553497,
+            "q3Ms": 17.074999928474426,
+            "p95Ms": 17.15500009059906,
+            "meanMs": 16.986666663487753
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.1000001430511475,
+            "q3Ms": 1.2999999523162842,
+            "p95Ms": 1.5,
+            "meanMs": 1.2166666984558105
+          },
+          "providerRequest": {
+            "observations": 30,
+            "medianMs": 87.75800000000001,
+            "q1Ms": 86.97075000000001,
+            "q3Ms": 89.95824999999999,
+            "p95Ms": 96.84089999999998,
+            "meanMs": 91.5618
+          }
+        },
+        {
+          "strategy": "none",
+          "annotatedElements": 100,
+          "uniqueIdentifiers": 80,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 33.050000071525574,
+            "q1Ms": 28.275000035762787,
+            "q3Ms": 37.125000059604645,
+            "p95Ms": 41.035000061988825,
+            "meanMs": 32.87666668097178
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 6.8500001430511475,
+            "q1Ms": 5.299999952316284,
+            "q3Ms": 7.675000071525574,
+            "p95Ms": 9.085000073909757,
+            "meanMs": 6.79333336353302
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 31.950000047683716,
+            "q1Ms": 27.32500010728836,
+            "q3Ms": 36.275000154972076,
+            "p95Ms": 37.66499997377396,
+            "meanMs": 31.546666725476584
+          },
+          "prefetchCompletion": null,
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 4651,
+            "q1": 4651,
+            "q3": 4651,
+            "p95": 4651,
+            "mean": 4651
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 82.30000007152557,
+            "q1Ms": 81.82499998807907,
+            "q3Ms": 83.90000003576279,
+            "p95Ms": 86.08499983549117,
+            "meanMs": 82.91000001430511
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 82.30000007152557,
+            "q1Ms": 81.82499998807907,
+            "q3Ms": 83.90000003576279,
+            "p95Ms": 86.08499983549117,
+            "meanMs": 82.94000001748402
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.1000001430511475,
+            "q3Ms": 1.2999999523162842,
+            "p95Ms": 2.095000064373014,
+            "meanMs": 1.3266666730244954
+          },
+          "providerRequest": {
+            "observations": 30,
+            "medianMs": 79.92150000000001,
+            "q1Ms": 78.9935,
+            "q3Ms": 81.0025,
+            "p95Ms": 83.14405,
+            "meanMs": 80.12636666666667
+          }
+        },
+        {
+          "strategy": "smart",
+          "annotatedElements": 100,
+          "uniqueIdentifiers": 80,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 15.049999952316284,
+            "q1Ms": 14.425000071525574,
+            "q3Ms": 17.19999998807907,
+            "p95Ms": 33.824999999999996,
+            "meanMs": 19.439999985694886
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 4.400000095367432,
+            "q1Ms": 3.9000000953674316,
+            "q3Ms": 4.774999976158142,
+            "p95Ms": 9.454999935626983,
+            "meanMs": 5.046666693687439
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 15.049999952316284,
+            "q1Ms": 14.425000071525574,
+            "q3Ms": 17.19999998807907,
+            "p95Ms": 33.63499996662139,
+            "meanMs": 19.32666666507721
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 940.3999998569489,
+            "q1Ms": 939.7250000238419,
+            "q3Ms": 942.1750000119209,
+            "p95Ms": 966.9399999737739,
+            "meanMs": 949.1033332983653
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 3,
+            "q1": 3,
+            "q3": 3,
+            "p95": 3,
+            "mean": 3
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 3,
+            "q1": 3,
+            "q3": 3,
+            "p95": 3,
+            "mean": 3
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 80,
+            "q1": 80,
+            "q3": 80,
+            "p95": 80,
+            "mean": 80
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 30103,
+            "q1": 30103,
+            "q3": 30103,
+            "p95": 30103,
+            "mean": 30103
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 0.9000000953674316,
+            "q1Ms": 0.8999998569488525,
+            "q3Ms": 1,
+            "p95Ms": 1.1549999594688414,
+            "meanMs": 0.9366666873296102
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 17,
+            "q1Ms": 17,
+            "q3Ms": 17.100000143051147,
+            "p95Ms": 17.31000007390976,
+            "meanMs": 17.056666700045266
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.1000001430511475,
+            "q3Ms": 1.274999976158142,
+            "p95Ms": 1.410000085830688,
+            "meanMs": 1.2933333396911622
+          },
+          "providerRequest": {
+            "observations": 30,
+            "medianMs": 109.94,
+            "q1Ms": 107.11600000000001,
+            "q3Ms": 120.271,
+            "p95Ms": 132.88459999999998,
+            "meanMs": 115.9918
+          }
+        },
+        {
+          "strategy": "all",
+          "annotatedElements": 100,
+          "uniqueIdentifiers": 80,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 14.799999952316284,
+            "q1Ms": 14.599999964237213,
+            "q3Ms": 15.150000035762787,
+            "p95Ms": 15.565000069141387,
+            "meanMs": 14.963333336512248
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 4.300000190734863,
+            "q1Ms": 4.299999952316284,
+            "q3Ms": 4.400000095367432,
+            "p95Ms": 4.754999995231628,
+            "meanMs": 4.446666669845581
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 14.700000047683716,
+            "q1Ms": 14.5,
+            "q3Ms": 15.074999928474426,
+            "p95Ms": 15.475000047683714,
+            "meanMs": 14.856666684150696
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 178.35000002384186,
+            "q1Ms": 164.02499997615814,
+            "q3Ms": 219.9999998807907,
+            "p95Ms": 292.4549998998642,
+            "meanMs": 199.5366666475932
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 1,
+            "mean": 0.13333333333333333
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 80,
+            "q1": 80,
+            "q3": 80,
+            "p95": 80,
+            "mean": 80
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 28435,
+            "q1": 28435,
+            "q3": 28435,
+            "p95": 28435,
+            "mean": 28435
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 0.8000001907348633,
+            "q1Ms": 0.7999999523162842,
+            "q3Ms": 0.9000000953674316,
+            "p95Ms": 1.0549999475479122,
+            "meanMs": 0.8666666507720947
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 17,
+            "q1Ms": 17,
+            "q3Ms": 17,
+            "p95Ms": 17.09999990463257,
+            "meanMs": 17.00999998251597
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.1000001430511475,
+            "q3Ms": 1.2000000476837158,
+            "p95Ms": 1.4550000429153438,
+            "meanMs": 1.2199999888737996
+          },
+          "providerRequest": {
+            "observations": 30,
+            "medianMs": 164.57,
+            "q1Ms": 160.851,
+            "q3Ms": 217.14350000000002,
+            "p95Ms": 289.97775,
+            "meanMs": 191.3864
+          }
+        }
+      ],
+      "warmupFailures": 0
+    },
+    {
+      "schemaVersion": 2,
+      "measurementVersion": 2,
+      "packageVersion": "2.3.2",
+      "gitCommit": "75d3d2ef5bc394b813936cd58adde55f2b8cdd2b",
+      "gitWorkingTreeDirty": true,
+      "inputSha256": {
+        "package.json": "d280d711e62ae675bf2fa382ca6ac4d68d2062d76e64556ab5a4512b7bb883a0",
+        "package-lock.json": "3b9b6fef286c0b2af2fe9bd6b6c4c44892be31ba84e6b460c8edc610bc72c6aa",
+        "esbuild.config.js": "820626c695c4adefac1525cf8a1e0f3042fd09219ea65fdaadda13d3a78bba2a",
+        "benchmark/browser.mjs": "ac6ac4ec3fd0d1173c4b8a3134141888b3f7d89aa971a46e779c0ddf03ec9437",
+        "benchmark/browser-report.mjs": "9f75326e80075f2605729db57307a88a249fa579876ba65d2325c0f06238b73a",
+        "benchmark/report.mjs": "552a0b6ff5e40bcc567b2e74d67ce10058f69481c50ab559d13dafd69a1a02fe",
+        "benchmark/live-genes.mjs": "8fb0093899b18bdc39153b4988ade700a06b0b1843cac1c1c8115d2d955aa865",
+        "benchmark/field-selection.mjs": "3ee7bb32878607d05a1c35d29bc38dc4cda5f7b394b271d5b2192ea0fc9b5e1d",
+        "benchmark/provenance.mjs": "10f97ad38ebcc07c9d29b9809113c5781b84e499fbf71398edb687e8b2ddceaa",
+        "benchmark/fixtures/mygene-tp53.json": "23212e03c72152f9835717e86a596febba3feb6c2db8ab1283829ddd0bd9ab86",
+        "dist/bio-tooltips.mygene.esm.js": "6c750c3d7533977af2d9c38282148f052f32a7a5ee550ebe92ac9d0d071042b2",
+        "dist/bio-tooltips.css": "5e2279a8df77cd3aa03329f0d57ca562ebf34c33164bae106b0107fd5ecf71db"
+      },
+      "startedAt": "2026-11-17T18:01:42.993Z",
+      "generatedAt": "2026-11-17T18:04:43.311Z",
+      "environment": {
+        "node": "v24.14.0",
+        "platform": "linux 7.0.0-42-generic x64",
+        "cpu": "AMD Ryzen 9 3950X 16-Core Processor",
+        "logicalCpus": 32,
+        "totalMemoryBytes": 134968143872,
+        "browserVersion": "153.0.8010.12"
+      },
+      "settings": {
+        "browser": "Chromium",
+        "repetitions": 30,
+        "warmups": 2,
+        "pageSizes": [
+          10,
+          100
+        ],
+        "strategies": [
+          "none",
+          "smart",
+          "all"
+        ],
+        "interactionsPerTrial": 5,
+        "cacheState": "Fresh document and JavaScript realm per trial; Chromium HTTP cache disabled; first five interactions use distinct identifiers; repeat interaction uses the in-memory annotation cache. Browser connections and provider caches may be reused.",
+        "visualPreload": "none",
+        "viewport": {
+          "width": 1280,
+          "height": 900
+        },
+        "uniqueRatio": 0.8
+      },
+      "condition": "fixture",
+      "summaries": [
+        {
+          "strategy": "none",
+          "annotatedElements": 10,
+          "uniqueIdentifiers": 8,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 29.399999976158142,
+            "q1Ms": 27.67500013113022,
+            "q3Ms": 32.875000059604645,
+            "p95Ms": 38.88499999046325,
+            "meanMs": 29.53333335717519
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 1,
+            "q1Ms": 0.9000000953674316,
+            "q3Ms": 1,
+            "p95Ms": 3.1449999570846505,
+            "meanMs": 1.2399999936421713
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 29.200000047683716,
+            "q1Ms": 27.57499998807907,
+            "q3Ms": 32,
+            "p95Ms": 38.2549999475479,
+            "meanMs": 29.256666684150694
+          },
+          "prefetchCompletion": null,
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 34217,
+            "q1": 34217,
+            "q3": 34217,
+            "p95": 34217,
+            "mean": 34217
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 8.399999976158142,
+            "q1Ms": 7.825000107288361,
+            "q3Ms": 9,
+            "p95Ms": 9.92999995946884,
+            "meanMs": 8.323333319028219
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 16.899999856948853,
+            "q1Ms": 16.82500010728836,
+            "q3Ms": 16.975000023841858,
+            "p95Ms": 17.255000126361846,
+            "meanMs": 16.919999980926512
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.1000001430511475,
+            "q3Ms": 1.3000001311302185,
+            "p95Ms": 1.6000001430511475,
+            "meanMs": 1.346666677792867
+          }
+        },
+        {
+          "strategy": "smart",
+          "annotatedElements": 10,
+          "uniqueIdentifiers": 8,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 27.350000023841858,
+            "q1Ms": 23.399999976158142,
+            "q3Ms": 31.249999940395355,
+            "p95Ms": 34.69499996900558,
+            "meanMs": 26.753333314259848
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 1.4000000953674316,
+            "q1Ms": 1.2999999523162842,
+            "q3Ms": 1.699999988079071,
+            "p95Ms": 2.42999995946884,
+            "meanMs": 1.5700000127156575
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 26.950000047683716,
+            "q1Ms": 23.125,
+            "q3Ms": 30.550000071525574,
+            "p95Ms": 33.059999883174896,
+            "meanMs": 25.886666639645895
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 30.549999952316284,
+            "q1Ms": 28.149999916553497,
+            "q3Ms": 39.799999952316284,
+            "p95Ms": 48.2549999833107,
+            "meanMs": 33.03000000317891
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 1,
+            "mean": 0.16666666666666666
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 8,
+            "q1": 8,
+            "q3": 8,
+            "p95": 8,
+            "mean": 8
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 54739,
+            "q1": 54739,
+            "q3": 54739,
+            "p95": 54739,
+            "mean": 54739
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 1,
+            "q1Ms": 0.8249999284744263,
+            "q3Ms": 1.1000000834465027,
+            "p95Ms": 1.2000000476837158,
+            "meanMs": 0.9699999888737997
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 16.90000009536743,
+            "q1Ms": 16.899999916553497,
+            "q3Ms": 17,
+            "p95Ms": 17.455000042915344,
+            "meanMs": 16.966666690508525
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.1250000596046448,
+            "q3Ms": 1.3000001907348633,
+            "p95Ms": 1.600000035762787,
+            "meanMs": 1.233333373069763
+          }
+        },
+        {
+          "strategy": "all",
+          "annotatedElements": 10,
+          "uniqueIdentifiers": 8,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 31.399999976158142,
+            "q1Ms": 29.95000010728836,
+            "q3Ms": 35.64999997615814,
+            "p95Ms": 55.41499992609022,
+            "meanMs": 35.01333333651225
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 1.5,
+            "q1Ms": 1.3999999165534973,
+            "q3Ms": 1.975000023841858,
+            "p95Ms": 4.879999947547908,
+            "meanMs": 2.046666677792867
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 30.799999952316284,
+            "q1Ms": 29.80000001192093,
+            "q3Ms": 35.550000071525574,
+            "p95Ms": 55.279999947547886,
+            "meanMs": 34.486666679382324
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 41.5,
+            "q1Ms": 29.250000059604645,
+            "q3Ms": 52.674999952316284,
+            "p95Ms": 70.19000000953667,
+            "meanMs": 42.16333332856496
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0.5499999999999972,
+            "mean": 0.06666666666666667
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 8,
+            "q1": 8,
+            "q3": 8,
+            "p95": 8,
+            "mean": 8
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 54739,
+            "q1": 54739,
+            "q3": 54739,
+            "p95": 54739,
+            "mean": 54739
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 0.9000000953674316,
+            "q1Ms": 0.8999998569488525,
+            "q3Ms": 1.0750001072883606,
+            "p95Ms": 1.4099999785423272,
+            "meanMs": 1.0033333539962768
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 16.90000009536743,
+            "q1Ms": 16.899999856948853,
+            "q3Ms": 17,
+            "p95Ms": 17.6200000166893,
+            "meanMs": 17.033333325386046
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.2000000476837158,
+            "q3Ms": 1.2999999523162842,
+            "p95Ms": 1.7650001168251028,
+            "meanMs": 1.300000015894572
+          }
+        },
+        {
+          "strategy": "none",
+          "annotatedElements": 100,
+          "uniqueIdentifiers": 80,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 34.89999997615814,
+            "q1Ms": 32.300000071525574,
+            "q3Ms": 38.97500002384186,
+            "p95Ms": 45.39499996900557,
+            "meanMs": 34.41333334445953
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 5.149999976158142,
+            "q1Ms": 4.599999904632568,
+            "q3Ms": 8.074999928474426,
+            "p95Ms": 9.030000126361845,
+            "meanMs": 6.1033333460489905
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 34.64999997615814,
+            "q1Ms": 30.900000154972076,
+            "q3Ms": 38.62500011920929,
+            "p95Ms": 42.61999987363815,
+            "meanMs": 33.670000012715654
+          },
+          "prefetchCompletion": null,
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 34217,
+            "q1": 34217,
+            "q3": 34217,
+            "p95": 34217,
+            "mean": 34217
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 5,
+            "q1": 5,
+            "q3": 5,
+            "p95": 5,
+            "mean": 5
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 8.049999952316284,
+            "q1Ms": 7.5,
+            "q3Ms": 8.675000011920929,
+            "p95Ms": 10.085000073909757,
+            "meanMs": 8.106666652361552
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 16.90000009536743,
+            "q1Ms": 16.90000009536743,
+            "q3Ms": 17,
+            "p95Ms": 17.15500009059906,
+            "meanMs": 16.933333388964336
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.1999998688697815,
+            "q3Ms": 1.4000000953674316,
+            "p95Ms": 3.4999999880790655,
+            "meanMs": 1.5166666666666666
+          }
+        },
+        {
+          "strategy": "smart",
+          "annotatedElements": 100,
+          "uniqueIdentifiers": 80,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 34.85000002384186,
+            "q1Ms": 30.625000059604645,
+            "q3Ms": 39.00000011920929,
+            "p95Ms": 42.824999999999996,
+            "meanMs": 34.526666688919065
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 5.100000023841858,
+            "q1Ms": 4.725000023841858,
+            "q3Ms": 6.474999964237213,
+            "p95Ms": 11.154999983310699,
+            "meanMs": 6.080000003178914
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 34.85000002384186,
+            "q1Ms": 30.474999964237213,
+            "q3Ms": 38.55000001192093,
+            "p95Ms": 41.239999926090235,
+            "meanMs": 33.92000000476837
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 957.0499999523163,
+            "q1Ms": 952.1750000715256,
+            "q3Ms": 964.4999998807907,
+            "p95Ms": 971.4499999046325,
+            "meanMs": 958.6433333237966
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 3,
+            "q1": 3,
+            "q3": 3,
+            "p95": 3,
+            "mean": 3
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 3,
+            "q1": 3,
+            "q3": 3,
+            "p95": 3,
+            "mean": 3
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 80,
+            "q1": 80,
+            "q3": 80,
+            "p95": 80,
+            "mean": 80
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 547411,
+            "q1": 547411,
+            "q3": 547411,
+            "p95": 547411,
+            "mean": 547411
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 0.9000000953674316,
+            "q1Ms": 0.8999998569488525,
+            "q3Ms": 1,
+            "p95Ms": 1.2000000476837158,
+            "meanMs": 0.9300000429153442
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 17,
+            "q1Ms": 16.899999856948853,
+            "q3Ms": 17.09999990463257,
+            "p95Ms": 17.25499999523163,
+            "meanMs": 16.920000020662943
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.1000001430511475,
+            "q3Ms": 1.3749999403953552,
+            "p95Ms": 1.4550000429153438,
+            "meanMs": 1.236666695276896
+          }
+        },
+        {
+          "strategy": "all",
+          "annotatedElements": 100,
+          "uniqueIdentifiers": 80,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 39.449999928474426,
+            "q1Ms": 36.45000010728836,
+            "q3Ms": 42.799999952316284,
+            "p95Ms": 51.18500008583069,
+            "meanMs": 37.37999999523163
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 7.25,
+            "q1Ms": 6.200000047683716,
+            "q3Ms": 10.224999904632568,
+            "p95Ms": 13.865000021457671,
+            "meanMs": 8.186666663487753
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 37.60000002384186,
+            "q1Ms": 35.175000071525574,
+            "q3Ms": 40.049999952316284,
+            "p95Ms": 50.85000005960464,
+            "meanMs": 36.51333334445953
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 44.700000047683716,
+            "q1Ms": 42.17499989271164,
+            "q3Ms": 54.47500002384186,
+            "p95Ms": 73.30499985218047,
+            "meanMs": 48.81333331267039
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 1,
+            "p95": 1,
+            "mean": 0.4
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 80,
+            "q1": 80,
+            "q3": 80,
+            "p95": 80,
+            "mean": 80
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 547409,
+            "q1": 547409,
+            "q3": 547409,
+            "p95": 547409,
+            "mean": 547409
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 1.0499999523162842,
+            "q1Ms": 0.8999999165534973,
+            "q3Ms": 1.2000000476837158,
+            "p95Ms": 1.2999999523162842,
+            "meanMs": 1.0433333237965903
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 17,
+            "q1Ms": 16.925000071525574,
+            "q3Ms": 17,
+            "p95Ms": 17.1549999833107,
+            "meanMs": 16.976666657129922
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.2000000476837158,
+            "q1Ms": 1.2000000476837158,
+            "q3Ms": 1.2999999523162842,
+            "p95Ms": 2.3150001168251,
+            "meanMs": 1.3800000190734862
+          }
+        }
+      ],
+      "warmupFailures": 0
+    }
+  ]
+}

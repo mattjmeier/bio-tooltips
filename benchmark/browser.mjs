@@ -19,18 +19,18 @@ const provenance = await captureProvenance(root, [
 ]);
 const fixture = JSON.parse(await readFile(path.join(root, 'benchmark/fixtures/mygene-tp53.json'), 'utf8')).data;
 const fieldSelection = process.argv.includes('--field-selection');
-const live = process.argv.includes('--live') || fieldSelection;
-if (process.argv.slice(2).some(argument => !['--live', '--field-selection'].includes(argument))) throw new Error('Usage: node benchmark/browser.mjs [--live | --field-selection]');
+const live = !process.argv.includes('--fixtures');
+if (!live && (fieldSelection || process.argv.includes('--live'))) throw new Error('--fixtures cannot be combined with --live or --field-selection.');
+if (process.argv.slice(2).some(argument => !['--live', '--fixtures', '--field-selection'].includes(argument))) throw new Error('Usage: node benchmark/browser.mjs [--live | --fixtures | --field-selection]');
 const repetitions = positiveInteger(live ? 'BENCH_BROWSER_LIVE_TRIALS' : 'BENCH_BROWSER_TRIALS', 30);
 const warmups = nonNegativeInteger(live ? 'BENCH_BROWSER_LIVE_WARMUPS' : 'BENCH_BROWSER_WARMUPS', 2);
-const latencyMs = nonNegativeNumber('BENCH_BROWSER_LATENCY_MS', 100);
 const pageSizes = process.env.BENCH_BROWSER_PAGE_SIZES
   ? process.env.BENCH_BROWSER_PAGE_SIZES.split(',').map(Number)
-  : [10, 100, ...(process.env.BENCH_BROWSER_INCLUDE_500 === '1' ? [500] : [])];
-if (!pageSizes.length || new Set(pageSizes).size !== pageSizes.length || pageSizes.some(size => ![10, 100, 500].includes(size))) {
-  throw new Error('BENCH_BROWSER_PAGE_SIZES must list unique sizes from 10,100,500.');
+  : [10, 100];
+if (!pageSizes.length || new Set(pageSizes).size !== pageSizes.length || pageSizes.some(size => ![10, 100].includes(size))) {
+  throw new Error('BENCH_BROWSER_PAGE_SIZES must list unique sizes from 10,100.');
 }
-if (live) pageSizes.forEach(elements => identifiersForPage(elements, true));
+pageSizes.forEach(elements => identifiersForPage(elements));
 const trialPauseMs = live ? nonNegativeNumber('BENCH_BROWSER_LIVE_PAUSE_MS', 250) : 0;
 const timeoutMs = live ? positiveInteger('BENCH_BROWSER_LIVE_TIMEOUT_MS', 15000) : 10000;
 const networkLabel = process.env.BENCH_BROWSER_NETWORK_LABEL || 'Not specified (runner network)';
@@ -44,7 +44,7 @@ const server = createServer(async (request, response) => {
   if (url.pathname === '/') {
     const size = Number(url.searchParams.get('elements'));
     const selector = '.gene-tooltip';
-    const markup = identifiersForPage(size, live).map(identifier =>
+    const markup = identifiersForPage(size).map(identifier =>
       `<span class="gene-tooltip bench-element" data-species="human">${identifier}</span>`
     ).join('\n');
     response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
@@ -225,24 +225,24 @@ if (fieldSelection) summaries.sort((left, right) =>
 
 const result = {
   schemaVersion: 2,
-  measurementVersion: 1,
-  benchmark: fieldSelection ? 'browser-field-selection' : live ? 'browser-live-api' : 'browser-prefetch',
-  condition: fieldSelection ? 'live-field-selection' : live ? 'live' : 'controlled',
+  measurementVersion: 2,
+  benchmark: fieldSelection ? 'browser-field-selection' : live ? 'browser-live-api' : 'browser-fixtures',
+  condition: fieldSelection ? 'live-field-selection' : live ? 'live' : 'fixture',
   startedAt,
   generatedAt: new Date().toISOString(),
   packageVersion: JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8')).version,
   ...provenance,
-  settings: { ...(fieldSelection ? { fieldVariants, fieldsByVariant: Object.fromEntries(fieldVariants.map(variant => [variant, fieldsForVariant(variant)])), requestOverride: true, variantOrder: 'Alternates within matched scenario/trial, including warm-ups; not randomized.' } : {}), browser: 'Chromium', repetitions, warmups, simulatedLatencyMs: live ? null : latencyMs, pageSizes, strategies, interactionsPerTrial: 5, cacheState: 'Fresh document and JavaScript realm per trial; Chromium HTTP cache disabled; first five interactions use distinct identifiers; repeat interaction uses the in-memory annotation cache. Browser connections and provider caches may be reused.', visualPreload: 'none', viewport: { width: 1280, height: 900 }, uniqueRatio: 0.8, ...(live ? { networkLabel, trialPauseMs, timeoutMs, identifiers: liveGeneSymbols, endpoint: 'https://mygene.info/v3/query', species: 9606, scopes: 'symbol' } : {}) },
+  settings: { ...(fieldSelection ? { fieldVariants, fieldsByVariant: Object.fromEntries(fieldVariants.map(variant => [variant, fieldsForVariant(variant)])), requestOverride: true, variantOrder: 'Alternates within matched scenario/trial, including warm-ups; not randomized.' } : {}), browser: 'Chromium', repetitions, warmups, pageSizes, strategies, interactionsPerTrial: 5, cacheState: 'Fresh document and JavaScript realm per trial; Chromium HTTP cache disabled; first five interactions use distinct identifiers; repeat interaction uses the in-memory annotation cache. Browser connections and provider caches may be reused.', visualPreload: 'none', viewport: { width: 1280, height: 900 }, uniqueRatio: 0.8, ...(live ? { networkLabel, trialPauseMs, timeoutMs, identifiers: liveGeneSymbols, endpoint: 'https://mygene.info/v3/query', species: 9606, scopes: 'symbol' } : {}) },
   environment: { node: process.version, platform: `${os.platform()} ${os.release()} ${os.arch()}`, cpu: os.cpus()[0]?.model ?? 'unknown', logicalCpus: os.cpus().length, totalMemoryBytes: os.totalmem(), browserVersion },
   definitions: {
     pageLoadMs: 'navigationStart to DOMContentLoaded; browser Navigation Timing API.',
     initMs: 'Synchronous duration of the real GeneTooltip.init() call.',
     readyMs: 'navigationStart to completion of the inline module initialization; optional background prefetch is excluded.',
-    prefetchCompletionMs: 'From initialization endpoint until all distinct fixture identifiers were fetched. For large smart pages, the runner scrolls the document to trigger viewport observers; this includes the deliberate scroll and 200 ms observer debounce.',
+    prefetchCompletionMs: 'From initialization endpoint until all distinct identifiers were fetched. For large smart pages, the runner scrolls the document to trigger viewport observers; this includes the deliberate scroll and 200 ms observer debounce.',
     interactionToContentMs: 'Median per trial across five sequential hovers on distinct identifiers, from capture of the real mouseenter event to its onTiming content set event. Summaries show the distribution of per-trial medians.',
     interactionToVisibleMs: 'Median per trial across the same five hovers, from mouseenter capture until that trigger\'s own tooltip has content and data-state=visible, timestamped by an in-page MutationObserver. This is a DOM state endpoint, not paint or animation completion.',
     warmCacheInteractionMs: 'Real mouseenter to content set on a second element with the first identifier, already in the annotation cache.',
-    simulatedLatency: fieldSelection ? 'No artificial delay or response replacement; only fields are overridden on real browser POSTs.' : live ? 'No interception or artificial delay; normal browser POSTs to MyGene.info.' : `A fixed ${latencyMs} ms delay is applied to each intercepted MyGene.info request. It is not observed service latency.`,
+    dataSource: live ? 'Normal MyGene.info browser POSTs.' : 'Intercepted requests fulfilled immediately from the stored TP53 fixture, relabeled with the same human gene symbols as live trials.',
     ...(live ? {
       providerRequestMs: 'Within-trial median of successful POST request start to complete response body, from browser request timing. Includes network/download; excludes application rendering. Summary is the distribution of per-trial medians.',
       failures: 'Failed measured trials are retained in rawObservations but excluded from latency summaries; failed warm-ups are retained in warmupFailures. No automatic retries.',
@@ -256,24 +256,25 @@ const result = {
   },
   summaries,
   rawObservations: observations,
-  ...(live ? { warmupFailures } : {}),
+  warmupFailures,
 };
 
 const resultsDirectory = path.join(root, 'benchmark/results');
 await mkdir(resultsDirectory, { recursive: true });
-const resultStem = fieldSelection ? 'browser-fields-latest' : live ? 'browser-live-latest' : 'browser-latest';
+const resultStem = fieldSelection ? 'browser-fields-latest' : live ? 'browser-live-latest' : 'browser-fixture-latest';
 await writeFile(path.join(resultsDirectory, `${resultStem}.json`), `${JSON.stringify(result, null, 2)}\n`);
-await writeFile(path.join(resultsDirectory, `${resultStem}.csv`), toCsv(browserCsvRows(summaries)));
-const controlledResult = live ? await readSavedResult('browser-latest.json') : result;
+await writeFile(path.join(resultsDirectory, `${resultStem}.csv`), toCsv(browserCsvRows(summaries.map(row => ({ ...row, source: result.condition })))));
+const fixtureResult = !live ? result : await readSavedResult('browser-fixture-latest.json');
 const liveResult = live && !fieldSelection ? result : await readSavedResult('browser-live-latest.json');
 const fieldSelectionResult = fieldSelection ? result : await readSavedResult('browser-fields-latest.json');
-const markdown = combineBrowserReports(controlledResult ? renderMarkdown(controlledResult) : null, liveResult, fieldSelectionResult);
+const markdown = combineBrowserReports(fixtureResult, liveResult, fieldSelectionResult);
 await writeFile(path.join(resultsDirectory, 'browser-latest.md'), markdown);
+if (!live) await writeFile(path.join(resultsDirectory, 'browser-fixture-latest.md'), combineBrowserReports(result, null));
 if (live && !fieldSelection) await writeFile(path.join(resultsDirectory, 'browser-live-latest.md'), `# Live browser benchmark results\n\n${renderLiveSection(result)}`);
 if (fieldSelection) await writeFile(path.join(resultsDirectory, 'browser-fields-latest.md'), `# Field selection browser benchmark results\n\n${renderFieldSelectionSection(result)}`);
 console.log(markdown);
 console.log(`Raw trials: ${path.join(resultsDirectory, `${resultStem}.json`)}`);
-if (live && observations.some(row => row.error)) process.exitCode = 1;
+if (observations.some(row => row.error)) process.exitCode = 1;
 
 async function readSavedResult(name) {
   try { return JSON.parse(await readFile(path.join(resultsDirectory, name), 'utf8')); }
@@ -322,8 +323,7 @@ async function runTrial({ page, baseUrl, elements, strategy, warmup, fieldVarian
   if (!live) await page.route('https://mygene.info/**', async route => {
     const body = new URLSearchParams(route.request().postData() ?? '');
     const queries = (body.get('q') ?? '').split(',').filter(Boolean);
-    if (latencyMs > 0) await new Promise(resolve => setTimeout(resolve, latencyMs));
-    const payload = queries.map(query => ({ ...fixture, _id: String(7157 + Number(query.slice(3))), query, symbol: query }));
+    const payload = queries.map(query => ({ ...fixture, _id: String(7157 + liveGeneSymbols.indexOf(query)), query, symbol: query }));
     await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'POST, OPTIONS', 'access-control-allow-headers': 'content-type' }, body: JSON.stringify(payload) });
   });
 
@@ -441,12 +441,11 @@ async function runTrial({ page, baseUrl, elements, strategy, warmup, fieldVarian
       ...(live ? {
         providerRequestMs: nullableMedian(requestLog.map(request => request.durationMs).filter(duration => duration !== null)),
         requestLog,
-        identifiers: [...new Set(identifiersForPage(elements, true))],
+        identifiers: [...new Set(identifiersForPage(elements))],
       } : {}),
     };
     return result;
   } catch (error) {
-    if (!live) throw error;
     // A timed-out fetch may still be downloading. Abort it before awaiting its
     // completion metadata, so a stalled provider cannot strand the whole run.
     const fieldValidation = fieldVariant
@@ -461,7 +460,7 @@ async function runTrial({ page, baseUrl, elements, strategy, warmup, fieldVarian
     };
   } finally {
     // Abort any outstanding fetches before the next trial (and its listeners).
-    if (live) await page.goto('about:blank');
+    await page.goto('about:blank');
     if (!live || fieldVariant) await page.unroute('https://mygene.info/**');
     page.off('request', onRequest);
     page.off('response', onResponse);
@@ -505,34 +504,11 @@ async function runTrial({ page, baseUrl, elements, strategy, warmup, fieldVarian
   }
 }
 
-function renderMarkdown(result) {
-  const metric = value => value ? `${fmt(value.medianMs)} (${fmt(value.q1Ms)}–${fmt(value.q3Ms)})` : '—';
-  const count = value => value ? `${fmtCount(value.median)} (${fmtCount(value.q1)}–${fmtCount(value.q3)})` : '—';
-  const initMetric = value => value ? `${fmtInit(value.medianMs)} (${fmtInit(value.q1Ms)}–${fmtInit(value.q3Ms)})` : '—';
-  return [
-    '# Browser benchmark results', '',
-    `Generated: ${result.generatedAt}. Measurement version: ${result.measurementVersion ?? "unversioned"}.`, '',
-    `Environment: ${result.environment.browserVersion}; ${result.environment.node}; ${result.environment.platform}; ${result.environment.cpu}`, '',
-    `Controlled request delay: ${result.settings.simulatedLatencyMs} ms per MyGene.info request (simulated). Trials: ${result.settings.repetitions}; warm-ups: ${result.settings.warmups}.`, '',
-    '| Prefetch strategy | Elements | Unique IDs | Page load (median, IQR ms) | Init (median, IQR ms) | Ready (median, IQR ms) | Prefetch complete (median, IQR ms) | Mouseenter to content (median of 5 hovers) | Mouseenter to visible DOM state (median of 5 hovers) | Repeat cached mouseenter to content | Prefetch API requests | API requests during 5 hovers | Cache hits |',
-    '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |',
-    ...result.summaries.map(row => `| ${row.strategy} | ${row.annotatedElements} | ${row.uniqueIdentifiers} | ${metric(row.pageLoad)} | ${initMetric(row.initialization)} | ${metric(row.readiness)} | ${metric(row.prefetchCompletion)} | ${metric(row.interactionToContent)} | ${metric(row.interactionToVisible)} | ${metric(row.warmCacheInteraction)} | ${count(row.prefetchRequests)} | ${count(row.interactionRequests)} | ${count(row.cacheHits)} |`),
-    '',
-    'Page load is navigation start to DOMContentLoaded. Readiness is the inline initialization endpoint; background prefetch completes later. Hover timing starts at capture of the actual mouseenter event, excluding Playwright hover preparation and protocol scheduling. It is the within-trial median across five distinct identifiers, measured after prefetch completion for `smart` and `all`; with `none`, each hover must fetch its record. `none` disables prefetch, while on-demand results are still cached for the repeat. API request columns count HTTP batch calls, not identifiers. The controlled delay is not observed provider latency.', '',
-    'IQR values use the first and third quartiles. The visible endpoint is timestamped in-page when the active trigger\'s own tooltip has content and data-state=visible; it is not a paint trace or animation completion. Schema version 2 records interaction timings from the actual DOM event; comparisons require matching schema and endpoint definitions. Approximate transferred bytes are controlled response body bytes.', '',
-    ...(result.metadataLimitations ?? []).map(note => `Metadata limitation: ${note}`),
-    '',
-  ].join('\n');
-}
-
 function nullableSummary(values) { return values.every(value => value === null) ? null : summarize(values.filter(value => value !== null)); }
 function summarizeCount(values) {
   const summary = summarize(values);
   return { observations: summary.observations, median: summary.medianMs, q1: summary.q1Ms, q3: summary.q3Ms, p95: summary.p95Ms, mean: summary.meanMs };
 }
-function fmt(value) { return value.toFixed(value < 10 ? 3 : 1); }
-function fmtInit(value) { return value.toFixed(1); }
-function fmtCount(value) { return Math.round(value).toString(); }
 function median(values) { return summarize(values).medianMs; }
 function nullableMedian(values) { return values.length ? median(values) : null; }
 function uniqueCount(elements) { return Math.ceil(elements * 0.8); }

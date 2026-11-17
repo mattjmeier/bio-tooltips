@@ -134,16 +134,17 @@ Run the deterministic renderer benchmark or the separate Chromium browser benchm
 ```powershell
 npm run benchmark
 npm run benchmark:browser
-# Optional: makes real MyGene.info requests
-npm run benchmark:browser:live
+# Optional: compare with local fixtures (no request delay)
+npm run benchmark:browser:fixtures
 # Optional: matched live requests with and without GeneRIFs
 npm run benchmark:browser:fields
 ```
 
 The benchmarks write machine-readable JSON and CSV plus Markdown summaries under the ignored
-`benchmark/results/` directory. The default browser run uses controlled simulated API
-responses. The opt-in live run saves separate `browser-live-latest.*` results and adds
-a live API table to `browser-latest.md`, preserving the saved controlled measurements.
+`benchmark/results/` directory. The default browser run makes real MyGene.info requests.
+The fixture command fulfills requests immediately with stored data. Each saves separate
+JSON/CSV results; `browser-latest.md` combines live and fixture rows in one table with
+source labels, preserving each run's date and environment. No artificial request delay is used.
 The field-selection run saves `browser-fields-latest.*` and adds a separate table comparing
 the same requests with and without `generif`; other fields and display settings stay fixed.
 Live results depend on the date, network and provider state. See [`docs/performance.md`](docs/performance.md)
