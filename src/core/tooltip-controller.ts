@@ -531,7 +531,9 @@ export class TooltipController<TData = unknown> {
     if (this.state.isDestroyed) return;
     this.explicitClose = false;
     this._peerDismissed = false;
-    this.clearHideTimers();
+    // Preserve closing state so openNow reinstalls lifecycle handlers removed
+    // by onHide and re-reads the trigger when explicitly reopening.
+    this.clearHideTimers(false);
     this.clearShowTimer();
     if (this.status === 'open') {
       this.makeVisible();
@@ -567,6 +569,9 @@ export class TooltipController<TData = unknown> {
     this.showTimer = undefined;
     if (this.hooks.onShow?.(this) === false) {
       this.status = 'idle';
+      if (this.state.isMounted) this.unmount();
+      unregisterTopLevelTooltip(this);
+      unregisterOpenTooltip(this);
       return;
     }
 
@@ -613,6 +618,8 @@ export class TooltipController<TData = unknown> {
     const restoreFocus = this.kind === 'dialog' && this.containsPanelFocus();
     if (restoreFocus) this.returnFocus();
     if (this.hooks.onHide?.(this) === false) return;
+    if (this.shownTimer) clearTimeout(this.shownTimer);
+    this.shownTimer = undefined;
     this.setDrawerExpandedState(false);
 
     this.destroyNestedTooltips();
@@ -1716,7 +1723,7 @@ export class TooltipController<TData = unknown> {
     this.showTimer = undefined;
   }
 
-  private clearHideTimers(): void {
+  private clearHideTimers(resumeClosing = true): void {
     if (this.hideTimer) clearTimeout(this.hideTimer);
     this.hideTimer = undefined;
     this.pointerBridgeCleanup?.();
@@ -1730,14 +1737,9 @@ export class TooltipController<TData = unknown> {
     if (this._peerDismissed || this.explicitClose) return;
     if (this.unmountTimer) clearTimeout(this.unmountTimer);
     this.unmountTimer = undefined;
-    if (!this.explicitClose && this.status === 'closing' && this.state.isMounted) {
-      this.status = 'open';
-      this.root.removeAttribute('inert');
-      this.state.isShown = true;
-      this.state.isVisible = true;
-      this.box.dataset.state = 'visible';
-      this.content.dataset.state = 'visible';
-      if (this.kind === 'dialog') this.reference.setAttribute('aria-expanded', 'true');
+    if (resumeClosing && !this.explicitClose && this.status === 'closing' && this.state.isMounted) {
+      this.status = 'opening';
+      this.openNow();
     }
   }
 
