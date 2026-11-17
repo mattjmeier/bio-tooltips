@@ -4,8 +4,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { performance } from 'node:perf_hooks';
 import { gzipSync } from 'node:zlib';
+import { captureProvenance } from './provenance.mjs';
 import { renderTooltipHTML as renderGeneTooltip } from '../dist/bio-tooltips.mygene.esm.js';
 import { renderTooltipHTML as renderChemicalTooltip } from '../dist/bio-tooltips.mychem.esm.js';
+import { summarize, toCsv } from './report.mjs';
 
 const benchmarkDirectory = path.dirname(fileURLToPath(import.meta.url));
 const fixtureDirectory = path.join(benchmarkDirectory, 'fixtures');
@@ -37,6 +39,14 @@ const cases = [
   },
 ];
 
+const provenance = await captureProvenance(path.join(benchmarkDirectory, '..'), [
+  'package.json', 'package-lock.json', 'esbuild.config.js',
+  'benchmark/run.mjs', 'benchmark/report.mjs', 'benchmark/provenance.mjs',
+  ...cases.map(benchmarkCase => `benchmark/fixtures/${benchmarkCase.fixture}`),
+  'dist/bio-tooltips.esm.js', 'dist/bio-tooltips.mygene.esm.js',
+  'dist/bio-tooltips.mychem.esm.js', 'dist/bio-tooltips.css',
+]);
+
 const loadedCases = await Promise.all(cases.map(async benchmarkCase => {
   const fixturePath = path.join(fixtureDirectory, benchmarkCase.fixture);
   const fixture = JSON.parse(await readFile(fixturePath, 'utf8'));
@@ -45,6 +55,7 @@ const loadedCases = await Promise.all(cases.map(async benchmarkCase => {
 
 const rendererResults = [];
 const pipelineResults = [];
+const rawObservations = [];
 const artifactResults = await Promise.all([
   ['Root ESM', 'bio-tooltips.esm.js'],
   ['MyGene ESM', 'bio-tooltips.mygene.esm.js'],
@@ -76,6 +87,7 @@ for (const benchmarkCase of loadedCases) {
       html = benchmarkCase.render(benchmarkCase.data);
     }
     renderDurations.push((performance.now() - start) / operationsPerSample);
+    rawObservations.push({ benchmark: 'renderer', caseId: benchmarkCase.id, trial: sample + 1, durationMs: renderDurations.at(-1), units: 'ms/operation' });
     htmlBytes = Buffer.byteLength(html);
   }
 
@@ -105,6 +117,10 @@ for (const benchmarkCase of loadedCases) {
       }
       benchmarkCase.render(benchmarkCase.data);
       durations.push(performance.now() - start);
+      rawObservations.push({ benchmark: 'pipeline-interaction', caseId: benchmarkCase.id, condition, trial: trial + 1, durationMs: durations.at(-1), units: 'ms' });
+      if (condition === 'prefetched') {
+        rawObservations.push({ benchmark: 'pipeline-preparation', caseId: benchmarkCase.id, condition, trial: trial + 1, durationMs: preparationDurations.at(-1), units: 'ms' });
+      }
     }
 
     pipelineResults.push({
@@ -122,9 +138,11 @@ for (const benchmarkCase of loadedCases) {
 const result = {
   schemaVersion: 1,
   generatedAt: new Date().toISOString(),
+  packageVersion: JSON.parse(await readFile(path.join(benchmarkDirectory, '..', 'package.json'), 'utf8')).version,
+  ...provenance,
   methodology: {
     renderer: 'Stored provider record to generated tooltip HTML. Each sample is divided by the number of operations in its batch.',
-    controlledPipeline: 'A deterministic data delay is included in uncached interaction time and completed before timing for prefetched interactions. Warm-cache and prefetched rows measure local render work.',
+    controlledPipeline: 'Synthetic data delay plus HTML rendering. Condition labels model data availability without exercising the provider, application cache, prefetch implementation, or browser lifecycle.',
     caveat: 'The controlled pipeline isolates package behavior from internet variability; it is not a live MyGene.info or MyChem.info service measurement and does not measure browser paint.',
   },
   settings: {
@@ -143,38 +161,23 @@ const result = {
   rendererResults,
   pipelineResults,
   artifactResults,
+  rawObservations,
 };
 
 await mkdir(resultsDirectory, { recursive: true });
 const jsonPath = path.join(resultsDirectory, 'latest.json');
 const markdownPath = path.join(resultsDirectory, 'latest.md');
+const csvPath = path.join(resultsDirectory, 'latest.csv');
 await writeFile(jsonPath, `${JSON.stringify(result, null, 2)}\n`);
 await writeFile(markdownPath, renderMarkdown(result));
+await writeFile(csvPath, toCsv([
+  ...rendererResults.map(row => ({ benchmark: 'renderer', caseId: row.caseId, condition: 'stored-fixture', observations: row.observations, medianMs: row.medianMs, q1Ms: row.q1Ms, q3Ms: row.q3Ms, p95Ms: row.p95Ms, units: 'ms/operation' })),
+  ...pipelineResults.map(row => ({ benchmark: 'pipeline-interaction', caseId: row.caseId, condition: row.condition, observations: row.interaction.observations, medianMs: row.interaction.medianMs, q1Ms: row.interaction.q1Ms, q3Ms: row.interaction.q3Ms, p95Ms: row.interaction.p95Ms, units: 'ms' })),
+]));
 
 console.log(renderMarkdown(result));
 console.log(`Raw results: ${jsonPath}`);
 console.log(`Markdown table: ${markdownPath}`);
-
-function summarize(values) {
-  const sorted = [...values].sort((left, right) => left - right);
-  const meanMs = sorted.reduce((sum, value) => sum + value, 0) / sorted.length;
-  return {
-    medianMs: percentile(sorted, 0.5),
-    q1Ms: percentile(sorted, 0.25),
-    q3Ms: percentile(sorted, 0.75),
-    p95Ms: percentile(sorted, 0.95),
-    meanMs,
-  };
-}
-
-function percentile(sorted, proportion) {
-  if (sorted.length === 1) return sorted[0];
-  const position = (sorted.length - 1) * proportion;
-  const lower = Math.floor(position);
-  const upper = Math.ceil(position);
-  const weight = position - lower;
-  return sorted[lower] * (1 - weight) + sorted[upper] * weight;
-}
 
 function renderMarkdown(result) {
   const lines = [
@@ -200,7 +203,7 @@ function renderMarkdown(result) {
       `| ${row.label} | ${row.operations} | ${row.htmlBytes} | ${format(row.medianMs)} | ${format(row.q1Ms)}–${format(row.q3Ms)} | ${format(row.p95Ms)} |`
     ),
     '',
-    `## Controlled interaction pipeline (${result.settings.controlledLatencyMs} ms data latency)`,
+    `## Synthetic interaction pipeline (${result.settings.controlledLatencyMs} ms data latency)`,
     '',
     '| Tooltip | Condition | Trials | Interaction-to-content median (ms) | IQR (ms) | p95 (ms) |',
     '| --- | --- | ---: | ---: | ---: | ---: |',

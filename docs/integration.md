@@ -95,6 +95,21 @@ Gene visuals that use chromosome ideograms also need D3 and Ideogram on the page
 
 ## Reports and Notebooks
 
-RMarkdown, Jupyter, MyST, and other static report systems follow the same pattern: include the CSS and bundle in the rendered HTML, emit spans with module-specific classes and data attributes, then initialize after the document is ready.
+R Markdown, Quarto, Jupyter, MyST, and other report and notebook systems can use Bio Tooltips in their HTML output. Follow the same pattern as the vanilla HTML example above: include the CSS and bundle in the rendered HTML, emit spans with module-specific classes and data attributes, then initialize after the document is ready.
 
 See the repository [examples folder](https://github.com/mattjmeier/bio-tooltips/tree/main/examples) for working starting points.
+
+### R Markdown, Quarto, and Shiny with BioTooltipR
+
+The companion R package [BioTooltipR](https://github.com/mattjmeier/BioTooltipR) handles the HTML markup and dependency registration for R workflows. It registers dependencies with `htmltools`, includes version-pinned browser assets, and supports R Markdown, Quarto, Shiny, and other HTML-producing workflows, with helpers for tables and Plotly interaction.
+
+```r
+library(BioTooltipR)
+
+use_bio_tooltips(modules = c("gene", "chemical"))
+
+gene_tt("TP53", species = "human")
+chem_tt("aspirin", query = "2244", scope = "pubchem")
+```
+
+See the [CRAN package page](https://cran.r-project.org/package=BioTooltipR) for installation and the [BioTooltipR vignette](https://cran.r-project.org/web/packages/BioTooltipR/vignettes/BioTooltipR.html) for usage in reports and interactive applications.

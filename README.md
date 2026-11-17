@@ -102,17 +102,47 @@ Span triggers receive keyboard focus and button semantics automatically. Enter o
 
 Accessibility support, integration responsibilities, tested behavior, and current limitations are documented in [`docs/accessibility.md`](docs/accessibility.md). Bio Tooltips is designed to support WCAG 2.2 Level AA conforming implementations when used according to that guidance; this is not a claim that every integration or the package itself has completed a full WCAG conformance evaluation. The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
 
+## Integrations and examples
+
+- **Web frameworks and plain HTML:** Bio Tooltips is framework-agnostic. The [integration guide](docs/integration.md) includes React, Vue, and vanilla HTML examples, with initialization and cleanup guidance.
+- **Reports and notebooks:** HTML output from R Markdown, Quarto, Jupyter, MyST, and similar systems can include Bio Tooltips. See [reports and notebooks](docs/integration.md#reports-and-notebooks) for the general approach, or use the companion R package below for R workflows.
+- **Interactive demos:** gene, chemical, and mixed-entity examples are available in the [project documentation](https://mattjmeier.github.io/bio-tooltips/demo).
+- **Companion R package:** [BioTooltipR on GitHub](https://github.com/mattjmeier/BioTooltipR), [CRAN package page](https://cran.r-project.org/package=BioTooltipR), and [vignette](https://cran.r-project.org/web/packages/BioTooltipR/vignettes/BioTooltipR.html). BioTooltipR generates the HTML markup expected by this JavaScript package, registers dependencies with `htmltools`, and includes version-pinned browser assets. It supports R Markdown, Quarto, Shiny, and other HTML-producing workflows, with helpers for tables and Plotly interaction.
+
+```r
+library(BioTooltipR)
+
+use_bio_tooltips(modules = c("gene", "chemical"))
+
+gene_tt("TP53", species = "human")
+chem_tt("aspirin", query = "2244", scope = "pubchem")
+```
+
+The repository's [examples](examples/) provide additional integration starting points.
+
 ## Performance Benchmarks
 
-Run the reproducible renderer and controlled cache/prefetch benchmark with:
+Run the deterministic renderer benchmark or the separate Chromium browser benchmark with:
 
 ```powershell
 npm run benchmark
+npm run benchmark:browser
+# Optional: makes real MyGene.info requests
+npm run benchmark:browser:live
+# Optional: matched live requests with and without GeneRIFs
+npm run benchmark:browser:fields
 ```
 
-It produces raw JSON plus publication-ready Markdown tables under
-`benchmark/results/`. See the performance benchmarking guide in `docs/performance.md`
-for methodology and fixture refresh instructions.
+The benchmarks write machine-readable JSON and CSV plus Markdown summaries under the ignored
+`benchmark/results/` directory. The default browser run uses controlled simulated API
+responses. The opt-in live run saves separate `browser-live-latest.*` results and adds
+a live API table to `browser-latest.md`, preserving the saved controlled measurements.
+The field-selection run saves `browser-fields-latest.*` and adds a separate table comparing
+the same requests with and without `generif`; other fields and display settings stay fixed.
+Live results depend on the date, network and provider state. See [`docs/performance.md`](docs/performance.md)
+for methodology and fixture refresh instructions. Generate local statement, branch,
+function, and line coverage with `npm run test:coverage`. The CI workflow generates an LCOV
+report and includes a Codecov upload step.
 
 ## Supply Chain Notes
 
@@ -120,6 +150,8 @@ Bio Tooltips keeps its user-facing dependency surface intentionally small:
 
 - Required runtime npm dependencies: none.
 - Accessibility test tooling: pinned `axe-core` is a development dependency used with Playwright; it is excluded from runtime bundles.
+- Build and documentation tooling: esbuild bundles the library, rimraf cleans build output, and VitePress and TypeDoc build the documentation. Vite is overridden to the patched `6.4.6` release shared by VitePress and Vitest.
+- Coverage tooling: Vitest's matching `@vitest/coverage-v8` development provider writes local and CI reports under the ignored `coverage/` directory.
 - Bundled positioning foundation: `@floating-ui/dom`; consumers do not install or configure it separately.
 - Optional peer dependencies: `d3`, `ideogram`, and `@rdkit/rdkit`. These are not bundled into the package and are only needed for optional visual/structure-rendering features.
 - Published package contents: `dist`, `assets` (light + dark README preview images), `README.md`, `LICENSE`, and `package.json`.
