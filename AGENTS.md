@@ -6,6 +6,7 @@ This repo keeps generated API reference markdown under `docs/api/**`.
 - Do not edit `docs/api/**` by hand. Treat it as generated output.
 - Use `npm run docs:build` for a local VitePress site build that does not rewrite `docs/api/**`.
 - Use `npm run docs:build:fresh` only when the generated TypeDoc API reference should be refreshed before building the docs site.
+- In `README.md`, link to VitePress documentation pages using their published `https://mattjmeier.github.io/bio-tooltips/...` URLs, not relative `docs/*.md` paths. TypeDoc also consumes the README and copies relative Markdown targets into `docs/api/_media/`, where page-relative imports and links can break the docs build. Keep local image paths relative so TypeDoc can copy those assets.
 - If `docs/api/**` changes accidentally, revert those generated files before finishing the task and tell the user what happened.
 - For ordinary source changes, prefer focused tests such as `npm test -- --run test/renderer.test.ts` on Windows, plus `npm run build:types`.
 

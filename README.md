@@ -149,7 +149,7 @@ JSON/CSV results; `browser-latest.md` combines live and fixture rows in one tabl
 source labels, preserving each run's date and environment. No artificial request delay is used.
 The field-selection run saves `browser-fields-latest.*` and adds a separate table comparing
 the same requests with and without `generif`; other fields and display settings stay fixed.
-Live results depend on the date, network and provider state. See [`docs/performance.md`](docs/performance.md)
+Live results depend on the date, network and provider state. See [Performance Benchmarking](https://mattjmeier.github.io/bio-tooltips/performance)
 for methodology and fixture refresh instructions. Generate local statement, branch,
 function, and line coverage with `npm run test:coverage`. The CI workflow generates an LCOV
 report and includes a Codecov upload step.
