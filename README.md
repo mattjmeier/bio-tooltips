@@ -104,9 +104,11 @@ Span triggers receive keyboard focus and button semantics automatically. Enter o
 
 Accessibility support, integration responsibilities, tested behavior, and current limitations are documented in [`docs/accessibility.md`](docs/accessibility.md). Bio Tooltips is designed to support WCAG 2.2 Level AA conforming implementations when used according to that guidance; this is not a claim that every integration or the package itself has completed a full WCAG conformance evaluation. The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
 
-Tooltip requests select fields for enabled sections. Collapsed sections load their
-remaining fields on expansion; expanded sections load immediately. Partial records
-are enriched in the shared cache and reused across tooltips and prefetches.
+Tooltip requests select fields for enabled sections. With the default
+`sectionLoading: 'lazy'`, collapsed sections load their remaining fields on expansion.
+Use `sectionLoading: 'eager'` to load all enabled section fields upfront while preserving
+collapsed display states. Both modes enrich and reuse the shared field-aware cache;
+`prefetch` independently controls when initial requests start.
 MyChem name searches retain the fields needed to rank molecule matches.
 
 ## Integrations and examples

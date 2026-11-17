@@ -1,9 +1,22 @@
+import { loadingLabel } from './scenarios.mjs';
+export { loadingLabel };
+
 // Presentation helpers shared by the docs component and its checks.
 export const browserViews = {
   interaction: [
     { key: 'interactionToContent', label: 'Hover → content' },
     { key: 'interactionToVisible', label: 'Hover → visible DOM' },
     { key: 'warmCacheInteraction', label: 'Cached repeat' },
+  ],
+  expansion: [
+    { key: 'sectionExpansion', label: 'First GeneRIF expansion' },
+    { key: 'repeatSectionExpansion', label: 'Repeat expansion' },
+    { key: 'sectionExpansionRequests', label: 'Expansion requests', unit: 'count' },
+  ],
+  payloads: [
+    { key: 'initialResponseBytes', label: 'Before expansion (MB)', unit: 'MB' },
+    { key: 'sectionResponseBytes', label: 'First expansion (MB)', unit: 'MB' },
+    { key: 'transferredBytes', label: 'Total body (MB)', unit: 'MB' },
   ],
   startup: [
     { key: 'pageLoad', label: 'DOM loaded' },
@@ -22,18 +35,18 @@ export const formatNumber = (value, digits = value < 10 ? 3 : 1) => String(Numbe
 export function formatMetric(value, unit = 'ms') {
   if (!value) return null;
   const scale = unit === 'MB' ? 1e6 : 1;
-  const format = number => formatNumber(number / scale, unit === 'MB' ? 4 : undefined);
+  const format = number => formatNumber(number / scale, unit === 'MB' ? (number < 10000 ? 4 : 2) : undefined);
   return {
     median: format(value.medianMs ?? value.median),
     range: `${format(value.q1Ms ?? value.q1)}–${format(value.q3Ms ?? value.q3)}`,
   };
 }
 
-export function groupBrowserRows(runs, elements) {
+export function groupBrowserRows(runs, elements, loadingMode = 'lightweight') {
   return ['none', 'smart', 'all'].map(strategy => ({
     strategy,
     rows: runs.flatMap(run => run.summaries
-      .filter(row => row.annotatedElements === elements && row.strategy === strategy)
+      .filter(row => row.annotatedElements === elements && row.strategy === strategy && (row.loadingMode ?? 'lightweight') === loadingMode)
       .map(row => ({ ...row, condition: run.condition, source: sourceLabel(run.condition) }))),
   })).filter(group => group.rows.length);
 }

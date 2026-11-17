@@ -11,6 +11,7 @@ ChemicalTooltip.init({
   selector: '.chemical-tooltip',
   theme: 'auto',
   sectionVariant: 'cards',
+  sectionLoading: 'lazy',
   tooltipWidth: 430,
   truncateSummary: 4,
   synonymCount: 6,
@@ -102,11 +103,12 @@ These examples show how configuration choices change the rendered tooltip. See t
 
 Open aspirin below, then expand **Pharmacology & Targets** or **Safety & Reported Effects**. The tooltip loads its header and expanded sections first, then requests missing annotations when you expand a collapsed section. You may briefly see “Loading details…” while the request completes.
 
-<ChemicalDemo query="aspirin" :config="{ prefetch: 'none', display: { summary: 'expanded', pharmacology: 'collapsed', safety: 'collapsed', rawJson: false } }" />
+<ChemicalDemo query="aspirin" :config="{ prefetch: 'none', sectionLoading: 'lazy', display: { summary: 'expanded', pharmacology: 'collapsed', safety: 'collapsed', rawJson: false } }" />
 
 ```ts
 ChemicalTooltip.init({
   prefetch: 'none',
+  sectionLoading: 'lazy',
   display: {
     summary: 'expanded',
     pharmacology: 'collapsed',
@@ -116,9 +118,36 @@ ChemicalTooltip.init({
 });
 ```
 
-Lazy loading follows the existing display settings. `'expanded'` requests a section's fields initially, `'collapsed'` defers missing fields, and `false` hides the section and adds no fields for it. `true` follows `display.collapsedByDefault`. Fields shared with the header or other expanded sections can still be fetched initially; name searches also include identity and synonym fields for match ranking.
+`sectionLoading: 'lazy'` is the default. `'expanded'` requests a section's fields initially, `'collapsed'` defers missing fields, and `false` hides the section and adds no fields for it. `true` follows `display.collapsedByDefault`. Fields shared with the header or other expanded sections can still be fetched initially; name searches also include identity and synonym fields for match ranking.
 
 This example disables prefetch to make the first opening easier to inspect. With `prefetch: 'smart'` or `'all'`, prefetch also selects initial fields. Successfully loaded fields are reused while cached, including across examples. Collapse and expand to retry a failed request; a successful response without annotations shows “No data available.” Set `display.collapsible: false` to fetch all enabled sections initially. `display.rawJson: true` requests the complete record immediately, so leave it disabled to demonstrate deferred fetching.
+
+### Eager Data, Collapsed Sections
+
+Use `sectionLoading: 'eager'` to include every enabled section's fields in the initial
+request. The sections can still start collapsed. Open caffeine below, then expand
+**Pharmacology & Targets** or **Safety & Reported Effects** to see their already-loaded data.
+Sections without annotations remain omitted.
+
+<ChemicalDemo query="caffeine" :config="{ prefetch: 'none', sectionLoading: 'eager', display: { summary: 'expanded', pharmacology: 'collapsed', safety: 'collapsed', rawJson: false } }" />
+
+```ts
+ChemicalTooltip.init({
+  prefetch: 'none',
+  sectionLoading: 'eager',
+  display: {
+    summary: 'expanded',
+    pharmacology: 'collapsed',
+    safety: 'collapsed',
+    rawJson: false
+  }
+});
+```
+
+Eager loading keeps shared caching and respects disabled sections. It fetches selected
+fields, not the entire provider record; `display.rawJson: true` still requests the full
+record in either mode. `prefetch: 'smart'` or `'all'` includes the eager section fields
+during prefetch; `'none'` waits until the tooltip is opened.
 
 ### Compact Tooltip
 

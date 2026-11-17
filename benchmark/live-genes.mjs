@@ -1,3 +1,5 @@
+import stressGenes from './fixtures/mygene-stress-symbols.json' with { type: 'json' };
+
 // Fixed human gene symbol set. The first five identifiers are measured
 // individually; subsequent entries supply the larger prefetch workload.
 export const liveGeneSymbols = Object.freeze([
@@ -11,12 +13,13 @@ export const liveGeneSymbols = Object.freeze([
   'FGFR2', 'FGFR3', 'MET', 'RET', 'ALK', 'ROS1', 'NTRK1', 'NTRK2',
   'NTRK3', 'BCL2', 'BAX', 'CASP3', 'CASP8', 'CASP9', 'MDM2', 'ATM',
   'ATR', 'CHEK1', 'CHEK2', 'PALB2', 'RAD51', 'MLH1', 'MSH2', 'MSH6',
+  ...stressGenes.symbols,
 ]);
 
 export function identifiersForPage(elements) {
   const count = Math.ceil(elements * 0.8);
   if (count > liveGeneSymbols.length) {
-    throw new Error(`Browser benchmark supports at most ${liveGeneSymbols.length} distinct identifiers (10/100-element scenarios).`);
+    throw new Error(`Browser benchmark supports at most ${liveGeneSymbols.length} distinct identifiers (10/100/1000-element scenarios).`);
   }
   const identifiers = liveGeneSymbols.slice(0, count);
   return Array.from({ length: elements }, (_, index) => {

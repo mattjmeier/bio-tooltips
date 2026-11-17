@@ -2,17 +2,24 @@
 import { computed, ref } from 'vue';
 import snapshot from '../../../../benchmark/published/latest.json';
 import snapshotUrl from '../../../../benchmark/published/latest.json?url';
-import { browserViews, formatNumber, formatDate, groupBrowserRows, sourceLabel } from '../../../../benchmark/presentation.mjs';
+import { browserViews, formatNumber, formatDate, groupBrowserRows, sourceLabel, loadingLabel } from '../../../../benchmark/presentation.mjs';
 import BenchmarkMetric from './BenchmarkMetric.vue';
 
 defineProps({ kind: { type: String, default: 'browser' } });
-const pageSizes = [...new Set(snapshot.browser.flatMap(run => run.summaries.map(row => row.annotatedElements)))].sort((a, b) => a - b);
+const pageSizes = [10, 100, 1000];
+const availableModes = [...new Set(snapshot.browser.flatMap(run => run.summaries.map(row => row.loadingMode ?? 'lightweight')))];
+const sectionModes = [...(availableModes.includes('lightweight') ? ['lightweight'] : []), 'lazy', 'eager'];
+const loadingMode = ref(availableModes.includes('lazy') ? 'lazy' : 'lightweight');
 const elements = ref(pageSizes[0]);
 const view = ref('interaction');
 const columns = computed(() => browserViews[view.value]);
-const groups = computed(() => groupBrowserRows(snapshot.browser, elements.value));
-const uniqueIdentifiers = computed(() => groups.value[0]?.rows[0]?.uniqueIdentifiers);
-const views = { interaction: 'Interaction', startup: 'Page startup', requests: 'Requests' };
+const groups = computed(() => groupBrowserRows(snapshot.browser, elements.value, loadingMode.value));
+const uniqueIdentifiers = computed(() => Math.ceil(elements.value * 0.8));
+const retainedCache = computed(() => groups.value.some(group => group.rows.some(row => row.cacheEntriesAfterPrefetch && row.strategy !== 'none' && row.cacheEntriesAfterPrefetch.median < row.uniqueIdentifiers)));
+const selectedRuns = computed(() => snapshot.browser.filter(run => run.summaries.some(row => row.annotatedElements === elements.value && (row.loadingMode ?? 'lightweight') === loadingMode.value)));
+const trialCounts = computed(() => [...new Set(selectedRuns.value.map(run => run.settings.repetitions))].join(' / '));
+const smallSample = computed(() => selectedRuns.value.some(run => run.settings.repetitions < 10));
+const views = { interaction: 'Interaction', startup: 'Page startup', requests: 'Requests', expansion: 'Section expansion', payloads: 'Payloads' };
 const runTotals = run => ({ successful: run.summaries.reduce((sum, row) => sum + row.trials, 0),
   attempted: run.summaries.reduce((sum, row) => sum + row.attemptedTrials, 0) });
 </script>
@@ -40,19 +47,25 @@ const runTotals = run => ({ successful: run.summaries.reduce((sum, row) => sum +
     <template v-else>
       <div class="controls">
         <label class="page-size">Page size
-          <select v-model="elements" aria-label="Page size"><option v-for="size in pageSizes" :key="size" :value="size">{{ size }} elements</option></select>
+          <select v-model="elements" aria-label="Page size"><option v-for="size in pageSizes" :key="size" :value="size">{{ size.toLocaleString('en-US') }} elements / {{ Math.ceil(size * 0.8) }} IDs</option></select>
+        </label>
+        <label class="page-size">Section loading
+          <select v-model="loadingMode" aria-label="Section loading"><option v-for="mode in sectionModes" :key="mode" :value="mode">{{ loadingLabel(mode) }}</option></select>
         </label>
         <fieldset><legend>Measurements</legend><div class="view-buttons">
           <button v-for="(label, key) in views" :key="key" type="button" :aria-pressed="view === key" @click="view = key">{{ label }}</button>
         </div></fieldset>
       </div>
       <p id="benchmark-table-note" class="table-note" aria-live="polite">
-        {{ elements }} elements · {{ uniqueIdentifiers }} unique IDs. Median with IQR beneath.
-        {{ view === 'requests' ? 'POSTs are batch request counts; provider response is in ms.' : 'All times in ms.' }}
+        {{ elements.toLocaleString('en-US') }} elements · {{ uniqueIdentifiers }} unique IDs. Median with IQR beneath.
+        {{ view === 'requests' ? 'POSTs are batch counts; provider response is in ms.' : view === 'payloads' ? 'Response bodies in decimal MB, excluding headers.' : view === 'expansion' ? 'Expansion times in ms; requests count GETs and POSTs.' : 'All times in ms.' }}
       </p>
-      <div class="table-scroll" tabindex="0" role="region" aria-label="Browser benchmark results">
+      <p v-if="selectedRuns.length" class="table-note">{{ trialCounts }} measured trials per scenario.<span v-if="smallSample"> Small sample: useful for exercising the workload, not stable latency conclusions.</span></p>
+      <p v-if="!groups.length" class="table-note" role="status">This page size and loading mode has not been measured in the published snapshot. Run and publish the matching live and fixture benchmarks to populate it.</p>
+      <p v-if="retainedCache" class="table-note">This workload exceeds the records retained in the bounded cache. Prefetched records may be evicted and fetched again during hovering.</p>
+      <div v-if="groups.length" class="table-scroll" tabindex="0" role="region" aria-label="Browser benchmark results">
         <table aria-describedby="benchmark-table-note">
-          <caption class="visually-hidden">{{ views[view] }} for {{ elements }} annotated elements</caption>
+          <caption class="visually-hidden">{{ views[view] }} for {{ elements }} annotated elements, {{ loadingLabel(loadingMode) }}</caption>
           <thead><tr><th scope="col" class="strategy-column">Prefetch</th><th scope="col" class="source-column">Source</th>
             <th v-for="column in columns" :key="column.key" scope="col">{{ column.label }}</th>
           </tr></thead>
@@ -66,24 +79,27 @@ const runTotals = run => ({ successful: run.summaries.reduce((sum, row) => sum +
         </table>
       </div>
       <p v-if="view === 'startup'" class="table-note">DOM loaded and tooltips ready start at navigation. Prefetch complete starts after initialization and includes scrolling on large smart pages. These are not paint timings.</p>
+      <p v-if="view === 'expansion'" class="table-note">The first expansion opens GeneRIFs on the cached-repeat tooltip. Lazy mode requests missing fields; eager mode uses the initial data. Repeat expansion should issue no request. DOM timing excludes paint.</p>
+      <p v-if="view === 'payloads'" class="table-note">Before expansion includes prefetch and opening hovers. First expansion shows the data deferred until GeneRIFs is opened. Live bodies are encoded network bytes; fixture bodies are decoded JSON.</p>
       <p v-if="view === 'requests'" class="table-note">Provider response includes network and body download for live requests. Fixtures are served locally.</p>
-      <details v-if="view === 'requests'" class="run-details"><summary>Response sizes and cached requests</summary>
-        <p>Response bodies in decimal MB, median with IQR. Live sizes are encoded network bytes; fixture sizes are decoded JSON bytes. Neither includes headers.</p>
-        <div class="table-scroll" tabindex="0" role="region" aria-label="Response sizes and cached requests"><table>
-          <thead><tr><th scope="col">Prefetch</th><th scope="col">Source</th><th scope="col">Body (MB)</th><th scope="col">Repeat POSTs</th></tr></thead>
+      <details v-if="view === 'requests' && groups.length" class="run-details"><summary>Fetched IDs and cache retention</summary>
+        <p>Distinct IDs fetched over the trial, compared with entries retained immediately after prefetch. A bounded cache need not retain every fetched record.</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Fetched IDs and cache retention"><table>
+          <thead><tr><th scope="col">Prefetch</th><th scope="col">Source</th><th scope="col">Fetched IDs</th><th scope="col">Retained cache</th></tr></thead>
           <tbody v-for="group in groups" :key="group.strategy"><tr v-for="(row, index) in group.rows" :key="row.condition">
             <th v-if="index === 0" :rowspan="group.rows.length" scope="rowgroup"><code>{{ group.strategy }}</code></th>
-            <th scope="row">{{ row.source }}</th><td><BenchmarkMetric :value="row.transferredBytes" unit="MB" /></td>
-            <td><BenchmarkMetric :value="row.repeatInteractionRequests" unit="count" /></td>
+            <th scope="row">{{ row.source }}</th><td><BenchmarkMetric :value="row.distinctRecordsFetched" unit="count" /></td>
+            <td><BenchmarkMetric :value="row.cacheEntriesAfterPrefetch" unit="count" /></td>
           </tr></tbody>
         </table></div>
       </details>
-      <details class="run-details"><summary>Browser run details</summary>
-        <section v-for="run in snapshot.browser" :key="run.condition" class="run">
+      <details v-if="selectedRuns.length" class="run-details"><summary>Browser run details</summary>
+        <section v-for="run in selectedRuns" :key="run.condition + run.generatedAt" class="run">
           <h4>{{ sourceLabel(run.condition) }}</h4>
+          <p v-if="run.retained">Latest opt-in stress measurement, retained from an earlier refresh. Its date and environment apply to these rows.</p>
           <p>{{ formatDate(run.startedAt) }} to {{ formatDate(run.generatedAt) }}.</p>
           <p>{{ run.settings.repetitions }} measured trials after {{ run.settings.warmups }} warm-ups per scenario.
-            {{ runTotals(run).successful }}/{{ runTotals(run).attempted }} successful trials; {{ run.warmupFailures }} failed warm-ups.</p>
+            {{ runTotals(run).successful }}/{{ runTotals(run).attempted }} successful trials across this run; {{ run.warmupFailures }} failed warm-ups.</p>
           <p>Package {{ run.packageVersion }} · Chromium {{ run.environment.browserVersion }} · {{ run.environment.node }} · {{ run.environment.platform }} · {{ run.environment.cpu }}</p>
           <p>Network: {{ run.settings.networkLabel ?? 'Local fixture interception' }}. Commit <code>{{ run.gitCommit?.slice(0, 12) ?? 'unavailable' }}</code><span v-if="run.gitWorkingTreeDirty"> with local changes</span>. Measurement version {{ run.measurementVersion }}.</p>
         </section>

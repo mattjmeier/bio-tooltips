@@ -94,3 +94,47 @@ describe('MyChem field selection', () => {
     expect(eager.initial).not.toContain('drugbank.targets');
   });
 });
+
+
+describe('section loading mode', () => {
+  it.each([
+    { name: 'gene', config: geneConfig, plan: getMyGeneFieldPlan },
+    { name: 'chemical', config: chemConfig, plan: getMyChemFieldPlan },
+  ])('defaults to lazy and eagerly includes the same enabled fields for $name', ({ config, plan }) => {
+    const lazyConfig = config();
+    expect(lazyConfig.sectionLoading).toBe('lazy');
+    const lazy = plan(lazyConfig as never);
+    expect(Object.keys(lazy.deferred).length).toBeGreaterThan(0);
+    const eagerConfig = config({ sectionLoading: 'eager' });
+    const eager = plan(eagerConfig as never);
+    expect(eager.deferred).toEqual({});
+    expect(new Set(eager.initial)).toEqual(new Set([...lazy.initial, ...Object.values(lazy.deferred).flat()]));
+    expect(eager.initial).toHaveLength(new Set(eager.initial).size);
+    expect(eagerConfig.display).toEqual(lazyConfig.display);
+    expect(eager.initial).not.toContain('all');
+  });
+
+  it('keeps disabled gene annotations omitted in eager mode, including when sections are explicitly collapsed', () => {
+    const plan = getMyGeneFieldPlan(geneConfig({ sectionLoading: 'eager', display: {
+      ...geneSectionsOff, pathways: 'collapsed', generifs: 'collapsed',
+    }, pathwaySource: 'reactome' }));
+    expect(plan.deferred).toEqual({});
+    expect(plan.initial).toContain('generif');
+    expect(plan.initial).toContain('pathway.reactome');
+    expect(plan.initial).not.toContain('exons');
+    expect(plan.initial).not.toContain('summary');
+    expect(plan.initial).not.toContain('pathway.kegg');
+  });
+
+  it('keeps disabled chemical annotations omitted in eager mode and preserves raw JSON full-record loading', () => {
+    const plan = getMyChemFieldPlan(chemConfig({ sectionLoading: 'eager', display: {
+      ...chemSectionsOff, safety: 'collapsed',
+    } }));
+    expect(plan.deferred).toEqual({});
+    expect(plan.initial).toContain('drugbank.toxicity');
+    expect(plan.initial).not.toContain('drugbank.targets');
+    expect(plan.initial).not.toContain('pubchem.xlogp');
+    expect(getMyChemFieldPlan(chemConfig({ sectionLoading: 'eager', display: { rawJson: true } })))
+      .toEqual({ initial: ['all'], deferred: {} });
+  });
+});

@@ -7,6 +7,7 @@ import { percentile, summarize, toCsv } from '../benchmark/report.mjs';
 import { browserCsvRows, combineBrowserReports, renderLiveSection, renderFieldSelectionSection } from '../benchmark/browser-report.mjs';
 import { applyFieldSelection, fieldsForVariant, fieldVariantOrder, referenceGeneFields } from '../benchmark/field-selection.mjs';
 import { identifiersForPage, liveGeneSymbols } from '../benchmark/live-genes.mjs';
+import { loadingConfig } from '../benchmark/scenarios.mjs';
 
 describe('benchmark report aggregation', () => {
   it('reports interpolated median, quartiles, p95 and observation count', () => {
@@ -39,9 +40,9 @@ describe('benchmark report aggregation', () => {
 
 describe('live browser benchmark data and reporting', () => {
   it('uses real identifiers, five distinct initial hovers, and a duplicate sixth trigger', () => {
-    expect(liveGeneSymbols).toHaveLength(80);
-    expect(new Set(liveGeneSymbols).size).toBe(80);
-    for (const size of [10, 100]) {
+    expect(liveGeneSymbols).toHaveLength(800);
+    expect(new Set(liveGeneSymbols).size).toBe(800);
+    for (const size of [10, 100, 1000]) {
       const identifiers = identifiersForPage(size);
       expect(identifiers).toHaveLength(size);
       expect(new Set(identifiers).size).toBe(size * 0.8);
@@ -49,7 +50,17 @@ describe('live browser benchmark data and reporting', () => {
       expect(identifiers[5]).toBe(identifiers[0]);
       expect(identifiers.every(identifier => liveGeneSymbols.includes(identifier))).toBe(true);
     }
-    expect(() => identifiersForPage(500)).toThrow('at most 80 distinct');
+    expect(() => identifiersForPage(2000)).toThrow('at most 800 distinct');
+  });
+
+  it('changes loading strategy while preserving the same enabled, collapsed GeneRIF display', () => {
+    const lazy = loadingConfig('lazy'); const eager = loadingConfig('eager');
+    expect(lazy.display).toEqual(eager.display);
+    expect(lazy.display.generifs).toBe('collapsed');
+    expect(lazy.sectionLoading).toBe('lazy');
+    expect(eager.sectionLoading).toBe('eager');
+    expect(loadingConfig('lightweight').display.generifs).toBe(false);
+    expect(() => loadingConfig('unknown')).toThrow();
   });
 
   it('combines live and fixture rows with source labels and retains failures without zero latencies', () => {
@@ -63,7 +74,7 @@ describe('live browser benchmark data and reporting', () => {
       warmupFailures: [{ strategy: 'none', annotatedElements: 10, error: 'Network failure' }],
     };
     const section = renderLiveSection(live);
-    expect(section).toContain('| Live API | none | 10 | 8 | 0 / 2 | — |');
+    expect(section).toContain('| Live API | Lightweight | none | 10 | 8 | 0 / 2 | — |');
     expect(section).toContain('HTTP 503');
     expect(section).toContain('Failed warm-up');
     expect(section).toContain('test\\|network location unspecified');
@@ -71,15 +82,15 @@ describe('live browser benchmark data and reporting', () => {
     const fixture = { ...live, condition: 'fixture', startedAt: 'fixture-start',
       environment: { ...live.environment, cpu: 'fixture CPU' } };
     const combined = combineBrowserReports(fixture, live);
-    expect(combined).toContain('| Live API | none |');
-    expect(combined).toContain('| Fixture | none |');
-    expect(combined.match(/\| Source \| Strategy/g)).toHaveLength(1);
+    expect(combined).toContain('| Live API | Lightweight | none |');
+    expect(combined).toContain('| Fixture | Lightweight | none |');
+    expect(combined.match(/\| Source \| Section loading \| Strategy \| Elements \| Unique IDs/g)).toHaveLength(1);
     expect(browserCsvRows([{ ...live.summaries[0], source: 'live' }])[0]).toMatchObject({ source: 'live' });
     expect(combined).toContain('fixture-start');
     expect(combined).toContain('fixture CPU');
     expect(combined).toContain('not a paired estimate of network overhead');
-    expect(combineBrowserReports(null, live)).toContain('| Live API | none |');
-    expect(combineBrowserReports(fixture, null)).toContain('| Fixture | none |');
+    expect(combineBrowserReports(null, live)).toContain('| Live API | Lightweight | none |');
+    expect(combineBrowserReports(fixture, null)).toContain('| Fixture | Lightweight | none |');
     expect(combineBrowserReports(null, null)).toContain('No current live API or fixture');
     expect(combineBrowserReports({ ...fixture, measurementVersion: 1 }, null)).not.toContain('| Fixture |');
     expect(combineBrowserReports({ ...fixture, condition: 'controlled' }, null)).not.toContain('| Fixture |');
@@ -134,9 +145,9 @@ describe('live browser benchmark data and reporting', () => {
     };
     const report = combineBrowserReports({ ...run, condition: 'fixture' }, run);
     const rows = report.split('\n').filter(line => /^\| (Live API|Fixture) \|/.test(line));
-    expect(rows.map(row => row.split(' | ').slice(0, 3).join(' | '))).toEqual([
-      '| Live API | none | 10', '| Fixture | none | 10',
-      '| Live API | none | 100', '| Fixture | none | 100',
+    expect(rows.map(row => row.split(' | ').slice(0, 4).join(' | '))).toEqual([
+      '| Live API | Lightweight | none | 10', '| Fixture | Lightweight | none | 10',
+      '| Live API | Lightweight | none | 100', '| Fixture | Lightweight | none | 100',
     ]);
     expect(report).toContain('0.003 (0.003–0.003)');
   });
@@ -182,7 +193,7 @@ describe('live field selection benchmark', () => {
     expect(section).toContain('benchmark overrides only');
     const combined = combineBrowserReports(null, { ...result, condition: 'live', measurementVersion: 2 }, result);
     expect(combined.indexOf('## Browser prefetch')).toBeLessThan(combined.indexOf('## Live field selection'));
-    expect(combined).toContain('| Live API | all |');
+    expect(combined).toContain('| Live API | Lightweight | all |');
     expect(browserCsvRows(result.summaries)[0]).toMatchObject({ fieldVariant: 'without-generif', metric: 'trial-count', observations: 0 });
     const success = { ...result.summaries[0], trials: 1, transferredBytes: { observations: 1, median: 100, q1: 100, q3: 100, p95: 100 } };
     expect(browserCsvRows([success])[0]).toMatchObject({ fieldVariant: 'without-generif', metric: 'transferredBytes', median: 100, units: 'bytes' });

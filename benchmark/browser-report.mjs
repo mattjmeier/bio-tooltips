@@ -1,3 +1,4 @@
+import { loadingLabel } from './scenarios.mjs';
 const metric = value => value ? `${format(value.medianMs)} (${format(value.q1Ms)}–${format(value.q3Ms)})` : '—';
 const count = value => value ? `${format(value.median)} (${format(value.q1)}–${format(value.q3)})` : '—';
 const mb = value => String(Number((value / 1e6).toFixed(value < 10000 ? 4 : 2)));
@@ -18,9 +19,9 @@ function renderBrowserSection(results) {
   return [
     '## Browser prefetch: live API and fixtures', '',
     'Metrics show median (IQR) across successful trials. Hover metrics summarize within-trial medians across five distinct identifiers, followed by a duplicate-identifier cache hit. Source labels identify each independently recorded run.', '',
-    '| Source | Strategy | Elements | Unique IDs | Successful / attempted trials | DOM loaded (ms) | Tooltips ready (ms) | Prefetch complete (ms) | Mouseenter → content (ms) | Mouseenter → visible DOM (ms) | Repeat cached → content (ms) | Provider POST → body complete (ms) | Response bodies (MB) | Prefetch POSTs | Hover POSTs | Failed trials |',
-    '| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |',
-    ...rows.map(({ result, row }) => `| ${source(result)} | ${row.strategy} | ${row.annotatedElements} | ${row.uniqueIdentifiers} | ${row.trials} / ${row.attemptedTrials} | ${metric(row.pageLoad)} | ${metric(row.readiness)} | ${metric(row.prefetchCompletion)} | ${metric(row.interactionToContent)} | ${metric(row.interactionToVisible)} | ${metric(row.warmCacheInteraction)} | ${metric(row.providerRequest)} | ${megabytes(row.transferredBytes)} | ${count(row.prefetchRequests)} | ${count(row.interactionRequests)} | ${row.failedTrials} |`),
+    '| Source | Section loading | Strategy | Elements | Unique IDs | Successful / attempted trials | DOM loaded (ms) | Tooltips ready (ms) | Prefetch complete (ms) | Mouseenter → content (ms) | Mouseenter → visible DOM (ms) | Repeat cached → content (ms) | Provider POST → body complete (ms) | Response bodies (MB) | Prefetch POSTs | Hover POSTs | Failed trials |',
+    '| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |',
+    ...rows.map(({ result, row }) => `| ${source(result)} | ${loadingLabel(row.loadingMode ?? 'lightweight')} | ${row.strategy} | ${row.annotatedElements} | ${row.uniqueIdentifiers} | ${row.trials} / ${row.attemptedTrials} | ${metric(row.pageLoad)} | ${metric(row.readiness)} | ${metric(row.prefetchCompletion)} | ${metric(row.interactionToContent)} | ${metric(row.interactionToVisible)} | ${metric(row.warmCacheInteraction)} | ${metric(row.providerRequest)} | ${megabytes(row.transferredBytes)} | ${count(row.prefetchRequests)} | ${count(row.interactionRequests)} | ${row.failedTrials} |`),
     '',
     ...results.flatMap(result => [
       `### ${source(result)} run`, '',
@@ -31,10 +32,17 @@ function renderBrowserSection(results) {
       ...(result.warmupFailures ?? []).map(row => `- Failed warm-up ${row.strategy}/${row.annotatedElements}: ${cell(row.error)}`),
       '',
     ]),
-    'Live API rows use real human gene symbols and normal MyGene.info POST requests, with no interception or artificial request delay. Fixture rows use the same symbols and page workload, fulfilling intercepted requests immediately from the curated TP53 record. Fixture payloads are relabeled copies, not the corresponding live records, and ignore requested field selection. Differences include payload content, size, parsing and rendering as well as network traffic; they are not a paired estimate of network overhead.', '',
+    'Live API rows use real human gene symbols and normal MyGene.info requests, with no interception or artificial request delay. Fixture rows use the same symbols and page workload, fulfilling intercepted requests immediately from the curated TP53 record. Fixture payloads are relabeled copies, not the corresponding live records, and omit GeneRIFs unless requested; other fixture annotations remain fixed. Differences include payload content, size, parsing and rendering as well as network traffic; they are not a paired estimate of network overhead.', '',
     'DOM loaded is navigation start to DOMContentLoaded. Tooltips ready is navigation start to the end of tooltip initialization, excluding background prefetch. These are DOM/application milestones, not browser paint or complete visual rendering times.', '',
-    'Each trial starts with a fresh document/application cache and disabled browser HTTP cache. Connections and provider caches may be reused. Optional visuals, preloading and animations are disabled. Prefetch completion includes scrolling and the 200 ms observer debounce for large smart pages. Hover timing starts at the actual mouseenter event; visible DOM timing is not paint or animation completion. Request columns count POST batch calls, not records.', '',
+    'Each trial starts with a fresh document/application cache and disabled browser HTTP cache. Connections and provider caches may be reused. Optional visuals, preloading and animations are disabled. Prefetch completion includes scrolling and the 200 ms observer debounce for large smart pages. Hover timing starts at the actual mouseenter event; visible DOM timing is not paint or animation completion. Request columns count calls, not records.', '',
     'Provider timing is live browser request start to response body completion, including network/download, not server processing time. Its within-trial median is summarized across successful trials. Live response bodies sum encoded network bytes excluding headers; fixture bodies count decoded JSON bytes (decimal MB for both), so byte columns are not directly equivalent. Failed trials are excluded from latency summaries and retained in each source JSON; failed warm-ups are recorded separately.', '',
+    ...(rows.some(({ row }) => row.loadingMode && row.loadingMode !== 'lightweight') ? [
+    '| Source | Section loading | Strategy | Elements | First GeneRIF expansion (ms) | Repeat expansion (ms) | Expansion requests | Before expansion (MB) | First expansion (MB) | Retained cache after prefetch |',
+    '| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |',
+    ...rows.filter(({ row }) => row.loadingMode && row.loadingMode !== 'lightweight').map(({ result, row }) => `| ${source(result)} | ${loadingLabel(row.loadingMode)} | ${row.strategy} | ${row.annotatedElements} | ${metric(row.sectionExpansion)} | ${metric(row.repeatSectionExpansion)} | ${count(row.sectionExpansionRequests)} | ${megabytes(row.initialResponseBytes)} | ${megabytes(row.sectionResponseBytes)} | ${count(row.cacheEntriesAfterPrefetch)} |`),
+    '',
+    'Lazy and eager modes keep GeneRIFs enabled and collapsed in the same tooltip layout. Initial bytes include prefetch and hovers before expansion; expansion bytes cover the first GeneRIF opening. The cache is bounded: on large workloads, fetched records can be evicted before hovering, so prefetch need not produce cache hits. Fetch completion counts cumulative successfully parsed identifiers rather than requiring the entire workload to remain cached.', '',
+    ] : []),
     'Runs retain their own dates and environments. Live observations depend on host, network and provider state and are not service guarantees. Compare matching measurement versions and settings.', '',
   ].join('\n');
 }
@@ -62,7 +70,7 @@ export function renderFieldSelectionSection(result) {
 
 export function combineBrowserReports(fixture, live, fieldSelection) {
   // Never fold old delay-based measurements into the fixture/live comparison.
-  const results = [live, fixture].filter(result => result?.measurementVersion === 2
+  const results = [live, fixture].filter(result => [2, 3].includes(result?.measurementVersion)
     && ['live', 'fixture'].includes(result.condition));
   return ['# Browser benchmark results', renderBrowserSection(results)
     || 'No current live API or fixture browser result is saved.', renderFieldSelectionSection(fieldSelection)]
@@ -71,11 +79,11 @@ export function combineBrowserReports(fixture, live, fieldSelection) {
 
 export function browserCsvRows(summaries) {
   return summaries.flatMap(summary => {
-    const base = { ...(summary.source ? { source: summary.source } : {}), ...(summary.fieldVariant ? { fieldVariant: summary.fieldVariant } : {}), strategy: summary.strategy, annotatedElements: summary.annotatedElements, uniqueIdentifiers: summary.uniqueIdentifiers, attemptedTrials: summary.attemptedTrials, failedTrials: summary.failedTrials };
-    const rows = ['pageLoad', 'initialization', 'readiness', 'prefetchCompletion', 'interactionToContent', 'interactionToVisible', 'warmCacheInteraction', 'providerRequest', 'initializationRequests', 'totalRequests', 'prefetchRequests', 'distinctRecordsFetched', 'transferredBytes', 'interactionRequests', 'repeatInteractionRequests', 'cacheHits'].flatMap(metric => {
+    const base = { ...(summary.loadingMode ? { loadingMode: summary.loadingMode } : {}), ...(summary.source ? { source: summary.source } : {}), ...(summary.fieldVariant ? { fieldVariant: summary.fieldVariant } : {}), strategy: summary.strategy, annotatedElements: summary.annotatedElements, uniqueIdentifiers: summary.uniqueIdentifiers, attemptedTrials: summary.attemptedTrials, failedTrials: summary.failedTrials };
+    const rows = ['pageLoad', 'initialization', 'readiness', 'prefetchCompletion', 'interactionToContent', 'interactionToVisible', 'warmCacheInteraction', 'providerRequest', 'sectionExpansion', 'repeatSectionExpansion', 'sectionExpansionRequests', 'initialResponseBytes', 'sectionResponseBytes', 'cacheEntriesAfterPrefetch', 'initializationRequests', 'totalRequests', 'prefetchRequests', 'distinctRecordsFetched', 'transferredBytes', 'interactionRequests', 'repeatInteractionRequests', 'cacheHits'].flatMap(metric => {
       const values = summary[metric];
       if (!values) return [];
-      return [{ ...base, metric, observations: values.observations, median: values.median ?? values.medianMs, q1: values.q1 ?? values.q1Ms, q3: values.q3 ?? values.q3Ms, p95: values.p95 ?? values.p95Ms, units: metric === 'transferredBytes' ? 'bytes' : /Requests|Records|Hits/.test(metric) ? 'count' : 'ms' }];
+      return [{ ...base, metric, observations: values.observations, median: values.median ?? values.medianMs, q1: values.q1 ?? values.q1Ms, q3: values.q3 ?? values.q3Ms, p95: values.p95 ?? values.p95Ms, units: /Bytes$/.test(metric) ? 'bytes' : /Requests|Records|Hits|Entries/.test(metric) ? 'count' : 'ms' }];
     });
     // Retain completely failed scenarios in CSV without inventing zero latency.
     return rows.length ? rows : [{ ...base, metric: 'trial-count', observations: summary.trials, units: 'count' }];

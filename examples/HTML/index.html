@@ -20,8 +20,15 @@
         <div class="gene-tooltip" data-species="human">TP53, GADD45A, BRCA1, BRCA2, RAD51, ATM, XPA, NOTAGENE</div>
     </p>
 
+    <h2>Eager section data with collapsed sections</h2>
+    <p>
+        Open <span class="gene-eager-tooltip" data-species="human">BRCA1</span>,
+        then expand Pathways or GeneRIFs. Their fields are fetched when the tooltip
+        first opens, even though the sections start collapsed.
+    </p>
+
     <!-- If you're using ideogram and d3, load them too -->
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0"></script>
     <script src="../../node_modules/ideogram/dist/js/ideogram.min.js"></script>
     <!-- Load the library -->
     <script src="../../dist/bio-tooltips.global.js"></script>
@@ -31,6 +38,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             GeneTooltip.init({
                 truncateSummary: 3,
+                sectionLoading: 'lazy', // Default: fetch collapsed section fields on expansion.
                 display: {
                     ideogram: true
                 },
@@ -40,6 +48,16 @@
                 },
                 tooltipHeight: 300,
                 theme: 'light'
+            });
+
+            GeneTooltip.init({
+                selector: '.gene-eager-tooltip',
+                prefetch: 'none', // Wait for opening rather than fetching ahead of interaction.
+                sectionLoading: 'eager',
+                display: {
+                    pathways: 'collapsed',
+                    generifs: 'collapsed'
+                }
             });
         });
     </script>

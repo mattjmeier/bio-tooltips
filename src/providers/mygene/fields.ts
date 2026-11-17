@@ -16,5 +16,5 @@ export function getMyGeneFieldPlan(config: GeneTooltipConfig) {
       ...(display.links?.ensembl !== false ? ['ensembl.gene'] : []),
       ...(display.links?.wikipedia !== false ? ['wikipedia.url_stub'] : []),
     ] },
-  ], display);
+  ], display, config.sectionLoading);
 }

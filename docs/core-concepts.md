@@ -72,6 +72,28 @@ Initialize each module against its own selector. See the [Mixed Entity Demo](./d
 | `all` | Fetches all matched tooltip data after initialization. |
 | `none` | Fetches only when the user opens a tooltip. |
 
+## Section Loading
+
+`sectionLoading` controls how much section data the initial request includes:
+
+| Value | Behavior |
+| --- | --- |
+| `lazy` | Default. Fetch expanded sections initially; fetch missing collapsed-section fields on expansion. |
+| `eager` | Fetch all enabled sections initially while preserving their open/closed display state. |
+
+```ts
+GeneTooltip.init({
+  prefetch: 'none',
+  sectionLoading: 'eager',
+  display: { pathways: 'collapsed' }
+});
+```
+
+Here the request starts on first opening, includes pathway data, and still shows the
+Pathways section collapsed. `prefetch` controls when the initial fetch starts;
+`sectionLoading` controls its section fields. Both modes reuse the shared cache.
+Disabled sections add no fields. Noncollapsible sections load initially in either mode.
+
 ## Visual Dependency Warmup
 
 Some tooltip modules have optional visual dependencies. For example, MyGene gene tooltips can use D3 for gene tracks and Ideogram.js for chromosome context.
