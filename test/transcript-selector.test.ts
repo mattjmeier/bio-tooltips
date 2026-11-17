@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
+import ratExonFixtures from './fixtures/rat-exons.json';
 import { defaultCoreConfig } from '../src/core/config';
 import { createShownHandler } from '../src/core/lifecycle';
 import { TooltipController } from '../src/core/tooltip-controller';
@@ -144,11 +145,11 @@ describe('native transcript selector', () => {
     expect(redraw).toHaveBeenCalledWith('ENST000002');
   });
 
-  it('hides and clears the selector when only one transcript is usable', () => {
+  it.each([{ transcripts: [] }, { transcripts: [transcript('ENST000001', 5)] }])('hides and clears the selector when there is no transcript choice (%j)', ({ transcripts }) => {
     const selector = document.createElement('select');
     selector.append(new Option('stale option', 'stale'));
 
-    const selected = initializeNativeTranscriptSelector(selector, [transcript('ENST000001', 5)], {
+    const selected = initializeNativeTranscriptSelector(selector, transcripts, {
       selectedTranscriptId: 'ENST000001',
       onChange: vi.fn(),
     });
@@ -177,6 +178,43 @@ describe('native transcript selector', () => {
       ...transcript('', 2),
       position: undefined,
     }])).toEqual([]);
+  });
+
+  // MyGene.info /v3/gene records 24842, 24186, and 24498: each rat
+  // demo gene has one RefSeq transcript, with valid exon coordinates.
+  it.each(ratExonFixtures)('renders a static transcript summary and exon track for rat $symbol', async fixture => {
+    const data = fixture as MyGeneInfoResult;
+    const uniqueId = `rat-${data.symbol}`;
+    const instance = new TooltipController(document.createElement('button'), {
+      content: renderTooltipHTML(data, { uniqueId }),
+      tooltip: defaultCoreConfig.tooltipOptions,
+      theme: 'light',
+    });
+    const root = instance.root;
+    const container = root.querySelector<HTMLElement>(`#gene-tooltip-track-${uniqueId}`)!;
+    vi.spyOn(container, 'getBoundingClientRect').mockReturnValue({ width: 320 } as DOMRect);
+
+    await renderGeneTrack(instance, data, uniqueId, defaultCoreConfig);
+
+    const selected = data.exons![0];
+    expect(root.querySelector('select')).toBeNull();
+    const summary = root.querySelector('.gene-tooltip-transcript-summary')!;
+    expect(summary.textContent).toBe(`${selected.transcript} · ${selected.position!.length} exons`);
+    expect(summary.closest('.gt-collapsible-header')).toBeNull();
+    expect(root.querySelector('.gene-tooltip-track-controls--single')).not.toBeNull();
+    expect(container.querySelectorAll('.exon-rect')).toHaveLength(selected.position!.length);
+    expect(container.querySelectorAll('tbody tr')).toHaveLength(selected.position!.length);
+    instance.destroy();
+  });
+
+  it('escapes a single transcript summary and uses the singular exon label', () => {
+    const root = document.createElement('div');
+    root.innerHTML = renderTooltipHTML(geneData([transcript('<b>NM_123</b>', 1)]));
+
+    const summary = root.querySelector('.gene-tooltip-transcript-summary')!;
+    expect(summary.textContent).toBe('<b>NM_123</b> · 1 exon');
+    expect(summary.querySelector('b')).toBeNull();
+    expect(root.querySelector('select')).toBeNull();
   });
 
   it('binds exon child tooltips on the initial gene-track render', async () => {

@@ -25,6 +25,12 @@ function escapeHTML(value: string): string {
   }[character] ?? character));
 }
 
+/** Plain transcript identity for gene models with no transcript choice. */
+export function renderSingleTranscriptSummary(transcript: MyGeneExon): string {
+  const count = transcript.position?.length ?? 0;
+  return `<span class="gene-tooltip-transcript-summary">${escapeHTML(transcript.transcript)} · ${count} exon${count === 1 ? '' : 's'}</span>`;
+}
+
 let nextTextAlternativeId = 0;
 const textAlternativeIds = new WeakMap<HTMLElement, string>();
 

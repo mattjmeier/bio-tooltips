@@ -1,6 +1,6 @@
 import { loaderHTML } from '../../../core/renderer.js';
 import type { MyGeneSectionDefinition } from './types.js';
-import { getUsableTranscripts } from '../visuals/transcript-selector.js';
+import { getUsableTranscripts, renderSingleTranscriptSummary } from '../visuals/transcript-selector.js';
 
 function renderGeneTrackContent(uniqueId: string): string {
   return `
@@ -9,8 +9,13 @@ function renderGeneTrackContent(uniqueId: string): string {
 }
 
 function renderGeneTrackControls(uniqueId: string, transcripts: Parameters<typeof getUsableTranscripts>[0]): string {
-  if (getUsableTranscripts(transcripts).length <= 1) {
+  const usableTranscripts = getUsableTranscripts(transcripts);
+  if (usableTranscripts.length === 0) {
     return '';
+  }
+
+  if (usableTranscripts.length === 1) {
+    return `<div class="gene-tooltip-track-controls gene-tooltip-track-controls--single">${renderSingleTranscriptSummary(usableTranscripts[0])}</div>`;
   }
 
   return `
