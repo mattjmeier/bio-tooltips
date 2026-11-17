@@ -6,6 +6,77 @@ browser benchmark initializes the built library against a local page and control
 responses. Neither default command contacts MyGene.info or MyChem.info. Separate
 opt-in commands measure real MyGene.info requests and compare field selection.
 
+## Example Results
+
+These tables are snapshots from saved benchmark runs, rather than performance targets.
+They were recorded with package version **2.3.2**, based on commit `144c30e3fe10`
+with uncommitted changes, before section-aware loading was added. They illustrate
+renderer costs and prefetch behavior; they do **not** measure lazy section expansion
+or establish a before/after improvement for it.
+
+All runs used Linux x64 on an AMD Ryzen 9 3950X with Node.js 24.14.0.
+Browser runs used Chromium 153.0.8010.12. Values are milliseconds unless stated
+otherwise; IQR is the first to third quartile.
+
+### Stored-Fixture HTML Rendering
+
+Recorded **2026-11-16 23:56 UTC**. Each row summarizes 100 samples of 20 operations
+(2,000 renders), after warm-up, using the curated fixtures. This measures HTML string
+generation, excluding requests, DOM insertion, layout, and paint.
+
+| Tooltip | Median (ms/render) | IQR (ms/render) | p95 (ms/render) |
+| --- | ---: | ---: | ---: |
+| MyGene TP53 | 0.017 | 0.015–0.019 | 0.024 |
+| MyGene BRCA1 | 0.014 | 0.013–0.017 | 0.018 |
+| MyChem aspirin | 0.178 | 0.171–0.185 | 0.197 |
+
+### Controlled Browser Prefetch
+
+Recorded **2026-11-17 00:17 UTC**, with 30 measured trials after two warm-ups per
+scenario and a simulated **100 ms delay per request**. Each trial starts with a fresh
+page and application cache; browser HTTP caching and optional visuals are disabled.
+Hover values summarize each trial's median across five distinct identifiers.
+`smart` and `all` are measured after prefetch completes; `none` fetches on demand.
+
+| Elements / unique IDs | Prefetch | Hover → content, median (IQR ms) | Repeat cached hover → content, median (IQR ms) | Prefetch batch requests | Requests during five hovers |
+| --- | --- | ---: | ---: | ---: | ---: |
+| 10 / 8 | `none` | 104.5 (104.3–104.7) | 1.100 (1.000–1.200) | 0 | 5 |
+| 10 / 8 | `smart` | 0.900 (0.800–0.900) | 1.000 (1.000–1.100) | 1 | 0 |
+| 10 / 8 | `all` | 0.850 (0.800–0.900) | 1.100 (1.000–1.200) | 1 | 0 |
+| 100 / 80 | `none` | 104.5 (104.1–104.8) | 1.100 (1.000–1.100) | 0 | 5 |
+| 100 / 80 | `smart` | 0.900 (0.800–0.975) | 1.000 (1.000–1.100) | 3 | 0 |
+| 100 / 80 | `all` | 0.900 (0.800–0.900) | 1.100 (1.000–1.100) | 1 | 0 |
+
+“Hover → content” starts at the actual `mouseenter` event and ends at the library's
+`content set` checkpoint; it excludes Playwright hover preparation and is not a paint
+measurement. Request counts are median HTTP batch calls, not records. Prefetch moves
+requests ahead of interaction; it still takes time and transfers data. Large `smart`
+pages were scrolled to populate the cache, including the observer's 200 ms debounce.
+The imposed delay is not observed MyGene.info latency. These browser results cover
+the gene adapter; the chemical row above measures only its HTML renderer.
+
+### Live Field-Selection Sample
+
+Recorded **2026-11-17 02:20–02:22 UTC** against MyGene.info, with no simulated delay.
+This small experiment used only **two measured trials after one warm-up** per variant
+and scenario; it illustrates payload differences and is insufficient for latency
+conclusions. The excerpt below uses `prefetch: 'all'` on 100 elements / 80 distinct
+human gene identifiers. Both variants completed 2/2 trials with no failures and one
+prefetch POST per trial.
+
+| Requested fields | Total response bodies, median (IQR MB) | Prefetch completion, median (IQR ms) |
+| --- | ---: | ---: |
+| Fixed reference list | 8.37 (8.37–8.37) | 5874.1 (5713.7–6034.6) |
+| Same list without `generif` | 0.23 (0.23–0.23) | 409.5 (392.6–426.3) |
+
+The harness changed only the outgoing field list, alternating variant order within
+matched trials; GeneRIF display stayed disabled in both. The reference list is not
+`fields=all`. Bytes sum encoded response bodies across a trial, excluding headers
+(decimal MB). Network type/location was unspecified; connections and provider caches
+could be reused. These observations depend on the selected genes, host, network, and
+provider state. The experiment overrides request fields directly and does not test
+automatic section-aware selection or loading on expansion.
+
 ## Commands and outputs
 
 ```bash
