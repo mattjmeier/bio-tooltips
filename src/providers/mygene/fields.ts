@@ -6,7 +6,7 @@ export function getMyGeneFieldPlan(config: GeneTooltipConfig) {
   return createFieldPlan(['_id', 'query', 'symbol', 'name', 'taxid'], [
     { key: 'summary', title: 'Summary', fields: ['summary'] },
     { key: 'location', title: 'Location', fields: ['genomic_pos'] },
-    { key: 'geneTrack', title: 'Gene Model', fields: ['exons', 'genomic_pos'] },
+    { key: 'geneTrack', title: 'Gene Model', fields: ['exons', 'genomic_pos', 'ensembl.transcript'] },
     { key: 'pathways', title: 'Pathways', fields: [`pathway.${config.pathwaySource}`] },
     { key: 'domains', title: 'Protein Domains', fields: ['interpro'] },
     { key: 'transcripts', title: 'Transcripts', fields: ['ensembl.transcript'] },

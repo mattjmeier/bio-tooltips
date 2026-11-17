@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import ratExonFixtures from './fixtures/rat-exons.json';
+import brca2ExonFixture from './fixtures/brca2-exons.json';
 import { defaultCoreConfig } from '../src/core/config';
 import { createShownHandler } from '../src/core/lifecycle';
 import { TooltipController } from '../src/core/tooltip-controller';
@@ -11,6 +12,7 @@ import { renderTooltipHTML } from '../src/providers/mygene/renderer';
 import type { MyGeneExon, MyGeneInfoResult } from '../src/providers/mygene/types';
 import { renderGeneTrack } from '../src/providers/mygene/visuals/gene-track';
 import {
+  getLinkedTranscriptsWithoutExons,
   getUsableTranscripts,
   initializeNativeTranscriptSelector,
   renderGeneTextAlternative,
@@ -120,6 +122,69 @@ describe('native transcript selector', () => {
       'ENST000003 · 2 exons',
     ]);
     expect(selector.value).toBe('ENST000001');
+  });
+
+  it('deduplicates linked IDs and excludes available models including versioned matches', () => {
+    const available = [transcript('ENST000001.2', 3)];
+    expect(getLinkedTranscriptsWithoutExons(available, [
+      'ENST000001', 'ENST000002', ' ENST000002 ', '', 'ENST000003',
+    ])).toEqual(['ENST000002', 'ENST000003']);
+    expect(getLinkedTranscriptsWithoutExons(available, 'ENST000002')).toEqual(['ENST000002']);
+    expect(getLinkedTranscriptsWithoutExons(available, undefined)).toEqual([]);
+  });
+
+  it('keeps linked IDs disabled and preserves the last drawable selection on invalid changes', () => {
+    const selector = document.createElement('select');
+    const onChange = vi.fn();
+    const available = [transcript('ENST000001', 3), transcript('ENST000002', 1)];
+    initializeNativeTranscriptSelector(selector, available, {
+      selectedTranscriptId: 'ENST000003', linkedTranscriptIds: ['ENST000003'], onChange,
+    });
+    expect(selector.value).toBe('ENST000001');
+    expect(selector.options[1].textContent).toBe('ENST000002 · 1 exon');
+    const linked = selector.querySelectorAll('optgroup')[1];
+    expect(linked.disabled).toBe(true);
+    expect(linked.querySelector('option')?.disabled).toBe(true);
+    selector.value = 'ENST000002';
+    selector.dispatchEvent(new Event('change'));
+    expect(onChange).toHaveBeenLastCalledWith('ENST000002');
+    selector.value = 'ENST000003';
+    selector.dispatchEvent(new Event('change'));
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(selector.value).toBe('ENST000002');
+  });
+
+  it('shows BRCA2 linked transcripts without implying their exon models are available', async () => {
+    const data = brca2ExonFixture as MyGeneInfoResult;
+    const uniqueId = 'brca2-availability';
+    const instance = new TooltipController(document.createElement('button'), {
+      content: renderTooltipHTML(data, { uniqueId }),
+      tooltip: defaultCoreConfig.tooltipOptions,
+      theme: 'light',
+    });
+    try {
+      const container = instance.root.querySelector<HTMLElement>(`#gene-tooltip-track-${uniqueId}`)!;
+      vi.spyOn(container, 'getBoundingClientRect').mockReturnValue({ width: 320 } as DOMRect);
+      await renderGeneTrack(instance, data, uniqueId, defaultCoreConfig);
+
+      const selector = instance.root.querySelector<HTMLSelectElement>('select')!;
+      expect(selector.hidden).toBe(false);
+      expect(selector.value).toBe('NM_000059');
+      const groups = selector.querySelectorAll('optgroup');
+      expect(groups[0].label).toBe('Available exon models');
+      expect(groups[0].querySelectorAll('option')).toHaveLength(1);
+      expect(groups[1].label).toBe('Linked Ensembl transcripts · no exon coordinates');
+      expect(groups[1].querySelectorAll('option:disabled')).toHaveLength(19);
+      const note = instance.root.querySelector(`#${selector.getAttribute('aria-describedby')}`)!;
+      expect(note.textContent).toContain('Only transcripts with exon coordinates from MyGene can be drawn');
+      expect(note.textContent).toContain('may refer to the same transcript');
+      expect(container.querySelectorAll('.exon-rect')).toHaveLength(27);
+      expect(container.querySelectorAll('tbody tr')).toHaveLength(27);
+      expect(instance.root.querySelector('[data-section="transcripts"] a')?.getAttribute('href'))
+        .toContain('ensembl.org');
+    } finally {
+      instance.destroy();
+    }
   });
 
   it('requests an immediate redraw for the selected transcript without retaining old handlers', () => {

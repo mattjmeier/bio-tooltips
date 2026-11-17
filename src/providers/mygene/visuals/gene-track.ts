@@ -177,7 +177,7 @@ export async function renderGeneTrack(
     renderGeneTextAlternative(container, transcripts.find(tx => tx.transcript === selectedTranscriptId) ?? longestTranscript, data.symbol, uniqueId);
 
     try {
-        if (transcripts.length > 1 && selectorEl) {
+        if (selectorEl) {
             logTooltipTiming(instance, config, 'transcript selector init start', {
                 transcripts: transcripts.length,
                 selected: selectedTranscriptId,
@@ -185,6 +185,7 @@ export async function renderGeneTrack(
             // Initialize the header control before D3 loads so it does not appear after the SVG.
             selectedTranscriptId = initializeNativeTranscriptSelector(selectorEl, transcripts, {
                 selectedTranscriptId,
+                linkedTranscriptIds: data.ensembl?.transcript,
                 onChange: selectedValue => {
                     selectedTranscriptId = selectedValue;
                     const selected = transcripts.find(tx => tx.transcript === selectedValue) ?? longestTranscript;
@@ -194,14 +195,6 @@ export async function renderGeneTrack(
                 },
             }) ?? longestTranscript.transcript;
             logTooltipTiming(instance, config, 'transcript selector init complete');
-
-        } else if (selectorEl) {
-            // A single transcript does not need a selection control.
-            initializeNativeTranscriptSelector(selectorEl, transcripts, {
-                selectedTranscriptId,
-                onChange: () => undefined,
-            });
-            logTooltipTiming(instance, config, 'transcript selector skipped', { reason: 'single-transcript' });
         }
 
         logTooltipTiming(instance, config, 'd3 load start');

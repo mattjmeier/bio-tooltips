@@ -1031,6 +1031,23 @@ ul.gene-tooltip-nested-list {
   background-color: var(--gt-transcript-selector-picker-background, var(--gt-background-color-base));
 }
 
+.gene-tooltip-transcript-selector optgroup {
+  font-weight: 600;
+}
+
+.gene-tooltip-transcript-selector option:disabled {
+  color: var(--gt-text-color-secondary);
+  font-weight: 400;
+  cursor: default;
+}
+
+.gt-tooltip-box .gt-transcript-availability {
+  margin: 0.4em 0;
+  color: var(--gt-text-color-secondary);
+  font-size: 0.85em;
+  line-height: 1.4;
+}
+
 /*
   Progressively theme the opened native picker where customizable selects are
   supported. Other browsers retain their accessible OS-provided picker.
@@ -1066,8 +1083,8 @@ ul.gene-tooltip-nested-list {
     border-radius: 4px;
   }
 
-  .gene-tooltip-transcript-selector option:hover,
-  .gene-tooltip-transcript-selector option:focus-visible {
+  .gene-tooltip-transcript-selector option:not(:disabled):hover,
+  .gene-tooltip-transcript-selector option:not(:disabled):focus-visible {
     background-color: var(
       --gt-transcript-selector-option-hover,
       color-mix(in srgb, var(--gt-accent-color) 12%, var(--gt-background-color-base))
