@@ -28,7 +28,7 @@ Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob
 
 ### loaderHTML
 
-> `const` **loaderHTML**: "\<div class=\"gt-loader-container\"\>\<div class=\"gt-spinner\"\>\</div\>\<span\>Loading...\</span\>\</div\>"
+> `const` **loaderHTML**: "\<div class=\\"gt-loader-container\\"\>\<div class=\\"gt-spinner\\"\>\</div\>\<span\>Loading...\</span\>\</div\>"
 
 Defined in: [core/renderer.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L5)
 

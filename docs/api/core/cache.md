@@ -8,7 +8,7 @@
 
 > **clear**(): `void`
 
-Defined in: [core/cache.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L30)
+Defined in: [core/cache.ts:50](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L50)
 
 #### Returns
 
@@ -18,9 +18,9 @@ Defined in: [core/cache.ts:30](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 ### get()
 
-> **get**\<`TData`\>(`cacheKey`): `TData` \| `null` \| `undefined`
+> **get**\<`TData`\>(`cacheKey`, `fields?`): `TData` \| `null` \| `undefined`
 
-Defined in: [core/cache.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L9)
+Defined in: [core/cache.ts:21](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L21)
 
 #### Type Parameters
 
@@ -34,6 +34,10 @@ Defined in: [core/cache.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/ma
 
 `string`
 
+##### fields?
+
+readonly `string`[]
+
 #### Returns
 
 `TData` \| `null` \| `undefined`
@@ -42,9 +46,9 @@ Defined in: [core/cache.ts:9](https://github.com/mattjmeier/bio-tooltips/blob/ma
 
 ### has()
 
-> **has**(`cacheKey`): `boolean`
+> **has**(`cacheKey`, `fields?`): `boolean`
 
-Defined in: [core/cache.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L5)
+Defined in: [core/cache.ts:16](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L16)
 
 #### Parameters
 
@@ -52,17 +56,43 @@ Defined in: [core/cache.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/ma
 
 `string`
 
+##### fields?
+
+readonly `string`[]
+
 #### Returns
 
 `boolean`
 
 ***
 
+### missingFields()
+
+> **missingFields**(`cacheKey`, `fields`): `string`[]
+
+Defined in: [core/cache.ts:8](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L8)
+
+#### Parameters
+
+##### cacheKey
+
+`string`
+
+##### fields
+
+readonly `string`[]
+
+#### Returns
+
+`string`[]
+
+***
+
 ### set()
 
-> **set**\<`TData`\>(`cacheKey`, `data`): `void`
+> **set**\<`TData`\>(`cacheKey`, `data`, `fields?`): `void`
 
-Defined in: [core/cache.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L13)
+Defined in: [core/cache.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L37)
 
 #### Type Parameters
 
@@ -80,6 +110,10 @@ Defined in: [core/cache.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 `TData` \| `null`
 
+##### fields?
+
+readonly `string`[]
+
 #### Returns
 
 `void`
@@ -90,7 +124,7 @@ Defined in: [core/cache.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > **setBatch**\<`TData`\>(`resultsMap`): `void`
 
-Defined in: [core/cache.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L24)
+Defined in: [core/cache.ts:47](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L47)
 
 #### Type Parameters
 
@@ -114,7 +148,7 @@ Defined in: [core/cache.ts:24](https://github.com/mattjmeier/bio-tooltips/blob/m
 
 > **size**(): `number`
 
-Defined in: [core/cache.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L34)
+Defined in: [core/cache.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/cache.ts#L51)
 
 #### Returns
 

@@ -8,4 +8,4 @@
 
 > `const` **myGeneProfile**: [`TooltipProfile`](../../core/types.md#tooltipprofile)\<[`MyGeneInfoResult`](types.md#mygeneinforesult), [`GeneTooltipConfig`](config.md#genetooltipconfig)\>
 
-Defined in: [providers/mygene/profile.ts:62](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/profile.ts#L62)
+Defined in: [providers/mygene/profile.ts:63](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/profile.ts#L63)

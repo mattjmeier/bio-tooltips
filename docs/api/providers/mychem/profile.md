@@ -8,4 +8,4 @@
 
 > `const` **myChemProfile**: [`TooltipProfile`](../../core/types.md#tooltipprofile)\<[`MyChemInfoResult`](types.md#mycheminforesult), [`MyChemTooltipConfig`](config.md#mychemtooltipconfig)\>
 
-Defined in: [providers/mychem/profile.ts:17](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/profile.ts#L17)
+Defined in: [providers/mychem/profile.ts:18](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/profile.ts#L18)

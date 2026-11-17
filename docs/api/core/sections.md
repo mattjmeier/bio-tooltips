@@ -74,7 +74,7 @@ Defined in: [core/sections.ts:8](https://github.com/mattjmeier/bio-tooltips/blob
 
 ### renderCollapsibleSection()
 
-> **renderCollapsibleSection**(`title`, `innerHTML`, `uniqueId`, `collapsible`, `isCollapsed`, `headerRightHTML?`): `string`
+> **renderCollapsibleSection**(`title`, `innerHTML`, `uniqueId`, `collapsible`, `isCollapsed`, `headerRightHTML?`, `deferred?`): `string`
 
 Defined in: [core/sections.ts:34](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/sections.ts#L34)
 
@@ -103,6 +103,10 @@ Defined in: [core/sections.ts:34](https://github.com/mattjmeier/bio-tooltips/blo
 ##### headerRightHTML?
 
 `string` = `''`
+
+##### deferred?
+
+`boolean` = `false`
 
 #### Returns
 

@@ -4,6 +4,8 @@
 
 # Bio Tooltips
 
+[![Codecov](https://codecov.io/gh/mattjmeier/bio-tooltips/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mattjmeier/bio-tooltips)
+
 Framework-agnostic biological & biochemical tooltips for HTML documents.
 
 <p align="center">
@@ -104,19 +106,57 @@ https://mattjmeier.github.io/bio-tooltips/
 
 Span triggers receive keyboard focus and button semantics automatically. Enter or Space enters a named, non-modal details dialog; Tab reaches its controls and Escape dismisses it. Native links retain Enter navigation and use ArrowDown to enter the panel.
 
-Accessibility support, integration responsibilities, tested behavior, and current limitations are documented in [`docs/accessibility.md`](_media/accessibility.md). Bio Tooltips is designed to support WCAG 2.2 Level AA conforming implementations when used according to that guidance; this is not a claim that every integration or the package itself has completed a full WCAG conformance evaluation. The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
+Accessibility support, integration responsibilities, tested behavior, and current limitations are documented in the [accessibility guide](https://mattjmeier.github.io/bio-tooltips/accessibility.html). Bio Tooltips is designed to support WCAG 2.2 Level AA conforming implementations when used according to that guidance; this is not a claim that every integration or the package itself has completed a full WCAG conformance evaluation. The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
+
+Tooltip requests select fields for enabled sections. With the default
+`sectionLoading: 'lazy'`, collapsed sections load their remaining fields on expansion.
+Use `sectionLoading: 'eager'` to load all enabled section fields upfront while preserving
+collapsed display states. Both modes enrich and reuse the shared field-aware cache;
+`prefetch` independently controls when initial requests start.
+MyChem name searches retain the fields needed to rank molecule matches.
+
+## Integrations and examples
+
+- **Web frameworks and plain HTML:** Bio Tooltips is framework-agnostic. The [integration guide](https://mattjmeier.github.io/bio-tooltips/integration.html) includes React, Vue, and vanilla HTML examples, with initialization and cleanup guidance.
+- **Reports and notebooks:** HTML output from R Markdown, Quarto, Jupyter, MyST, and similar systems can include Bio Tooltips. See [reports and notebooks](https://mattjmeier.github.io/bio-tooltips/integration.html#reports-and-notebooks) for the general approach, or use the companion R package below for R workflows.
+- **Interactive demos:** gene, chemical, and mixed-entity examples are available in the [project documentation](https://mattjmeier.github.io/bio-tooltips/demo).
+- **Companion R package:** [BioTooltipR on GitHub](https://github.com/mattjmeier/BioTooltipR), [CRAN package page](https://cran.r-project.org/package=BioTooltipR), and [vignette](https://cran.r-project.org/web/packages/BioTooltipR/vignettes/BioTooltipR.html). BioTooltipR generates the HTML markup expected by this JavaScript package, registers dependencies with `htmltools`, and includes version-pinned browser assets. It supports R Markdown, Quarto, Shiny, and other HTML-producing workflows, with helpers for tables and Plotly interaction.
+
+```r
+library(BioTooltipR)
+
+use_bio_tooltips(modules = c("gene", "chemical"))
+
+gene_tt("TP53", species = "human")
+chem_tt("aspirin", query = "2244", scope = "pubchem")
+```
+
+The repository's [examples](https://github.com/mattjmeier/bio-tooltips/tree/main/examples) provide additional integration starting points.
 
 ## Performance Benchmarks
 
-Run the reproducible renderer and controlled cache/prefetch benchmark with:
+Run the deterministic renderer benchmark or the separate Chromium browser benchmark with:
 
 ```powershell
 npm run benchmark
+npm run benchmark:browser
+# Optional: compare with local fixtures (no request delay)
+npm run benchmark:browser:fixtures
+# Optional: matched live requests with and without GeneRIFs
+npm run benchmark:browser:fields
 ```
 
-It produces raw JSON plus publication-ready Markdown tables under
-`benchmark/results/`. See the performance benchmarking guide in `docs/performance.md`
-for methodology and fixture refresh instructions.
+The benchmarks write machine-readable JSON and CSV plus Markdown summaries under the ignored
+`benchmark/results/` directory. The default browser run makes real MyGene.info requests.
+The fixture command fulfills requests immediately with stored data. Each saves separate
+JSON/CSV results; `browser-latest.md` combines live and fixture rows in one table with
+source labels, preserving each run's date and environment. No artificial request delay is used.
+The field-selection run saves `browser-fields-latest.*` and adds a separate table comparing
+the same requests with and without `generif`; other fields and display settings stay fixed.
+Live results depend on the date, network and provider state. See [Performance Benchmarking](https://mattjmeier.github.io/bio-tooltips/performance)
+for methodology and fixture refresh instructions. Generate local statement, branch,
+function, and line coverage with `npm run test:coverage`. The CI workflow generates an LCOV
+report and includes a Codecov upload step.
 
 ## Supply Chain Notes
 
@@ -124,6 +164,8 @@ Bio Tooltips keeps its user-facing dependency surface intentionally small:
 
 - Required runtime npm dependencies: none.
 - Accessibility test tooling: pinned `axe-core` is a development dependency used with Playwright; it is excluded from runtime bundles.
+- Build and documentation tooling: esbuild bundles the library, rimraf cleans build output, and VitePress and TypeDoc build the documentation. Vite is overridden to the patched `6.4.6` release shared by VitePress and Vitest.
+- Coverage tooling: Vitest's matching `@vitest/coverage-v8` development provider writes local and CI reports under the ignored `coverage/` directory.
 - Bundled positioning foundation: `@floating-ui/dom`; consumers do not install or configure it separately.
 - Optional peer dependencies: `d3`, `ideogram`, and `@rdkit/rdkit`. These are not bundled into the package and are only needed for optional visual/structure-rendering features.
 - Published package contents: `dist`, `assets` (light + dark README preview images), `README.md`, `LICENSE`, and `package.json`.
@@ -148,10 +190,14 @@ import { GeneTooltip } from 'bio-tooltips/mygene';
 Browser CDN paths also move to the new package and artifact names:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.3.1/dist/bio-tooltips.css">
-<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@2.3.1/dist/bio-tooltips.global.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.3.2/dist/bio-tooltips.css">
+<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@2.3.2/dist/bio-tooltips.global.js"></script>
 ```
 
 ## Package History
 
 This package was originally developed as `gene-tooltips` and renamed to `bio-tooltips` as chemical and future entity modules were added.
+
+## AI-assisted development
+
+Generative AI tools have been used during development to assist with code generation, refactoring, testing, documentation, and debugging. All software design decisions, integration, code review, and testing are performed by me (a human), who is responsible for the resulting code and documentation.

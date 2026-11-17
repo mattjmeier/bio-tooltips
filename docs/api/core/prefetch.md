@@ -6,9 +6,9 @@
 
 ### runPrefetch()
 
-> **runPrefetch**\<`TData`\>(`strategy`, `elements`, `threshold`, `inFlightRequests`, `provider`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
+> **runPrefetch**\<`TData`\>(`strategy`, `elements`, `threshold`, `inFlightRequests`, `provider`, `fields?`): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [core/prefetch.ts:95](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/prefetch.ts#L95)
+Defined in: [core/prefetch.ts:104](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/prefetch.ts#L104)
 
 #### Type Parameters
 
@@ -37,6 +37,10 @@ Defined in: [core/prefetch.ts:95](https://github.com/mattjmeier/bio-tooltips/blo
 ##### provider
 
 [`DataProvider`](types.md#dataprovider)\<`TData`\>
+
+##### fields?
+
+readonly `string`[]
 
 #### Returns
 

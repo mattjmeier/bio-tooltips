@@ -326,6 +326,12 @@ Re-exports [renderTooltipHTML](providers/mygene/renderer.md#rendertooltiphtml)
 
 ***
 
+### SectionLoadingMode
+
+Re-exports [SectionLoadingMode](core/config.md#sectionloadingmode)
+
+***
+
 ### SectionVariant
 
 Re-exports [SectionVariant](core/config.md#sectionvariant-1)

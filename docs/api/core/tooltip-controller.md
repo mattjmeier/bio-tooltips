@@ -256,7 +256,7 @@ Defined in: [core/tooltip-controller.ts:446](https://github.com/mattjmeier/bio-t
 
 > **close**(): `void`
 
-Defined in: [core/tooltip-controller.ts:552](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L552)
+Defined in: [core/tooltip-controller.ts:554](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L554)
 
 Explicitly dismiss this controller, including pinned dialogs.
 
@@ -311,7 +311,7 @@ once the tooltip is fully unmounted or genuinely reopens.
 
 > **enter**(): `void`
 
-Defined in: [core/tooltip-controller.ts:546](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L546)
+Defined in: [core/tooltip-controller.ts:548](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L548)
 
 Explicitly enter a dialog from keyboard activation.
 
@@ -323,7 +323,7 @@ Explicitly enter a dialog from keyboard activation.
 
 > **hasFocus**(): `boolean`
 
-Defined in: [core/tooltip-controller.ts:1533](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1533)
+Defined in: [core/tooltip-controller.ts:1540](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1540)
 
 ###### Returns
 
@@ -465,7 +465,7 @@ Defined in: [core/tooltip-controller.ts:337](https://github.com/mattjmeier/bio-t
 
 > **syncPinButton**(): `void`
 
-Defined in: [core/tooltip-controller.ts:1187](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1187)
+Defined in: [core/tooltip-controller.ts:1194](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1194)
 
 Synchronize a rendered pin control with the controller's current state.
 
@@ -699,7 +699,7 @@ Defined in: [core/tooltip-controller.ts:24](https://github.com/mattjmeier/bio-to
 
 > **createStaticTooltip**(`reference`, `content`, `options`): [`TooltipController`](#tooltipcontroller)
 
-Defined in: [core/tooltip-controller.ts:1756](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1756)
+Defined in: [core/tooltip-controller.ts:1758](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/tooltip-controller.ts#L1758)
 
 #### Parameters
 

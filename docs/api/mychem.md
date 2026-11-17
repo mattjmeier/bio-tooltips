@@ -8,7 +8,7 @@
 
 > `const` **ChemicalTooltip**: `object`
 
-Defined in: [mychem.ts:55](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L55)
+Defined in: [mychem.ts:56](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L56)
 
 #### Type Declaration
 
@@ -84,7 +84,7 @@ Attach a ChemicalTooltip to one element without querying the document.
 
 > **attach**(`anchor`, `userConfig?`): [`TooltipHandle`](core/tooltip-handle.md#tooltiphandle)
 
-Defined in: [mychem.ts:32](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L32)
+Defined in: [mychem.ts:33](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L33)
 
 Attach a ChemicalTooltip to one element without querying the document.
 
@@ -108,7 +108,7 @@ Attach a ChemicalTooltip to one element without querying the document.
 
 > **cacheSize**(): `number`
 
-Defined in: [mychem.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L51)
+Defined in: [mychem.ts:52](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L52)
 
 #### Returns
 
@@ -120,7 +120,7 @@ Defined in: [mychem.ts:51](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **clearCache**(): `void`
 
-Defined in: [mychem.ts:47](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L47)
+Defined in: [mychem.ts:48](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L48)
 
 #### Returns
 
@@ -132,7 +132,7 @@ Defined in: [mychem.ts:47](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **init**(`userConfig?`): () => `void`
 
-Defined in: [mychem.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L27)
+Defined in: [mychem.ts:28](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L28)
 
 #### Parameters
 
@@ -150,7 +150,7 @@ Defined in: [mychem.ts:27](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **preload**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`unknown`\>
 
-Defined in: [mychem.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L39)
+Defined in: [mychem.ts:40](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L40)
 
 #### Returns
 
@@ -162,7 +162,7 @@ Defined in: [mychem.ts:39](https://github.com/mattjmeier/bio-tooltips/blob/main/
 
 > **whenPrefetchReady**(): [`Promise`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)\<`void`\>
 
-Defined in: [mychem.ts:43](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L43)
+Defined in: [mychem.ts:44](https://github.com/mattjmeier/bio-tooltips/blob/main/src/mychem.ts#L44)
 
 #### Returns
 
@@ -443,6 +443,12 @@ Re-exports [resolveField](providers/mychem/formatters.md#resolvefield)
 ### sanitizeInlineHTML
 
 Re-exports [sanitizeInlineHTML](providers/mychem/formatters.md#sanitizeinlinehtml)
+
+***
+
+### SectionLoadingMode
+
+Re-exports [SectionLoadingMode](core/config.md#sectionloadingmode)
 
 ***
 

@@ -8,7 +8,7 @@
 
 > **getMyChemNestedTooltipDefinitions**(`data`, `config`, `uniqueId`): [`NestedTooltipDefinition`](../../core/types.md#nestedtooltipdefinition)[]
 
-Defined in: [providers/mychem/renderer.ts:707](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L707)
+Defined in: [providers/mychem/renderer.ts:713](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L713)
 
 #### Parameters
 
@@ -34,7 +34,7 @@ Defined in: [providers/mychem/renderer.ts:707](https://github.com/mattjmeier/bio
 
 > **installChemicalStructureImageFallback**(`root`): `void`
 
-Defined in: [providers/mychem/renderer.ts:311](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L311)
+Defined in: [providers/mychem/renderer.ts:317](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L317)
 
 Replace an unavailable remote structure image with an explicit fallback.
 
@@ -52,9 +52,9 @@ Replace an unavailable remote structure image with an explicit fallback.
 
 ### renderMyChemTooltipFromConfig()
 
-> **renderMyChemTooltipFromConfig**(`data`, `uniqueId`, `config`): `string`
+> **renderMyChemTooltipFromConfig**(`data`, `uniqueId`, `config`, `deferredSections?`): `string`
 
-Defined in: [providers/mychem/renderer.ts:152](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L152)
+Defined in: [providers/mychem/renderer.ts:156](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L156)
 
 #### Parameters
 
@@ -70,6 +70,10 @@ Defined in: [providers/mychem/renderer.ts:152](https://github.com/mattjmeier/bio
 
 [`MyChemTooltipConfig`](config.md#mychemtooltipconfig)
 
+##### deferredSections?
+
+`string`[]
+
 #### Returns
 
 `string`
@@ -80,7 +84,7 @@ Defined in: [providers/mychem/renderer.ts:152](https://github.com/mattjmeier/bio
 
 > **renderTooltipHTML**(`data`, `options?`): `string`
 
-Defined in: [providers/mychem/renderer.ts:70](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L70)
+Defined in: [providers/mychem/renderer.ts:71](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mychem/renderer.ts#L71)
 
 #### Parameters
 

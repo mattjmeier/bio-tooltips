@@ -102,7 +102,7 @@ https://mattjmeier.github.io/bio-tooltips/
 
 Span triggers receive keyboard focus and button semantics automatically. Enter or Space enters a named, non-modal details dialog; Tab reaches its controls and Escape dismisses it. Native links retain Enter navigation and use ArrowDown to enter the panel.
 
-Accessibility support, integration responsibilities, tested behavior, and current limitations are documented in [`docs/accessibility.md`](docs/accessibility.md). Bio Tooltips is designed to support WCAG 2.2 Level AA conforming implementations when used according to that guidance; this is not a claim that every integration or the package itself has completed a full WCAG conformance evaluation. The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
+Accessibility support, integration responsibilities, tested behavior, and current limitations are documented in the [accessibility guide](https://mattjmeier.github.io/bio-tooltips/accessibility.html). Bio Tooltips is designed to support WCAG 2.2 Level AA conforming implementations when used according to that guidance; this is not a claim that every integration or the package itself has completed a full WCAG conformance evaluation. The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
 
 Tooltip requests select fields for enabled sections. With the default
 `sectionLoading: 'lazy'`, collapsed sections load their remaining fields on expansion.
@@ -113,8 +113,8 @@ MyChem name searches retain the fields needed to rank molecule matches.
 
 ## Integrations and examples
 
-- **Web frameworks and plain HTML:** Bio Tooltips is framework-agnostic. The [integration guide](docs/integration.md) includes React, Vue, and vanilla HTML examples, with initialization and cleanup guidance.
-- **Reports and notebooks:** HTML output from R Markdown, Quarto, Jupyter, MyST, and similar systems can include Bio Tooltips. See [reports and notebooks](docs/integration.md#reports-and-notebooks) for the general approach, or use the companion R package below for R workflows.
+- **Web frameworks and plain HTML:** Bio Tooltips is framework-agnostic. The [integration guide](https://mattjmeier.github.io/bio-tooltips/integration.html) includes React, Vue, and vanilla HTML examples, with initialization and cleanup guidance.
+- **Reports and notebooks:** HTML output from R Markdown, Quarto, Jupyter, MyST, and similar systems can include Bio Tooltips. See [reports and notebooks](https://mattjmeier.github.io/bio-tooltips/integration.html#reports-and-notebooks) for the general approach, or use the companion R package below for R workflows.
 - **Interactive demos:** gene, chemical, and mixed-entity examples are available in the [project documentation](https://mattjmeier.github.io/bio-tooltips/demo).
 - **Companion R package:** [BioTooltipR on GitHub](https://github.com/mattjmeier/BioTooltipR), [CRAN package page](https://cran.r-project.org/package=BioTooltipR), and [vignette](https://cran.r-project.org/web/packages/BioTooltipR/vignettes/BioTooltipR.html). BioTooltipR generates the HTML markup expected by this JavaScript package, registers dependencies with `htmltools`, and includes version-pinned browser assets. It supports R Markdown, Quarto, Shiny, and other HTML-producing workflows, with helpers for tables and Plotly interaction.
 
