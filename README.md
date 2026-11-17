@@ -1,5 +1,7 @@
 # Bio Tooltips
 
+[![Codecov](https://codecov.io/gh/mattjmeier/bio-tooltips/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mattjmeier/bio-tooltips)
+
 Framework-agnostic biological & biochemical tooltips for HTML documents.
 
 <p align="center">
