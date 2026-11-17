@@ -38,12 +38,22 @@ describe('MyGene field selection', () => {
     expect(plan.initial).toEqual(['_id', 'query', 'symbol', 'name', 'taxid', 'ensembl.gene', 'wikipedia.url_stub']);
   });
 
+  it('loads linked transcript IDs for the gene model even when the Transcripts section is hidden', () => {
+    const plan = getMyGeneFieldPlan(geneConfig({ display: {
+      ...geneSectionsOff, geneTrack: 'expanded',
+    } }));
+    expect(plan.initial).toEqual([
+      '_id', 'query', 'symbol', 'name', 'taxid', 'exons', 'genomic_pos', 'ensembl.transcript',
+    ]);
+    expect(plan.deferred).toEqual({});
+  });
+
   it('keeps shared location data eager while deferring the gene model, and removes disabled links entirely', () => {
     const plan = getMyGeneFieldPlan(geneConfig({ display: {
       ...geneSectionsOff, location: 'expanded', geneTrack: 'collapsed',
     } }));
     expect(plan.initial).toEqual(['_id', 'query', 'symbol', 'name', 'taxid', 'genomic_pos']);
-    expect(plan.deferred).toEqual({ 'gene-model': ['exons', 'genomic_pos'] });
+    expect(plan.deferred).toEqual({ 'gene-model': ['exons', 'genomic_pos', 'ensembl.transcript'] });
     expect(plan.initial).not.toContain('ensembl.gene');
     expect(plan.initial).not.toContain('wikipedia.url_stub');
   });
