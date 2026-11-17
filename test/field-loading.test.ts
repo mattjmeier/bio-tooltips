@@ -66,6 +66,73 @@ describe('projected records and lazy section loading', () => {
     expect(eager.deferred).toEqual({});
   });
 
+  it.each(['none', 'smart', 'all'] as const)('keeps eager gene sections collapsed and cache-served with prefetch %s', async prefetch => {
+    const fetch = vi.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: true, json: async () => [
+      { ...gene, generif: { text: 'Loaded upfront', pubmed: 123 } },
+    ] } as Response);
+    const anchor = document.createElement('span');
+    anchor.textContent = 'TP53'; anchor.dataset.species = 'human'; document.body.append(anchor);
+    const profile = { ...myGeneProfile, renderVisuals: vi.fn() };
+    const engine = createTooltipEngine({ profile, mergeConfig, findElements: () => [anchor] });
+    const cleanup = engine.init({ sectionLoading: 'eager', prefetch, display, visualPreload: 'none',
+      tooltipOptions: { showDuration: 0, hideDuration: 0 } });
+    try {
+      await engine.whenPrefetchReady(); await settle();
+      expect(fetch).toHaveBeenCalledTimes(prefetch === 'none' ? 0 : 1);
+      anchor.dispatchEvent(new MouseEvent('mouseenter')); vi.advanceTimersByTime(0); await settle();
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(new URLSearchParams(fetch.mock.calls[0][1]?.body as URLSearchParams).get('fields')).toContain('generif');
+      expect(section().dataset.collapsed).toBe('true');
+      expect(section().hasAttribute('data-deferred')).toBe(false);
+      expect(button().getAttribute('aria-expanded')).toBe('false');
+      expect(section().querySelector<HTMLElement>('.gt-collapsible-content')!.hidden).toBe(true);
+      button().click(); await settle();
+      expect(section().textContent).toContain('Loaded upfront');
+      expect(button().getAttribute('aria-expanded')).toBe('true');
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(cache.has('mygene:TP53_9606', ['generif', 'name'])).toBe(true);
+    } finally { cleanup(); }
+  });
+
+  it('enriches a shared lazy record before opening an eager tooltip', async () => {
+    const fetch = vi.spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce({ ok: true, json: async () => [gene] } as Response)
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ _id: '7157', generif: { text: 'Enriched upfront', pubmed: 123 } }) } as Response);
+    const lazy = open(); await settle(); lazy.handle.destroy();
+    const eager = open({ sectionLoading: 'eager' }); await settle();
+    expect(String(fetch.mock.calls[1][0])).toContain('/gene/7157?fields=generif');
+    expect(section().dataset.collapsed).toBe('true');
+    expect(section().hasAttribute('data-deferred')).toBe(false);
+    button().click(); await settle();
+    expect(section().textContent).toContain('Enriched upfront');
+    eager.handle.destroy();
+    open({ sectionLoading: 'eager' }); await settle();
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(cache.get('mygene:TP53_9606', ['generif', 'name'])).toMatchObject({ name: gene.name });
+  });
+
+  it('loads chemical safety upfront without changing its collapsed state', async () => {
+    const fetch = vi.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: true, json: async () => [
+      { _id: 'aspirin-id', name: 'Aspirin', drugbank: { name: 'Aspirin', toxicity: 'Loaded safety upfront' } },
+    ] } as Response);
+    const engine = createTooltipEngine({ profile: myChemProfile, mergeConfig: mergeChem, findElements: () => [] });
+    const anchor = document.createElement('button'); anchor.dataset.query = '2244'; anchor.dataset.scope = 'pubchem';
+    document.body.append(anchor);
+    const handle = engine.attach(anchor, { sectionLoading: 'eager', prefetch: 'none', visualPreload: 'none',
+      display: { identity: false, structureProperties: false, detailedProperties: false, summary: false, synonyms: false,
+        classes: false, pharmacology: false, regulatory: false, safety: 'collapsed', identifiers: false },
+      tooltipOptions: { showDuration: 0, hideDuration: 0 },
+    });
+    handles.push(handle); handle.open(); await settle();
+    expect(new URLSearchParams(fetch.mock.calls[0][1]?.body as URLSearchParams).get('fields')).toContain('drugbank.toxicity');
+    const safety = document.querySelector<HTMLElement>('[data-section="safety-&-reported-effects"]')!;
+    expect(safety.dataset.collapsed).toBe('true');
+    expect(safety.hasAttribute('data-deferred')).toBe(false);
+    safety.querySelector<HTMLButtonElement>('.gt-collapsible-header')!.click(); await settle();
+    expect(safety.textContent).toContain('Loaded safety upfront');
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
   it('loads a collapsed section by resolved ID, preserves focus, and reuses enriched data on reopening', async () => {
     const fetch = vi.spyOn(globalThis, 'fetch')
       .mockResolvedValueOnce({ ok: true, json: async () => [gene] } as Response)

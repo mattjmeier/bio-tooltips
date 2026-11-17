@@ -11,6 +11,7 @@ GeneTooltip.init({
   selector: '.gene-tooltip',
   theme: 'auto',
   sectionVariant: 'cards',
+  sectionLoading: 'lazy',
   tooltipWidth: 430,
   truncateSummary: 4,
   pathwaySource: 'reactome',
@@ -74,11 +75,12 @@ These examples show how configuration choices change the rendered tooltip. See t
 
 Open TP53 below, then expand **GeneRIFs** or **Pathways**. The initial request includes the header and expanded sections; annotations needed only by collapsed sections are fetched on first expansion. You may briefly see “Loading details…” while the request completes.
 
-<GeneDemo genes="TP53" species="human" :config="{ prefetch: 'none', display: { summary: 'expanded', pathways: 'collapsed', generifs: 'collapsed' } }" />
+<GeneDemo genes="TP53" species="human" :config="{ prefetch: 'none', sectionLoading: 'lazy', display: { summary: 'expanded', pathways: 'collapsed', generifs: 'collapsed' } }" />
 
 ```ts
 GeneTooltip.init({
   prefetch: 'none',
+  sectionLoading: 'lazy',
   display: {
     summary: 'expanded',
     pathways: 'collapsed',
@@ -87,9 +89,35 @@ GeneTooltip.init({
 });
 ```
 
-Lazy loading follows the existing display settings; no extra switch is needed. Set a section to `'expanded'` to request its fields initially, or `false` to hide it and omit its fields. `true` follows `display.collapsedByDefault`. Set `display.collapsible: false` to load all enabled sections initially. Pathways request only the configured `pathwaySource`.
+`sectionLoading: 'lazy'` is the default. Expanded sections load initially; collapsed
+sections fetch missing fields when first expanded. `false` hides a section and omits its
+fields; `true` follows `display.collapsedByDefault`. Pathways request only the configured
+`pathwaySource`. Noncollapsible sections always load initially.
 
 This example disables prefetch to make the first opening easier to inspect. With `prefetch: 'smart'` or `'all'`, prefetch also selects initial fields and leaves collapsed sections for expansion. Successfully loaded fields are reused while cached; another example on this page may already have loaded the same annotation. If a request fails, collapse and expand to retry. A successful response without annotations shows “No data available.”
+
+### Eager Data, Collapsed Sections
+
+Use `sectionLoading: 'eager'` to fetch every enabled section's fields in the initial
+request while keeping the same accordion display. Open BRCA1, then expand **GeneRIFs**
+or **Pathways**: their data is already available when the initial request succeeds.
+
+<GeneDemo genes="BRCA1" species="human" :config="{ prefetch: 'none', sectionLoading: 'eager', display: { summary: 'expanded', pathways: 'collapsed', generifs: 'collapsed' } }" />
+
+```ts
+GeneTooltip.init({
+  prefetch: 'none',
+  sectionLoading: 'eager',
+  display: {
+    summary: 'expanded',
+    pathways: 'collapsed',
+    generifs: 'collapsed'
+  }
+});
+```
+
+Disabled sections still add no fields. Shared caching remains enabled; this setting
+changes the initial field selection, not whether records are cached. With `prefetch: 'smart'` or `'all'`, those enabled fields are included during prefetch instead.
 
 ### Wide Tooltip
 

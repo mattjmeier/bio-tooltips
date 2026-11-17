@@ -104,9 +104,11 @@ Span triggers receive keyboard focus and button semantics automatically. Enter o
 
 Accessibility support, integration responsibilities, tested behavior, and current limitations are documented in [`docs/accessibility.md`](docs/accessibility.md). Bio Tooltips is designed to support WCAG 2.2 Level AA conforming implementations when used according to that guidance; this is not a claim that every integration or the package itself has completed a full WCAG conformance evaluation. The browser regression fixture uses the dev-only `axe-core` package; it is not part of the published runtime or dependency surface.
 
-Tooltip requests select fields for enabled sections. Collapsed sections load their
-remaining fields on expansion; expanded sections load immediately. Partial records
-are enriched in the shared cache and reused across tooltips and prefetches.
+Tooltip requests select fields for enabled sections. With the default
+`sectionLoading: 'lazy'`, collapsed sections load their remaining fields on expansion.
+Use `sectionLoading: 'eager'` to load all enabled section fields upfront while preserving
+collapsed display states. Both modes enrich and reuse the shared field-aware cache;
+`prefetch` independently controls when initial requests start.
 MyChem name searches retain the fields needed to rank molecule matches.
 
 ## Integrations and examples
@@ -134,16 +136,17 @@ Run the deterministic renderer benchmark or the separate Chromium browser benchm
 ```powershell
 npm run benchmark
 npm run benchmark:browser
-# Optional: makes real MyGene.info requests
-npm run benchmark:browser:live
+# Optional: compare with local fixtures (no request delay)
+npm run benchmark:browser:fixtures
 # Optional: matched live requests with and without GeneRIFs
 npm run benchmark:browser:fields
 ```
 
 The benchmarks write machine-readable JSON and CSV plus Markdown summaries under the ignored
-`benchmark/results/` directory. The default browser run uses controlled simulated API
-responses. The opt-in live run saves separate `browser-live-latest.*` results and adds
-a live API table to `browser-latest.md`, preserving the saved controlled measurements.
+`benchmark/results/` directory. The default browser run makes real MyGene.info requests.
+The fixture command fulfills requests immediately with stored data. Each saves separate
+JSON/CSV results; `browser-latest.md` combines live and fixture rows in one table with
+source labels, preserving each run's date and environment. No artificial request delay is used.
 The field-selection run saves `browser-fields-latest.*` and adds a separate table comparing
 the same requests with and without `generif`; other fields and display settings stay fixed.
 Live results depend on the date, network and provider state. See [`docs/performance.md`](docs/performance.md)

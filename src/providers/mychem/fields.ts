@@ -51,5 +51,5 @@ export function getMyChemFieldPlan(config: MyChemTooltipConfig) {
     { key: 'regulatory', title: 'Regulatory / Products', fields: ['drugbank.groups', 'chembl.max_phase', 'chembl.first_approval', 'drugbank.products', 'drugcentral.approval.product', 'drugcentral.ndc.product_ndc', 'drugcentral.omop_relationship.orphan', 'drugcentral.orphan'] },
     { key: 'safety', title: 'Safety & Reported Effects', fields: ['sider.side_effect', 'drugbank.toxicity', 'aeolus.outcomes', 'aeolus.adverse_events'] },
     { key: 'identifiers', title: 'Identifiers & External Records', fields: identifiers },
-  ], config.display);
+  ], config.display, config.sectionLoading);
 }

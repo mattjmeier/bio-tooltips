@@ -6,6 +6,7 @@ Core config is shared by all tooltip modules.
 | --- | --- | --- |
 | `selector` | Module-specific | CSS selector used to find tooltip targets. |
 | `prefetch` | `smart` | Data fetch strategy: `smart`, `all`, or `none`. |
+| `sectionLoading` | `lazy` | Load collapsed sections on expansion (`lazy`) or include all enabled sections in initial data (`eager`), preserving display state. |
 | `prefetchThreshold` | `15` | Element count used by smart prefetch behavior. |
 | `visualPreload` | `hover` | Optional visual dependency warmup strategy: `hover`, `init`, or `none`. |
 | `debugTimings` | `false` | Logs tooltip lifecycle timing checkpoints to the browser console. |
@@ -17,6 +18,33 @@ Core config is shared by all tooltip modules.
 | `constrainToViewport` | `true` | Keeps large tooltips within the visible viewport. |
 | `tooltipOptions` | Module defaults | Bio Tooltips positioning, timing, portal, and stacking options for main tooltips. |
 | `nestedTooltipOptions` | Module defaults | The same owned option surface for nested tooltips. |
+
+## Section Loading
+
+`sectionLoading` controls which enabled section fields are included in initial data.
+It is independent of `prefetch`, which controls when those initial requests start.
+
+```ts
+GeneTooltip.init({
+  sectionLoading: 'eager',
+  display: { pathways: 'collapsed', generifs: 'collapsed' }
+});
+```
+
+| Value | Behavior |
+| --- | --- |
+| `lazy` | Default. Load expanded sections initially and request missing fields for collapsed sections when they expand. |
+| `eager` | Load all enabled section fields initially, even when their sections start collapsed. |
+
+The option applies to gene and chemical tooltips through both `init()` and `attach()`.
+Disabled sections still add no fields. Eager loading requests selected fields, not the
+complete provider record; MyChem's `display.rawJson: true` remains the full-record exception.
+Both modes reuse the shared field-aware cache. `prefetch: 'none'` postpones the initial
+request until opening; it does not disable caching or force section loading to be lazy.
+
+`display.collapsible: false` always loads enabled sections initially, since there is no
+expansion control. With collapsible sections, `display.collapsedByDefault` and explicit
+`'expanded'` / `'collapsed'` states continue to control appearance independently of loading.
 
 ## Visual Preload
 

@@ -9,6 +9,7 @@ import type { TooltipHandle } from './core/tooltip-handle.js';
 export { filterNestedList };
 export type {
   FixedPlacement,
+  SectionLoadingMode,
   SectionVariant,
   TooltipOptions,
   TooltipPlacementOptions,

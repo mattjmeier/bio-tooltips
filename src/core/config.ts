@@ -1,4 +1,5 @@
 export type PrefetchMode = 'smart' | 'all' | 'none';
+export type SectionLoadingMode = 'lazy' | 'eager';
 export type TooltipTheme = 'light' | 'dark' | 'auto' | 'material' | 'translucent' | 'light-border' | undefined;
 export type VisualPreloadMode = 'none' | 'hover' | 'init';
 export type SectionVariant = 'cards' | 'dividers';
@@ -64,6 +65,11 @@ export interface CoreTooltipConfig {
   /** How top-level tooltip dialogs are presented. Nested tooltips remain popovers. */
   presentation?: TooltipPresentation;
   prefetch: PrefetchMode;
+  /**
+   * Load collapsed sections on expansion (lazy, default) or with initial data (eager).
+   * Does not change display state or disable the shared cache.
+   */
+  sectionLoading?: SectionLoadingMode;
   prefetchThreshold: number;
   visualPreload: VisualPreloadMode;
   debugTimings: boolean;
@@ -83,6 +89,7 @@ export const defaultCoreConfig: CoreTooltipConfig = {
   triggerStyle: 'none',
   presentation: 'auto',
   prefetch: 'smart',
+  sectionLoading: 'lazy',
   prefetchThreshold: 15,
   visualPreload: 'hover',
   debugTimings: false,

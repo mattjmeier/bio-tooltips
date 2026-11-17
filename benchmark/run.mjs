@@ -15,8 +15,6 @@ const resultsDirectory = path.join(benchmarkDirectory, 'results');
 
 const samples = readPositiveInteger('BENCH_SAMPLES', 100);
 const operationsPerSample = readPositiveInteger('BENCH_OPS_PER_SAMPLE', 20);
-const pipelineTrials = readPositiveInteger('BENCH_PIPELINE_TRIALS', 25);
-const controlledLatencyMs = readNonNegativeNumber('BENCH_LATENCY_MS', 50);
 
 const cases = [
   {
@@ -54,7 +52,6 @@ const loadedCases = await Promise.all(cases.map(async benchmarkCase => {
 }));
 
 const rendererResults = [];
-const pipelineResults = [];
 const rawObservations = [];
 const artifactResults = await Promise.all([
   ['Root ESM', 'bio-tooltips.esm.js'],
@@ -99,57 +96,20 @@ for (const benchmarkCase of loadedCases) {
     operations: samples * operationsPerSample,
     ...summarize(renderDurations),
   });
-
-  for (const condition of ['uncached', 'prefetched', 'warm-cache']) {
-    const durations = [];
-    const preparationDurations = [];
-
-    for (let trial = 0; trial < pipelineTrials; trial += 1) {
-      if (condition === 'prefetched') {
-        const preparationStart = performance.now();
-        await delay(controlledLatencyMs);
-        preparationDurations.push(performance.now() - preparationStart);
-      }
-
-      const start = performance.now();
-      if (condition === 'uncached') {
-        await delay(controlledLatencyMs);
-      }
-      benchmarkCase.render(benchmarkCase.data);
-      durations.push(performance.now() - start);
-      rawObservations.push({ benchmark: 'pipeline-interaction', caseId: benchmarkCase.id, condition, trial: trial + 1, durationMs: durations.at(-1), units: 'ms' });
-      if (condition === 'prefetched') {
-        rawObservations.push({ benchmark: 'pipeline-preparation', caseId: benchmarkCase.id, condition, trial: trial + 1, durationMs: preparationDurations.at(-1), units: 'ms' });
-      }
-    }
-
-    pipelineResults.push({
-      caseId: benchmarkCase.id,
-      label: benchmarkCase.label,
-      condition,
-      trials: pipelineTrials,
-      controlledLatencyMs,
-      interaction: summarize(durations),
-      preparation: preparationDurations.length > 0 ? summarize(preparationDurations) : null,
-    });
-  }
 }
 
 const result = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   generatedAt: new Date().toISOString(),
   packageVersion: JSON.parse(await readFile(path.join(benchmarkDirectory, '..', 'package.json'), 'utf8')).version,
   ...provenance,
   methodology: {
     renderer: 'Stored provider record to generated tooltip HTML. Each sample is divided by the number of operations in its batch.',
-    controlledPipeline: 'Synthetic data delay plus HTML rendering. Condition labels model data availability without exercising the provider, application cache, prefetch implementation, or browser lifecycle.',
-    caveat: 'The controlled pipeline isolates package behavior from internet variability; it is not a live MyGene.info or MyChem.info service measurement and does not measure browser paint.',
+    caveat: 'Stored-fixture rendering excludes network requests and browser paint. Use the browser benchmark for live API and fixture comparisons.',
   },
   settings: {
     samples,
     operationsPerSample,
-    pipelineTrials,
-    controlledLatencyMs,
   },
   environment: {
     node: process.version,
@@ -159,7 +119,6 @@ const result = {
     totalMemoryBytes: os.totalmem(),
   },
   rendererResults,
-  pipelineResults,
   artifactResults,
   rawObservations,
 };
@@ -172,7 +131,6 @@ await writeFile(jsonPath, `${JSON.stringify(result, null, 2)}\n`);
 await writeFile(markdownPath, renderMarkdown(result));
 await writeFile(csvPath, toCsv([
   ...rendererResults.map(row => ({ benchmark: 'renderer', caseId: row.caseId, condition: 'stored-fixture', observations: row.observations, medianMs: row.medianMs, q1Ms: row.q1Ms, q3Ms: row.q3Ms, p95Ms: row.p95Ms, units: 'ms/operation' })),
-  ...pipelineResults.map(row => ({ benchmark: 'pipeline-interaction', caseId: row.caseId, condition: row.condition, observations: row.interaction.observations, medianMs: row.interaction.medianMs, q1Ms: row.interaction.q1Ms, q3Ms: row.interaction.q3Ms, p95Ms: row.interaction.p95Ms, units: 'ms' })),
 ]));
 
 console.log(renderMarkdown(result));
@@ -203,16 +161,6 @@ function renderMarkdown(result) {
       `| ${row.label} | ${row.operations} | ${row.htmlBytes} | ${format(row.medianMs)} | ${format(row.q1Ms)}–${format(row.q3Ms)} | ${format(row.p95Ms)} |`
     ),
     '',
-    `## Synthetic interaction pipeline (${result.settings.controlledLatencyMs} ms data latency)`,
-    '',
-    '| Tooltip | Condition | Trials | Interaction-to-content median (ms) | IQR (ms) | p95 (ms) |',
-    '| --- | --- | ---: | ---: | ---: | ---: |',
-    ...result.pipelineResults.map(row =>
-      `| ${row.label} | ${row.condition} | ${row.trials} | ${format(row.interaction.medianMs)} | ${format(row.interaction.q1Ms)}–${format(row.interaction.q3Ms)} | ${format(row.interaction.p95Ms)} |`
-    ),
-    '',
-    '> Controlled latency is included in the uncached condition and completed before interaction timing in the prefetched condition. These values do not represent live BioThings service latency or browser paint time.',
-    '',
   ];
   return `${lines.join('\n')}\n`;
 }
@@ -221,22 +169,10 @@ function format(value) {
   return value.toFixed(value < 10 ? 3 : 1);
 }
 
-function delay(milliseconds) {
-  return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
-
 function readPositiveInteger(name, fallback) {
   const value = Number(process.env[name] ?? fallback);
   if (!Number.isInteger(value) || value <= 0) {
     throw new Error(`${name} must be a positive integer.`);
-  }
-  return value;
-}
-
-function readNonNegativeNumber(name, fallback) {
-  const value = Number(process.env[name] ?? fallback);
-  if (!Number.isFinite(value) || value < 0) {
-    throw new Error(`${name} must be a non-negative number.`);
   }
   return value;
 }
