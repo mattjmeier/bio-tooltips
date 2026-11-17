@@ -40,12 +40,12 @@ Hover values summarize each trial's median across five distinct identifiers.
 
 | Elements / unique IDs | Prefetch | Hover → content, median (IQR ms) | Repeat cached hover → content, median (IQR ms) | Prefetch batch requests | Requests during five hovers |
 | --- | --- | ---: | ---: | ---: | ---: |
-| 10 / 8 | `none` | 104.5 (104.3–104.7) | 1.100 (1.000–1.200) | 0 | 5 |
-| 10 / 8 | `smart` | 0.900 (0.800–0.900) | 1.000 (1.000–1.100) | 1 | 0 |
-| 10 / 8 | `all` | 0.850 (0.800–0.900) | 1.100 (1.000–1.200) | 1 | 0 |
-| 100 / 80 | `none` | 104.5 (104.1–104.8) | 1.100 (1.000–1.100) | 0 | 5 |
-| 100 / 80 | `smart` | 0.900 (0.800–0.975) | 1.000 (1.000–1.100) | 3 | 0 |
-| 100 / 80 | `all` | 0.900 (0.800–0.900) | 1.100 (1.000–1.100) | 1 | 0 |
+| 10 / 8 | `none` | 104.5 (104.3–104.7) | 1.1 (1.0–1.2) | 0 | 5 |
+| 10 / 8 | `smart` | 0.900 (0.800–0.900) | 1.0 (1.0–1.1) | 1 | 0 |
+| 10 / 8 | `all` | 0.850 (0.800–0.900) | 1.1 (1.0–1.2) | 1 | 0 |
+| 100 / 80 | `none` | 104.5 (104.1–104.8) | 1.1 (1.0–1.1) | 0 | 5 |
+| 100 / 80 | `smart` | 0.900 (0.800–0.975) | 1.0 (1.0–1.1) | 3 | 0 |
+| 100 / 80 | `all` | 0.900 (0.800–0.900) | 1.1 (1.0–1.1) | 1 | 0 |
 
 “Hover → content” starts at the actual `mouseenter` event and ends at the library's
 `content set` checkpoint; it excludes Playwright hover preparation and is not a paint
