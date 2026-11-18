@@ -7,8 +7,6 @@ on:
         description: Include 1,000 elements / 800 IDs (large live GeneRIF downloads)
         type: boolean
         default: false
-  schedule:
-    - cron: '23 7 * * 1'
 
 permissions:
   contents: read
@@ -21,11 +19,15 @@ jobs:
   refresh:
     if: github.repository == 'mattjmeier/bio-tooltips'
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     permissions:
       contents: write
       pull-requests: write
     env:
+      BENCH_BROWSER_TRIALS: '30'
+      BENCH_BROWSER_LIVE_TRIALS: '30'
+      BENCH_BROWSER_WARMUPS: '2'
+      BENCH_BROWSER_LIVE_WARMUPS: '2'
       BENCH_BROWSER_NETWORK_LABEL: GitHub-hosted Ubuntu runner (network/location unspecified)
     steps:
       - name: Checkout main
@@ -58,11 +60,11 @@ jobs:
         run: node benchmark/browser.mjs
 
       - name: Measure fixture stress workload
-        if: github.event_name == 'workflow_dispatch' && inputs.include_stress
+        if: inputs.include_stress
         run: node benchmark/browser.mjs --fixtures --stress
 
       - name: Measure live stress workload
-        if: github.event_name == 'workflow_dispatch' && inputs.include_stress
+        if: inputs.include_stress
         run: node benchmark/browser.mjs --stress
 
       - name: Refresh published snapshot

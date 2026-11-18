@@ -125,9 +125,11 @@ npm run benchmark:publish-results
 
 The stress commands use the same 1,000-element workload for both sources and save
 separate `browser-fixture-stress-latest.*` and `browser-live-stress-latest.*` reports.
-Large eager runs can download substantial GeneRIF data, so they are excluded from
-scheduled refreshes. Manual Actions runs have an **Include stress** option. Routine refreshes retain the last
-stress pair with its original date and environment until the next stress run.
+Large eager runs can download substantial GeneRIF data. The manual GitHub Actions
+workflow includes these runs only when **Include stress** is selected. All browser
+scenarios included in that workflow use 30 measured trials after two warm-ups.
+Routine refreshes retain the last stress pair with its original date and environment
+until the next stress run.
 
 Browser runs require Playwright Chromium (`npx playwright install chromium`). Routine
 defaults are 30 measured trials after two warm-ups for each strategy and loading mode
@@ -143,9 +145,10 @@ BENCH_BROWSER_TRIALS=2 BENCH_BROWSER_WARMUPS=1 npm run benchmark:browser:fixture
 
 JSON, CSV and Markdown reports are saved under the Git-ignored `benchmark/results/`.
 The publish command extracts summaries and provenance into a versioned snapshot; the
-docs build renders it without contacting the APIs. A separate weekly or manually
-triggered GitHub Action runs the routine benchmarks and proposes a snapshot update in a PR.
-Merging it publishes the new tables through the normal docs workflow.
+docs build renders it without contacting the APIs. Maintainers can dispatch
+**Refresh Performance Results** around releases to run the benchmarks and propose
+a snapshot update in a PR. Merging it publishes the new tables through the normal
+docs workflow. npm publication runs independently.
 
 For additional experiments, `npm run benchmark:browser:fields` compares the same live
 requests with and without GeneRIF fields. It overrides request fields directly and

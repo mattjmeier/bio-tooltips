@@ -21,7 +21,9 @@ measured trials before replacing the snapshot. Raw observations remain in the ig
 `results/` directory; the public snapshot contains aggregate measurements and provenance.
 Review the JSON diff before committing it. Building docs never reruns benchmarks.
 
-`Refresh Performance Results` runs weekly and through `workflow_dispatch` on main.
+`Refresh Performance Results` runs on demand through `workflow_dispatch` on main.
+Dispatch it when a release warrants new performance measurements. It runs independently
+of npm publication.
 It opens a new PR containing only the snapshot, after focused tests and a docs build.
 A failed benchmark leaves the published data unchanged. Repository Actions settings must
 allow GitHub Actions to create pull requests. PRs opened with `GITHUB_TOKEN` do not
@@ -66,8 +68,9 @@ MyGene query for human records with GeneRIFs. Its metadata records the exact end
 capture date. The fixed first 80 symbols preserve the small-page workload. This is an
 annotation-rich workload, not a representative random sample of all human genes.
 
-Scheduled refreshes omit stress. Manual dispatch exposes `include_stress`; enabling it
-runs the paired large scenarios before snapshot validation and PR creation.
+Manual dispatch exposes `include_stress`. Enabling it runs the paired large scenarios
+before snapshot validation and PR creation. All browser scenarios included in that
+workflow use 30 measured trials and two warm-ups.
 
 Routine refreshes retain the last published stress pair when no fresh stress run is
 present. Retained rows keep their own commit, dates, package version and environment;
