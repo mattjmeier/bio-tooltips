@@ -26,6 +26,14 @@ Defined in: [core/renderer.ts:3](https://github.com/mattjmeier/bio-tooltips/blob
 
 ## Variables
 
+### copyIconHTML
+
+> `const` **copyIconHTML**: "\<svg xmlns=\\"http://www.w3.org/2000/svg\\" aria-hidden=\\"true\\" focusable=\\"false\\" fill=\\"currentColor\\" viewBox=\\"0 0 16 16\\"\>\<path fill-rule=\\"evenodd\\" d=\\"M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z\\"/\>\</svg\>"
+
+Defined in: [core/renderer.ts:65](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L65)
+
+***
+
 ### loaderHTML
 
 > `const` **loaderHTML**: "\<div class=\\"gt-loader-container\\"\>\<div class=\\"gt-spinner\\"\>\</div\>\<span\>Loading...\</span\>\</div\>"
@@ -90,7 +98,7 @@ Defined in: [core/renderer.ts:61](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderListContent**(`items`, `initialCount`, `moreButtonId`): `string`
 
-Defined in: [core/renderer.ts:114](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L114)
+Defined in: [core/renderer.ts:116](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L116)
 
 #### Parameters
 
@@ -138,7 +146,7 @@ Defined in: [core/renderer.ts:53](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderParagraphContent**(`items`, `initialCount`, `moreButtonId`): `string`
 
-Defined in: [core/renderer.ts:87](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L87)
+Defined in: [core/renderer.ts:89](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L89)
 
 #### Parameters
 
@@ -164,7 +172,7 @@ Defined in: [core/renderer.ts:87](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderSummaryActions**(`uniqueId`, `expanded?`): `string`
 
-Defined in: [core/renderer.ts:74](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L74)
+Defined in: [core/renderer.ts:76](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L76)
 
 #### Parameters
 
@@ -186,7 +194,7 @@ Defined in: [core/renderer.ts:74](https://github.com/mattjmeier/bio-tooltips/blo
 
 > **renderSummaryCopyButton**(`uniqueId`): `string`
 
-Defined in: [core/renderer.ts:66](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L66)
+Defined in: [core/renderer.ts:68](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L68)
 
 A small, labelled copy affordance for the summary action row.
 
@@ -206,7 +214,7 @@ A small, labelled copy affordance for the summary action row.
 
 > **renderSummaryToggle**(`uniqueId`, `expanded?`): `string`
 
-Defined in: [core/renderer.ts:82](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L82)
+Defined in: [core/renderer.ts:84](https://github.com/mattjmeier/bio-tooltips/blob/main/src/core/renderer.ts#L84)
 
 #### Parameters
 

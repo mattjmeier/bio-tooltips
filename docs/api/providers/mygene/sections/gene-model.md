@@ -8,4 +8,4 @@
 
 > `const` **geneModelSection**: [`MyGeneSectionDefinition`](types.md#mygenesectiondefinition)
 
-Defined in: [providers/mygene/sections/gene-model.ts:37](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/sections/gene-model.ts#L37)
+Defined in: [providers/mygene/sections/gene-model.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/sections/gene-model.ts#L5)

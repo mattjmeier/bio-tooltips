@@ -4,35 +4,11 @@
 
 ## Functions
 
-### getLinkedTranscriptsWithoutExons()
-
-> **getLinkedTranscriptsWithoutExons**(`transcripts`, `linkedTranscriptIds`): `string`[]
-
-Defined in: [providers/mygene/visuals/transcript-selector.ts:12](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L12)
-
-Linked IDs without a matching drawable model; cross-source aliases remain linked IDs.
-
-#### Parameters
-
-##### transcripts
-
-[`MyGeneExon`](../types.md#mygeneexon)[]
-
-##### linkedTranscriptIds
-
-`string` \| `string`[] \| `undefined`
-
-#### Returns
-
-`string`[]
-
-***
-
 ### getLongestTranscript()
 
 > **getLongestTranscript**(`transcripts`): [`MyGeneExon`](../types.md#mygeneexon)
 
-Defined in: [providers/mygene/visuals/transcript-selector.ts:23](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L23)
+Defined in: [providers/mygene/visuals/transcript-selector.ts:13](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L13)
 
 #### Parameters
 
@@ -50,7 +26,7 @@ Defined in: [providers/mygene/visuals/transcript-selector.ts:23](https://github.
 
 > **getUsableTranscripts**(`transcripts`): [`MyGeneExon`](../types.md#mygeneexon)[]
 
-Defined in: [providers/mygene/visuals/transcript-selector.ts:3](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L3)
+Defined in: [providers/mygene/visuals/transcript-selector.ts:5](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L5)
 
 #### Parameters
 
@@ -64,29 +40,25 @@ Defined in: [providers/mygene/visuals/transcript-selector.ts:3](https://github.c
 
 ***
 
-### initializeNativeTranscriptSelector()
+### initializeTranscriptPicker()
 
-> **initializeNativeTranscriptSelector**(`selectorEl`, `transcripts`, `__namedParameters`): `string` \| `null`
+> **initializeTranscriptPicker**(`picker`, `onChange?`): `void`
 
-Defined in: [providers/mygene/visuals/transcript-selector.ts:145](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L145)
+Defined in: [providers/mygene/visuals/transcript-selector.ts:179](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L179)
 
 #### Parameters
 
-##### selectorEl
+##### picker
 
-[`HTMLSelectElement`](https://developer.mozilla.org/docs/Web/API/HTMLSelectElement)
+[`HTMLDetailsElement`](https://developer.mozilla.org/docs/Web/API/HTMLDetailsElement)
 
-##### transcripts
+##### onChange?
 
-[`MyGeneExon`](../types.md#mygeneexon)[]
-
-##### \_\_namedParameters
-
-`NativeTranscriptSelectorOptions`
+(`transcriptId`) => `void`
 
 #### Returns
 
-`string` \| `null`
+`void`
 
 ***
 
@@ -94,7 +66,7 @@ Defined in: [providers/mygene/visuals/transcript-selector.ts:145](https://github
 
 > **renderGeneTextAlternative**(`container`, `transcript`, `symbol`, `uniqueId?`): [`HTMLDivElement`](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)
 
-Defined in: [providers/mygene/visuals/transcript-selector.ts:89](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L89)
+Defined in: [providers/mygene/visuals/transcript-selector.ts:123](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L123)
 
 Render a keyboard-readable equivalent of the exon SVG.
 
@@ -122,19 +94,25 @@ Render a keyboard-readable equivalent of the exon SVG.
 
 ***
 
-### renderSingleTranscriptSummary()
+### renderTranscriptPicker()
 
-> **renderSingleTranscriptSummary**(`transcript`): `string`
+> **renderTranscriptPicker**(`uniqueId`, `transcripts`, `linkedTranscriptIds`): `string`
 
-Defined in: [providers/mygene/visuals/transcript-selector.ts:42](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L42)
-
-Plain transcript identity for gene models with no transcript choice.
+Defined in: [providers/mygene/visuals/transcript-selector.ts:36](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L36)
 
 #### Parameters
 
-##### transcript
+##### uniqueId
 
-[`MyGeneExon`](../types.md#mygeneexon)
+`string`
+
+##### transcripts
+
+[`MyGeneExon`](../types.md#mygeneexon)[] \| `undefined`
+
+##### linkedTranscriptIds
+
+`string` \| `string`[] \| `undefined`
 
 #### Returns
 
@@ -146,7 +124,7 @@ Plain transcript identity for gene models with no transcript choice.
 
 > **setGeneTextAlternativeExpanded**(`container`, `expanded`): `void`
 
-Defined in: [providers/mygene/visuals/transcript-selector.ts:76](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L76)
+Defined in: [providers/mygene/visuals/transcript-selector.ts:110](https://github.com/mattjmeier/bio-tooltips/blob/main/src/providers/mygene/visuals/transcript-selector.ts#L110)
 
 #### Parameters
 
