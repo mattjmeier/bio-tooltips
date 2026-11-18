@@ -188,8 +188,8 @@ import { GeneTooltip } from 'bio-tooltips/mygene';
 Browser CDN paths also move to the new package and artifact names:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.4.1/dist/bio-tooltips.css">
-<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@2.4.1/dist/bio-tooltips.global.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bio-tooltips@2.4.2/dist/bio-tooltips.css">
+<script src="https://cdn.jsdelivr.net/npm/bio-tooltips@2.4.2/dist/bio-tooltips.global.js"></script>
 ```
 
 ## Package History
