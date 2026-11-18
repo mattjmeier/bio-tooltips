@@ -10,11 +10,12 @@ import { defaultConfig } from '../src/providers/mygene/config';
 import { myGeneProfile } from '../src/providers/mygene/profile';
 import { renderTooltipHTML } from '../src/providers/mygene/renderer';
 import type { MyGeneExon, MyGeneInfoResult } from '../src/providers/mygene/types';
+import { enableSummaryExpand } from '../src/ui/summaryExpand';
 import { renderGeneTrack } from '../src/providers/mygene/visuals/gene-track';
 import {
-  getLinkedTranscriptsWithoutExons,
   getUsableTranscripts,
-  initializeNativeTranscriptSelector,
+  initializeTranscriptPicker,
+  renderTranscriptPicker,
   renderGeneTextAlternative,
 } from '../src/providers/mygene/visuals/transcript-selector';
 
@@ -42,7 +43,7 @@ function geneData(exons: MyGeneExon[] | undefined): MyGeneInfoResult {
   };
 }
 
-describe('native transcript selector', () => {
+describe('transcript picker', () => {
   it('renders a compact accessible exon-data disclosure with strand and transcript identity', () => {
     const container = document.createElement('div');
     const selected = { ...transcript('ENST000009', 3), strand: -1 };
@@ -96,62 +97,20 @@ describe('native transcript selector', () => {
     container.remove();
   });
 
-  it('sorts native options, shows exon counts, and selects the longest transcript', () => {
-    const selector = document.createElement('select');
-    const transcripts = [
+  it('sorts model rows, shows exon counts, and selects the longest transcript', () => {
+    const root = document.createElement('div');
+    root.innerHTML = renderTranscriptPicker('sorting', [
       transcript('ENST000003', 2),
       transcript('ENST000001', 5),
-      transcript('ENST000002', 3),
-    ];
-
-    const selected = initializeNativeTranscriptSelector(selector, transcripts, {
-      selectedTranscriptId: 'not-a-transcript',
-      onChange: vi.fn(),
-    });
-
-    expect(selected).toBe('ENST000001');
-    expect(selector.hidden).toBe(false);
-    expect([...selector.options].map(option => option.value)).toEqual([
-      'ENST000001',
-      'ENST000002',
-      'ENST000003',
-    ]);
-    expect([...selector.options].map(option => option.text)).toEqual([
+      transcript('ENST000002', 1),
+    ], undefined);
+    const models = [...root.querySelectorAll<HTMLButtonElement>('[data-transcript-model]')];
+    expect(models.map(model => model.textContent)).toEqual([
       'ENST000001 · 5 exons',
-      'ENST000002 · 3 exons',
+      'ENST000002 · 1 exon',
       'ENST000003 · 2 exons',
     ]);
-    expect(selector.value).toBe('ENST000001');
-  });
-
-  it('deduplicates linked IDs and excludes available models including versioned matches', () => {
-    const available = [transcript('ENST000001.2', 3)];
-    expect(getLinkedTranscriptsWithoutExons(available, [
-      'ENST000001', 'ENST000002', ' ENST000002 ', '', 'ENST000003',
-    ])).toEqual(['ENST000002', 'ENST000003']);
-    expect(getLinkedTranscriptsWithoutExons(available, 'ENST000002')).toEqual(['ENST000002']);
-    expect(getLinkedTranscriptsWithoutExons(available, undefined)).toEqual([]);
-  });
-
-  it('keeps linked IDs disabled and preserves the last drawable selection on invalid changes', () => {
-    const selector = document.createElement('select');
-    const onChange = vi.fn();
-    const available = [transcript('ENST000001', 3), transcript('ENST000002', 1)];
-    initializeNativeTranscriptSelector(selector, available, {
-      selectedTranscriptId: 'ENST000003', linkedTranscriptIds: ['ENST000003'], onChange,
-    });
-    expect(selector.value).toBe('ENST000001');
-    expect(selector.options[1].textContent).toBe('ENST000002 · 1 exon');
-    const linked = selector.querySelectorAll('optgroup')[1];
-    expect(linked.disabled).toBe(true);
-    expect(linked.querySelector('option')?.disabled).toBe(true);
-    selector.value = 'ENST000002';
-    selector.dispatchEvent(new Event('change'));
-    expect(onChange).toHaveBeenLastCalledWith('ENST000002');
-    selector.value = 'ENST000003';
-    selector.dispatchEvent(new Event('change'));
-    expect(onChange).toHaveBeenCalledTimes(1);
-    expect(selector.value).toBe('ENST000002');
+    expect(models.map(model => model.getAttribute('aria-pressed'))).toEqual(['true', 'false', 'false']);
   });
 
   it('shows BRCA2 linked transcripts without implying their exon models are available', async () => {
@@ -167,17 +126,13 @@ describe('native transcript selector', () => {
       vi.spyOn(container, 'getBoundingClientRect').mockReturnValue({ width: 320 } as DOMRect);
       await renderGeneTrack(instance, data, uniqueId, defaultCoreConfig);
 
-      const selector = instance.root.querySelector<HTMLSelectElement>('select')!;
-      expect(selector.hidden).toBe(false);
-      expect(selector.value).toBe('NM_000059');
-      const groups = selector.querySelectorAll('optgroup');
-      expect(groups[0].label).toBe('Available exon models');
-      expect(groups[0].querySelectorAll('option')).toHaveLength(1);
-      expect(groups[1].label).toBe('Linked Ensembl transcripts · no exon coordinates');
-      expect(groups[1].querySelectorAll('option:disabled')).toHaveLength(19);
-      const note = instance.root.querySelector(`#${selector.getAttribute('aria-describedby')}`)!;
-      expect(note.textContent).toContain('Only transcripts with exon coordinates from MyGene can be drawn');
-      expect(note.textContent).toContain('may refer to the same transcript');
+      const disclosure = instance.root.querySelector<HTMLDetailsElement>('.gene-tooltip-transcript-selector')!;
+      expect(disclosure.open).toBe(false);
+      expect(disclosure.querySelector('summary')?.textContent).toContain('NM_000059');
+      expect(disclosure.querySelectorAll('[data-transcript-model]')).toHaveLength(1);
+      const linked = disclosure.querySelector('ul[aria-labelledby^="transcript-linked"]')!;
+      expect(linked.querySelectorAll('button[data-copy]')).toHaveLength(19);
+      expect(linked.querySelector('[data-transcript-model]')).toBeNull();
       expect(container.querySelectorAll('.exon-rect')).toHaveLength(27);
       expect(container.querySelectorAll('tbody tr')).toHaveLength(27);
       expect(instance.root.querySelector('[data-section="transcripts"] a')?.getAttribute('href'))
@@ -187,56 +142,73 @@ describe('native transcript selector', () => {
     }
   });
 
-  it('requests an immediate redraw for the selected transcript without retaining old handlers', () => {
-    const selector = document.createElement('select');
-    const transcripts = [transcript('ENST000001', 5), transcript('ENST000002', 3)];
-    const oldRedraw = vi.fn();
-    const redraw = vi.fn();
-
-    initializeNativeTranscriptSelector(selector, transcripts, {
-      selectedTranscriptId: 'ENST000001',
-      onChange: oldRedraw,
-    });
-    initializeNativeTranscriptSelector(selector, transcripts, {
-      selectedTranscriptId: 'ENST000001',
-      onChange: redraw,
-    });
-    selector.value = 'ENST000002';
-    selector.dispatchEvent(new Event('change'));
-
-    expect(selector.options).toHaveLength(2);
-    expect(oldRedraw).not.toHaveBeenCalled();
-    expect(redraw).toHaveBeenCalledTimes(1);
-    expect(redraw).toHaveBeenCalledWith('ENST000002');
+  it('copies individual RefSeq and linked Ensembl IDs without changing the selected model', async () => {
+    const uniqueId = 'copy-ensembl-id';
+    const data = {
+      ...geneData([transcript('NM_000001', 3), transcript('ENST000002.4', 1)]),
+      ensembl: { transcript: ['ENSRNOT00000046490', ' ENSRNOT00000046490 '] },
+    };
+    const root = document.createElement('div');
+    root.innerHTML = renderTooltipHTML(data, { uniqueId });
+    document.body.append(root);
+    const release = enableSummaryExpand();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal('navigator', { clipboard: { writeText } });
+    try {
+      const picker = root.querySelector<HTMLDetailsElement>('.gene-tooltip-transcript-selector')!;
+      const onChange = vi.fn();
+      initializeTranscriptPicker(picker, onChange);
+      picker.open = true;
+      const buttons = [...picker.querySelectorAll<HTMLButtonElement>('button[data-copy]')];
+      expect(buttons.map(button => button.getAttribute('aria-label'))).toEqual([
+        'Copy ENST000002.4', 'Copy NM_000001', 'Copy ENSRNOT00000046490',
+      ]);
+      buttons[1].click();
+      await vi.waitFor(() => expect(picker.querySelector('[role="status"]')?.textContent).toBe('Copied'));
+      expect(buttons[1].classList.contains('gt-summary-copy-btn--success')).toBe(true);
+      buttons[2].click();
+      expect(writeText.mock.calls).toEqual([['NM_000001'], ['ENSRNOT00000046490']]);
+      expect(picker.open).toBe(true);
+      expect(picker.querySelector('summary')?.textContent).toContain('NM_000001');
+      expect(onChange).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllGlobals();
+      release();
+      root.remove();
+    }
   });
 
-  it.each([{ transcripts: [] }, { transcripts: [transcript('ENST000001', 5)] }])('hides and clears the selector when there is no transcript choice (%j)', ({ transcripts }) => {
-    const selector = document.createElement('select');
-    selector.append(new Option('stale option', 'stale'));
+  it('requests an immediate redraw for the selected transcript without retaining old handlers', () => {
+    const root = document.createElement('div');
+    root.innerHTML = renderTranscriptPicker('redraw', [transcript('ENST000001', 5), transcript('ENST000002', 3)], undefined);
+    const picker = root.querySelector('details')!;
+    const oldRedraw = vi.fn();
+    const redraw = vi.fn();
+    initializeTranscriptPicker(picker, oldRedraw);
+    initializeTranscriptPicker(picker, redraw);
+    picker.open = true;
+    const second = picker.querySelector<HTMLButtonElement>('[data-transcript-model="ENST000002"]')!;
+    second.click();
 
-    const selected = initializeNativeTranscriptSelector(selector, transcripts, {
-      selectedTranscriptId: 'ENST000001',
-      onChange: vi.fn(),
-    });
-
-    expect(selected).toBeNull();
-    expect(selector.hidden).toBe(true);
-    expect(selector.options).toHaveLength(0);
-    expect(selector.onchange).toBeNull();
+    expect(picker.open).toBe(false);
+    expect(picker.querySelector('summary')?.textContent).toContain('ENST000002');
+    expect(second.getAttribute('aria-pressed')).toBe('true');
+    expect(oldRedraw).not.toHaveBeenCalled();
+    expect(redraw).toHaveBeenCalledExactlyOnceWith('ENST000002');
   });
 
   it('hides the selector and retains the transcript-data fallback when no transcript is usable', async () => {
     const uniqueId = 'missing-transcripts';
     const tooltipRoot = document.createElement('div');
     tooltipRoot.innerHTML = `
-      <select id="transcript-selector-${uniqueId}"></select>
+      <details id="transcript-selector-${uniqueId}"></details>
       <div id="gene-tooltip-track-${uniqueId}"></div>
     `;
     const instance = { root: tooltipRoot } as TooltipController;
 
     await renderGeneTrack(instance, geneData([]), uniqueId, defaultCoreConfig);
 
-    expect(tooltipRoot.querySelector<HTMLSelectElement>('select')?.hidden).toBe(true);
+    expect(tooltipRoot.querySelector<HTMLDetailsElement>('details')?.hidden).toBe(true);
     expect(tooltipRoot.querySelector('#gene-tooltip-track-missing-transcripts')?.textContent)
       .toContain('Transcript data not available.');
     expect(getUsableTranscripts([{
@@ -262,7 +234,7 @@ describe('native transcript selector', () => {
     await renderGeneTrack(instance, data, uniqueId, defaultCoreConfig);
 
     const selected = data.exons![0];
-    expect(root.querySelector('select')).toBeNull();
+    expect(root.querySelector('.gene-tooltip-transcript-selector')).toBeNull();
     const summary = root.querySelector('.gene-tooltip-transcript-summary')!;
     expect(summary.textContent).toBe(`${selected.transcript} · ${selected.position!.length} exons`);
     expect(summary.closest('.gt-collapsible-header')).toBeNull();
@@ -279,7 +251,7 @@ describe('native transcript selector', () => {
     const summary = root.querySelector('.gene-tooltip-transcript-summary')!;
     expect(summary.textContent).toBe('<b>NM_123</b> · 1 exon');
     expect(summary.querySelector('b')).toBeNull();
-    expect(root.querySelector('select')).toBeNull();
+    expect(root.querySelector('.gene-tooltip-transcript-selector')).toBeNull();
   });
 
   it('binds exon child tooltips on the initial gene-track render', async () => {
@@ -352,8 +324,8 @@ describe('native transcript selector', () => {
       'src/css/main.css',
     ].map(path => readFileSync(resolve(path), 'utf8'));
 
-    expect(html).toContain('class="gene-tooltip-transcript-selector"');
-    expect(html).toContain('aria-label="Select transcript"');
+    expect(html).toContain('<details class="gene-tooltip-track-controls gene-tooltip-transcript-selector"');
+    expect(html).toContain('aria-label="Select transcript, current:');
     const removedIntegrationPattern = new RegExp([
       'Tom', 'Select|tom', '-select|_tom', 'select|ts-',
       'wrapper|ts-', 'control|ts-', 'dropdown',
@@ -363,7 +335,7 @@ describe('native transcript selector', () => {
     expect(runtimeSources.join('\n')).not.toMatch(removedIntegrationPattern);
   });
 
-  it('does not collapse the gene-model section when the native selector is clicked', () => {
+  it('does not collapse the gene-model section when the picker is clicked', () => {
     const tooltipRoot = document.createElement('div');
     tooltipRoot.innerHTML = renderTooltipHTML(geneData([
       transcript('ENST000002', 2),
@@ -377,7 +349,7 @@ describe('native transcript selector', () => {
     onShown(instance);
 
     const section = tooltipRoot.querySelector<HTMLElement>('[data-section="gene-model"]')!;
-    const selector = section.querySelector<HTMLSelectElement>('select')!;
+    const selector = section.querySelector<HTMLElement>('.gene-tooltip-transcript-selector summary')!;
     const trigger = section.querySelector<HTMLElement>('.gt-collapsible-header')!;
 
     expect(selector.closest('.gt-collapsible-header')).toBeNull();
@@ -480,11 +452,10 @@ describe('native transcript selector', () => {
     expect(renderVisuals).toHaveBeenCalledTimes(1);
   });
 
-  it('progressively themes the native picker while retaining selector override hooks', () => {
+  it('retains selector theme overrides', () => {
     const stylesheet = readFileSync(resolve('src/css/main.css'), 'utf8');
 
-    expect(stylesheet).toContain('@supports (appearance: base-select)');
-    expect(stylesheet).toContain('.gene-tooltip-transcript-selector::picker(select)');
+    expect(stylesheet).toContain('.gt-transcript-picker');
     expect(stylesheet).toContain('--gt-transcript-selector-picker-background');
     expect(stylesheet).toContain('--gt-transcript-selector-option-selected');
   });
@@ -499,7 +470,7 @@ describe('gene track fallback', () => {
     const { renderGeneTrack: renderWithFailedD3 } = await import('../src/providers/mygene/visuals/gene-track');
     const uniqueId = 'failed-d3-alternative';
     const root = document.createElement('div');
-    root.innerHTML = `<select id="transcript-selector-${uniqueId}"></select><div id="gene-tooltip-track-${uniqueId}"><div class="gt-loader-container"><span>Loading...</span></div></div>`;
+    root.innerHTML = `<details id="transcript-selector-${uniqueId}"></details><div id="gene-tooltip-track-${uniqueId}"><div class="gt-loader-container"><span>Loading...</span></div></div>`;
 
     await renderWithFailedD3({ root } as TooltipController, geneData([transcript('ENST000001', 2)]), uniqueId, defaultCoreConfig);
 

@@ -1,3 +1,5 @@
+import { copyIconHTML } from '../../../core/renderer.js';
+import { asArray } from '../formatters.js';
 import type { MyGeneExon } from '../types.js';
 
 export function getUsableTranscripts(transcripts: MyGeneExon[] | undefined): MyGeneExon[] {
@@ -8,28 +10,10 @@ export function getUsableTranscripts(transcripts: MyGeneExon[] | undefined): MyG
   ));
 }
 
-/** Linked IDs without a matching drawable model; cross-source aliases remain linked IDs. */
-export function getLinkedTranscriptsWithoutExons(
-  transcripts: MyGeneExon[],
-  linkedTranscriptIds: string | string[] | undefined,
-): string[] {
-  const ids = typeof linkedTranscriptIds === 'string' ? [linkedTranscriptIds] : linkedTranscriptIds ?? [];
-  const withoutVersion = (id: string) => id.replace(/\.\d+$/, '');
-  const available = new Set(transcripts.map(transcript => withoutVersion(transcript.transcript.trim())));
-  return [...new Set(ids.map(id => id.trim()).filter(id => id && !available.has(withoutVersion(id))))]
-    .sort((a, b) => a.localeCompare(b));
-}
-
 export function getLongestTranscript(transcripts: MyGeneExon[]): MyGeneExon {
   return transcripts.reduce((longest, current) => (
     current.position!.length > longest.position!.length ? current : longest
   ), transcripts[0]);
-}
-
-interface NativeTranscriptSelectorOptions {
-  selectedTranscriptId: string;
-  linkedTranscriptIds?: string | string[];
-  onChange: (transcriptId: string) => void;
 }
 
 function escapeHTML(value: string): string {
@@ -38,10 +22,60 @@ function escapeHTML(value: string): string {
   }[character] ?? character));
 }
 
-/** Plain transcript identity for gene models with no transcript choice. */
-export function renderSingleTranscriptSummary(transcript: MyGeneExon): string {
+function formatTranscriptSummary(transcript: MyGeneExon): string {
   const count = transcript.position?.length ?? 0;
-  return `<span class="gene-tooltip-transcript-summary">${escapeHTML(transcript.transcript)} · ${count} exon${count === 1 ? '' : 's'}</span>`;
+  return `${transcript.transcript} · ${count} exon${count === 1 ? '' : 's'}`;
+}
+
+function renderTranscriptCopyButton(escapedId: string): string {
+  return `<button type="button" class="gt-transcript-copy-btn" data-copy="${escapedId}" aria-label="Copy ${escapedId}" title="Copy ${escapedId}">${copyIconHTML}</button>`;
+}
+
+const transcriptCopyStatus = '<div class="gt-copy-status gt-sr-only" role="status"></div>';
+
+export function renderTranscriptPicker(
+  uniqueId: string,
+  transcripts: MyGeneExon[] | undefined,
+  linkedTranscriptIds: string | string[] | undefined,
+): string {
+  const models = getUsableTranscripts(transcripts);
+  if (models.length === 0) return '';
+
+  const withoutVersion = (id: string) => id.replace(/\.\d+$/, '');
+  const modelIds = new Set(models.map(model => withoutVersion(model.transcript.trim())));
+  const linkedIds = [...new Set(asArray(linkedTranscriptIds).map(id => id.trim()))]
+    .filter(id => id && !modelIds.has(withoutVersion(id)))
+    .sort((a, b) => a.localeCompare(b));
+  const selected = getLongestTranscript(models);
+  const summary = escapeHTML(formatTranscriptSummary(selected));
+
+  if (models.length === 1 && linkedIds.length === 0) {
+    return `<div class="gene-tooltip-track-controls gene-tooltip-track-controls--single">
+      <span class="gene-tooltip-transcript-summary">${summary}</span>
+      ${renderTranscriptCopyButton(escapeHTML(selected.transcript))}
+      ${transcriptCopyStatus}
+    </div>`;
+  }
+
+  const modelRows = [...models].sort((a, b) => a.transcript.localeCompare(b.transcript)).map(model => {
+    const id = escapeHTML(model.transcript);
+    return `<li><button type="button" data-transcript-model="${id}" aria-pressed="${model === selected}">${escapeHTML(formatTranscriptSummary(model))}</button>${renderTranscriptCopyButton(id)}</li>`;
+  }).join('');
+  const linkedRows = linkedIds.map(id => {
+    const escapedId = escapeHTML(id);
+    return `<li><span>${escapedId}</span>${renderTranscriptCopyButton(escapedId)}</li>`;
+  }).join('');
+
+  return `<details class="gene-tooltip-track-controls gene-tooltip-transcript-selector" id="transcript-selector-${uniqueId}">
+    <summary aria-label="Select transcript, current: ${summary}"><span>${summary}</span></summary>
+    <div class="gt-transcript-picker">
+      <div id="transcript-models-${uniqueId}" class="gt-transcript-group-label">Available exon models</div>
+      <ul role="list" aria-labelledby="transcript-models-${uniqueId}">${modelRows}</ul>
+      ${linkedRows ? `<div id="transcript-linked-${uniqueId}" class="gt-transcript-group-label">Linked Ensembl transcripts · no exon coordinates</div>
+      <ul role="list" aria-labelledby="transcript-linked-${uniqueId}">${linkedRows}</ul>` : ''}
+      ${transcriptCopyStatus}
+    </div>
+  </details>`;
 }
 
 let nextTextAlternativeId = 0;
@@ -142,56 +176,32 @@ export function renderGeneTextAlternative(
   return alternative;
 }
 
-export function initializeNativeTranscriptSelector(
-  selectorEl: HTMLSelectElement,
-  transcripts: MyGeneExon[],
-  { selectedTranscriptId, linkedTranscriptIds, onChange }: NativeTranscriptSelectorOptions,
-): string | null {
-  const unavailable = getLinkedTranscriptsWithoutExons(transcripts, linkedTranscriptIds);
-  if (transcripts.length === 0 || (transcripts.length === 1 && unavailable.length === 0)) {
-    selectorEl.replaceChildren();
-    selectorEl.onchange = null;
-    selectorEl.hidden = true;
-    return null;
-  }
+export function initializeTranscriptPicker(
+  picker: HTMLDetailsElement,
+  onChange?: (transcriptId: string) => void,
+): void {
+  const summary = picker.querySelector('summary');
+  const label = summary?.querySelector('span');
+  if (!summary || !label) return;
 
-  const sortedTranscripts = [...transcripts].sort((a, b) => a.transcript.localeCompare(b.transcript));
-  const availableTranscriptIds = new Set(sortedTranscripts.map(transcript => transcript.transcript));
-  const fallbackTranscriptId = getLongestTranscript(transcripts).transcript;
-  let activeTranscriptId = availableTranscriptIds.has(selectedTranscriptId) ? selectedTranscriptId : fallbackTranscriptId;
+  picker.onclick = event => {
+    const model = (event.target as Element).closest<HTMLButtonElement>('[data-transcript-model]');
+    const id = model?.dataset.transcriptModel;
+    if (!model || !id) return;
 
-  const availableGroup = document.createElement('optgroup');
-  availableGroup.label = 'Available exon models';
-  availableGroup.append(...sortedTranscripts.map(transcript => {
-    const option = document.createElement('option');
-    option.value = transcript.transcript;
-    option.textContent = `${transcript.transcript} · ${transcript.position!.length} exon${transcript.position!.length === 1 ? '' : 's'}`;
-    return option;
-  }));
-  selectorEl.replaceChildren(availableGroup);
-  if (unavailable.length > 0) {
-    const linkedGroup = document.createElement('optgroup');
-    linkedGroup.label = 'Linked Ensembl transcripts · no exon coordinates';
-    linkedGroup.disabled = true;
-    linkedGroup.append(...unavailable.map(transcriptId => {
-      const option = document.createElement('option');
-      option.value = transcriptId;
-      option.textContent = transcriptId;
-      option.disabled = true;
-      return option;
-    }));
-    selectorEl.append(linkedGroup);
-  }
-  selectorEl.value = activeTranscriptId;
-  selectorEl.hidden = false;
-  selectorEl.onchange = () => {
-    // Keep unavailable IDs out of redraws, including programmatic change events.
-    if (!availableTranscriptIds.has(selectorEl.value)) {
-      selectorEl.value = activeTranscriptId;
-      return;
-    }
-    activeTranscriptId = selectorEl.value;
-    onChange(activeTranscriptId);
+    picker.querySelector('[data-transcript-model][aria-pressed="true"]')?.setAttribute('aria-pressed', 'false');
+    model.setAttribute('aria-pressed', 'true');
+    label.textContent = model.textContent;
+    summary.setAttribute('aria-label', `Select transcript, current: ${model.textContent}`);
+    picker.open = false;
+    summary.focus();
+    onChange?.(id);
   };
-  return activeTranscriptId;
+
+  picker.onkeydown = event => {
+    if (!picker.open || event.key !== 'Escape') return;
+    event.stopPropagation();
+    picker.open = false;
+    summary.focus();
+  };
 }

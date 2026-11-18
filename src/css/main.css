@@ -209,7 +209,7 @@ html.gt-drawer-expanded-open body {
 .gt-drawer-handle[hidden],
 .gt-drawer-close-button[hidden] { display: none; }
 .gene-tooltip-header .gt-close-button { width: 2rem; height: 2rem; min-width: 2rem; min-height: 2rem; }
-.gt-close-button:hover, .gt-close-button:focus-visible, .gt-pin-button:hover, .gt-pin-button:focus-visible, .gt-summary-copy-btn:hover, .gt-summary-copy-btn:focus-visible { color: var(--gt-accent-color); background-color: var(--gt-control-hover-background); opacity: 1; }
+.gt-close-button:hover, .gt-close-button:focus-visible, .gt-pin-button:hover, .gt-pin-button:focus-visible, :is(.gt-summary-copy-btn, .gt-transcript-copy-btn):hover, :is(.gt-summary-copy-btn, .gt-transcript-copy-btn):focus-visible { color: var(--gt-accent-color); background-color: var(--gt-control-hover-background); opacity: 1; }
 .gt-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .gt-nested-search-label { color: var(--gt-text-color-secondary); }
 .gt-nested-status, .gt-copy-status, .gt-gene-track-status { color: var(--gt-text-color-secondary); }
@@ -335,7 +335,7 @@ html.gt-drawer-expanded-open body {
 
 /* Summary copy affordance. An icon button (inline SVG, matching the pin
    button's convention). Kept under its own class so it is always visible. */
-.gt-summary-copy-btn {
+:is(.gt-summary-copy-btn, .gt-transcript-copy-btn) {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
@@ -357,13 +357,13 @@ html.gt-drawer-expanded-open body {
   transition: background-color 0.2s, opacity 0.2s, color 0.2s;
 }
 
-.gt-summary-copy-btn svg {
+:is(.gt-summary-copy-btn, .gt-transcript-copy-btn) svg {
   width: 14px;
   height: 14px;
 }
 
-.gt-summary-copy-btn:hover,
-.gt-summary-copy-btn:focus-visible {
+:is(.gt-summary-copy-btn, .gt-transcript-copy-btn):hover,
+:is(.gt-summary-copy-btn, .gt-transcript-copy-btn):focus-visible {
   opacity: 1;
   outline: none;
 }
@@ -944,7 +944,7 @@ ul.gene-tooltip-nested-list {
   min-width: 0;
 }
 
-.gene-tooltip-track-controls::after {
+.gene-tooltip-transcript-selector > summary::after {
   position: absolute;
   right: 0.65em;
   top: 50%;
@@ -963,10 +963,6 @@ ul.gene-tooltip-nested-list {
   user-select: text;
 }
 
-.gene-tooltip-track-controls--single::after {
-  content: none;
-}
-
 .gene-tooltip-transcript-summary {
   padding: 0.32em 0;
   color: var(--gt-text-color-secondary);
@@ -977,133 +973,108 @@ ul.gene-tooltip-nested-list {
   overflow-wrap: anywhere;
 }
 
+.gene-tooltip-track-controls--single {
+  gap: .25em;
+}
 .gene-tooltip-transcript-selector {
-  appearance: none;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-
-  min-height: 2em;
-  padding: 0.32em 1.7em 0.32em 0.6em;
-
-  color: var(--gt-text-color);
-  font: inherit;
-  font-size: 0.86em;
+  display: block;
+}
+.gene-tooltip-transcript-selector > summary,
+.gt-transcript-picker {
+  font-size: .86em;
   font-weight: 400;
   font-variant-numeric: tabular-nums;
   line-height: 1.25;
-
-  text-overflow: ellipsis;
-  cursor: pointer;
-
-  background-color:
-    var(--gt-transcript-selector-background, var(--gt-background-color-subtle));
-  border:
-    1px solid
-    var(--gt-transcript-selector-border-color, var(--gt-border-color));
-  border-radius: 6px;
-
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
 }
-
-.gene-tooltip-transcript-selector:hover {
-  border-color:
-    color-mix(in srgb, var(--gt-accent-color) 30%, var(--gt-border-color));
-}
-
-.gene-tooltip-transcript-selector:focus-visible {
-  border-color: var(--gt-accent-color);
-  outline: 2px solid var(--gt-accent-color);
-  outline-offset: 2px;
-}
-
-.gene-tooltip-transcript-selector:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.gene-tooltip-transcript-selector option {
+.gene-tooltip-transcript-selector > summary {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  padding: .32em 1.7em .32em .6em;
   color: var(--gt-text-color);
-  background-color: var(--gt-transcript-selector-picker-background, var(--gt-background-color-base));
+  cursor: pointer;
+  background: var(--gt-transcript-selector-background, var(--gt-background-color-subtle));
+  border: 1px solid var(--gt-transcript-selector-border-color, var(--gt-border-color));
+  border-radius: 6px;
 }
-
-.gene-tooltip-transcript-selector optgroup {
+.gene-tooltip-transcript-selector > summary::-webkit-details-marker {
+  display: none;
+}
+.gene-tooltip-transcript-selector > summary span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gene-tooltip-transcript-selector > summary:focus-visible,
+.gt-transcript-picker [data-transcript-model]:focus-visible {
+  outline: 2px solid var(--gt-accent-color);
+  outline-offset: -2px;
+}
+.gene-tooltip-transcript-selector[open] {
+  z-index: 12;
+}
+.gt-transcript-picker {
+  position: absolute;
+  inset-inline-end: 0;
+  top: 100%;
+  width: max-content;
+  min-width: 100%;
+  max-width: min(19rem, calc(100vw - 3rem));
+  max-height: min(16rem, 40vh);
+  overflow: auto;
+  box-sizing: border-box;
+  margin-top: .25em;
+  padding: .25em;
+  color: var(--gt-text-color);
+  background: var(--gt-transcript-selector-picker-background, var(--gt-background-color-base));
+  border: 1px solid var(--gt-transcript-selector-border-color, var(--gt-border-color));
+  border-radius: 6px;
+  box-shadow: var(--gt-transcript-selector-picker-shadow, 0 8px 20px rgba(0, 0, 0, .2));
+}
+.gt-transcript-picker ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.gt-transcript-group-label {
+  padding: .25em .4em;
   font-weight: 600;
 }
-
-.gene-tooltip-transcript-selector option:disabled {
-  color: var(--gt-text-color-secondary);
-  font-weight: 400;
-  cursor: default;
+.gt-transcript-picker li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .25em;
+  padding-inline-end: .2em;
+  border-radius: 4px;
 }
-
-.gt-tooltip-box .gt-transcript-availability {
-  margin: 0.4em 0;
-  color: var(--gt-text-color-secondary);
-  font-size: 0.85em;
-  line-height: 1.4;
+.gt-transcript-picker li:has([aria-pressed="true"]) {
+  background: var(--gt-transcript-selector-option-selected, var(--gt-background-color-subtle));
 }
-
-/*
-  Progressively theme the opened native picker where customizable selects are
-  supported. Other browsers retain their accessible OS-provided picker.
-*/
-@supports (appearance: base-select) {
-  .gene-tooltip-transcript-selector,
-  .gene-tooltip-transcript-selector::picker(select) {
-    appearance: base-select;
-  }
-
-  .gene-tooltip-transcript-selector::picker-icon {
-    display: none;
-  }
-
-  .gene-tooltip-transcript-selector::picker(select) {
-    max-height: min(18rem, calc(100dvh - 2rem));
-    margin-block: 0.3em;
-    padding: 0.25em;
-    color: var(--gt-text-color);
-    background-color: var(--gt-transcript-selector-picker-background, var(--gt-background-color-base));
-    border: 1px solid var(--gt-transcript-selector-border-color, var(--gt-border-color));
-    border-radius: 6px;
-    box-shadow: var(--gt-transcript-selector-picker-shadow, 0 8px 20px rgba(0, 0, 0, 0.2));
-    scrollbar-color: var(--gt-border-color) transparent;
-  }
-
-  .gene-tooltip-transcript-selector option {
-    min-height: 2em;
-    padding: 0.45em 0.6em;
-    font: inherit;
-    font-weight: 400;
-    background-color: transparent;
-    border-radius: 4px;
-  }
-
-  .gene-tooltip-transcript-selector option:not(:disabled):hover,
-  .gene-tooltip-transcript-selector option:not(:disabled):focus-visible {
-    background-color: var(
-      --gt-transcript-selector-option-hover,
-      color-mix(in srgb, var(--gt-accent-color) 12%, var(--gt-background-color-base))
-    );
-    outline: none;
-  }
-
-  .gene-tooltip-transcript-selector option:checked {
-    color: var(--gt-text-color);
-    font-weight: 600;
-    background-color: var(
-      --gt-transcript-selector-option-selected,
-      color-mix(in srgb, var(--gt-accent-color) 22%, var(--gt-background-color-base))
-    );
-  }
-
-  .gene-tooltip-transcript-selector option::checkmark {
-    color: var(--gt-accent-color);
-  }
+.gt-transcript-picker li > span,
+.gt-transcript-picker [data-transcript-model] {
+  flex: 1;
+  padding: .25em .4em;
+  overflow-wrap: anywhere;
+}
+.gt-transcript-picker li > span,
+.gt-gene-text-alternative .gt-transcript-id {
+  -webkit-user-select: text;
+  user-select: text;
+}
+.gt-transcript-picker [data-transcript-model] {
+  align-self: stretch;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+}
+.gt-transcript-picker [data-transcript-model]:hover {
+  background: var(--gt-transcript-selector-option-hover, var(--gt-background-color-subtle));
 }
 
 .exon-rect {
@@ -1605,7 +1576,7 @@ ul.gene-tooltip-nested-list {
 
 @media (prefers-reduced-motion: reduce) {
   .gt-tooltip-box, .gt-collapsible-content, .gt-section-arrow::after,
-  .gt-summary-toggle, .gt-summary-copy-btn, .gene-tooltip-links-container a { transition: none; }
+  .gt-summary-toggle, :is(.gt-summary-copy-btn, .gt-transcript-copy-btn), .gene-tooltip-links-container a { transition: none; }
 }
 
 @media (forced-colors: active) {
@@ -1627,7 +1598,7 @@ ul.gene-tooltip-nested-list {
   outline: 3px solid var(--gt-focus-color, var(--gt-accent-color, #005fcc));
   outline-offset: 3px;
 }
-.gt-tooltip-box .gt-summary-copy-btn:focus-visible,
+.gt-tooltip-box :is(.gt-summary-copy-btn, .gt-transcript-copy-btn):focus-visible,
 .gt-tooltip-box .gene-tooltip-nested-search:focus {
   outline: 3px solid var(--gt-focus-color, var(--gt-accent-color, #005fcc));
   outline-offset: 3px;
@@ -1699,7 +1670,7 @@ button.gt-collapsible-header {
   background-color: var(--gt-control-hover-background);
 }
 .gt-tooltip-box .gt-summary-toggle:focus-visible,
-.gt-tooltip-box .gt-summary-copy-btn:focus-visible {
+.gt-tooltip-box :is(.gt-summary-copy-btn, .gt-transcript-copy-btn):focus-visible {
   outline-offset: 1px;
 }
 .gene-tooltip-summary.expanded + .gt-summary-actions {

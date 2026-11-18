@@ -5,7 +5,7 @@ import { logTooltipTiming } from '../../../core/timing.js';
 import {
     getLongestTranscript,
     getUsableTranscripts,
-    initializeNativeTranscriptSelector,
+    initializeTranscriptPicker,
     renderGeneTextAlternative,
     setGeneTextAlternativeExpanded,
 } from './transcript-selector.js';
@@ -148,7 +148,7 @@ export async function renderGeneTrack(
 ) {
     logTooltipTiming(instance, config, 'gene track render start');
     const container = instance.root.querySelector<HTMLElement>(`#gene-tooltip-track-${uniqueId}`);
-    const selectorEl = instance.root.querySelector<HTMLSelectElement>(`#transcript-selector-${uniqueId}`);
+    const selectorEl = instance.root.querySelector<HTMLDetailsElement>(`#transcript-selector-${uniqueId}`);
 
     if (!container) return;
 
@@ -157,8 +157,6 @@ export async function renderGeneTrack(
     if (transcripts.length === 0) {
         container.innerHTML = `<small>Transcript data not available.</small>`;
         if (selectorEl) {
-            selectorEl.replaceChildren();
-            selectorEl.onchange = null;
             selectorEl.hidden = true;
         }
         logTooltipTiming(instance, config, 'gene track skipped', { reason: 'no-transcripts' });
@@ -167,7 +165,8 @@ export async function renderGeneTrack(
 
     const longestTranscript = getLongestTranscript(transcripts);
 
-    let selectedTranscriptId = selectorEl?.value || longestTranscript.transcript;
+    let selectedTranscriptId = selectorEl?.querySelector<HTMLButtonElement>('[data-transcript-model][aria-pressed="true"]')
+        ?.dataset.transcriptModel || longestTranscript.transcript;
     if (!transcripts.some(tx => tx.transcript === selectedTranscriptId)) {
         selectedTranscriptId = longestTranscript.transcript;
     }
@@ -183,17 +182,13 @@ export async function renderGeneTrack(
                 selected: selectedTranscriptId,
             });
             // Initialize the header control before D3 loads so it does not appear after the SVG.
-            selectedTranscriptId = initializeNativeTranscriptSelector(selectorEl, transcripts, {
-                selectedTranscriptId,
-                linkedTranscriptIds: data.ensembl?.transcript,
-                onChange: selectedValue => {
-                    selectedTranscriptId = selectedValue;
-                    const selected = transcripts.find(tx => tx.transcript === selectedValue) ?? longestTranscript;
-                    renderGeneTextAlternative(container, selected, data.symbol, uniqueId);
-                    logTooltipTiming(instance, config, 'transcript selector change', { selected: selectedTranscriptId });
-                    drawSelectedTranscript?.(selectedTranscriptId);
-                },
-            }) ?? longestTranscript.transcript;
+            initializeTranscriptPicker(selectorEl, selectedValue => {
+                selectedTranscriptId = selectedValue;
+                const selected = transcripts.find(tx => tx.transcript === selectedValue) ?? longestTranscript;
+                renderGeneTextAlternative(container, selected, data.symbol, uniqueId);
+                logTooltipTiming(instance, config, 'transcript selector change', { selected: selectedTranscriptId });
+                drawSelectedTranscript?.(selectedTranscriptId);
+            });
             logTooltipTiming(instance, config, 'transcript selector init complete');
         }
 

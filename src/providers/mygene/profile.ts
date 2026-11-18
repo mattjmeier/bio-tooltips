@@ -8,6 +8,7 @@ import { parseGeneElement } from './parser.js';
 import { renderTooltipHTML } from './renderer.js';
 import { renderIdeogram } from './visuals/ideogram.js';
 import { renderGeneTrack } from './visuals/gene-track.js';
+import { initializeTranscriptPicker } from './visuals/transcript-selector.js';
 import { getIdeogram } from './visuals/ideogram.js';
 import { getD3 } from './visuals/gene-track.js';
 import { getMyGeneNestedTooltipDefinitions } from './sections/index.js';
@@ -36,6 +37,11 @@ async function renderMyGeneVisuals(
   const shouldRenderIdeogram = sectionKey
     ? sectionKey === 'location' && !renderedSections.has('location')
     : !isLocationCollapsed && !renderedSections.has('location');
+
+  if (!sectionKey && isGeneModelCollapsed && !renderedSections.has('gene-model')) {
+    const picker = geneModelSection?.querySelector<HTMLDetailsElement>('.gene-tooltip-transcript-selector');
+    if (picker) initializeTranscriptPicker(picker);
+  }
 
   if (config.display.geneTrack && data.exons && shouldRenderGeneTrack) {
     renderPromises.push({

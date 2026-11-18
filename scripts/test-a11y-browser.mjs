@@ -122,13 +122,42 @@ try {
   assert.equal(await textToggle.getAttribute('aria-expanded'), 'true');
   assert.match(await textToggle.textContent(), /Hide exon data/);
   assert.ok(await textAlternative.isVisible(), 'expanded exon region must be visible');
-  const selector = rootPanel.locator('select').first();
-  assert.ok(await selector.locator('option').count() > 1);
-  await selector.focus(); await page.keyboard.press('ArrowDown');
-  const transcript = await selector.inputValue();
-  assert.ok((await page.locator('.gt-gene-text-alternative').textContent()).includes(transcript));
+  const picker = rootPanel.locator('.gene-tooltip-transcript-selector');
+  const pickerSummary = picker.locator('summary');
+  await pickerSummary.focus();
+  await page.keyboard.press('Enter');
+  const models = picker.locator('[data-transcript-model]');
+  assert.ok(await models.count() > 1);
+  const nextModel = picker.locator('[data-transcript-model][aria-pressed="false"]').first();
+  const transcript = await nextModel.getAttribute('data-transcript-model');
+  await nextModel.focus();
+  await page.keyboard.press('Enter');
+  assert.ok((await textAlternative.textContent()).includes(transcript));
+  assert.equal(await pickerSummary.evaluate(summary => summary === document.activeElement), true);
   await textToggle.click();
   assert.equal(await textToggle.getAttribute('aria-expanded'), 'false', 'exon region must collapse again');
+
+  await pickerSummary.focus();
+  await page.keyboard.press('Enter');
+  const copyTranscript = picker.getByRole('button', { name: /^Copy / }).first();
+  await waitFor(() => copyTranscript.isVisible());
+  await page.evaluate(() => {
+    navigator.clipboard.writeText = async text => { window.__copiedTranscriptId = text; };
+  });
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  assert.equal(await copyTranscript.evaluate(button => button === document.activeElement), true);
+  await page.keyboard.press('Enter');
+  await waitFor(() => picker.getByRole('status').textContent().then(text => text === 'Copied'));
+  assert.equal(await page.evaluate(() => window.__copiedTranscriptId), await copyTranscript.getAttribute('data-copy'));
+  const copyLinked = picker.locator('ul[aria-labelledby^="transcript-linked"]').getByRole('button', { name: /^Copy ENS/ }).first();
+  await copyLinked.click();
+  await waitFor(() => page.evaluate(() => window.__copiedTranscriptId?.startsWith('ENS')));
+  assert.equal(await page.evaluate(() => window.__copiedTranscriptId), await copyLinked.getAttribute('data-copy'));
+  assert.equal(await picker.locator('[aria-pressed="true"]').getAttribute('data-transcript-model'), transcript);
+  await page.keyboard.press('Escape');
+  assert.equal(await picker.evaluate(details => details.open), false);
+  assert.equal(await pickerSummary.evaluate(summary => summary === document.activeElement), true);
   const collapsible = page.locator('.gt-collapsible-header').first();
   assert.equal(await collapsible.count(), 1);
   { await collapsible.click(); assert.equal(await collapsible.getAttribute('aria-expanded'),'false'); assert.ok(await page.locator('.gt-collapsible-content').first().getAttribute('inert') !== null); await collapsible.click(); }

@@ -160,6 +160,20 @@ export function enableSummaryExpand(): () => void {
       void copySummaryText(copyBtn);
       return;
     }
+    const transcriptCopy = target.closest<HTMLButtonElement>('.gene-tooltip-track-controls .gt-transcript-copy-btn');
+    if (transcriptCopy) {
+      const status = transcriptCopy.closest('.gene-tooltip-track-controls')?.querySelector('.gt-copy-status');
+      const id = transcriptCopy.dataset.copy ?? '';
+      if (status) status.textContent = '';
+      void copyTextToClipboard(id).then(copied => {
+        if (copied) flashCopySuccess(transcriptCopy);
+        if (status) {
+          status.classList.toggle('gt-sr-only', copied || !transcriptCopy.closest('.gt-transcript-picker'));
+          status.textContent = copied ? 'Copied' : 'Unable to copy';
+        }
+      });
+      return;
+    }
     const identifierCopy = target.closest<HTMLButtonElement>('.gt-chem-id-row [data-copy]');
     if (identifierCopy) {
       const identifierStatus = identifierCopy.parentElement?.querySelector<HTMLElement>('.gt-copy-status') ?? undefined;
