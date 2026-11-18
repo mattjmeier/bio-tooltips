@@ -20,6 +20,8 @@ Currently supported modules:
 
 ## Install
 
+[View `bio-tooltips` on npm](https://www.npmjs.com/package/bio-tooltips).
+
 ```bash
 npm install bio-tooltips
 ```
