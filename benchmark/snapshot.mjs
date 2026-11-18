@@ -1,6 +1,6 @@
 import { scenarioKey } from './scenarios.mjs';
 const metadataKeys = ['schemaVersion', 'measurementVersion', 'packageVersion', 'gitCommit',
-  'gitWorkingTreeDirty', 'retained', 'inputSha256', 'startedAt', 'generatedAt', 'environment', 'settings'];
+  'gitWorkingTreeDirty', 'retained', 'inputSha256', 'startedAt', 'generatedAt', 'environment', 'settings', 'retrySessions'];
 const pick = (object, keys) => Object.fromEntries(keys.filter(key => key in object).map(key => [key, object[key]]));
 
 function finiteNumbers(value) {
@@ -21,8 +21,9 @@ export function createPublishedSnapshot(renderer, ...runs) {
     if (run.schemaVersion !== 2 || ![2, 3].includes(run.measurementVersion)) {
       throw new Error(`Expected current ${condition} browser measurements.`);
     }
-    if (!run.summaries?.length || run.summaries.some(row => row.failedTrials !== 0
-      || row.trials < 1 || row.trials !== row.attemptedTrials || row.trials !== run.settings.repetitions)) {
+    if (!run.summaries?.length || run.summaries.some(row => !Number.isInteger(row.failedTrials) || row.failedTrials < 0
+      || (row.failedTrials > 0 && !(condition === 'live' && run.retrySessions?.length))
+      || row.trials < 1 || row.trials + row.failedTrials !== row.attemptedTrials || row.trials !== run.settings.repetitions)) {
       throw new Error('Only complete, successful measured runs can refresh the published snapshot.');
     }
     const modes = run.measurementVersion === 2 ? ['lightweight'] : run.settings.sectionLoadingModes;

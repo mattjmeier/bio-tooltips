@@ -12,7 +12,10 @@ if (!live.settings.pageSizes.includes(1000)) {
   const stressFixture = await optional('browser-fixture-stress-latest');
   if (stressLive || stressFixture) {
     if (!stressLive || !stressFixture) throw new Error('Both live and fixture stress runs are required.');
-    extra.push(stressLive, stressFixture);
+    // A previously measured pair keeps its provenance when the routine suite is refreshed.
+    extra.push(...[stressLive, stressFixture].map(run =>
+      run.gitCommit === live.gitCommit && run.packageVersion === live.packageVersion
+        ? run : { ...run, retained: true }));
   }
 }
 if (!extra.length && !live.settings.pageSizes.includes(1000)) {

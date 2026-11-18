@@ -20,8 +20,6 @@ const selectedRuns = computed(() => snapshot.browser.filter(run => run.summaries
 const trialCounts = computed(() => [...new Set(selectedRuns.value.map(run => run.settings.repetitions))].join(' / '));
 const smallSample = computed(() => selectedRuns.value.some(run => run.settings.repetitions < 10));
 const views = { interaction: 'Interaction', startup: 'Page startup', requests: 'Requests', expansion: 'Section expansion', payloads: 'Payloads' };
-const runTotals = run => ({ successful: run.summaries.reduce((sum, row) => sum + row.trials, 0),
-  attempted: run.summaries.reduce((sum, row) => sum + row.attemptedTrials, 0) });
 </script>
 
 <template>
@@ -70,7 +68,7 @@ const runTotals = run => ({ successful: run.summaries.reduce((sum, row) => sum +
             <th v-for="column in columns" :key="column.key" scope="col">{{ column.label }}</th>
           </tr></thead>
           <tbody v-for="group in groups" :key="group.strategy">
-            <tr v-for="(row, index) in group.rows" :key="row.condition">
+            <tr v-for="(row, index) in group.rows" :key="row.condition" :class="row.condition">
               <th v-if="index === 0" :rowspan="group.rows.length" scope="rowgroup" class="strategy"><code>{{ group.strategy }}</code></th>
               <th scope="row" class="source">{{ row.source }}</th>
               <td v-for="column in columns" :key="column.key"><BenchmarkMetric :value="row[column.key]" :unit="column.unit ?? 'ms'" /></td>
@@ -78,7 +76,7 @@ const runTotals = run => ({ successful: run.summaries.reduce((sum, row) => sum +
           </tbody>
         </table>
       </div>
-      <p v-if="view === 'startup'" class="table-note">DOM loaded and tooltips ready start at navigation. Prefetch complete starts after initialization and includes scrolling on large smart pages. These are not paint timings.</p>
+      <p v-if="view === 'startup'" class="table-note">DOM loaded, page load, and tooltips ready start at navigation. Prefetch complete starts after initialization and includes scrolling on large smart pages. These are not paint timings.</p>
       <p v-if="view === 'expansion'" class="table-note">The first expansion opens GeneRIFs on the cached-repeat tooltip. Lazy mode requests missing fields; eager mode uses the initial data. Repeat expansion should issue no request. DOM timing excludes paint.</p>
       <p v-if="view === 'payloads'" class="table-note">Before expansion includes prefetch and opening hovers. First expansion shows the data deferred until GeneRIFs is opened. Live bodies are encoded network bytes; fixture bodies are decoded JSON.</p>
       <p v-if="view === 'requests'" class="table-note">Provider response includes network and body download for live requests. Fixtures are served locally.</p>
@@ -86,7 +84,7 @@ const runTotals = run => ({ successful: run.summaries.reduce((sum, row) => sum +
         <p>Distinct IDs fetched over the trial, compared with entries retained immediately after prefetch. A bounded cache need not retain every fetched record.</p>
         <div class="table-scroll" tabindex="0" role="region" aria-label="Fetched IDs and cache retention"><table>
           <thead><tr><th scope="col">Prefetch</th><th scope="col">Source</th><th scope="col">Fetched IDs</th><th scope="col">Retained cache</th></tr></thead>
-          <tbody v-for="group in groups" :key="group.strategy"><tr v-for="(row, index) in group.rows" :key="row.condition">
+          <tbody v-for="group in groups" :key="group.strategy"><tr v-for="(row, index) in group.rows" :key="row.condition" :class="row.condition">
             <th v-if="index === 0" :rowspan="group.rows.length" scope="rowgroup"><code>{{ group.strategy }}</code></th>
             <th scope="row">{{ row.source }}</th><td><BenchmarkMetric :value="row.distinctRecordsFetched" unit="count" /></td>
             <td><BenchmarkMetric :value="row.cacheEntriesAfterPrefetch" unit="count" /></td>
@@ -98,8 +96,7 @@ const runTotals = run => ({ successful: run.summaries.reduce((sum, row) => sum +
           <h4>{{ sourceLabel(run.condition) }}</h4>
           <p v-if="run.retained">Latest opt-in stress measurement, retained from an earlier refresh. Its date and environment apply to these rows.</p>
           <p>{{ formatDate(run.startedAt) }} to {{ formatDate(run.generatedAt) }}.</p>
-          <p>{{ run.settings.repetitions }} measured trials after {{ run.settings.warmups }} warm-ups per scenario.
-            {{ runTotals(run).successful }}/{{ runTotals(run).attempted }} successful trials across this run; {{ run.warmupFailures }} failed warm-ups.</p>
+          <p>{{ run.settings.repetitions }} successful measured trials per scenario.</p>
           <p>Package {{ run.packageVersion }} · Chromium {{ run.environment.browserVersion }} · {{ run.environment.node }} · {{ run.environment.platform }} · {{ run.environment.cpu }}</p>
           <p>Network: {{ run.settings.networkLabel ?? 'Local fixture interception' }}. Commit <code>{{ run.gitCommit?.slice(0, 12) ?? 'unavailable' }}</code><span v-if="run.gitWorkingTreeDirty"> with local changes</span>. Measurement version {{ run.measurementVersion }}.</p>
         </section>
@@ -131,10 +128,15 @@ tbody tr + tr { border-top: 1px solid var(--vp-c-divider); }
 .performance-results tr { background: var(--vp-c-bg); border: 0; transition: none; }
 .performance-results tr:nth-child(2n) { background: var(--vp-c-bg-soft); }
 .performance-results td { font-size: inherit; }
-th:first-child, .source { text-align: left; }
+.performance-results th:first-child,
+.performance-results th.source-column,
+.performance-results th.source { text-align: left; }
+.performance-results tr.live { background: var(--vp-c-bg); }
+.performance-results tr.fixture { background: var(--vp-c-bg-soft); }
+.performance-results th.source { background: inherit; }
 .strategy-column { width: 76px; }
 .source-column { width: 78px; }
-.strategy { background: var(--vp-c-bg-soft); vertical-align: middle; }
+.performance-results th.strategy { background: var(--vp-c-bg); }
 .source { font-size: 0.8rem; font-weight: 500; white-space: nowrap; }
 .run-details { margin-top: 1rem; border-top: 1px solid var(--vp-c-divider); padding-top: 0.75rem; }
 summary { cursor: pointer; font-size: 0.9rem; font-weight: 600; }

@@ -1,5 +1,5 @@
 import { createServer } from 'node:http';
-import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import { readFile, mkdir, rename, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,27 +23,50 @@ const fixture = JSON.parse(await readFile(path.join(root, 'benchmark/fixtures/my
 const fieldSelection = process.argv.includes('--field-selection');
 const stress = process.argv.includes('--stress');
 const live = !process.argv.includes('--fixtures');
+const resume = process.argv.includes('--resume');
+if (resume && (!live || fieldSelection)) throw new Error('--resume supports standard and stress live runs.');
+const resultsDirectory = path.join(root, 'benchmark/results');
+const resultStem = fieldSelection ? 'browser-fields-latest' : `browser-${live ? 'live' : 'fixture'}${stress ? '-stress' : ''}-latest`;
+const resultPath = path.join(resultsDirectory, `${resultStem}.json`);
+const originalJson = resume ? await readFile(resultPath, 'utf8') : null;
+const previous = resume ? JSON.parse(originalJson) : null;
+const saved = previous?.settings;
+if (previous && (previous.schemaVersion !== 2 || previous.measurementVersion !== 3
+  || previous.condition !== 'live' || !previous.definitions?.fullPageLoadMs
+  || Object.entries(provenance.inputSha256).some(([file, hash]) =>
+    !['benchmark/browser.mjs', 'benchmark/browser-report.mjs'].includes(file)
+    && previous.inputSha256?.[file] !== hash))) {
+  throw new Error('Resume requires a compatible live result with matching benchmark inputs.');
+}
+const slotKey = ({ annotatedElements, strategy, loadingMode, trial }) =>
+  JSON.stringify([annotatedElements, strategy, loadingMode, trial]);
+const latestAttempts = new Map(previous?.rawObservations.map(row => [slotKey(row), row]));
+const retrySlots = [...latestAttempts.values()].filter(row => row.error);
+if (resume && !retrySlots.length) {
+  console.log('All measured trial slots are complete.');
+  process.exit(0);
+}
 if (!live && (fieldSelection || process.argv.includes('--live'))) throw new Error('--fixtures cannot be combined with --live or --field-selection.');
-if (process.argv.slice(2).some(argument => !['--live', '--fixtures', '--field-selection', '--stress'].includes(argument))) throw new Error('Usage: node benchmark/browser.mjs [--live | --fixtures | --field-selection] [--stress]');
-const repetitions = positiveInteger(live ? 'BENCH_BROWSER_LIVE_TRIALS' : 'BENCH_BROWSER_TRIALS', stress ? 3 : 30);
-const warmups = nonNegativeInteger(live ? 'BENCH_BROWSER_LIVE_WARMUPS' : 'BENCH_BROWSER_WARMUPS', stress ? 1 : 2);
-const pageSizes = process.env.BENCH_BROWSER_PAGE_SIZES
+if (process.argv.slice(2).some(argument => !['--live', '--fixtures', '--field-selection', '--stress', '--resume'].includes(argument))) throw new Error('Usage: node benchmark/browser.mjs [--live | --fixtures | --field-selection] [--stress] [--resume]');
+const repetitions = saved?.repetitions ?? positiveInteger(live ? 'BENCH_BROWSER_LIVE_TRIALS' : 'BENCH_BROWSER_TRIALS', stress ? 3 : 30);
+const warmups = saved?.warmups ?? nonNegativeInteger(live ? 'BENCH_BROWSER_LIVE_WARMUPS' : 'BENCH_BROWSER_WARMUPS', stress ? 1 : 2);
+const pageSizes = saved?.pageSizes ?? (process.env.BENCH_BROWSER_PAGE_SIZES
   ? process.env.BENCH_BROWSER_PAGE_SIZES.split(',').map(Number)
-  : stress ? [1000] : [10, 100];
+  : stress ? [1000] : [10, 100]);
 if (!pageSizes.length || new Set(pageSizes).size !== pageSizes.length || pageSizes.some(size => !supportedPageSizes.includes(size))) {
   throw new Error('BENCH_BROWSER_PAGE_SIZES must list unique sizes from 10,100,1000.');
 }
 if (stress && (pageSizes.length !== 1 || pageSizes[0] !== 1000)) throw new Error('--stress requires only 1000 elements; use the routine command for a combined page-size matrix.');
 pageSizes.forEach(elements => identifiersForPage(elements));
-const sectionLoadingModes = fieldSelection ? ['lightweight'] : (process.env.BENCH_BROWSER_LOADING_MODES?.split(',') ?? loadingModes);
+const sectionLoadingModes = saved?.sectionLoadingModes ?? (fieldSelection ? ['lightweight'] : (process.env.BENCH_BROWSER_LOADING_MODES?.split(',') ?? loadingModes));
 if (!sectionLoadingModes.length || new Set(sectionLoadingModes).size !== sectionLoadingModes.length) throw new Error('Loading modes must be nonempty and unique.');
 sectionLoadingModes.forEach(mode => loadingConfig(mode));
-const trialPauseMs = live ? nonNegativeNumber('BENCH_BROWSER_LIVE_PAUSE_MS', 250) : 0;
-const timeoutMs = live ? positiveInteger('BENCH_BROWSER_LIVE_TIMEOUT_MS', pageSizes.includes(1000) ? 120000 : 30000) : 30000;
-const networkLabel = process.env.BENCH_BROWSER_NETWORK_LABEL || 'Not specified (runner network)';
+const trialPauseMs = saved?.trialPauseMs ?? (live ? nonNegativeNumber('BENCH_BROWSER_LIVE_PAUSE_MS', 250) : 0);
+const timeoutMs = saved?.timeoutMs ?? (live ? positiveInteger('BENCH_BROWSER_LIVE_TIMEOUT_MS', pageSizes.includes(1000) ? 120000 : 30000) : 30000);
+const networkLabel = saved?.networkLabel ?? (process.env.BENCH_BROWSER_NETWORK_LABEL || 'Not specified (runner network)');
 const strategies = ['none', 'smart', 'all'];
-const observations = [];
-const warmupFailures = [];
+const observations = previous?.rawObservations ?? [];
+const warmupFailures = previous?.warmupFailures ?? [];
 const startedAt = new Date().toISOString();
 
 const server = createServer(async (request, response) => {
@@ -179,20 +202,31 @@ try {
   await cdp.send('Network.enable');
   await cdp.send('Network.setCacheDisabled', { cacheDisabled: true });
 
-  for (const elements of pageSizes) {
-    for (const strategy of strategies) {
-      for (let trial = 0; trial < warmups + repetitions; trial += 1) {
-        const warmup = trial < warmups;
-        const orderedModes = trial % 2 ? [...sectionLoadingModes].reverse() : sectionLoadingModes;
-        for (const loadingMode of orderedModes) {
-          for (const fieldVariant of fieldSelection ? fieldVariantOrder(trial) : [undefined]) {
-            const observation = await runTrial({ page, baseUrl, elements, strategy, warmup, fieldVariant, loadingMode });
-            observation.trial = warmup ? trial + 1 : trial - warmups + 1;
-            if (!warmup) observations.push(observation);
-            else if (observation.error) warmupFailures.push(observation);
-            if (observation.error) console.warn(`Failed ${loadingMode}/${fieldVariant ?? ''}/${strategy}/${elements}, ${warmup ? 'warm-up' : 'trial'} ${observation.trial}: ${observation.error}`);
-            if (!warmup && (trial - warmups + 1) % 10 === 0) console.log(`Completed ${loadingMode}/${fieldVariant ?? ''}/${strategy}/${elements}: ${trial - warmups + 1}/${repetitions}`);
-            if (trialPauseMs) await page.waitForTimeout(trialPauseMs);
+  if (resume) {
+    console.log(`Retrying ${retrySlots.length} failed trial slots.`);
+    for (const slot of retrySlots) {
+      const { annotatedElements: elements, strategy, loadingMode, trial } = slot;
+      const observation = await runTrial({ page, baseUrl, elements, strategy, warmup: false, loadingMode });
+      observations.push({ ...observation, trial, retrySession: (previous.retrySessions?.length ?? 0) + 1 });
+      console.log(`${loadingMode}/${strategy}/${elements}, trial ${trial}: ${observation.error ?? 'success'}`);
+      if (trialPauseMs) await page.waitForTimeout(trialPauseMs);
+    }
+  } else {
+    for (const elements of pageSizes) {
+      for (const strategy of strategies) {
+        for (let trial = 0; trial < warmups + repetitions; trial += 1) {
+          const warmup = trial < warmups;
+          const orderedModes = trial % 2 ? [...sectionLoadingModes].reverse() : sectionLoadingModes;
+          for (const loadingMode of orderedModes) {
+            for (const fieldVariant of fieldSelection ? fieldVariantOrder(trial) : [undefined]) {
+              const observation = await runTrial({ page, baseUrl, elements, strategy, warmup, fieldVariant, loadingMode });
+              observation.trial = warmup ? trial + 1 : trial - warmups + 1;
+              if (!warmup) observations.push(observation);
+              else if (observation.error) warmupFailures.push(observation);
+              if (observation.error) console.warn(`Failed ${loadingMode}/${fieldVariant ?? ''}/${strategy}/${elements}, ${warmup ? 'warm-up' : 'trial'} ${observation.trial}: ${observation.error}`);
+              if (!warmup && (trial - warmups + 1) % 10 === 0) console.log(`Completed ${loadingMode}/${fieldVariant ?? ''}/${strategy}/${elements}: ${trial - warmups + 1}/${repetitions}`);
+              if (trialPauseMs) await page.waitForTimeout(trialPauseMs);
+            }
           }
         }
       }
@@ -232,6 +266,7 @@ const summaries = [...groups.values()].map(attempts => {
     attemptedTrials: attempts.length,
     failedTrials: attempts.length - rows.length,
     pageLoad: timings('pageLoadMs'),
+    fullPageLoad: timings('fullPageLoadMs'),
     initialization: timings('initMs'),
     readiness: timings('readyMs'),
     prefetchCompletion: timings('prefetchCompletionMs'),
@@ -266,14 +301,15 @@ const result = {
   measurementVersion: 3,
   benchmark: fieldSelection ? 'browser-field-selection' : live ? 'browser-live-api' : 'browser-fixtures',
   condition: fieldSelection ? 'live-field-selection' : live ? 'live' : 'fixture',
-  startedAt,
+  startedAt: previous?.startedAt ?? startedAt,
   generatedAt: new Date().toISOString(),
   packageVersion: JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8')).version,
   ...provenance,
   settings: { ...(fieldSelection ? { fieldVariants, fieldsByVariant: Object.fromEntries(fieldVariants.map(variant => [variant, fieldsForVariant(variant)])), requestOverride: true, variantOrder: 'Alternates within matched scenario/trial, including warm-ups; not randomized.' } : {}), browser: 'Chromium', repetitions, warmups, pageSizes, strategies, sectionLoadingModes, displayByLoadingMode: Object.fromEntries(sectionLoadingModes.map(mode => [mode, loadingConfig(mode)])), interactionsPerTrial: 5, cacheState: 'Fresh document and JavaScript realm per trial; Chromium HTTP cache disabled; first five interactions use distinct identifiers; repeat interaction uses the in-memory annotation cache. Browser connections and provider caches may be reused.', visualPreload: 'none', viewport: { width: 1280, height: 900 }, uniqueRatio: 0.8, ...(live ? { networkLabel, trialPauseMs, timeoutMs, identifiers: liveGeneSymbols, endpoint: 'https://mygene.info/v3/query', species: 9606, scopes: 'symbol' } : {}) },
   environment: { node: process.version, platform: `${os.platform()} ${os.release()} ${os.arch()}`, cpu: os.cpus()[0]?.model ?? 'unknown', logicalCpus: os.cpus().length, totalMemoryBytes: os.totalmem(), browserVersion },
   definitions: {
-    pageLoadMs: 'navigationStart to DOMContentLoaded; browser Navigation Timing API.',
+    pageLoadMs: 'Navigation start to DOMContentLoaded completion (DOM loaded).',
+    fullPageLoadMs: 'Navigation start to load event completion (PerformanceNavigationTiming.loadEventEnd).',
     initMs: 'Synchronous duration of the real GeneTooltip.init() call.',
     readyMs: 'navigationStart to completion of the inline module initialization; optional background prefetch is excluded.',
     prefetchCompletionMs: 'From initialization endpoint until all distinct identifiers were successfully parsed. This tracks cumulative fetched identifiers rather than cache size, so eviction does not prevent completion. For large smart pages, the runner scrolls the document to trigger viewport observers; this includes the deliberate scroll and 200 ms observer debounce.',
@@ -287,7 +323,7 @@ const result = {
     loadingComparison: 'Same collapsed GeneRIF display with sectionLoading lazy versus eager. Trial order alternates modes; cache remains bounded and may evict records above capacity.',
     ...(live ? {
       providerRequestMs: 'Within-trial median of initial-phase successful provider request start to complete response body. Includes network/download; excludes application rendering. Expansion request bodies are measured separately.',
-      failures: 'Failed measured trials are retained in rawObservations but excluded from latency summaries; failed warm-ups are retained in warmupFailures. No automatic retries.',
+      failures: 'Failed measured trials are retained in rawObservations but excluded from latency summaries; failed warm-ups are retained in warmupFailures. Explicit resume retries failed trial slots and retains every attempt.',
       transferredBytes: 'Encoded response body bytes from Playwright request.sizes(), excluding response headers. Full live bodies are parsed by the library, not copied into the runner.',
       cacheEntriesAfterPrefetch: 'Entries retained after prefetch. This is distinct from cumulative fetched IDs and can be lower under cache eviction.',
       distinctRecordsFetched: 'Cumulative distinct query identifiers successfully parsed by the application, independent of bounded-cache eviction.',
@@ -302,10 +338,21 @@ const result = {
   warmupFailures,
 };
 
-const resultsDirectory = path.join(root, 'benchmark/results');
+if (resume) {
+  result.retrySessions = [...(previous.retrySessions ?? []), {
+    startedAt, generatedAt: result.generatedAt, environment: result.environment, ...provenance,
+  }];
+  for (const key of ['environment', 'gitCommit', 'gitWorkingTreeDirty', 'inputSha256', 'packageVersion', 'settings']) {
+    result[key] = previous[key];
+  }
+}
 await mkdir(resultsDirectory, { recursive: true });
-const resultStem = fieldSelection ? 'browser-fields-latest' : `browser-${live ? 'live' : 'fixture'}${stress ? '-stress' : ''}-latest`;
-await writeFile(path.join(resultsDirectory, `${resultStem}.json`), `${JSON.stringify(result, null, 2)}\n`);
+const temporaryResult = `${resultPath}.${process.pid}.tmp`;
+await writeFile(temporaryResult, `${JSON.stringify(result, null, 2)}\n`);
+if (resume && await readFile(resultPath, 'utf8') !== originalJson) {
+  throw new Error(`Results changed during retry. Retry output is saved at ${temporaryResult}.`);
+}
+await rename(temporaryResult, resultPath);
 await writeFile(path.join(resultsDirectory, `${resultStem}.csv`), toCsv(browserCsvRows(summaries.map(row => ({ ...row, source: result.condition })))));
 const fixtureResult = !live ? result : await readSavedResult(`browser-fixture${stress ? '-stress' : ''}-latest.json`);
 const liveResult = live && !fieldSelection ? result : await readSavedResult(`browser-live${stress ? '-stress' : ''}-latest.json`);
@@ -317,7 +364,7 @@ if (live && !fieldSelection) await writeFile(path.join(resultsDirectory, `${resu
 if (fieldSelection) await writeFile(path.join(resultsDirectory, 'browser-fields-latest.md'), `# Field selection browser benchmark results\n\n${renderFieldSelectionSection(result)}`);
 console.log(markdown);
 console.log(`Raw trials: ${path.join(resultsDirectory, `${resultStem}.json`)}`);
-if (observations.some(row => row.error)) process.exitCode = 1;
+if (summaries.some(row => row.trials !== repetitions)) process.exitCode = 1;
 
 async function readSavedResult(name) {
   try { return JSON.parse(await readFile(path.join(resultsDirectory, name), 'utf8')); }
@@ -490,11 +537,19 @@ async function runTrial({ page, baseUrl, elements, strategy, warmup, fieldVarian
     if (fieldVariant && (!fieldValidation.records || (fieldVariant === 'reference' && !fieldValidation.recordsWithGenerif))) {
       throw new Error('Field-selection response validation failed: expected matched records and reference GeneRIF annotations.');
     }
+    // Read the navigation timestamp after interactions to preserve their scheduling.
+    const loadTiming = await page.waitForFunction(() => {
+      const loadEventEnd = performance.getEntriesByType('navigation')[0]?.loadEventEnd;
+      return loadEventEnd > 0 ? loadEventEnd : false;
+    }, null, { timeout: timeoutMs });
+    const fullPageLoadMs = await loadTiming.jsonValue();
+    await loadTiming.dispose();
     const requests = responseInfo.length;
     const result = {
       ...(fieldVariant ? { fieldVariant, fieldValidation } : {}),
       loadingMode, strategy, annotatedElements: elements, uniqueIdentifiers: uniqueCount(elements), warmup,
       pageLoadMs: ready.domContentLoadedMs,
+      fullPageLoadMs,
       initMs: ready.initMs,
       readyMs: ready.readyAt,
       initializationRequests,

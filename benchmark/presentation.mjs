@@ -20,6 +20,7 @@ export const browserViews = {
   ],
   startup: [
     { key: 'pageLoad', label: 'DOM loaded' },
+    { key: 'fullPageLoad', label: 'Page load' },
     { key: 'readiness', label: 'Tooltips ready' },
     { key: 'prefetchCompletion', label: 'Prefetch complete' },
   ],

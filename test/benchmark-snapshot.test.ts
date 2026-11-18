@@ -20,6 +20,19 @@ describe('published benchmark snapshot', () => {
     expect(snapshot.browser[0]).not.toHaveProperty('rawObservations');
   });
 
+  it('accepts a completed retry and preserves its attempted counts and session metadata', () => {
+    const [renderer, live, fixture] = inputs();
+    const row = live.summaries[0];
+    row.failedTrials += 1;
+    row.attemptedTrials += 1;
+    live.retrySessions = [{ startedAt: live.startedAt, generatedAt: live.generatedAt }];
+    const [saved] = createPublishedSnapshot(renderer, live, fixture).browser;
+    expect(saved.retrySessions).toEqual(live.retrySessions);
+    expect(saved.summaries[0].attemptedTrials).toBe(row.trials + 1);
+    row.trials -= 1;
+    expect(() => createPublishedSnapshot(renderer, live, fixture)).toThrow();
+  });
+
   it('rejects failed, legacy, mismatched and invalid runs before replacing published data', () => {
     const edits = [
       (runs: any[]) => { runs[1].summaries[0].failedTrials = 1; },

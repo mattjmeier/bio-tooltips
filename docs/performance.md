@@ -77,7 +77,8 @@ of renders after warm-up.
 | Hover → content | Actual `mouseenter` to the library's `content set` event. |
 | Hover → visible DOM | The same hover until its tooltip has content and reaches the visible DOM state. |
 | Cached repeat | A hover on a second element using an already cached identifier. |
-| DOM loaded | Navigation start to `DOMContentLoaded`. |
+| DOM loaded | Navigation start to completion of `DOMContentLoaded`. |
+| Page load | Navigation start to completion of the browser’s `load` event, measured by [`PerformanceNavigationTiming.loadEventEnd`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming/loadEventEnd). |
 | Tooltips ready | Navigation start to completion of tooltip initialization; background prefetch is excluded. |
 | Prefetch complete | End of initialization until all distinct query identifiers have been fetched and parsed, even if some are later evicted. |
 | First GeneRIF expansion | Actual expansion click until the section is open and deferred content has loaded. |
@@ -93,7 +94,9 @@ hovers follow completed prefetch; `none` fetches on demand.
 Large `smart` pages are scrolled to exercise viewport prefetch. Their completion time
 includes scrolling and the observer's 200 ms debounce. Page startup includes the local
 server and script-loading overhead. Initialization can finish before `DOMContentLoaded`
-fires, so **Tooltips ready** may be slightly earlier than **DOM loaded**.
+fires, so **Tooltips ready** may be slightly earlier than **DOM loaded**. Asynchronous
+annotation prefetch can continue after **Page load**. Earlier runs show a dash for
+**Page load** until the corresponding benchmarks are rerun.
 
 These are lifecycle and DOM measurements, not browser paint or animation-completion
 timings. Optional visuals, visual preloading and animations are disabled. The browser
@@ -103,8 +106,9 @@ the chemical adapter's browser behavior.
 Live timings depend on the host, network and provider state. Connections and provider
 caches may be reused; these are observations, not service guarantees. Compare runs with
 matching settings and environments. Quartiles and p95 use linear interpolation. Failed
-trials are recorded in local reports and excluded from timing summaries; only complete,
-successful measured runs refresh the published snapshot.
+attempts are recorded in local reports and excluded from timing summaries. The published
+snapshot requires the configured number of successes for every scenario and includes
+the attempted counts from resumed runs.
 
 ## Run the benchmarks
 
@@ -114,6 +118,12 @@ npm run benchmark:browser            # Live MyGene.info requests
 npm run benchmark:browser:fixtures   # Immediate local fixture responses
 npm run benchmark:publish-results    # Refresh the snapshot used by this page
 ```
+
+To retry failed live trial slots using their saved settings, run
+`npm run benchmark:browser -- --resume`. This starts a fresh browser session and
+appends one attempt per unresolved slot to the local results. The original attempts,
+including failures, remain in the results. For a saved live stress run, use
+`npm run benchmark:browser:stress -- --resume`.
 
 To include the large workload before publishing:
 

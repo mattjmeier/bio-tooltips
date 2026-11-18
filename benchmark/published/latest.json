@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "renderer": {
     "schemaVersion": 2,
-    "packageVersion": "2.4.0",
-    "gitCommit": "c9600f19f30d2b4cc83c10b7786bf6ed660bcad5",
-    "gitWorkingTreeDirty": false,
+    "packageVersion": "2.4.1",
+    "gitCommit": "d2bd5baaf396a869ec7a3af92607ae76fd660ade",
+    "gitWorkingTreeDirty": true,
     "inputSha256": {
-      "package.json": "b32562d30adb674e3fa73882f9293c989cd9b82d19690b8f63c03777c8d5792d",
-      "package-lock.json": "36b0205447027d69ae09386c60b83d7270a33872beb612f8825f1f6144a12505",
+      "package.json": "47cd8843eb773eb02e6b76e976b91c7ed37f3e700afc4951882d965886f09b74",
+      "package-lock.json": "b5d88c569909366b3d44f880f1d84ee1f5a16fac0044489fbaf070ebac3b3f43",
       "esbuild.config.js": "820626c695c4adefac1525cf8a1e0f3042fd09219ea65fdaadda13d3a78bba2a",
       "benchmark/run.mjs": "0c63f5ad2ebb28145a8558d1e590168b038b1dc00cbd80f14336f8327fbb8901",
       "benchmark/report.mjs": "552a0b6ff5e40bcc567b2e74d67ce10058f69481c50ab559d13dafd69a1a02fe",
@@ -15,12 +15,12 @@
       "benchmark/fixtures/mygene-tp53.json": "23212e03c72152f9835717e86a596febba3feb6c2db8ab1283829ddd0bd9ab86",
       "benchmark/fixtures/mygene-brca1.json": "4f9b92efd96772fcaa05375568d03c2327e09ff943ad91f42021550dd5bb0741",
       "benchmark/fixtures/mychem-aspirin.json": "7e8b64cd68ca62678b729e176f40fac05d2ef1290909a1ece6137a053c58a398",
-      "dist/bio-tooltips.esm.js": "328e1f8a1eeb2ff183a107c0e87403a41a91c043950e076bdc79be65c1e1c0e6",
-      "dist/bio-tooltips.mygene.esm.js": "56368544700b3d80e553af0835148749ccbe6ca9fb383f24b7c372addfe0acc9",
-      "dist/bio-tooltips.mychem.esm.js": "26eb67ba50ce635a16a63856d4c938631eac7fee1922a536c8ef088c666c1c79",
-      "dist/bio-tooltips.css": "db150030912a2c27211d071866811f350bd983470a9feab7080eb78a475270b4"
+      "dist/bio-tooltips.esm.js": "4e4e8dd3df8a6e883658906d1e26fb03522acd927e70d8b3355255c5112d9ae7",
+      "dist/bio-tooltips.mygene.esm.js": "ad3635cea758046f070ff9023dd8670e91f7168585f204b9790a319360dbefed",
+      "dist/bio-tooltips.mychem.esm.js": "09fe9d0cd22cb108cedba63d60c806d516dd2866d442878393a429ab35545450",
+      "dist/bio-tooltips.css": "a31620b4e3602b9691424470d2afe4021533aed315ea71343b847b83bb614096"
     },
-    "generatedAt": "2026-11-17T22:55:38.446Z",
+    "generatedAt": "2026-11-18T16:13:53.719Z",
     "environment": {
       "node": "v24.14.0",
       "platform": "linux 7.0.0-42-generic x64",
@@ -38,21 +38,21 @@
         "label": "MyGene TP53",
         "operations": 2000,
         "observations": 100,
-        "medianMs": 0.03038682499999936,
-        "q1Ms": 0.02558286249999995,
-        "q3Ms": 0.04136760000000095,
-        "p95Ms": 0.08857113000000047,
-        "htmlBytes": 11966
+        "medianMs": 0.03929112500000045,
+        "q1Ms": 0.03451352499999949,
+        "q3Ms": 0.05532591250000003,
+        "p95Ms": 0.18517255749999947,
+        "htmlBytes": 25679
       },
       {
         "caseId": "mygene-brca1",
         "label": "MyGene BRCA1",
         "operations": 2000,
         "observations": 100,
-        "medianMs": 0.0204172750000005,
-        "q1Ms": 0.018067312499999842,
-        "q3Ms": 0.022637837500000303,
-        "p95Ms": 0.03894814000000018,
+        "medianMs": 0.01648710000000051,
+        "q1Ms": 0.015937062499999398,
+        "q3Ms": 0.02130078749999882,
+        "p95Ms": 0.061160117499999986,
         "htmlBytes": 10724
       },
       {
@@ -60,10 +60,10 @@
         "label": "MyChem aspirin",
         "operations": 2000,
         "observations": 100,
-        "medianMs": 0.26245704999999897,
-        "q1Ms": 0.22349949999999977,
-        "q3Ms": 0.31832955,
-        "p95Ms": 0.47501493499999914,
+        "medianMs": 0.3215473250000016,
+        "q1Ms": 0.21604420000000035,
+        "q3Ms": 0.46645638749999985,
+        "p95Ms": 0.7323951149999991,
         "htmlBytes": 18927
       }
     ]
@@ -72,15 +72,15 @@
     {
       "schemaVersion": 2,
       "measurementVersion": 3,
-      "packageVersion": "2.4.0",
-      "gitCommit": "c9600f19f30d2b4cc83c10b7786bf6ed660bcad5",
-      "gitWorkingTreeDirty": false,
+      "packageVersion": "2.4.1",
+      "gitCommit": "d2bd5baaf396a869ec7a3af92607ae76fd660ade",
+      "gitWorkingTreeDirty": true,
       "inputSha256": {
-        "package.json": "b32562d30adb674e3fa73882f9293c989cd9b82d19690b8f63c03777c8d5792d",
-        "package-lock.json": "36b0205447027d69ae09386c60b83d7270a33872beb612f8825f1f6144a12505",
+        "package.json": "47cd8843eb773eb02e6b76e976b91c7ed37f3e700afc4951882d965886f09b74",
+        "package-lock.json": "b5d88c569909366b3d44f880f1d84ee1f5a16fac0044489fbaf070ebac3b3f43",
         "esbuild.config.js": "820626c695c4adefac1525cf8a1e0f3042fd09219ea65fdaadda13d3a78bba2a",
-        "benchmark/browser.mjs": "257b83603e84bed0fdc1e9095ffaebeb285a0e22a57acd8ef0e571c5d46bc111",
-        "benchmark/browser-report.mjs": "72c7d0a0696d2d1a3d8ad66925090d4df54202d76c55ab25dfc1fcc24efbca96",
+        "benchmark/browser.mjs": "0bde9a6dfbc1b82ad61892e24a98fa6145260ac2fc4545e5d10e7c647aa9f8df",
+        "benchmark/browser-report.mjs": "5c1a3f5f7060940da8769310d054564db560142af96417655e80176f153ec6b5",
         "benchmark/report.mjs": "552a0b6ff5e40bcc567b2e74d67ce10058f69481c50ab559d13dafd69a1a02fe",
         "benchmark/live-genes.mjs": "c037f09dd18f51d3e23e533f66ad76688ba2d4864996d58efb40195991410b30",
         "benchmark/field-selection.mjs": "3ee7bb32878607d05a1c35d29bc38dc4cda5f7b394b271d5b2192ea0fc9b5e1d",
@@ -88,11 +88,11 @@
         "benchmark/scenarios.mjs": "7fb0b133f0f92f69b30b95caeb2d63c009f9fae4ee95c6429c560ec73bf4677d",
         "benchmark/fixtures/mygene-stress-symbols.json": "4386fec29eee9b068c9250841fdf2e7d8b7d39600bb46594f8a089fe0fc85761",
         "benchmark/fixtures/mygene-tp53.json": "23212e03c72152f9835717e86a596febba3feb6c2db8ab1283829ddd0bd9ab86",
-        "dist/bio-tooltips.mygene.esm.js": "56368544700b3d80e553af0835148749ccbe6ca9fb383f24b7c372addfe0acc9",
-        "dist/bio-tooltips.css": "db150030912a2c27211d071866811f350bd983470a9feab7080eb78a475270b4"
+        "dist/bio-tooltips.mygene.esm.js": "ad3635cea758046f070ff9023dd8670e91f7168585f204b9790a319360dbefed",
+        "dist/bio-tooltips.css": "a31620b4e3602b9691424470d2afe4021533aed315ea71343b847b83bb614096"
       },
-      "startedAt": "2026-11-17T23:02:13.660Z",
-      "generatedAt": "2026-11-17T23:22:35.734Z",
+      "startedAt": "2026-11-18T14:58:13.261Z",
+      "generatedAt": "2026-11-18T16:12:28.146Z",
       "environment": {
         "node": "v24.14.0",
         "platform": "linux 7.0.0-42-generic x64",
@@ -154,7 +154,7 @@
           "height": 900
         },
         "uniqueRatio": 0.8,
-        "networkLabel": "Local workstation network (location unspecified)",
+        "networkLabel": "Not specified (runner network)",
         "trialPauseMs": 250,
         "timeoutMs": 30000,
         "identifiers": [
@@ -963,6 +963,38 @@
         "species": 9606,
         "scopes": "symbol"
       },
+      "retrySessions": [
+        {
+          "startedAt": "2026-11-18T16:12:13.711Z",
+          "generatedAt": "2026-11-18T16:12:28.146Z",
+          "environment": {
+            "node": "v24.14.0",
+            "platform": "linux 7.0.0-42-generic x64",
+            "cpu": "AMD Ryzen 9 3950X 16-Core Processor",
+            "logicalCpus": 32,
+            "totalMemoryBytes": 134968143872,
+            "browserVersion": "153.0.8010.12"
+          },
+          "gitCommit": "d2bd5baaf396a869ec7a3af92607ae76fd660ade",
+          "gitWorkingTreeDirty": true,
+          "inputSha256": {
+            "package.json": "47cd8843eb773eb02e6b76e976b91c7ed37f3e700afc4951882d965886f09b74",
+            "package-lock.json": "b5d88c569909366b3d44f880f1d84ee1f5a16fac0044489fbaf070ebac3b3f43",
+            "esbuild.config.js": "820626c695c4adefac1525cf8a1e0f3042fd09219ea65fdaadda13d3a78bba2a",
+            "benchmark/browser.mjs": "0079ee11cd9bc100f535eac408ad0a876c4f4f82210c7a31629e50e0a97a0e00",
+            "benchmark/browser-report.mjs": "5c1a3f5f7060940da8769310d054564db560142af96417655e80176f153ec6b5",
+            "benchmark/report.mjs": "552a0b6ff5e40bcc567b2e74d67ce10058f69481c50ab559d13dafd69a1a02fe",
+            "benchmark/live-genes.mjs": "c037f09dd18f51d3e23e533f66ad76688ba2d4864996d58efb40195991410b30",
+            "benchmark/field-selection.mjs": "3ee7bb32878607d05a1c35d29bc38dc4cda5f7b394b271d5b2192ea0fc9b5e1d",
+            "benchmark/provenance.mjs": "10f97ad38ebcc07c9d29b9809113c5781b84e499fbf71398edb687e8b2ddceaa",
+            "benchmark/scenarios.mjs": "7fb0b133f0f92f69b30b95caeb2d63c009f9fae4ee95c6429c560ec73bf4677d",
+            "benchmark/fixtures/mygene-stress-symbols.json": "4386fec29eee9b068c9250841fdf2e7d8b7d39600bb46594f8a089fe0fc85761",
+            "benchmark/fixtures/mygene-tp53.json": "23212e03c72152f9835717e86a596febba3feb6c2db8ab1283829ddd0bd9ab86",
+            "dist/bio-tooltips.mygene.esm.js": "ad3635cea758046f070ff9023dd8670e91f7168585f204b9790a319360dbefed",
+            "dist/bio-tooltips.css": "a31620b4e3602b9691424470d2afe4021533aed315ea71343b847b83bb614096"
+          }
+        }
+      ],
       "condition": "live",
       "summaries": [
         {
@@ -975,27 +1007,35 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 14.550000071525574,
-            "q1Ms": 12.625000059604645,
-            "q3Ms": 16.57499998807907,
-            "p95Ms": 20.16000002622604,
-            "meanMs": 14.933333333333334
+            "medianMs": 29.550000071525574,
+            "q1Ms": 22.524999976158142,
+            "q3Ms": 30.974999964237213,
+            "p95Ms": 38.65499994754791,
+            "meanMs": 28.239999993642172
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 29.850000023841858,
+            "q1Ms": 23.30000001192093,
+            "q3Ms": 31.100000023841858,
+            "p95Ms": 38.85499999523162,
+            "meanMs": 28.523333350817364
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 1.100000023841858,
-            "q1Ms": 0.9250000715255737,
-            "q3Ms": 1.4000000357627869,
-            "p95Ms": 1.7999999523162842,
-            "meanMs": 1.2133333206176757
+            "medianMs": 1,
+            "q1Ms": 0.9000000953674316,
+            "q3Ms": 1.0999999046325684,
+            "p95Ms": 2.220000052452086,
+            "meanMs": 1.203333314259847
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 14.450000047683716,
-            "q1Ms": 12.549999952316284,
-            "q3Ms": 16.549999833106995,
-            "p95Ms": 20.060000121593472,
-            "meanMs": 14.849999984105429
+            "medianMs": 29.450000047683716,
+            "q1Ms": 22.450000047683716,
+            "q3Ms": 30.67500001192093,
+            "p95Ms": 38.599999999999994,
+            "meanMs": 27.933333333333334
           },
           "prefetchCompletion": null,
           "initializationRequests": {
@@ -1032,11 +1072,11 @@
           },
           "transferredBytes": {
             "observations": 30,
-            "median": 671795,
-            "q1": 671795,
-            "q3": 671804,
-            "p95": 671808.95,
-            "mean": 671800.1
+            "median": 671741,
+            "q1": 671741,
+            "q3": 671746.75,
+            "p95": 671750.55,
+            "mean": 671738.2333333333
           },
           "interactionRequests": {
             "observations": 30,
@@ -1064,43 +1104,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 79.89999997615814,
-            "q1Ms": 79.12500011920929,
-            "q3Ms": 80.5,
-            "p95Ms": 89.88999993801116,
-            "meanMs": 80.92666669686635
+            "medianMs": 103.94999992847443,
+            "q1Ms": 98.95000010728836,
+            "q3Ms": 110.42500001192093,
+            "p95Ms": 129.0450000047683,
+            "meanMs": 106.15333336194357
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 79.89999997615814,
-            "q1Ms": 79.12500011920929,
-            "q3Ms": 80.57499992847443,
-            "p95Ms": 89.88999993801116,
-            "meanMs": 80.95666668415069
+            "medianMs": 104,
+            "q1Ms": 98.9750000834465,
+            "q3Ms": 110.42500001192093,
+            "p95Ms": 129.0450000047683,
+            "meanMs": 106.1866666952769
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.5499999523162842,
-            "q1Ms": 1.4250000715255737,
-            "q3Ms": 1.7750001549720764,
-            "p95Ms": 2.1649999737739556,
-            "meanMs": 1.6166666825612386
+            "medianMs": 1.3000001907348633,
+            "q1Ms": 1.2000000476837158,
+            "q3Ms": 1.4000000953674316,
+            "p95Ms": 1.6099998950958248,
+            "meanMs": 1.2566666920979819
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 396.64999997615814,
-            "q1Ms": 339.9749999642372,
-            "q3Ms": 472.625,
-            "p95Ms": 1454.4849998831733,
-            "meanMs": 552.4266666650772
+            "medianMs": 1245.5500000715256,
+            "q1Ms": 1181.3249999284744,
+            "q3Ms": 1320.5000001192093,
+            "p95Ms": 3175.9700001001315,
+            "meanMs": 1462.9766666968665
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.2999999523162842,
-            "q1Ms": 0.2999999523162842,
-            "q3Ms": 0.3749999403953552,
-            "p95Ms": 0.7549999952316281,
-            "meanMs": 0.3700000127156576
+            "q1Ms": 0.20000004768371582,
+            "q3Ms": 0.2999999523162842,
+            "p95Ms": 0.40000009536743164,
+            "meanMs": 0.2666666269302368
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -1115,16 +1155,16 @@
             "median": 4651,
             "q1": 4651,
             "q3": 4651,
-            "p95": 4651,
-            "mean": 4651
+            "p95": 4656,
+            "mean": 4651.7
           },
           "sectionResponseBytes": {
             "observations": 30,
-            "median": 667144,
-            "q1": 667144,
-            "q3": 667153,
-            "p95": 667157.95,
-            "mean": 667149.1
+            "median": 667090,
+            "q1": 667090,
+            "q3": 667091,
+            "p95": 667099.55,
+            "mean": 667086.5333333333
           },
           "cacheEntriesAfterPrefetch": {
             "observations": 30,
@@ -1136,11 +1176,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 77.44550000000001,
-            "q1Ms": 77.01125,
-            "q3Ms": 77.988,
-            "p95Ms": 88.0495,
-            "meanMs": 78.63313333333333
+            "medianMs": 100.7865,
+            "q1Ms": 95.99574999999999,
+            "q3Ms": 107.36775,
+            "p95Ms": 127.18304999999992,
+            "meanMs": 103.18643333333331
           }
         },
         {
@@ -1153,27 +1193,35 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 15.399999976158142,
-            "q1Ms": 13.225000083446503,
-            "q3Ms": 17.275000035762787,
-            "p95Ms": 21.574999952316283,
-            "meanMs": 16.02000000476837
+            "medianMs": 27.399999976158142,
+            "q1Ms": 24.175000071525574,
+            "q3Ms": 34.42500001192093,
+            "p95Ms": 43.25999993085861,
+            "meanMs": 29.230000003178915
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 27.5,
+            "q1Ms": 24.67499989271164,
+            "q3Ms": 34.50000011920929,
+            "p95Ms": 43.314999878406525,
+            "meanMs": 29.486666679382324
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 1.2999999523162842,
+            "medianMs": 1,
             "q1Ms": 1,
-            "q3Ms": 1.5749999284744263,
-            "p95Ms": 2.0100001215934746,
-            "meanMs": 1.3199999968210856
+            "q3Ms": 1.1750000715255737,
+            "p95Ms": 3.514999926090237,
+            "meanMs": 1.3766666412353517
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 15.399999976158142,
-            "q1Ms": 13.124999940395355,
-            "q3Ms": 17.25,
-            "p95Ms": 21.48499993085861,
-            "meanMs": 15.963333304723104
+            "medianMs": 27.350000023841858,
+            "q1Ms": 24.099999964237213,
+            "q3Ms": 33.02500003576279,
+            "p95Ms": 42.995000052452085,
+            "meanMs": 28.933333333333334
           },
           "prefetchCompletion": null,
           "initializationRequests": {
@@ -1210,11 +1258,11 @@
           },
           "transferredBytes": {
             "observations": 30,
-            "median": 1511939,
-            "q1": 1511939,
-            "q3": 1511954.75,
-            "p95": 1511957,
-            "mean": 1511941.4
+            "median": 1511891,
+            "q1": 1511885,
+            "q3": 1511897,
+            "p95": 1511906.65,
+            "mean": 1511885.4333333333
           },
           "interactionRequests": {
             "observations": 30,
@@ -1242,43 +1290,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 175.700000166893,
-            "q1Ms": 144.19999992847443,
-            "q3Ms": 263.2499998807907,
-            "p95Ms": 443.5749999642372,
-            "meanMs": 217.56666663487752
+            "medianMs": 479.60000002384186,
+            "q1Ms": 388.1750001311302,
+            "q3Ms": 697.5499999523163,
+            "p95Ms": 886.1300000309939,
+            "meanMs": 553.2433333555857
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 175.80000007152557,
-            "q1Ms": 144.19999992847443,
-            "q3Ms": 263.29999989271164,
-            "p95Ms": 443.5749999642372,
-            "meanMs": 217.62999997138976
+            "medianMs": 479.64999997615814,
+            "q1Ms": 388.2750000357628,
+            "q3Ms": 697.5499999523163,
+            "p95Ms": 886.1849999785418,
+            "meanMs": 553.3033333381017
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 57.09999990463257,
-            "q1Ms": 50.99999988079071,
-            "q3Ms": 60.150000154972076,
-            "p95Ms": 68.86499987840651,
-            "meanMs": 55.42666666507721
+            "medianMs": 84.35000014305115,
+            "q1Ms": 54.59999990463257,
+            "q3Ms": 115.2749999165535,
+            "p95Ms": 127.97500004768372,
+            "meanMs": 86.17000002066294
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 0.5999999046325684,
-            "q1Ms": 0.5,
-            "q3Ms": 0.75,
-            "p95Ms": 1,
-            "meanMs": 0.6233333587646485
+            "medianMs": 0.5,
+            "q1Ms": 0.40000009536743164,
+            "q3Ms": 0.5,
+            "p95Ms": 0.5999999046325684,
+            "meanMs": 0.47333331902821857
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.20000004768371582,
             "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.45500004291534396,
-            "meanMs": 0.250000007947286
+            "q3Ms": 0.20000004768371582,
+            "p95Ms": 0.2999999523162842,
+            "meanMs": 0.20999999841054282
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -1290,11 +1338,11 @@
           },
           "initialResponseBytes": {
             "observations": 30,
-            "median": 1511939,
-            "q1": 1511939,
-            "q3": 1511954.75,
-            "p95": 1511957,
-            "mean": 1511941.4
+            "median": 1511891,
+            "q1": 1511885,
+            "q3": 1511897,
+            "p95": 1511906.65,
+            "mean": 1511885.4333333333
           },
           "sectionResponseBytes": {
             "observations": 30,
@@ -1314,11 +1362,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 159.4415,
-            "q1Ms": 120.36675,
-            "q3Ms": 219.54275,
-            "p95Ms": 389.5457,
-            "meanMs": 186.68280000000001
+            "medianMs": 446.01250000000005,
+            "q1Ms": 351.44425,
+            "q3Ms": 655.8969999999999,
+            "p95Ms": 845.2387499999995,
+            "meanMs": 513.6421666666668
           }
         },
         {
@@ -1331,35 +1379,43 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 15.800000071525574,
-            "q1Ms": 13,
-            "q3Ms": 18.149999916553497,
-            "p95Ms": 22.130000007152557,
-            "meanMs": 15.903333353996278
+            "medianMs": 27.34999990463257,
+            "q1Ms": 25,
+            "q3Ms": 34.375,
+            "p95Ms": 47.16499996185302,
+            "meanMs": 30.559999966621398
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 28.149999976158142,
+            "q1Ms": 25.200000047683716,
+            "q3Ms": 34.74999988079071,
+            "p95Ms": 47.36499987840652,
+            "meanMs": 30.98333330154419
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 1.7500001192092896,
-            "q1Ms": 1.3999999165534973,
-            "q3Ms": 2.3000001311302185,
-            "p95Ms": 2.8199999570846543,
-            "meanMs": 1.8933333555857341
+            "medianMs": 1.600000023841858,
+            "q1Ms": 1.4000000953674316,
+            "q3Ms": 2.774999976158142,
+            "p95Ms": 5.664999973773956,
+            "meanMs": 2.4366666316986083
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 15.75,
-            "q1Ms": 12.899999916553497,
-            "q3Ms": 18.07499998807907,
-            "p95Ms": 22.029999995231627,
-            "meanMs": 15.82000000476837
+            "medianMs": 27.199999928474426,
+            "q1Ms": 24.44999998807907,
+            "q3Ms": 33.99999988079071,
+            "p95Ms": 45.629999899864195,
+            "meanMs": 30.069999941190083
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 212.70000004768372,
-            "q1Ms": 115.5249999165535,
-            "q3Ms": 1412.8000000715256,
-            "p95Ms": 2953.609999930858,
-            "meanMs": 845.2833333412806
+            "medianMs": 119.79999995231628,
+            "q1Ms": 115.64999997615814,
+            "q3Ms": 124.87500005960464,
+            "p95Ms": 138.7399999260902,
+            "meanMs": 137.68000002702078
           },
           "initializationRequests": {
             "observations": 30,
@@ -1367,7 +1423,7 @@
             "q1": 0,
             "q3": 0,
             "p95": 1,
-            "mean": 0.13333333333333333
+            "mean": 0.16666666666666666
           },
           "totalRequests": {
             "observations": 30,
@@ -1395,11 +1451,11 @@
           },
           "transferredBytes": {
             "observations": 30,
-            "median": 670957,
-            "q1": 670957,
-            "q3": 670966,
-            "p95": 670966,
-            "mean": 670960
+            "median": 670921,
+            "q1": 670903,
+            "q3": 670945.75,
+            "p95": 670961.95,
+            "mean": 670924.3
           },
           "interactionRequests": {
             "observations": 30,
@@ -1427,43 +1483,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 1.2999999523162842,
-            "q1Ms": 1,
-            "q3Ms": 1.4000000953674316,
-            "p95Ms": 1.8100000739097588,
-            "meanMs": 1.2566666762034098
+            "medianMs": 0.9000000953674316,
+            "q1Ms": 0.8000001907348633,
+            "q3Ms": 0.9750000238418579,
+            "p95Ms": 1.2000000476837158,
+            "meanMs": 0.9133333841959635
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17.200000047683716,
-            "q1Ms": 17,
-            "q3Ms": 17.375000059604645,
-            "p95Ms": 17.554999947547913,
-            "meanMs": 17.206666692097983
+            "medianMs": 17.049999952316284,
+            "q1Ms": 16.799999952316284,
+            "q3Ms": 17.200000047683716,
+            "p95Ms": 18.454999935626983,
+            "meanMs": 16.920000020662943
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.7000000476837158,
-            "q1Ms": 1.4000000953674316,
-            "q3Ms": 2,
-            "p95Ms": 2.5549999475479126,
-            "meanMs": 1.7466666618982951
+            "medianMs": 1.2999999523162842,
+            "q1Ms": 1.2000000476837158,
+            "q3Ms": 1.3999998569488525,
+            "p95Ms": 2.9050000071525544,
+            "meanMs": 1.5266666412353516
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 561.8499999046326,
-            "q1Ms": 469.72499990463257,
-            "q3Ms": 665.1999999880791,
-            "p95Ms": 2268.5400000691398,
-            "meanMs": 809.6199999968211
+            "medianMs": 548.75,
+            "q1Ms": 505.7249999642372,
+            "q3Ms": 661.4499999284744,
+            "p95Ms": 956.015000069141,
+            "meanMs": 621.5300000111262
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.2999999523162842,
             "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.3749999403953552,
-            "p95Ms": 0.7549999952316281,
-            "meanMs": 0.36000001430511475
+            "q3Ms": 0.3000001907348633,
+            "p95Ms": 0.40000009536743164,
+            "meanMs": 0.2733333587646484
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -1483,11 +1539,11 @@
           },
           "sectionResponseBytes": {
             "observations": 30,
-            "median": 667144,
-            "q1": 667144,
-            "q3": 667153,
-            "p95": 667153,
-            "mean": 667147
+            "median": 667108,
+            "q1": 667090,
+            "q3": 667132.75,
+            "p95": 667148.95,
+            "mean": 667111.3
           },
           "cacheEntriesAfterPrefetch": {
             "observations": 30,
@@ -1499,11 +1555,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 185.824,
-            "q1Ms": 86.80125,
-            "q3Ms": 1393.0915,
-            "p95Ms": 2928.5823499999997,
-            "meanMs": 818.5679999999999
+            "medianMs": 88.8075,
+            "q1Ms": 86.53450000000001,
+            "q3Ms": 91.58775,
+            "p95Ms": 104.49519999999995,
+            "meanMs": 107.45109999999998
           }
         },
         {
@@ -1516,35 +1572,43 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 14.350000023841858,
-            "q1Ms": 12.62499988079071,
-            "q3Ms": 18.899999976158142,
-            "p95Ms": 21.164999973773956,
-            "meanMs": 15.576666649182638
+            "medianMs": 31.799999952316284,
+            "q1Ms": 26.825000047683716,
+            "q3Ms": 34.625000059604645,
+            "p95Ms": 42.079999995231624,
+            "meanMs": 31.17666664918264
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 31.850000023841858,
+            "q1Ms": 27.350000023841858,
+            "q3Ms": 34.97500014305115,
+            "p95Ms": 42.22499996423721,
+            "meanMs": 31.703333322207133
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 1.5999999046325684,
+            "medianMs": 1.5499999523162842,
             "q1Ms": 1.4000000953674316,
-            "q3Ms": 2.200000047683716,
-            "p95Ms": 2.5,
-            "meanMs": 1.7866666714350383
+            "q3Ms": 3.150000035762787,
+            "p95Ms": 5.185000085830687,
+            "meanMs": 2.5099999984105428
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 14.25,
-            "q1Ms": 12.599999904632568,
-            "q3Ms": 18.574999928474426,
-            "p95Ms": 20.96499992609024,
-            "meanMs": 15.483333325386047
+            "medianMs": 31.65000009536743,
+            "q1Ms": 25.100000023841858,
+            "q3Ms": 34.22499996423721,
+            "p95Ms": 40.79999990463256,
+            "meanMs": 30.433333333333334
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 1432.3999999761581,
-            "q1Ms": 1082.574999988079,
-            "q3Ms": 1780.7749999761581,
-            "p95Ms": 3334.1950000643706,
-            "meanMs": 1664.0633333603541
+            "medianMs": 1312.6499999761581,
+            "q1Ms": 1118.2000001072884,
+            "q3Ms": 1430.6000000238419,
+            "p95Ms": 1729.215000116825,
+            "meanMs": 1303.6699999968212
           },
           "initializationRequests": {
             "observations": 30,
@@ -1580,11 +1644,11 @@
           },
           "transferredBytes": {
             "observations": 30,
-            "median": 1923098,
-            "q1": 1923091.25,
-            "q3": 1923098,
-            "p95": 1923107,
-            "mean": 1923092.9
+            "median": 1922742.5,
+            "q1": 1922720,
+            "q3": 1922765,
+            "p95": 1922783,
+            "mean": 1922741.6
           },
           "interactionRequests": {
             "observations": 30,
@@ -1612,43 +1676,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 19.649999976158142,
-            "q1Ms": 13.550000011920929,
-            "q3Ms": 22.400000035762787,
-            "p95Ms": 25.904999899864194,
-            "meanMs": 18.72666666507721
+            "medianMs": 26.299999952316284,
+            "q1Ms": 24.450000166893005,
+            "q3Ms": 30.600000143051147,
+            "p95Ms": 37.05,
+            "meanMs": 27.703333361943564
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 23.100000143051147,
-            "q1Ms": 17.200000047683716,
-            "q3Ms": 26.900000035762787,
-            "p95Ms": 31.33500012159347,
-            "meanMs": 23.05666669209798
+            "medianMs": 33.450000047683716,
+            "q1Ms": 31.850000143051147,
+            "q3Ms": 39.999999940395355,
+            "p95Ms": 52.555000078678134,
+            "meanMs": 36.716666674613954
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 59.50000011920929,
-            "q1Ms": 41.549999952316284,
-            "q3Ms": 65.2250000834465,
-            "p95Ms": 72,
-            "meanMs": 54.193333355585736
+            "medianMs": 84.20000004768372,
+            "q1Ms": 57.074999928474426,
+            "q3Ms": 104.32499992847443,
+            "p95Ms": 125.21500010490416,
+            "meanMs": 82.06333336035411
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 0.5,
+            "medianMs": 0.4500000476837158,
             "q1Ms": 0.40000009536743164,
             "q3Ms": 0.5,
-            "p95Ms": 0.9100000858306879,
-            "meanMs": 0.5300000111262003
+            "p95Ms": 0.6549999833106992,
+            "meanMs": 0.5633333524068197
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.20000004768371582,
-            "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.5550000786781308,
-            "meanMs": 0.28333330949147545
+            "q1Ms": 0.19999980926513672,
+            "q3Ms": 0.20000004768371582,
+            "p95Ms": 0.25499999523162814,
+            "meanMs": 0.18999998569488524
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -1660,11 +1724,11 @@
           },
           "initialResponseBytes": {
             "observations": 30,
-            "median": 1923098,
-            "q1": 1923091.25,
-            "q3": 1923098,
-            "p95": 1923107,
-            "mean": 1923092.9
+            "median": 1922742.5,
+            "q1": 1922720,
+            "q3": 1922765,
+            "p95": 1922783,
+            "mean": 1922741.6
           },
           "sectionResponseBytes": {
             "observations": 30,
@@ -1684,11 +1748,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 1391.3225,
-            "q1Ms": 1043.1499999999999,
-            "q3Ms": 1721.4765,
-            "p95Ms": 3289.2075499999974,
-            "meanMs": 1618.7655666666665
+            "medianMs": 1205.0915,
+            "q1Ms": 1043.1315,
+            "q3Ms": 1355.21425,
+            "p95Ms": 1645.9186999999997,
+            "meanMs": 1217.4654666666668
           }
         },
         {
@@ -1697,47 +1761,55 @@
           "annotatedElements": 10,
           "uniqueIdentifiers": 8,
           "trials": 30,
-          "attemptedTrials": 30,
-          "failedTrials": 0,
+          "attemptedTrials": 31,
+          "failedTrials": 1,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 16.950000047683716,
-            "q1Ms": 14.700000047683716,
-            "q3Ms": 19.07500010728836,
-            "p95Ms": 24.310000061988823,
-            "meanMs": 17.326666657129923
+            "medianMs": 30.350000023841858,
+            "q1Ms": 27.15000009536743,
+            "q3Ms": 37.550000071525574,
+            "p95Ms": 49.48500002622603,
+            "meanMs": 33.960000014305116
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 30.699999928474426,
+            "q1Ms": 27.275000035762787,
+            "q3Ms": 37.72500014305115,
+            "p95Ms": 49.695000064373005,
+            "meanMs": 34.2300000111262
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 1.850000023841858,
-            "q1Ms": 1.524999976158142,
-            "q3Ms": 2.3749999403953552,
-            "p95Ms": 2.965000164508819,
-            "meanMs": 2.0100000063578287
+            "medianMs": 1.5,
+            "q1Ms": 1.3999998569488525,
+            "q3Ms": 2.6000000834465027,
+            "p95Ms": 7.54500001668929,
+            "meanMs": 2.5733333110809324
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 16.850000023841858,
-            "q1Ms": 14.374999940395355,
-            "q3Ms": 18.900000035762787,
-            "p95Ms": 24.220000147819512,
-            "meanMs": 17.20333335399628
+            "medianMs": 30.25,
+            "q1Ms": 26.849999964237213,
+            "q3Ms": 37.19999998807907,
+            "p95Ms": 46.795000100135795,
+            "meanMs": 32.88333332538605
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 118.69999980926514,
-            "q1Ms": 112.5249999165535,
-            "q3Ms": 493.44999998807907,
-            "p95Ms": 5961.575000059602,
-            "meanMs": 923.3899999380112
+            "medianMs": 118.25,
+            "q1Ms": 112.29999995231628,
+            "q3Ms": 126.45000010728836,
+            "p95Ms": 151.59999999999994,
+            "meanMs": 124.78999999364217
           },
           "initializationRequests": {
             "observations": 30,
             "median": 0,
             "q1": 0,
             "q3": 0,
-            "p95": 0,
-            "mean": 0
+            "p95": 1,
+            "mean": 0.1
           },
           "totalRequests": {
             "observations": 30,
@@ -1769,7 +1841,7 @@
             "q1": 670957,
             "q3": 670966,
             "p95": 670966,
-            "mean": 670960
+            "mean": 670954.0333333333
           },
           "interactionRequests": {
             "observations": 30,
@@ -1797,43 +1869,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 1.2999999523162842,
-            "q1Ms": 1.1250001192092896,
-            "q3Ms": 1.3999998569488525,
-            "p95Ms": 1.8100000739097588,
-            "meanMs": 1.2966666539510092
+            "medianMs": 0.8999998569488525,
+            "q1Ms": 0.800000011920929,
+            "q3Ms": 1.0999999046325684,
+            "p95Ms": 1.2999999523162842,
+            "meanMs": 0.9666666507720947
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17.299999952316284,
-            "q1Ms": 17.125000059604645,
-            "q3Ms": 17.400000035762787,
-            "p95Ms": 17.5,
-            "meanMs": 17.27000001271566
+            "medianMs": 17.100000143051147,
+            "q1Ms": 17,
+            "q3Ms": 17.30000013113022,
+            "p95Ms": 17.55500007867813,
+            "meanMs": 17.030000003178916
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.6999999284744263,
-            "q1Ms": 1.5,
-            "q3Ms": 2,
-            "p95Ms": 2.520000112056731,
-            "meanMs": 1.8033333619435628
+            "medianMs": 1.2999999523162842,
+            "q1Ms": 1.2000000476837158,
+            "q3Ms": 1.4000000357627869,
+            "p95Ms": 1.7099999308586116,
+            "meanMs": 1.3100000143051147
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 395.25,
-            "q1Ms": 356.549999833107,
-            "q3Ms": 487.625,
-            "p95Ms": 1373.6350000739096,
-            "meanMs": 667.2466666460037
+            "medianMs": 518.6000000238419,
+            "q1Ms": 470.37499994039536,
+            "q3Ms": 584.5999998450279,
+            "p95Ms": 667.2399999260901,
+            "meanMs": 534.236666671435
           },
           "repeatSectionExpansion": {
             "observations": 30,
-            "medianMs": 0.2999999523162842,
+            "medianMs": 0.20000004768371582,
             "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.37500011920928955,
-            "p95Ms": 0.6550000905990598,
-            "meanMs": 0.33000001112620037
+            "q3Ms": 0.2999999523162842,
+            "p95Ms": 0.399999988079071,
+            "meanMs": 0.2466666618982951
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -1849,7 +1921,7 @@
             "q1": 3813,
             "q3": 3813,
             "p95": 3813,
-            "mean": 3813
+            "mean": 3813.0333333333333
           },
           "sectionResponseBytes": {
             "observations": 30,
@@ -1857,7 +1929,7 @@
             "q1": 667144,
             "q3": 667153,
             "p95": 667153,
-            "mean": 667147
+            "mean": 667141
           },
           "cacheEntriesAfterPrefetch": {
             "observations": 30,
@@ -1869,11 +1941,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 87.6515,
-            "q1Ms": 86.2865,
-            "q3Ms": 470.35525,
-            "p95Ms": 5934.604599999997,
-            "meanMs": 896.4835999999999
+            "medianMs": 90.333,
+            "q1Ms": 87.04175,
+            "q3Ms": 93.79599999999999,
+            "p95Ms": 118.87849999999992,
+            "meanMs": 97.26013333333334
           }
         },
         {
@@ -1882,47 +1954,55 @@
           "annotatedElements": 10,
           "uniqueIdentifiers": 8,
           "trials": 30,
-          "attemptedTrials": 30,
-          "failedTrials": 0,
+          "attemptedTrials": 31,
+          "failedTrials": 1,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 15.049999952316284,
-            "q1Ms": 13.025000035762787,
-            "q3Ms": 19.375000059604645,
-            "p95Ms": 23.619999969005573,
-            "meanMs": 16.39333334763845
+            "medianMs": 31.399999856948853,
+            "q1Ms": 28.67500001192093,
+            "q3Ms": 33.94999998807907,
+            "p95Ms": 43.4399998307228,
+            "meanMs": 32.146666677792865
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 31.649999976158142,
+            "q1Ms": 28.94999998807907,
+            "q3Ms": 35.52500003576279,
+            "p95Ms": 43.5849999308586,
+            "meanMs": 32.96000000635783
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 1.649999976158142,
-            "q1Ms": 1.4000000953674316,
-            "q3Ms": 2.299999952316284,
-            "p95Ms": 2.555000078678131,
-            "meanMs": 1.8366666634877522
+            "medianMs": 2.2500001192092896,
+            "q1Ms": 1.6999998688697815,
+            "q3Ms": 3.0749999284744263,
+            "p95Ms": 5.329999947547911,
+            "meanMs": 2.6900000254313152
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 15,
-            "q1Ms": 12.925000071525574,
-            "q3Ms": 19.350000083446503,
-            "p95Ms": 23.464999985694874,
-            "meanMs": 16.296666677792867
+            "medianMs": 30.450000047683716,
+            "q1Ms": 28.349999964237213,
+            "q3Ms": 33.15000003576279,
+            "p95Ms": 41.12499995231628,
+            "meanMs": 31.18000002702077
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 1046.8999999761581,
-            "q1Ms": 782.5749998688698,
-            "q3Ms": 1546.574999988079,
-            "p95Ms": 7221.724999952314,
-            "meanMs": 2038.593333307902
+            "medianMs": 1129.3500000238419,
+            "q1Ms": 1010.2999999523163,
+            "q3Ms": 1471.375,
+            "p95Ms": 1636.4999999046324,
+            "meanMs": 1229.2866666316986
           },
           "initializationRequests": {
             "observations": 30,
             "median": 0,
             "q1": 0,
             "q3": 0,
-            "p95": 0,
-            "mean": 0.03333333333333333
+            "p95": 1,
+            "mean": 0.16666666666666666
           },
           "totalRequests": {
             "observations": 30,
@@ -1950,11 +2030,11 @@
           },
           "transferredBytes": {
             "observations": 30,
-            "median": 1923098,
-            "q1": 1923089,
-            "q3": 1923098,
-            "p95": 1923107,
-            "mean": 1923086.3
+            "median": 1922801,
+            "q1": 1922801,
+            "q3": 1922810,
+            "p95": 1922819.9,
+            "mean": 1922805.8
           },
           "interactionRequests": {
             "observations": 30,
@@ -1982,43 +2062,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 18.899999976158142,
-            "q1Ms": 14.599999964237213,
-            "q3Ms": 22.19999998807907,
-            "p95Ms": 24.68000003099441,
-            "meanMs": 18.616666682561238
+            "medianMs": 26.449999928474426,
+            "q1Ms": 25.125,
+            "q3Ms": 30.050000071525574,
+            "p95Ms": 40.68500003814696,
+            "meanMs": 28.62999999523163
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 22.75,
-            "q1Ms": 18.575000047683716,
-            "q3Ms": 26.625000059604645,
-            "p95Ms": 29.81500000953674,
-            "meanMs": 22.88333330154419
+            "medianMs": 34.75,
+            "q1Ms": 30.275000035762787,
+            "q3Ms": 37.30000001192093,
+            "p95Ms": 52.49499996900556,
+            "meanMs": 36.300000015894575
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 60.84999990463257,
-            "q1Ms": 46.30000001192093,
-            "q3Ms": 68.32500004768372,
-            "p95Ms": 77.42000005245208,
-            "meanMs": 58.45333333810171
+            "medianMs": 71.25,
+            "q1Ms": 48.124999940395355,
+            "q3Ms": 89.42500001192093,
+            "p95Ms": 125.7200000524521,
+            "meanMs": 75.38333335717519
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 0.5499999523162842,
-            "q1Ms": 0.5,
-            "q3Ms": 0.7749999761581421,
-            "p95Ms": 1.3200000643730152,
-            "meanMs": 0.6633333683013916
+            "medianMs": 0.4500000476837158,
+            "q1Ms": 0.39999985694885254,
+            "q3Ms": 0.5,
+            "p95Ms": 0.5,
+            "meanMs": 0.44999996821085614
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.20000004768371582,
             "q1Ms": 0.20000004768371582,
             "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.5550000786781308,
-            "meanMs": 0.2633333365122477
+            "p95Ms": 0.2999999523162842,
+            "meanMs": 0.3299999793370565
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -2030,11 +2110,11 @@
           },
           "initialResponseBytes": {
             "observations": 30,
-            "median": 1923098,
-            "q1": 1923089,
-            "q3": 1923098,
-            "p95": 1923107,
-            "mean": 1923086.3
+            "median": 1922801,
+            "q1": 1922801,
+            "q3": 1922810,
+            "p95": 1922819.9,
+            "mean": 1922805.8
           },
           "sectionResponseBytes": {
             "observations": 30,
@@ -2054,11 +2134,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 997.6145,
-            "q1Ms": 743.777,
-            "q3Ms": 1506.0035,
-            "p95Ms": 7165.001549999996,
-            "meanMs": 1993.0966999999998
+            "medianMs": 1053.2515,
+            "q1Ms": 930.73425,
+            "q3Ms": 1401.3967499999999,
+            "p95Ms": 1565.079,
+            "meanMs": 1155.0069
           }
         },
         {
@@ -2071,27 +2151,35 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 21.649999976158142,
-            "q1Ms": 18.625,
-            "q3Ms": 25.07500010728836,
-            "p95Ms": 29.25499999523163,
-            "meanMs": 21.963333336512246
+            "medianMs": 41.10000002384186,
+            "q1Ms": 35.40000003576279,
+            "q3Ms": 49.59999990463257,
+            "p95Ms": 56.11000002622605,
+            "meanMs": 42.193333339691165
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 42.39999997615814,
+            "q1Ms": 37.27500003576279,
+            "q3Ms": 50.599999845027924,
+            "p95Ms": 58.22999989986418,
+            "meanMs": 43.586666663487755
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 6.550000071525574,
-            "q1Ms": 4.599999904632568,
-            "q3Ms": 8.150000035762787,
-            "p95Ms": 9.054999947547913,
-            "meanMs": 6.429999987284343
+            "medianMs": 7.600000023841858,
+            "q1Ms": 5.5,
+            "q3Ms": 10.07500010728836,
+            "p95Ms": 13.329999947547911,
+            "meanMs": 8.106666652361552
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 21.449999928474426,
-            "q1Ms": 18.449999928474426,
-            "q3Ms": 24.875000059604645,
-            "p95Ms": 29,
-            "meanMs": 21.816666666666666
+            "medianMs": 37.550000071525574,
+            "q1Ms": 34.950000047683716,
+            "q3Ms": 45.449999928474426,
+            "p95Ms": 53.98500002622603,
+            "meanMs": 40.480000003178915
           },
           "prefetchCompletion": null,
           "initializationRequests": {
@@ -2132,7 +2220,7 @@
             "q1": 671795,
             "q3": 671804,
             "p95": 671804,
-            "mean": 671796.5
+            "mean": 671793.8
           },
           "interactionRequests": {
             "observations": 30,
@@ -2160,43 +2248,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 80.55000007152557,
-            "q1Ms": 79,
-            "q3Ms": 83.125,
-            "p95Ms": 92.43000003099439,
-            "meanMs": 105.52999998728434
+            "medianMs": 82.75,
+            "q1Ms": 81.17499995231628,
+            "q3Ms": 83.87499994039536,
+            "p95Ms": 85.88500002622604,
+            "meanMs": 82.68333334128062
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 80.59999990463257,
-            "q1Ms": 79.02499997615814,
-            "q3Ms": 83.15000003576279,
-            "p95Ms": 92.43000003099439,
-            "meanMs": 105.5733333269755
+            "medianMs": 82.75,
+            "q1Ms": 81.27500003576279,
+            "q3Ms": 83.89999985694885,
+            "p95Ms": 85.88500002622604,
+            "meanMs": 82.71000001430511
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.6500000953674316,
-            "q1Ms": 1.3999998569488525,
-            "q3Ms": 1.9000000953674316,
-            "p95Ms": 2.5,
-            "meanMs": 1.7066666603088378
+            "medianMs": 1.3000001907348633,
+            "q1Ms": 1.225000023841858,
+            "q3Ms": 1.4000000953674316,
+            "p95Ms": 2.14000002145767,
+            "meanMs": 1.4733333667119344
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 520,
-            "q1Ms": 457.9750000834465,
-            "q3Ms": 599.0500000715256,
-            "p95Ms": 1026.3750000476828,
-            "meanMs": 582.1099999984106
+            "medianMs": 548.4499999284744,
+            "q1Ms": 516.7499998807907,
+            "q3Ms": 626.0750001072884,
+            "p95Ms": 738.9250000953673,
+            "meanMs": 576.816666650772
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.2999999523162842,
             "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.40000009536743164,
-            "p95Ms": 0.6649999737739554,
-            "meanMs": 0.34666670163472496
+            "q3Ms": 0.2999999523162842,
+            "p95Ms": 0.3550001382827756,
+            "meanMs": 0.2800000111262004
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -2220,7 +2308,7 @@
             "q1": 667144,
             "q3": 667153,
             "p95": 667153,
-            "mean": 667145.5
+            "mean": 667142.8
           },
           "cacheEntriesAfterPrefetch": {
             "observations": 30,
@@ -2232,11 +2320,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 77.976,
-            "q1Ms": 76.8055,
-            "q3Ms": 80.2875,
-            "p95Ms": 90.45669999999998,
-            "meanMs": 103.12179999999998
+            "medianMs": 78.997,
+            "q1Ms": 78.26175,
+            "q3Ms": 80.265,
+            "p95Ms": 81.70454999999998,
+            "meanMs": 79.16540000000002
           }
         },
         {
@@ -2249,27 +2337,35 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 22.549999952316284,
-            "q1Ms": 17.69999998807907,
-            "q3Ms": 25.449999928474426,
-            "p95Ms": 27.919999969005584,
-            "meanMs": 21.986666663487753
+            "medianMs": 41.39999997615814,
+            "q1Ms": 37.54999989271164,
+            "q3Ms": 46.249999940395355,
+            "p95Ms": 55.52999998331069,
+            "meanMs": 42.31333332061767
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 42.700000047683716,
+            "q1Ms": 38.925000071525574,
+            "q3Ms": 46.85000002384186,
+            "p95Ms": 55.82999993562697,
+            "meanMs": 43.323333319028215
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 6.849999904632568,
-            "q1Ms": 4.525000035762787,
-            "q3Ms": 8.224999964237213,
-            "p95Ms": 9.250000047683713,
-            "meanMs": 6.513333336512248
+            "medianMs": 8.350000023841858,
+            "q1Ms": 6.425000071525574,
+            "q3Ms": 9.849999904632568,
+            "p95Ms": 15.329999947547911,
+            "meanMs": 8.883333325386047
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 22.25,
-            "q1Ms": 17.625000059604645,
-            "q3Ms": 25.325000047683716,
-            "p95Ms": 27.820000064373016,
-            "meanMs": 21.843333339691164
+            "medianMs": 39.549999833106995,
+            "q1Ms": 35.00000011920929,
+            "q3Ms": 42.849999845027924,
+            "p95Ms": 53.865000021457675,
+            "meanMs": 40.429999979337055
           },
           "prefetchCompletion": null,
           "initializationRequests": {
@@ -2306,11 +2402,11 @@
           },
           "transferredBytes": {
             "observations": 30,
-            "median": 1511948,
-            "q1": 1511948,
+            "median": 1511939,
+            "q1": 1511939,
             "q3": 1511948,
             "p95": 1511957,
-            "mean": 1511942
+            "mean": 1511936.6
           },
           "interactionRequests": {
             "observations": 30,
@@ -2338,43 +2434,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 198.85000002384186,
-            "q1Ms": 187.25,
-            "q3Ms": 235.2749999165535,
-            "p95Ms": 481.42000005245166,
-            "meanMs": 239.90666663646698
+            "medianMs": 216.35000002384186,
+            "q1Ms": 209.0249999165535,
+            "q3Ms": 272.8000001311302,
+            "p95Ms": 361.35999997854225,
+            "meanMs": 241.43999999364218
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 198.85000002384186,
-            "q1Ms": 187.34999990463257,
-            "q3Ms": 235.4999998807907,
-            "p95Ms": 481.42000005245166,
-            "meanMs": 239.94666663805643
+            "medianMs": 216.35000002384186,
+            "q1Ms": 209.10000002384186,
+            "q3Ms": 272.8000001311302,
+            "p95Ms": 361.35999997854225,
+            "meanMs": 241.47333333492278
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 59.90000009536743,
-            "q1Ms": 45.07499998807907,
-            "q3Ms": 64.24999994039536,
-            "p95Ms": 67.36500002145767,
-            "meanMs": 55.28333334128062
+            "medianMs": 76.80000007152557,
+            "q1Ms": 45.249999940395355,
+            "q3Ms": 87.25,
+            "p95Ms": 110.51999998092651,
+            "meanMs": 72.20333335399627
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 0.5,
-            "q1Ms": 0.42500007152557373,
-            "q3Ms": 0.75,
-            "p95Ms": 0.9000000953674316,
-            "meanMs": 0.5900000015894572
+            "medianMs": 0.40000009536743164,
+            "q1Ms": 0.39999985694885254,
+            "q3Ms": 0.5,
+            "p95Ms": 0.5549999475479124,
+            "meanMs": 0.4466666301091512
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.20000004768371582,
             "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.5,
-            "meanMs": 0.27000001271565754
+            "q3Ms": 0.2749999761581421,
+            "p95Ms": 0.2999999523162842,
+            "meanMs": 0.21666666666666667
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -2386,11 +2482,11 @@
           },
           "initialResponseBytes": {
             "observations": 30,
-            "median": 1511948,
-            "q1": 1511948,
+            "median": 1511939,
+            "q1": 1511939,
             "q3": 1511948,
             "p95": 1511957,
-            "mean": 1511942
+            "mean": 1511936.6
           },
           "sectionResponseBytes": {
             "observations": 30,
@@ -2410,11 +2506,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 176.9255,
-            "q1Ms": 173.86599999999999,
-            "q3Ms": 212.31175000000002,
-            "p95Ms": 450.1513499999997,
-            "meanMs": 214.08066666666667
+            "medianMs": 177.7655,
+            "q1Ms": 175.5815,
+            "q3Ms": 215.70825000000002,
+            "p95Ms": 275.53675,
+            "meanMs": 198.06746666666666
           }
         },
         {
@@ -2423,39 +2519,47 @@
           "annotatedElements": 100,
           "uniqueIdentifiers": 80,
           "trials": 30,
-          "attemptedTrials": 30,
-          "failedTrials": 0,
+          "attemptedTrials": 31,
+          "failedTrials": 1,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 19.74999988079071,
-            "q1Ms": 17.024999976158142,
-            "q3Ms": 24.399999976158142,
-            "p95Ms": 29.72999993562698,
-            "meanMs": 21.013333280881245
+            "medianMs": 37.950000047683716,
+            "q1Ms": 33,
+            "q3Ms": 43.80000001192093,
+            "p95Ms": 53.21999992132187,
+            "meanMs": 39.08333334128062
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 38.60000002384186,
+            "q1Ms": 33.800000071525574,
+            "q3Ms": 44.674999833106995,
+            "p95Ms": 53.66499997377396,
+            "meanMs": 40.19666667779287
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 6.550000071525574,
-            "q1Ms": 4.324999988079071,
-            "q3Ms": 7.774999916553497,
-            "p95Ms": 8.5,
-            "meanMs": 6.233333357175192
+            "medianMs": 7.449999928474426,
+            "q1Ms": 6.025000035762787,
+            "q3Ms": 10.175000071525574,
+            "p95Ms": 15.324999999999996,
+            "meanMs": 8.546666653951009
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 19.600000023841858,
-            "q1Ms": 16.925000071525574,
-            "q3Ms": 24.29999989271164,
-            "p95Ms": 29.495000052452085,
-            "meanMs": 20.89666665395101
+            "medianMs": 36.950000047683716,
+            "q1Ms": 30.07499998807907,
+            "q3Ms": 41.800000071525574,
+            "p95Ms": 52.18000003099441,
+            "meanMs": 37.24666668574015
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 948.6999999284744,
-            "q1Ms": 945.3249999880791,
-            "q3Ms": 951.2749998569489,
-            "p95Ms": 955.1400000214576,
-            "meanMs": 948.4466666618983
+            "medianMs": 973.5,
+            "q1Ms": 961.5500000119209,
+            "q3Ms": 988.0749999880791,
+            "p95Ms": 1286.0100001215928,
+            "meanMs": 1037.4033333381017
           },
           "initializationRequests": {
             "observations": 30,
@@ -2493,9 +2597,9 @@
             "observations": 30,
             "median": 697247,
             "q1": 697247,
-            "q3": 697256,
+            "q3": 697253.75,
             "p95": 697256,
-            "mean": 697240.7
+            "mean": 697247.9
           },
           "interactionRequests": {
             "observations": 30,
@@ -2523,43 +2627,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 1.2999999523162842,
-            "q1Ms": 1.1250000596046448,
-            "q3Ms": 1.6000000834465027,
-            "p95Ms": 1.8550001382827754,
-            "meanMs": 1.3600000222524007
+            "medianMs": 1,
+            "q1Ms": 0.8999998569488525,
+            "q3Ms": 1.1750000715255737,
+            "p95Ms": 1.2549999952316282,
+            "meanMs": 1.0066666762034098
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17.200000047683716,
-            "q1Ms": 17.09999990463257,
-            "q3Ms": 17.40000009536743,
-            "p95Ms": 17.5,
-            "meanMs": 17.25
+            "medianMs": 17.09999990463257,
+            "q1Ms": 17,
+            "q3Ms": 17.400000035762787,
+            "p95Ms": 18.509999990463257,
+            "meanMs": 17.206666668256123
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 2,
-            "q1Ms": 1.5999999642372131,
-            "q3Ms": 2.1750000715255737,
-            "p95Ms": 2.7099999308586114,
-            "meanMs": 1.9133333444595337
+            "medianMs": 1.2999999523162842,
+            "q1Ms": 1.2000000476837158,
+            "q3Ms": 1.4000000357627869,
+            "p95Ms": 1.7650000095367422,
+            "meanMs": 1.3933333555857341
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 485.9499999284744,
-            "q1Ms": 450.9749999642372,
-            "q3Ms": 556.6750000715256,
-            "p95Ms": 722.2250000596046,
-            "meanMs": 523.7733333269755
+            "medianMs": 512.9499999284744,
+            "q1Ms": 446.4749999642372,
+            "q3Ms": 630,
+            "p95Ms": 1291.8449999213212,
+            "meanMs": 649.3333333412806
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.2999999523162842,
             "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.3000001311302185,
-            "p95Ms": 0.8550001382827757,
-            "meanMs": 0.34000001748402914
+            "q3Ms": 0.2999999523162842,
+            "p95Ms": 0.3000001907348633,
+            "meanMs": 0.2566666762034098
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -2581,9 +2685,9 @@
             "observations": 30,
             "median": 667144,
             "q1": 667144,
-            "q3": 667153,
+            "q3": 667150.75,
             "p95": 667153,
-            "mean": 667137.7
+            "mean": 667144.9
           },
           "cacheEntriesAfterPrefetch": {
             "observations": 30,
@@ -2595,11 +2699,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 108.136,
-            "q1Ms": 106.30175,
-            "q3Ms": 112.87675,
-            "p95Ms": 137.42645,
-            "meanMs": 113.76890000000002
+            "medianMs": 114.5635,
+            "q1Ms": 105.77475,
+            "q3Ms": 131.46625,
+            "p95Ms": 510.844149999999,
+            "meanMs": 189.5125
           }
         },
         {
@@ -2612,35 +2716,43 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 23.350000023841858,
-            "q1Ms": 19.399999856948853,
-            "q3Ms": 25.774999976158142,
-            "p95Ms": 31.60499994754791,
-            "meanMs": 23.01666665871938
+            "medianMs": 38.89999997615814,
+            "q1Ms": 33.02499997615814,
+            "q3Ms": 45.574999928474426,
+            "p95Ms": 50.3500000834465,
+            "meanMs": 39.22333332697551
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 40.5,
+            "q1Ms": 33.42499989271164,
+            "q3Ms": 46.675000071525574,
+            "p95Ms": 50.7049999833107,
+            "meanMs": 40.290000001589455
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 7.100000023841858,
-            "q1Ms": 5.450000047683716,
-            "q3Ms": 8.375000059604645,
-            "p95Ms": 9.254999995231628,
-            "meanMs": 6.876666680971781
+            "medianMs": 9.199999928474426,
+            "q1Ms": 6.049999952316284,
+            "q3Ms": 12.150000035762787,
+            "p95Ms": 13.830000078678129,
+            "meanMs": 9.373333342870076
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 23.100000143051147,
-            "q1Ms": 19.149999916553497,
-            "q3Ms": 25.5,
-            "p95Ms": 31.45000009536743,
-            "meanMs": 22.846666677792868
+            "medianMs": 37.75,
+            "q1Ms": 32.62499988079071,
+            "q3Ms": 44.84999996423721,
+            "p95Ms": 50.25000004768371,
+            "meanMs": 38.066666674613955
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 4067.149999976158,
-            "q1Ms": 3801.024999976158,
-            "q3Ms": 4675.574999928474,
-            "p95Ms": 5845.689999961853,
-            "meanMs": 4336.003333330154
+            "medianMs": 3730.0999999046326,
+            "q1Ms": 3472.1749998927116,
+            "q3Ms": 4269.299999952316,
+            "p95Ms": 5182.219999969006,
+            "meanMs": 3917.239999985695
           },
           "initializationRequests": {
             "observations": 30,
@@ -2676,11 +2788,11 @@
           },
           "transferredBytes": {
             "observations": 30,
-            "median": 8099403,
-            "q1": 8099304,
-            "q3": 8099445.75,
-            "p95": 8099661.3,
-            "mean": 8099375.1
+            "median": 8098957.5,
+            "q1": 8098908,
+            "q3": 8099283.75,
+            "p95": 8099782.35,
+            "mean": 8099104.8
           },
           "interactionRequests": {
             "observations": 30,
@@ -2708,43 +2820,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 19.549999952316284,
-            "q1Ms": 16.57499998807907,
-            "q3Ms": 21.274999916553497,
-            "p95Ms": 25.02499990463256,
-            "meanMs": 18.796666638056436
+            "medianMs": 25.299999952316284,
+            "q1Ms": 20.800000190734863,
+            "q3Ms": 28.675000071525574,
+            "p95Ms": 36.72500009536743,
+            "meanMs": 25.150000047683715
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 23.549999952316284,
-            "q1Ms": 19.72499990463257,
-            "q3Ms": 25.87499988079071,
-            "p95Ms": 29.77499995231627,
-            "meanMs": 23.103333314259846
+            "medianMs": 30.149999976158142,
+            "q1Ms": 27.40000009536743,
+            "q3Ms": 36.32499998807907,
+            "p95Ms": 48.955000042915344,
+            "meanMs": 32.720000020662944
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 57.5,
-            "q1Ms": 48.7749999165535,
-            "q3Ms": 65.50000005960464,
-            "p95Ms": 76.23500016927717,
-            "meanMs": 57.42000002861023
+            "medianMs": 58.799999952316284,
+            "q1Ms": 46.34999990463257,
+            "q3Ms": 82.54999989271164,
+            "p95Ms": 121.61000002622602,
+            "meanMs": 68.63666665554047
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 0.5499999523162842,
-            "q1Ms": 0.5,
-            "q3Ms": 0.7000000476837158,
-            "p95Ms": 1.110000026226043,
-            "meanMs": 0.6333333412806194
+            "medianMs": 0.5,
+            "q1Ms": 0.40000009536743164,
+            "q3Ms": 0.5,
+            "p95Ms": 0.5549999475479124,
+            "meanMs": 0.46666665077209474
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.20000004768371582,
-            "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.2749999761581421,
-            "p95Ms": 0.3550000071525571,
-            "meanMs": 0.2233333428700765
+            "q1Ms": 0.19999980926513672,
+            "q3Ms": 0.2999999523162842,
+            "p95Ms": 0.2999999523162842,
+            "meanMs": 0.21666663487752277
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -2756,11 +2868,11 @@
           },
           "initialResponseBytes": {
             "observations": 30,
-            "median": 8099403,
-            "q1": 8099304,
-            "q3": 8099445.75,
-            "p95": 8099661.3,
-            "mean": 8099375.1
+            "median": 8098957.5,
+            "q1": 8098908,
+            "q3": 8099283.75,
+            "p95": 8099782.35,
+            "mean": 8099104.8
           },
           "sectionResponseBytes": {
             "observations": 30,
@@ -2780,11 +2892,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 1218.8525,
-            "q1Ms": 875.8545,
-            "q3Ms": 2531.20375,
-            "p95Ms": 4284.282949999999,
-            "meanMs": 1846.8663999999999
+            "medianMs": 811.065,
+            "q1Ms": 689.39375,
+            "q3Ms": 1600.6705,
+            "p95Ms": 3180.08825,
+            "meanMs": 1274.0739666666666
           }
         },
         {
@@ -2793,39 +2905,47 @@
           "annotatedElements": 100,
           "uniqueIdentifiers": 80,
           "trials": 30,
-          "attemptedTrials": 30,
-          "failedTrials": 0,
+          "attemptedTrials": 31,
+          "failedTrials": 1,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 18.550000071525574,
-            "q1Ms": 16.425000071525574,
-            "q3Ms": 26.150000035762787,
-            "p95Ms": 30.659999883174887,
-            "meanMs": 21.13333330154419
+            "medianMs": 40.85000002384186,
+            "q1Ms": 38.074999928474426,
+            "q3Ms": 47.24999988079071,
+            "p95Ms": 53.22499985694885,
+            "meanMs": 42.44333333174388
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 41.39999997615814,
+            "q1Ms": 39.52499997615814,
+            "q3Ms": 47.54999989271164,
+            "p95Ms": 53.62499995231628,
+            "meanMs": 43.24333334763845
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 5.849999904632568,
-            "q1Ms": 5.250000059604645,
-            "q3Ms": 8.850000023841858,
-            "p95Ms": 10.98499993085861,
-            "meanMs": 6.986666663487752
+            "medianMs": 11.800000071525574,
+            "q1Ms": 7.500000059604645,
+            "q3Ms": 15.824999928474426,
+            "p95Ms": 19.445000016689296,
+            "meanMs": 11.890000001589458
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 18.399999976158142,
-            "q1Ms": 16.30000001192093,
-            "q3Ms": 26.049999952316284,
-            "p95Ms": 30.604999935626974,
-            "meanMs": 21.009999974568686
+            "medianMs": 40.35000002384186,
+            "q1Ms": 36.92500001192093,
+            "q3Ms": 47.07499986886978,
+            "p95Ms": 53.17999989986419,
+            "meanMs": 41.81999999682109
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 194.85000002384186,
-            "q1Ms": 188.0250000357628,
-            "q3Ms": 258.02499997615814,
-            "p95Ms": 329.5449999213218,
-            "meanMs": 233.04333333174387
+            "medianMs": 250.29999995231628,
+            "q1Ms": 197.8999999165535,
+            "q3Ms": 370.89999997615814,
+            "p95Ms": 668.9900001168251,
+            "meanMs": 344.4966666618983
           },
           "initializationRequests": {
             "observations": 30,
@@ -2863,9 +2983,9 @@
             "observations": 30,
             "median": 695579,
             "q1": 695579,
-            "q3": 695588,
+            "q3": 695585.75,
             "p95": 695588,
-            "mean": 695582.6
+            "mean": 695576
           },
           "interactionRequests": {
             "observations": 30,
@@ -2893,43 +3013,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 1.100000023841858,
-            "q1Ms": 1,
-            "q3Ms": 1.4000000953674316,
-            "p95Ms": 1.8100000739097588,
-            "meanMs": 1.2200000127156576
+            "medianMs": 0.9000000953674316,
+            "q1Ms": 0.8000001907348633,
+            "q3Ms": 1,
+            "p95Ms": 1.1550000905990596,
+            "meanMs": 0.9200000286102294
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17.199999809265137,
-            "q1Ms": 17.09999990463257,
-            "q3Ms": 17.299999952316284,
-            "p95Ms": 17.355000030994415,
-            "meanMs": 17.1699999888738
+            "medianMs": 17.100000143051147,
+            "q1Ms": 17,
+            "q3Ms": 17.300000190734863,
+            "p95Ms": 17.87500001192093,
+            "meanMs": 17.15000002384186
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.5,
-            "q1Ms": 1.225000023841858,
-            "q3Ms": 2.0500001311302185,
-            "p95Ms": 2.5099999904632564,
-            "meanMs": 1.65666667620341
+            "medianMs": 1.2999999523162842,
+            "q1Ms": 1.2000000476837158,
+            "q3Ms": 1.3999998569488525,
+            "p95Ms": 1.6549999833106992,
+            "meanMs": 1.3300000270207724
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 475.2999999523163,
-            "q1Ms": 447.8499999642372,
-            "q3Ms": 550.4250000119209,
-            "p95Ms": 895.0100000858304,
-            "meanMs": 543.4666666428249
+            "medianMs": 533.5,
+            "q1Ms": 469.8000000715256,
+            "q3Ms": 669.7749999165535,
+            "p95Ms": 1259.0600000262255,
+            "meanMs": 660.4866666634878
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.2999999523162842,
             "q1Ms": 0.20000004768371582,
             "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.6000001430511475,
-            "meanMs": 0.3066666682561239
+            "p95Ms": 0.3550001382827756,
+            "meanMs": 0.26666666666666666
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -2951,9 +3071,9 @@
             "observations": 30,
             "median": 667144,
             "q1": 667144,
-            "q3": 667153,
+            "q3": 667150.75,
             "p95": 667153,
-            "mean": 667147.6
+            "mean": 667141
           },
           "cacheEntriesAfterPrefetch": {
             "observations": 30,
@@ -2965,11 +3085,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 164.93349999999998,
-            "q1Ms": 161.34025,
-            "q3Ms": 229.89975,
-            "p95Ms": 300.4763999999999,
-            "meanMs": 205.02683333333337
+            "medianMs": 223.398,
+            "q1Ms": 169.443,
+            "q3Ms": 339.06325000000004,
+            "p95Ms": 639.4847499999998,
+            "meanMs": 315.62766666666664
           }
         },
         {
@@ -2978,39 +3098,47 @@
           "annotatedElements": 100,
           "uniqueIdentifiers": 80,
           "trials": 30,
-          "attemptedTrials": 30,
-          "failedTrials": 0,
+          "attemptedTrials": 31,
+          "failedTrials": 1,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 24,
-            "q1Ms": 18.05000001192093,
-            "q3Ms": 27.325000047683716,
-            "p95Ms": 31.060000121593472,
-            "meanMs": 23.170000004768372
+            "medianMs": 45.949999928474426,
+            "q1Ms": 40.90000003576279,
+            "q3Ms": 49.074999928474426,
+            "p95Ms": 53.15999999046325,
+            "meanMs": 46.34999998410543
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 46.75,
+            "q1Ms": 41.90000003576279,
+            "q3Ms": 50.27499997615814,
+            "p95Ms": 55,
+            "meanMs": 47.590000009536745
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 7.75,
-            "q1Ms": 5.725000023841858,
-            "q3Ms": 9.399999976158142,
-            "p95Ms": 11.370000064373013,
-            "meanMs": 7.806666668256124
+            "medianMs": 11.800000071525574,
+            "q1Ms": 8.149999976158142,
+            "q3Ms": 14.300000131130219,
+            "p95Ms": 19.66499996185302,
+            "meanMs": 12.303333322207132
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 23.899999976158142,
-            "q1Ms": 17.925000071525574,
-            "q3Ms": 27.125,
-            "p95Ms": 30.740000057220456,
-            "meanMs": 23.033333365122477
+            "medianMs": 42.799999952316284,
+            "q1Ms": 39.125,
+            "q3Ms": 46.3500000834465,
+            "p95Ms": 53.05999997854232,
+            "meanMs": 44.396666661898294
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 4395.25,
-            "q1Ms": 3822,
-            "q3Ms": 4972.474999964237,
-            "p95Ms": 6328.079999995231,
-            "meanMs": 4608.176666641235
+            "medianMs": 4381.949999928474,
+            "q1Ms": 3941.725000143051,
+            "q3Ms": 4968.05000013113,
+            "p95Ms": 6378.330000030992,
+            "meanMs": 4568.213333352407
           },
           "initializationRequests": {
             "observations": 30,
@@ -3046,11 +3174,11 @@
           },
           "transferredBytes": {
             "observations": 30,
-            "median": 8097243,
-            "q1": 8097234,
-            "q3": 8097270,
-            "p95": 8097484.199999999,
-            "mean": 8097266.1
+            "median": 8097135,
+            "q1": 8097108,
+            "q3": 8097519.75,
+            "p95": 8098039.050000001,
+            "mean": 8097348.6
           },
           "interactionRequests": {
             "observations": 30,
@@ -3078,43 +3206,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 19.200000047683716,
-            "q1Ms": 15.95000010728836,
-            "q3Ms": 21.42500001192093,
-            "p95Ms": 25.210000026226037,
-            "meanMs": 18.626666657129924
+            "medianMs": 25.899999856948853,
+            "q1Ms": 23.225000143051147,
+            "q3Ms": 29.025000035762787,
+            "p95Ms": 38.3500000834465,
+            "meanMs": 27.28666668732961
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 22.5,
-            "q1Ms": 19.275000035762787,
-            "q3Ms": 25.799999952316284,
-            "p95Ms": 29.690000009536732,
-            "meanMs": 22.889999969800314
+            "medianMs": 33.549999952316284,
+            "q1Ms": 29.57499998807907,
+            "q3Ms": 37.20000010728836,
+            "p95Ms": 50.355000138282776,
+            "meanMs": 34.983333349227905
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 53.74999988079071,
-            "q1Ms": 41.874999940395355,
-            "q3Ms": 63.67500001192093,
-            "p95Ms": 70.43999997377395,
-            "meanMs": 52.339999993642174
+            "medianMs": 82.34999990463257,
+            "q1Ms": 46.47500002384186,
+            "q3Ms": 95.52500015497208,
+            "p95Ms": 118.85499989986417,
+            "meanMs": 77.20666666825612
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 0.5,
+            "medianMs": 0.40000009536743164,
             "q1Ms": 0.40000009536743164,
-            "q3Ms": 0.6000000834465027,
-            "p95Ms": 1.0550000786781308,
-            "meanMs": 0.5733333269755045
+            "q3Ms": 0.5,
+            "p95Ms": 0.5549999475479124,
+            "meanMs": 0.44666669368743894
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.20000004768371582,
             "q1Ms": 0.20000004768371582,
             "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.45500004291534396,
-            "meanMs": 0.250000007947286
+            "p95Ms": 0.3000001907348633,
+            "meanMs": 0.2200000286102295
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -3126,11 +3254,11 @@
           },
           "initialResponseBytes": {
             "observations": 30,
-            "median": 8097243,
-            "q1": 8097234,
-            "q3": 8097270,
-            "p95": 8097484.199999999,
-            "mean": 8097266.1
+            "median": 8097135,
+            "q1": 8097108,
+            "q3": 8097519.75,
+            "p95": 8098039.050000001,
+            "mean": 8097348.6
           },
           "sectionResponseBytes": {
             "observations": 30,
@@ -3150,11 +3278,11 @@
           },
           "providerRequest": {
             "observations": 30,
-            "medianMs": 4335.4965,
-            "q1Ms": 3747.81175,
-            "q3Ms": 4918.1762499999995,
-            "p95Ms": 6261.42865,
-            "meanMs": 4539.091799999999
+            "medianMs": 4275.768,
+            "q1Ms": 3840.6375000000003,
+            "q3Ms": 4855.28,
+            "p95Ms": 6247.050849999997,
+            "meanMs": 4448.413966666668
           }
         }
       ],
@@ -3163,15 +3291,15 @@
     {
       "schemaVersion": 2,
       "measurementVersion": 3,
-      "packageVersion": "2.4.0",
-      "gitCommit": "c9600f19f30d2b4cc83c10b7786bf6ed660bcad5",
-      "gitWorkingTreeDirty": false,
+      "packageVersion": "2.4.1",
+      "gitCommit": "d2bd5baaf396a869ec7a3af92607ae76fd660ade",
+      "gitWorkingTreeDirty": true,
       "inputSha256": {
-        "package.json": "b32562d30adb674e3fa73882f9293c989cd9b82d19690b8f63c03777c8d5792d",
-        "package-lock.json": "36b0205447027d69ae09386c60b83d7270a33872beb612f8825f1f6144a12505",
+        "package.json": "47cd8843eb773eb02e6b76e976b91c7ed37f3e700afc4951882d965886f09b74",
+        "package-lock.json": "b5d88c569909366b3d44f880f1d84ee1f5a16fac0044489fbaf070ebac3b3f43",
         "esbuild.config.js": "820626c695c4adefac1525cf8a1e0f3042fd09219ea65fdaadda13d3a78bba2a",
-        "benchmark/browser.mjs": "257b83603e84bed0fdc1e9095ffaebeb285a0e22a57acd8ef0e571c5d46bc111",
-        "benchmark/browser-report.mjs": "72c7d0a0696d2d1a3d8ad66925090d4df54202d76c55ab25dfc1fcc24efbca96",
+        "benchmark/browser.mjs": "0bde9a6dfbc1b82ad61892e24a98fa6145260ac2fc4545e5d10e7c647aa9f8df",
+        "benchmark/browser-report.mjs": "5c1a3f5f7060940da8769310d054564db560142af96417655e80176f153ec6b5",
         "benchmark/report.mjs": "552a0b6ff5e40bcc567b2e74d67ce10058f69481c50ab559d13dafd69a1a02fe",
         "benchmark/live-genes.mjs": "c037f09dd18f51d3e23e533f66ad76688ba2d4864996d58efb40195991410b30",
         "benchmark/field-selection.mjs": "3ee7bb32878607d05a1c35d29bc38dc4cda5f7b394b271d5b2192ea0fc9b5e1d",
@@ -3179,11 +3307,11 @@
         "benchmark/scenarios.mjs": "7fb0b133f0f92f69b30b95caeb2d63c009f9fae4ee95c6429c560ec73bf4677d",
         "benchmark/fixtures/mygene-stress-symbols.json": "4386fec29eee9b068c9250841fdf2e7d8b7d39600bb46594f8a089fe0fc85761",
         "benchmark/fixtures/mygene-tp53.json": "23212e03c72152f9835717e86a596febba3feb6c2db8ab1283829ddd0bd9ab86",
-        "dist/bio-tooltips.mygene.esm.js": "56368544700b3d80e553af0835148749ccbe6ca9fb383f24b7c372addfe0acc9",
-        "dist/bio-tooltips.css": "db150030912a2c27211d071866811f350bd983470a9feab7080eb78a475270b4"
+        "dist/bio-tooltips.mygene.esm.js": "ad3635cea758046f070ff9023dd8670e91f7168585f204b9790a319360dbefed",
+        "dist/bio-tooltips.css": "a31620b4e3602b9691424470d2afe4021533aed315ea71343b847b83bb614096"
       },
-      "startedAt": "2026-11-17T22:55:38.882Z",
-      "generatedAt": "2026-11-17T23:02:13.144Z",
+      "startedAt": "2026-11-18T14:50:54.838Z",
+      "generatedAt": "2026-11-18T14:58:11.747Z",
       "environment": {
         "node": "v24.14.0",
         "platform": "linux 7.0.0-42-generic x64",
@@ -3258,27 +3386,35 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 17.950000047683716,
-            "q1Ms": 14.174999952316284,
-            "q3Ms": 20.474999964237213,
-            "p95Ms": 26.52000000476837,
-            "meanMs": 18.163333328564963
+            "medianMs": 37.5,
+            "q1Ms": 32.60000002384186,
+            "q3Ms": 40.59999996423721,
+            "p95Ms": 51.504999995231614,
+            "meanMs": 38.443333355585736
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 37.799999952316284,
+            "q1Ms": 32.82499998807907,
+            "q3Ms": 40.79999989271164,
+            "p95Ms": 51.749999999999986,
+            "meanMs": 38.693333355585736
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 1.2000000476837158,
+            "medianMs": 1,
             "q1Ms": 1,
-            "q3Ms": 1.4000000953674316,
-            "p95Ms": 1.8100000739097588,
-            "meanMs": 1.256666644414266
+            "q3Ms": 1.274999976158142,
+            "p95Ms": 2.154999983310699,
+            "meanMs": 1.2466666460037232
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 17.90000009536743,
-            "q1Ms": 14.149999916553497,
-            "q3Ms": 20.449999928474426,
-            "p95Ms": 26.52000000476837,
-            "meanMs": 18.099999992052712
+            "medianMs": 37.25,
+            "q1Ms": 32.500000059604645,
+            "q3Ms": 39.89999997615814,
+            "p95Ms": 51.44999991655348,
+            "meanMs": 38.11333333651225
           },
           "prefetchCompletion": null,
           "initializationRequests": {
@@ -3347,43 +3483,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 6.300000071525574,
-            "q1Ms": 5.574999988079071,
-            "q3Ms": 7.175000011920929,
-            "p95Ms": 8.465000057220458,
-            "meanMs": 6.36333335240682
+            "medianMs": 10.5,
+            "q1Ms": 9.5,
+            "q3Ms": 11.774999976158142,
+            "p95Ms": 13.02000000476837,
+            "meanMs": 10.62666666507721
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17,
-            "q1Ms": 16.90000009536743,
-            "q3Ms": 17.09999990463257,
-            "p95Ms": 17.200000047683716,
-            "meanMs": 16.99333336353302
+            "medianMs": 17.34999990463257,
+            "q1Ms": 17,
+            "q3Ms": 18.299999952316284,
+            "p95Ms": 19.804999887943264,
+            "meanMs": 17.69666665395101
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.75,
-            "q1Ms": 1.5,
-            "q3Ms": 2,
-            "p95Ms": 3.0549999475479126,
-            "meanMs": 1.8633333365122478
+            "medianMs": 1.399999976158142,
+            "q1Ms": 1.2999999523162842,
+            "q3Ms": 1.5,
+            "p95Ms": 1.7000000476837158,
+            "meanMs": 1.4633333285649617
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 16.5,
-            "q1Ms": 16.200000047683716,
-            "q3Ms": 17,
-            "p95Ms": 17.6549999833107,
-            "meanMs": 16.62666666507721
+            "medianMs": 16.75,
+            "q1Ms": 16.124999940395355,
+            "q3Ms": 19.299999952316284,
+            "p95Ms": 21.02000011205673,
+            "meanMs": 17.010000014305113
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.20000004768371582,
             "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.2749999761581421,
-            "p95Ms": 0.3550000071525571,
-            "meanMs": 0.23333332538604737
+            "q3Ms": 0.20000004768371582,
+            "p95Ms": 0.30000008344650264,
+            "meanMs": 0.22666666507720948
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -3428,27 +3564,35 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 16.700000047683716,
-            "q1Ms": 14.04999989271164,
-            "q3Ms": 20.849999964237213,
-            "p95Ms": 24.45000009536743,
-            "meanMs": 17.429999987284344
+            "medianMs": 37.200000047683716,
+            "q1Ms": 33.8999999165535,
+            "q3Ms": 42.324999928474426,
+            "p95Ms": 49.66999987363815,
+            "meanMs": 38.39999998410543
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 38.35000002384186,
+            "q1Ms": 34.05000001192093,
+            "q3Ms": 42.55000001192093,
+            "p95Ms": 49.82499998807906,
+            "meanMs": 38.77000003655751
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 1.1000001430511475,
-            "q1Ms": 0.9250000715255737,
-            "q3Ms": 1.475000023841858,
-            "p95Ms": 2.110000026226043,
-            "meanMs": 1.2633333365122477
+            "medianMs": 1,
+            "q1Ms": 1,
+            "q3Ms": 1.1000001430511475,
+            "p95Ms": 1.5100000143051142,
+            "meanMs": 1.090000001589457
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 16.700000047683716,
-            "q1Ms": 13.875000059604645,
-            "q3Ms": 20.82499998807907,
-            "p95Ms": 24.285000121593473,
-            "meanMs": 17.353333338101706
+            "medianMs": 37.050000071525574,
+            "q1Ms": 33.799999952316284,
+            "q3Ms": 42.324999928474426,
+            "p95Ms": 49.34000005722045,
+            "meanMs": 38.22000000476837
           },
           "prefetchCompletion": null,
           "initializationRequests": {
@@ -3517,43 +3661,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 6.799999952316284,
-            "q1Ms": 6.050000011920929,
-            "q3Ms": 7.5,
-            "p95Ms": 8.799999952316284,
-            "meanMs": 6.766666642824808
+            "medianMs": 11.649999976158142,
+            "q1Ms": 10.524999976158142,
+            "q3Ms": 12.700000047683716,
+            "p95Ms": 14.030000126361845,
+            "meanMs": 11.61333335240682
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17,
-            "q1Ms": 16.899999916553497,
-            "q3Ms": 17,
-            "p95Ms": 17.15500009059906,
-            "meanMs": 16.963333344459535
+            "medianMs": 17.399999976158142,
+            "q1Ms": 17.099999964237213,
+            "q3Ms": 19.475000023841858,
+            "p95Ms": 20.855000030994415,
+            "meanMs": 18.23666670322418
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.9500000476837158,
-            "q1Ms": 1.6999998688697815,
-            "q3Ms": 2.274999976158142,
-            "p95Ms": 2.9650000572204585,
-            "meanMs": 2.060000030199687
+            "medianMs": 1.5999999046325684,
+            "q1Ms": 1.5,
+            "q3Ms": 1.699999988079071,
+            "p95Ms": 2.0650000691413872,
+            "meanMs": 1.6366666555404663
           },
           "sectionExpansion": {
             "observations": 30,
             "medianMs": 0.5,
             "q1Ms": 0.40000009536743164,
-            "q3Ms": 0.6000001430511475,
-            "p95Ms": 1.065000069141387,
-            "meanMs": 0.5733333428700765
+            "q3Ms": 0.5,
+            "p95Ms": 0.5,
+            "meanMs": 0.4600000143051147
           },
           "repeatSectionExpansion": {
             "observations": 30,
-            "medianMs": 0.25,
+            "medianMs": 0.20000004768371582,
             "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.37499988079071045,
-            "p95Ms": 0.5549999475479124,
-            "meanMs": 0.2833333253860474
+            "q3Ms": 0.2999999523162842,
+            "p95Ms": 0.3000001907348633,
+            "meanMs": 0.24999999205271403
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -3598,43 +3742,51 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 17.25,
-            "q1Ms": 14.20000010728836,
-            "q3Ms": 19.699999809265137,
-            "p95Ms": 20.72999993562698,
-            "meanMs": 17.20999999841054
+            "medianMs": 39.549999952316284,
+            "q1Ms": 36.799999952316284,
+            "q3Ms": 44.59999990463257,
+            "p95Ms": 49.969999969005585,
+            "meanMs": 41.51333332856496
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 39.700000047683716,
+            "q1Ms": 37.124999940395355,
+            "q3Ms": 45,
+            "p95Ms": 51.11000002622605,
+            "meanMs": 41.88333334128062
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 1.6000001430511475,
+            "medianMs": 1.5,
             "q1Ms": 1.4000000953674316,
-            "q3Ms": 2.0750001072883606,
-            "p95Ms": 2.3999999880790712,
-            "meanMs": 1.7266666809717814
+            "q3Ms": 1.9749999642372131,
+            "p95Ms": 5.365000021457671,
+            "meanMs": 2.056666644414266
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 17.15000009536743,
-            "q1Ms": 14.175000131130219,
-            "q3Ms": 19.649999856948853,
-            "p95Ms": 20.61999990940094,
-            "meanMs": 17.113333336512248
+            "medianMs": 39.050000071525574,
+            "q1Ms": 36.27499985694885,
+            "q3Ms": 43.3999999165535,
+            "p95Ms": 48.435000026226035,
+            "meanMs": 40.713333328564964
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 31.799999952316284,
-            "q1Ms": 27.899999916553497,
-            "q3Ms": 37.875000059604645,
-            "p95Ms": 45.515000057220455,
-            "meanMs": 33.380000003178914
+            "medianMs": 44.299999833106995,
+            "q1Ms": 39.10000002384186,
+            "q3Ms": 53.95000010728836,
+            "p95Ms": 76.39000003337853,
+            "meanMs": 48.56666666666667
           },
           "initializationRequests": {
             "observations": 30,
             "median": 0,
             "q1": 0,
             "q3": 0,
-            "p95": 0,
-            "mean": 0
+            "p95": 0.5499999999999972,
+            "mean": 0.06666666666666667
           },
           "totalRequests": {
             "observations": 30,
@@ -3667,6 +3819,561 @@
             "q3": 58572,
             "p95": 58572,
             "mean": 58572
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 1,
+            "q1Ms": 0.9000000953674316,
+            "q3Ms": 1.1750000715255737,
+            "p95Ms": 1.3549998998641963,
+            "meanMs": 1.0233333428700766
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 17.09999990463257,
+            "q1Ms": 16.899999916553497,
+            "q3Ms": 17.475000023841858,
+            "p95Ms": 18.509999883174896,
+            "meanMs": 17.249999992052715
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.4000000953674316,
+            "q1Ms": 1.300000011920929,
+            "q3Ms": 1.5,
+            "p95Ms": 3.3600000381469637,
+            "meanMs": 1.6600000143051148
+          },
+          "sectionExpansion": {
+            "observations": 30,
+            "medianMs": 17.649999856948853,
+            "q1Ms": 14.225000023841858,
+            "q3Ms": 18.700000047683716,
+            "p95Ms": 22.57000011205673,
+            "meanMs": 16.92333333492279
+          },
+          "repeatSectionExpansion": {
+            "observations": 30,
+            "medianMs": 0.20000004768371582,
+            "q1Ms": 0.20000004768371582,
+            "q3Ms": 0.20000004768371582,
+            "p95Ms": 0.30000008344650264,
+            "meanMs": 0.22000001271565756
+          },
+          "sectionExpansionRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "initialResponseBytes": {
+            "observations": 30,
+            "median": 51731,
+            "q1": 51731,
+            "q3": 51731,
+            "p95": 51731,
+            "mean": 51731
+          },
+          "sectionResponseBytes": {
+            "observations": 30,
+            "median": 6841,
+            "q1": 6841,
+            "q3": 6841,
+            "p95": 6841,
+            "mean": 6841
+          },
+          "cacheEntriesAfterPrefetch": {
+            "observations": 30,
+            "median": 8,
+            "q1": 8,
+            "q3": 8,
+            "p95": 8,
+            "mean": 8
+          }
+        },
+        {
+          "loadingMode": "eager",
+          "strategy": "smart",
+          "annotatedElements": 10,
+          "uniqueIdentifiers": 8,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 39.799999952316284,
+            "q1Ms": 34.750000059604645,
+            "q3Ms": 44.64999997615814,
+            "p95Ms": 54.37999999523161,
+            "meanMs": 40.39000000953674
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 40.050000071525574,
+            "q1Ms": 34.84999996423721,
+            "q3Ms": 44.800000071525574,
+            "p95Ms": 54.58000004291532,
+            "meanMs": 40.616666690508524
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 1.5999999046325684,
+            "q1Ms": 1.4000000953674316,
+            "q3Ms": 2.475000023841858,
+            "p95Ms": 5.230000042915343,
+            "meanMs": 2.3300000111262005
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 39.699999928474426,
+            "q1Ms": 34.65000009536743,
+            "q3Ms": 44.09999990463257,
+            "p95Ms": 52.29000006914136,
+            "meanMs": 39.933333325386045
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 42.10000002384186,
+            "q1Ms": 39.25000011920929,
+            "q3Ms": 45.05000001192093,
+            "p95Ms": 66.94499999284743,
+            "meanMs": 45.80666667620341
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 1,
+            "mean": 0.1
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 8,
+            "q1": 8,
+            "q3": 8,
+            "p95": 8,
+            "mean": 8
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 54739,
+            "q1": 54739,
+            "q3": 54739,
+            "p95": 54739,
+            "mean": 54739
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 1.2999999523162842,
+            "q1Ms": 1.2000000476837158,
+            "q3Ms": 1.4000000357627869,
+            "p95Ms": 1.5549999475479122,
+            "meanMs": 1.296666646003723
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 17,
+            "q1Ms": 16.82500010728836,
+            "q3Ms": 17.374999940395355,
+            "p95Ms": 18.184999978542326,
+            "meanMs": 17.13999999364217
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.5999999046325684,
+            "q1Ms": 1.5,
+            "q3Ms": 1.7000000476837158,
+            "p95Ms": 3.2100000262260373,
+            "meanMs": 1.8200000127156575
+          },
+          "sectionExpansion": {
+            "observations": 30,
+            "medianMs": 0.40000009536743164,
+            "q1Ms": 0.39999985694885254,
+            "q3Ms": 0.5,
+            "p95Ms": 0.5,
+            "meanMs": 0.4299999952316284
+          },
+          "repeatSectionExpansion": {
+            "observations": 30,
+            "medianMs": 0.20000004768371582,
+            "q1Ms": 0.20000004768371582,
+            "q3Ms": 0.20000004768371582,
+            "p95Ms": 0.2999999523162842,
+            "meanMs": 0.2166666825612386
+          },
+          "sectionExpansionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "initialResponseBytes": {
+            "observations": 30,
+            "median": 54739,
+            "q1": 54739,
+            "q3": 54739,
+            "p95": 54739,
+            "mean": 54739
+          },
+          "sectionResponseBytes": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheEntriesAfterPrefetch": {
+            "observations": 30,
+            "median": 8,
+            "q1": 8,
+            "q3": 8,
+            "p95": 8,
+            "mean": 8
+          }
+        },
+        {
+          "loadingMode": "lazy",
+          "strategy": "all",
+          "annotatedElements": 10,
+          "uniqueIdentifiers": 8,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 37.64999997615814,
+            "q1Ms": 34.525000154972076,
+            "q3Ms": 42.22499996423721,
+            "p95Ms": 46.08499989509581,
+            "meanMs": 37.93666664759318
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 38.050000071525574,
+            "q1Ms": 34.625000059604645,
+            "q3Ms": 42.749999940395355,
+            "p95Ms": 46.47499999999999,
+            "meanMs": 38.35000000794729
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 1.9499999284744263,
+            "q1Ms": 1.5,
+            "q3Ms": 2.774999976158142,
+            "p95Ms": 5.365000021457671,
+            "meanMs": 2.5599999984105426
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 37.60000002384186,
+            "q1Ms": 34.30000001192093,
+            "q3Ms": 41.34999990463257,
+            "p95Ms": 46.03999983072279,
+            "meanMs": 37.52333330313365
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 42.450000047683716,
+            "q1Ms": 34.34999996423721,
+            "q3Ms": 53.875000059604645,
+            "p95Ms": 87.28999992609015,
+            "meanMs": 48.0199999888738
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 1,
+            "mean": 0.23333333333333334
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 2,
+            "q1": 2,
+            "q3": 2,
+            "p95": 2,
+            "mean": 2
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 8,
+            "q1": 8,
+            "q3": 8,
+            "p95": 8,
+            "mean": 8
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 58572,
+            "q1": 58572,
+            "q3": 58572,
+            "p95": 58572,
+            "mean": 58572
+          },
+          "interactionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "repeatInteractionRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 0,
+            "mean": 0
+          },
+          "cacheHits": {
+            "observations": 30,
+            "median": 6,
+            "q1": 6,
+            "q3": 6,
+            "p95": 6,
+            "mean": 6
+          },
+          "interactionToContent": {
+            "observations": 30,
+            "medianMs": 1.0499999523162842,
+            "q1Ms": 0.9000000953674316,
+            "q3Ms": 1.1000001430511475,
+            "p95Ms": 1.3550000071525572,
+            "meanMs": 1.053333338101705
+          },
+          "interactionToVisible": {
+            "observations": 30,
+            "medianMs": 17.09999990463257,
+            "q1Ms": 16.899999856948853,
+            "q3Ms": 17.200000047683716,
+            "p95Ms": 17.855000030994415,
+            "meanMs": 17.08666663169861
+          },
+          "warmCacheInteraction": {
+            "observations": 30,
+            "medianMs": 1.4000000953674316,
+            "q1Ms": 1.300000011920929,
+            "q3Ms": 1.6500000357627869,
+            "p95Ms": 4.784999883174894,
+            "meanMs": 1.7366666714350383
+          },
+          "sectionExpansion": {
+            "observations": 30,
+            "medianMs": 16.99999988079071,
+            "q1Ms": 14.350000023841858,
+            "q3Ms": 19.274999916553497,
+            "p95Ms": 20.855000007152558,
+            "meanMs": 16.699999976158143
+          },
+          "repeatSectionExpansion": {
+            "observations": 30,
+            "medianMs": 0.20000004768371582,
+            "q1Ms": 0.19999980926513672,
+            "q3Ms": 0.20000004768371582,
+            "p95Ms": 0.30000008344650264,
+            "meanMs": 0.21666663487752277
+          },
+          "sectionExpansionRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "initialResponseBytes": {
+            "observations": 30,
+            "median": 51731,
+            "q1": 51731,
+            "q3": 51731,
+            "p95": 51731,
+            "mean": 51731
+          },
+          "sectionResponseBytes": {
+            "observations": 30,
+            "median": 6841,
+            "q1": 6841,
+            "q3": 6841,
+            "p95": 6841,
+            "mean": 6841
+          },
+          "cacheEntriesAfterPrefetch": {
+            "observations": 30,
+            "median": 8,
+            "q1": 8,
+            "q3": 8,
+            "p95": 8,
+            "mean": 8
+          }
+        },
+        {
+          "loadingMode": "eager",
+          "strategy": "all",
+          "annotatedElements": 10,
+          "uniqueIdentifiers": 8,
+          "trials": 30,
+          "attemptedTrials": 30,
+          "failedTrials": 0,
+          "pageLoad": {
+            "observations": 30,
+            "medianMs": 40.89999985694885,
+            "q1Ms": 37.69999998807907,
+            "q3Ms": 44.94999986886978,
+            "p95Ms": 48.86999995708465,
+            "meanMs": 41.04666664600372
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 41.049999952316284,
+            "q1Ms": 37.949999928474426,
+            "q3Ms": 45.47499996423721,
+            "p95Ms": 49.26999992132187,
+            "meanMs": 41.49333333969116
+          },
+          "initialization": {
+            "observations": 30,
+            "medianMs": 1.5499999523162842,
+            "q1Ms": 1.4000000953674316,
+            "q3Ms": 2.699999988079071,
+            "p95Ms": 4.754999995231628,
+            "meanMs": 2.213333320617676
+          },
+          "readiness": {
+            "observations": 30,
+            "medianMs": 40.300000071525574,
+            "q1Ms": 37.09999996423721,
+            "q3Ms": 44.049999952316284,
+            "p95Ms": 48.824999999999996,
+            "meanMs": 40.369999996821086
+          },
+          "prefetchCompletion": {
+            "observations": 30,
+            "medianMs": 42.799999833106995,
+            "q1Ms": 37.64999997615814,
+            "q3Ms": 47.67499989271164,
+            "p95Ms": 59.325000011920906,
+            "meanMs": 44.74666665395101
+          },
+          "initializationRequests": {
+            "observations": 30,
+            "median": 0,
+            "q1": 0,
+            "q3": 0,
+            "p95": 1,
+            "mean": 0.1
+          },
+          "totalRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "prefetchRequests": {
+            "observations": 30,
+            "median": 1,
+            "q1": 1,
+            "q3": 1,
+            "p95": 1,
+            "mean": 1
+          },
+          "distinctRecordsFetched": {
+            "observations": 30,
+            "median": 8,
+            "q1": 8,
+            "q3": 8,
+            "p95": 8,
+            "mean": 8
+          },
+          "transferredBytes": {
+            "observations": 30,
+            "median": 54739,
+            "q1": 54739,
+            "q3": 54739,
+            "p95": 54739,
+            "mean": 54739
           },
           "interactionRequests": {
             "observations": 30,
@@ -3696,572 +4403,41 @@
             "observations": 30,
             "medianMs": 1.2000000476837158,
             "q1Ms": 1.1000001430511475,
-            "q3Ms": 1.475000023841858,
-            "p95Ms": 1.855000030994415,
-            "meanMs": 1.300000015894572
+            "q3Ms": 1.2999999523162842,
+            "p95Ms": 1.5,
+            "meanMs": 1.2199999968210855
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17.199999809265137,
-            "q1Ms": 17.024999976158142,
-            "q3Ms": 17.299999952316284,
-            "p95Ms": 17.5,
-            "meanMs": 17.166666658719382
-          },
-          "warmCacheInteraction": {
-            "observations": 30,
-            "medianMs": 1.600000023841858,
-            "q1Ms": 1.3250001072883606,
-            "q3Ms": 1.9000000357627869,
-            "p95Ms": 2.5,
-            "meanMs": 1.6766666889190673
-          },
-          "sectionExpansion": {
-            "observations": 30,
-            "medianMs": 16.5,
-            "q1Ms": 16.149999916553497,
-            "q3Ms": 16.90000009536743,
-            "p95Ms": 17.255000126361846,
-            "meanMs": 16.540000009536744
-          },
-          "repeatSectionExpansion": {
-            "observations": 30,
-            "medianMs": 0.20000004768371582,
-            "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.3000001907348633,
-            "meanMs": 0.2566666762034098
-          },
-          "sectionExpansionRequests": {
-            "observations": 30,
-            "median": 1,
-            "q1": 1,
-            "q3": 1,
-            "p95": 1,
-            "mean": 1
-          },
-          "initialResponseBytes": {
-            "observations": 30,
-            "median": 51731,
-            "q1": 51731,
-            "q3": 51731,
-            "p95": 51731,
-            "mean": 51731
-          },
-          "sectionResponseBytes": {
-            "observations": 30,
-            "median": 6841,
-            "q1": 6841,
-            "q3": 6841,
-            "p95": 6841,
-            "mean": 6841
-          },
-          "cacheEntriesAfterPrefetch": {
-            "observations": 30,
-            "median": 8,
-            "q1": 8,
-            "q3": 8,
-            "p95": 8,
-            "mean": 8
-          }
-        },
-        {
-          "loadingMode": "eager",
-          "strategy": "smart",
-          "annotatedElements": 10,
-          "uniqueIdentifiers": 8,
-          "trials": 30,
-          "attemptedTrials": 30,
-          "failedTrials": 0,
-          "pageLoad": {
-            "observations": 30,
-            "medianMs": 18.40000009536743,
-            "q1Ms": 15.324999928474426,
-            "q3Ms": 21.875,
-            "p95Ms": 25.1549999833107,
-            "meanMs": 18.843333315849303
-          },
-          "initialization": {
-            "observations": 30,
-            "medianMs": 1.600000023841858,
-            "q1Ms": 1.4000000953674316,
-            "q3Ms": 2,
-            "p95Ms": 2.820000064373015,
-            "meanMs": 1.8
-          },
-          "readiness": {
-            "observations": 30,
-            "medianMs": 18.25000011920929,
-            "q1Ms": 15.224999845027924,
-            "q3Ms": 21.775000035762787,
-            "p95Ms": 25.05500007867813,
-            "meanMs": 18.753333314259848
-          },
-          "prefetchCompletion": {
-            "observations": 30,
-            "medianMs": 31.75,
-            "q1Ms": 28.75,
-            "q3Ms": 39.60000014305115,
-            "p95Ms": 43.71500010490417,
-            "meanMs": 33.79666665395101
-          },
-          "initializationRequests": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "totalRequests": {
-            "observations": 30,
-            "median": 1,
-            "q1": 1,
-            "q3": 1,
-            "p95": 1,
-            "mean": 1
-          },
-          "prefetchRequests": {
-            "observations": 30,
-            "median": 1,
-            "q1": 1,
-            "q3": 1,
-            "p95": 1,
-            "mean": 1
-          },
-          "distinctRecordsFetched": {
-            "observations": 30,
-            "median": 8,
-            "q1": 8,
-            "q3": 8,
-            "p95": 8,
-            "mean": 8
-          },
-          "transferredBytes": {
-            "observations": 30,
-            "median": 54739,
-            "q1": 54739,
-            "q3": 54739,
-            "p95": 54739,
-            "mean": 54739
-          },
-          "interactionRequests": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "repeatInteractionRequests": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "cacheHits": {
-            "observations": 30,
-            "median": 6,
-            "q1": 6,
-            "q3": 6,
-            "p95": 6,
-            "mean": 6
-          },
-          "interactionToContent": {
-            "observations": 30,
-            "medianMs": 1.5999999046325684,
-            "q1Ms": 1.3250001072883606,
-            "q3Ms": 1.7000000476837158,
-            "p95Ms": 2.0549999475479126,
-            "meanMs": 1.5766666412353516
-          },
-          "interactionToVisible": {
-            "observations": 30,
-            "medianMs": 17.200000047683716,
-            "q1Ms": 17,
-            "q3Ms": 17.299999952316284,
-            "p95Ms": 17.455000042915344,
-            "meanMs": 17.18333335717519
-          },
-          "warmCacheInteraction": {
-            "observations": 30,
-            "medianMs": 2.100000023841858,
-            "q1Ms": 1.7000000476837158,
-            "q3Ms": 2.3749998807907104,
-            "p95Ms": 2.8099999666213984,
-            "meanMs": 2.046666693687439
-          },
-          "sectionExpansion": {
-            "observations": 30,
-            "medianMs": 0.5,
-            "q1Ms": 0.40000009536743164,
-            "q3Ms": 0.5999999046325684,
-            "p95Ms": 0.7000000476837158,
-            "meanMs": 0.5333333492279053
-          },
-          "repeatSectionExpansion": {
-            "observations": 30,
-            "medianMs": 0.20000004768371582,
-            "q1Ms": 0.19999980926513672,
-            "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.3550001382827756,
-            "meanMs": 0.23666665554046631
-          },
-          "sectionExpansionRequests": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "initialResponseBytes": {
-            "observations": 30,
-            "median": 54739,
-            "q1": 54739,
-            "q3": 54739,
-            "p95": 54739,
-            "mean": 54739
-          },
-          "sectionResponseBytes": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "cacheEntriesAfterPrefetch": {
-            "observations": 30,
-            "median": 8,
-            "q1": 8,
-            "q3": 8,
-            "p95": 8,
-            "mean": 8
-          }
-        },
-        {
-          "loadingMode": "lazy",
-          "strategy": "all",
-          "annotatedElements": 10,
-          "uniqueIdentifiers": 8,
-          "trials": 30,
-          "attemptedTrials": 30,
-          "failedTrials": 0,
-          "pageLoad": {
-            "observations": 30,
-            "medianMs": 19.450000047683716,
-            "q1Ms": 15.099999964237213,
-            "q3Ms": 22.400000035762787,
-            "p95Ms": 29.514999973773936,
-            "meanMs": 19.456666660308837
-          },
-          "initialization": {
-            "observations": 30,
-            "medianMs": 1.5999999046325684,
-            "q1Ms": 1.4000000953674316,
-            "q3Ms": 2.1749998331069946,
-            "p95Ms": 2.6200000166892994,
-            "meanMs": 1.7766666889190674
-          },
-          "readiness": {
-            "observations": 30,
-            "medianMs": 19.300000071525574,
-            "q1Ms": 15.074999988079071,
-            "q3Ms": 22.299999952316284,
-            "p95Ms": 29.315000057220438,
-            "meanMs": 19.33666666348775
-          },
-          "prefetchCompletion": {
-            "observations": 30,
-            "medianMs": 34.85000002384186,
-            "q1Ms": 29.774999976158142,
-            "q3Ms": 40.12499988079071,
-            "p95Ms": 45.495000052452085,
-            "meanMs": 35.266666666666666
-          },
-          "initializationRequests": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "totalRequests": {
-            "observations": 30,
-            "median": 2,
-            "q1": 2,
-            "q3": 2,
-            "p95": 2,
-            "mean": 2
-          },
-          "prefetchRequests": {
-            "observations": 30,
-            "median": 1,
-            "q1": 1,
-            "q3": 1,
-            "p95": 1,
-            "mean": 1
-          },
-          "distinctRecordsFetched": {
-            "observations": 30,
-            "median": 8,
-            "q1": 8,
-            "q3": 8,
-            "p95": 8,
-            "mean": 8
-          },
-          "transferredBytes": {
-            "observations": 30,
-            "median": 58572,
-            "q1": 58572,
-            "q3": 58572,
-            "p95": 58572,
-            "mean": 58572
-          },
-          "interactionRequests": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "repeatInteractionRequests": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "cacheHits": {
-            "observations": 30,
-            "median": 6,
-            "q1": 6,
-            "q3": 6,
-            "p95": 6,
-            "mean": 6
-          },
-          "interactionToContent": {
-            "observations": 30,
-            "medianMs": 1.3999998569488525,
-            "q1Ms": 1.1999998688697815,
-            "q3Ms": 1.5,
-            "p95Ms": 1.7549998879432676,
-            "meanMs": 1.346666653951009
-          },
-          "interactionToVisible": {
-            "observations": 30,
-            "medianMs": 17.200000047683716,
-            "q1Ms": 17.09999990463257,
-            "q3Ms": 17.30000013113022,
-            "p95Ms": 17.710000038146973,
-            "meanMs": 17.243333331743877
-          },
-          "warmCacheInteraction": {
-            "observations": 30,
-            "medianMs": 1.75,
-            "q1Ms": 1.3999998569488525,
-            "q3Ms": 2,
-            "p95Ms": 2.299999952316284,
-            "meanMs": 1.7733333110809326
-          },
-          "sectionExpansion": {
-            "observations": 30,
-            "medianMs": 16.299999952316284,
-            "q1Ms": 15.899999916553497,
-            "q3Ms": 16.800000190734863,
-            "p95Ms": 17.684999978542326,
-            "meanMs": 16.376666673024495
-          },
-          "repeatSectionExpansion": {
-            "observations": 30,
-            "medianMs": 0.2999999523162842,
-            "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.6000000357627868,
-            "meanMs": 0.2900000015894572
-          },
-          "sectionExpansionRequests": {
-            "observations": 30,
-            "median": 1,
-            "q1": 1,
-            "q3": 1,
-            "p95": 1,
-            "mean": 1
-          },
-          "initialResponseBytes": {
-            "observations": 30,
-            "median": 51731,
-            "q1": 51731,
-            "q3": 51731,
-            "p95": 51731,
-            "mean": 51731
-          },
-          "sectionResponseBytes": {
-            "observations": 30,
-            "median": 6841,
-            "q1": 6841,
-            "q3": 6841,
-            "p95": 6841,
-            "mean": 6841
-          },
-          "cacheEntriesAfterPrefetch": {
-            "observations": 30,
-            "median": 8,
-            "q1": 8,
-            "q3": 8,
-            "p95": 8,
-            "mean": 8
-          }
-        },
-        {
-          "loadingMode": "eager",
-          "strategy": "all",
-          "annotatedElements": 10,
-          "uniqueIdentifiers": 8,
-          "trials": 30,
-          "attemptedTrials": 30,
-          "failedTrials": 0,
-          "pageLoad": {
-            "observations": 30,
-            "medianMs": 19.09999990463257,
-            "q1Ms": 14.874999940395355,
-            "q3Ms": 22.449999928474426,
-            "p95Ms": 27.284999990463255,
-            "meanMs": 19.366666650772096
-          },
-          "initialization": {
-            "observations": 30,
-            "medianMs": 1.9499999284744263,
-            "q1Ms": 1.5999999642372131,
-            "q3Ms": 2.3749998807907104,
-            "p95Ms": 2.7749999999999986,
-            "meanMs": 1.9399999856948853
-          },
-          "readiness": {
-            "observations": 30,
-            "medianMs": 18.899999856948853,
-            "q1Ms": 14.824999928474426,
-            "q3Ms": 22.42499989271164,
-            "p95Ms": 27.230000042915343,
-            "meanMs": 19.246666646003725
-          },
-          "prefetchCompletion": {
-            "observations": 30,
-            "medianMs": 34.199999928474426,
-            "q1Ms": 30.024999976158142,
-            "q3Ms": 38.40000003576279,
-            "p95Ms": 42.76499987840653,
-            "meanMs": 33.96999997297923
-          },
-          "initializationRequests": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "totalRequests": {
-            "observations": 30,
-            "median": 1,
-            "q1": 1,
-            "q3": 1,
-            "p95": 1,
-            "mean": 1
-          },
-          "prefetchRequests": {
-            "observations": 30,
-            "median": 1,
-            "q1": 1,
-            "q3": 1,
-            "p95": 1,
-            "mean": 1
-          },
-          "distinctRecordsFetched": {
-            "observations": 30,
-            "median": 8,
-            "q1": 8,
-            "q3": 8,
-            "p95": 8,
-            "mean": 8
-          },
-          "transferredBytes": {
-            "observations": 30,
-            "median": 54739,
-            "q1": 54739,
-            "q3": 54739,
-            "p95": 54739,
-            "mean": 54739
-          },
-          "interactionRequests": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "repeatInteractionRequests": {
-            "observations": 30,
-            "median": 0,
-            "q1": 0,
-            "q3": 0,
-            "p95": 0,
-            "mean": 0
-          },
-          "cacheHits": {
-            "observations": 30,
-            "median": 6,
-            "q1": 6,
-            "q3": 6,
-            "p95": 6,
-            "mean": 6
-          },
-          "interactionToContent": {
-            "observations": 30,
-            "medianMs": 1.5,
-            "q1Ms": 1.2000000476837158,
-            "q3Ms": 1.8000001311302185,
-            "p95Ms": 2.3650000214576714,
-            "meanMs": 1.550000015894572
-          },
-          "interactionToVisible": {
-            "observations": 30,
-            "medianMs": 17.100000143051147,
-            "q1Ms": 17,
+            "medianMs": 17,
+            "q1Ms": 16.899999916553497,
             "q3Ms": 17.200000047683716,
-            "p95Ms": 17.39999998807907,
-            "meanMs": 17.13000005086263
+            "p95Ms": 18.17500009536743,
+            "meanMs": 17.096666669845582
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.899999976158142,
-            "q1Ms": 1.6000001430511475,
-            "q3Ms": 2.200000047683716,
-            "p95Ms": 2.800000083446503,
-            "meanMs": 1.9800000190734863
+            "medianMs": 1.5999999046325684,
+            "q1Ms": 1.5,
+            "q3Ms": 1.6000001430511475,
+            "p95Ms": 1.7000000476837158,
+            "meanMs": 1.5733333349227905
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 0.5,
+            "medianMs": 0.40000009536743164,
             "q1Ms": 0.40000009536743164,
-            "q3Ms": 0.6000001430511475,
-            "p95Ms": 1.065000069141387,
-            "meanMs": 0.5766666968663533
+            "q3Ms": 0.5,
+            "p95Ms": 0.5999999046325684,
+            "meanMs": 0.45000001589457195
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.20000004768371582,
-            "q1Ms": 0.20000004768371582,
+            "q1Ms": 0.1999998688697815,
             "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.4549999356269834,
-            "meanMs": 0.2499999761581421
+            "p95Ms": 0.2999999523162842,
+            "meanMs": 0.2166666587193807
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -4306,27 +4482,35 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 20.399999976158142,
-            "q1Ms": 18.42499989271164,
-            "q3Ms": 25.62499988079071,
-            "p95Ms": 30.490000069141377,
-            "meanMs": 22.053333322207134
+            "medianMs": 47.799999952316284,
+            "q1Ms": 42.64999997615814,
+            "q3Ms": 52.82499998807907,
+            "p95Ms": 62.6349999785423,
+            "meanMs": 48.37999997933706
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 48.40000009536743,
+            "q1Ms": 43.05000013113022,
+            "q3Ms": 53.42500013113022,
+            "p95Ms": 63.9599999785423,
+            "meanMs": 48.95333333810171
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 5.300000071525574,
-            "q1Ms": 4.599999904632568,
-            "q3Ms": 6.975000023841858,
-            "p95Ms": 8.910000085830688,
-            "meanMs": 5.8966666539510095
+            "medianMs": 6.300000071525574,
+            "q1Ms": 5.5,
+            "q3Ms": 8.849999904632568,
+            "p95Ms": 16.559999942779527,
+            "meanMs": 7.823333319028219
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 20.25,
-            "q1Ms": 18.32499998807907,
-            "q3Ms": 25.42500001192093,
-            "p95Ms": 30.299999904632557,
-            "meanMs": 21.903333330154418
+            "medianMs": 44.90000009536743,
+            "q1Ms": 39.84999990463257,
+            "q3Ms": 50.04999989271164,
+            "p95Ms": 60.25999993085858,
+            "meanMs": 46.029999979337056
           },
           "prefetchCompletion": null,
           "initializationRequests": {
@@ -4395,43 +4579,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 6.199999928474426,
-            "q1Ms": 5.374999940395355,
-            "q3Ms": 7.824999928474426,
-            "p95Ms": 8.519999980926512,
-            "meanMs": 6.596666661898295
+            "medianMs": 11.00000011920929,
+            "q1Ms": 10.099999904632568,
+            "q3Ms": 12.225000083446503,
+            "p95Ms": 13.919999969005584,
+            "meanMs": 11.176666641235352
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17,
-            "q1Ms": 16.90000009536743,
-            "q3Ms": 17,
-            "p95Ms": 17.355000007152558,
-            "meanMs": 17.01333335240682
+            "medianMs": 17.25,
+            "q1Ms": 16.899999856948853,
+            "q3Ms": 18.100000143051147,
+            "p95Ms": 19.58499994277954,
+            "meanMs": 17.67333331902822
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.7999999523162842,
-            "q1Ms": 1.5999999046325684,
-            "q3Ms": 2.200000047683716,
-            "p95Ms": 2.654999983310699,
-            "meanMs": 1.9133333365122478
+            "medianMs": 1.4000000953674316,
+            "q1Ms": 1.3999998569488525,
+            "q3Ms": 1.5,
+            "p95Ms": 1.9199998617172231,
+            "meanMs": 1.5700000047683715
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 16.399999976158142,
-            "q1Ms": 16.024999976158142,
-            "q3Ms": 16.799999952316284,
-            "p95Ms": 17.419999861717223,
-            "meanMs": 16.39333330790202
+            "medianMs": 16.949999928474426,
+            "q1Ms": 14.299999952316284,
+            "q3Ms": 19.900000154972076,
+            "p95Ms": 23.23999992609024,
+            "meanMs": 17.026666688919068
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.20000004768371582,
-            "q1Ms": 0.20000004768371582,
+            "q1Ms": 0.1999998688697815,
             "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.6200000166892994,
-            "meanMs": 0.27666668891906737
+            "p95Ms": 0.3550000071525571,
+            "meanMs": 0.2233333190282186
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -4476,27 +4660,35 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 23,
-            "q1Ms": 20.775000035762787,
-            "q3Ms": 24.80000013113022,
-            "p95Ms": 33.00999999046326,
-            "meanMs": 23.643333355585735
+            "medianMs": 43.700000047683716,
+            "q1Ms": 41.60000002384186,
+            "q3Ms": 49.299999952316284,
+            "p95Ms": 68.89500005245206,
+            "meanMs": 47.40000003178914
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 45.14999997615814,
+            "q1Ms": 42.30000001192093,
+            "q3Ms": 50.82500010728836,
+            "p95Ms": 69.29500001668927,
+            "meanMs": 48.30000003973643
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 6.100000023841858,
-            "q1Ms": 5.000000059604645,
-            "q3Ms": 6.925000011920929,
-            "p95Ms": 8.600000035762786,
-            "meanMs": 6.256666668256124
+            "medianMs": 6.5,
+            "q1Ms": 5.524999976158142,
+            "q3Ms": 8.45000010728836,
+            "p95Ms": 15.075000059604644,
+            "meanMs": 7.75666667620341
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 22.899999976158142,
-            "q1Ms": 20.674999952316284,
-            "q3Ms": 24.700000047683716,
-            "p95Ms": 32.899999988079074,
-            "meanMs": 23.55333334604899
+            "medianMs": 41.950000047683716,
+            "q1Ms": 37.200000047683716,
+            "q3Ms": 46.27500003576279,
+            "p95Ms": 68.35500004291532,
+            "meanMs": 45.6400000333786
           },
           "prefetchCompletion": null,
           "initializationRequests": {
@@ -4565,43 +4757,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 6.950000047683716,
-            "q1Ms": 6.299999952316284,
-            "q3Ms": 7.574999928474426,
-            "p95Ms": 8.200000047683716,
-            "meanMs": 6.8633333047231035
+            "medianMs": 10.700000047683716,
+            "q1Ms": 9.900000154972076,
+            "q3Ms": 12.425000011920929,
+            "p95Ms": 15.949999988079067,
+            "meanMs": 11.296666693687438
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17,
-            "q1Ms": 16.90000009536743,
-            "q3Ms": 17.100000083446503,
-            "p95Ms": 17.25499999523163,
-            "meanMs": 17.023333342870078
+            "medianMs": 17.200000047683716,
+            "q1Ms": 16.925000071525574,
+            "q3Ms": 18.5,
+            "p95Ms": 21.120000147819518,
+            "meanMs": 17.859999998410544
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.8999998569488525,
-            "q1Ms": 1.7000000476837158,
-            "q3Ms": 2.274999976158142,
-            "p95Ms": 2.810000073909759,
-            "meanMs": 1.99333336353302
+            "medianMs": 1.7000000476837158,
+            "q1Ms": 1.6000001430511475,
+            "q3Ms": 2.0999999046325684,
+            "p95Ms": 4.959999978542324,
+            "meanMs": 2.446666677792867
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 0.5,
-            "q1Ms": 0.40000009536743164,
-            "q3Ms": 0.6000000834465027,
-            "p95Ms": 1.0649999618530264,
-            "meanMs": 0.5533333539962768
+            "medianMs": 0.40000009536743164,
+            "q1Ms": 0.39999985694885254,
+            "q3Ms": 0.5,
+            "p95Ms": 0.5999999046325684,
+            "meanMs": 0.4433333158493042
           },
           "repeatSectionExpansion": {
             "observations": 30,
             "medianMs": 0.20000004768371582,
             "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.3750000596046448,
-            "p95Ms": 0.5,
-            "meanMs": 0.2866666793823242
+            "q3Ms": 0.2999999523162842,
+            "p95Ms": 0.30000008344650264,
+            "meanMs": 0.2233333428700765
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -4646,35 +4838,43 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 24.09999990463257,
-            "q1Ms": 22.37500011920929,
-            "q3Ms": 27.200000047683716,
-            "p95Ms": 30.31000007390976,
-            "meanMs": 24.613333344459534
+            "medianMs": 46.14999985694885,
+            "q1Ms": 40.32500010728836,
+            "q3Ms": 51.200000047683716,
+            "p95Ms": 58.46999990940091,
+            "meanMs": 46.0433333158493
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 46.5,
+            "q1Ms": 40.92500001192093,
+            "q3Ms": 52.050000071525574,
+            "p95Ms": 59.30499993562697,
+            "meanMs": 46.75333333015442
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 6.350000023841858,
-            "q1Ms": 5.1999998688697815,
-            "q3Ms": 7.5,
-            "p95Ms": 8.455000042915344,
-            "meanMs": 6.346666661898295
+            "medianMs": 8,
+            "q1Ms": 5.725000023841858,
+            "q3Ms": 9.424999952316284,
+            "p95Ms": 12.654999852180481,
+            "meanMs": 7.96666665871938
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 23.950000047683716,
-            "q1Ms": 22.275000035762787,
-            "q3Ms": 27.049999952316284,
-            "p95Ms": 30.05500007867813,
-            "meanMs": 24.49666665395101
+            "medianMs": 44.5,
+            "q1Ms": 39.700000047683716,
+            "q3Ms": 49.69999986886978,
+            "p95Ms": 55.94500000476836,
+            "meanMs": 44.33666663964589
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 957.6500000953674,
-            "q1Ms": 954.3500001430511,
-            "q3Ms": 961.5250000953674,
-            "p95Ms": 964.6099998950958,
-            "meanMs": 958.143333363533
+            "medianMs": 979.9499999284744,
+            "q1Ms": 968.0500000119209,
+            "q3Ms": 991.9749999046326,
+            "p95Ms": 1017.3999999046325,
+            "meanMs": 983.1366666475932
           },
           "initializationRequests": {
             "observations": 30,
@@ -4742,43 +4942,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 1.3999998569488525,
-            "q1Ms": 1.2999999523162842,
-            "q3Ms": 1.5,
-            "p95Ms": 1.7100000381469722,
-            "meanMs": 1.4099999825159708
+            "medianMs": 1,
+            "q1Ms": 1,
+            "q3Ms": 1.1750000715255737,
+            "p95Ms": 1.3549998998641963,
+            "meanMs": 1.0699999888737997
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17.200000047683716,
-            "q1Ms": 17.100000143051147,
-            "q3Ms": 17.30000013113022,
-            "p95Ms": 17.554999947547913,
-            "meanMs": 17.226666688919067
+            "medianMs": 17.15000009536743,
+            "q1Ms": 17,
+            "q3Ms": 17.299999952316284,
+            "p95Ms": 17.86500002145767,
+            "meanMs": 17.160000014305115
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.7000000476837158,
-            "q1Ms": 1.4250000715255737,
-            "q3Ms": 1.9000000953674316,
-            "p95Ms": 2.555000078678131,
-            "meanMs": 1.7733333269755045
+            "medianMs": 1.3000001907348633,
+            "q1Ms": 1.2999999523162842,
+            "q3Ms": 1.4000000953674316,
+            "p95Ms": 1.7000000476837158,
+            "meanMs": 1.4700000127156576
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 16.700000047683716,
-            "q1Ms": 16.324999928474426,
-            "q3Ms": 17.09999990463257,
-            "p95Ms": 17.620000147819518,
-            "meanMs": 16.656666692097982
+            "medianMs": 16.799999952316284,
+            "q1Ms": 15.12500011920929,
+            "q3Ms": 18.32500010728836,
+            "p95Ms": 20.615000069141384,
+            "meanMs": 16.67666668097178
           },
           "repeatSectionExpansion": {
             "observations": 30,
-            "medianMs": 0.2999999523162842,
-            "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.40000003576278687,
-            "p95Ms": 0.45500004291534396,
-            "meanMs": 0.31666667461395265
+            "medianMs": 0.20000004768371582,
+            "q1Ms": 0.19999980926513672,
+            "q3Ms": 0.20000004768371582,
+            "p95Ms": 0.30000008344650264,
+            "meanMs": 0.20666666825612387
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -4823,35 +5023,43 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 22.949999928474426,
-            "q1Ms": 19.725000083446503,
-            "q3Ms": 25.100000023841858,
-            "p95Ms": 32.28500006198881,
-            "meanMs": 23.176666657129925
+            "medianMs": 43.950000047683716,
+            "q1Ms": 38.500000059604645,
+            "q3Ms": 48.92500001192093,
+            "p95Ms": 55.69000010490416,
+            "meanMs": 44.2833333492279
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 44.300000071525574,
+            "q1Ms": 39.32499998807907,
+            "q3Ms": 49.575000047683716,
+            "p95Ms": 58.324999999999996,
+            "meanMs": 45.00666666030884
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 5.900000095367432,
-            "q1Ms": 4.524999976158142,
-            "q3Ms": 7.549999952316284,
-            "p95Ms": 8.355000030994415,
-            "meanMs": 6.090000001589457
+            "medianMs": 5.9999998807907104,
+            "q1Ms": 5.150000095367432,
+            "q3Ms": 8.074999928474426,
+            "p95Ms": 11.405000019073478,
+            "meanMs": 7.003333314259847
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 22.799999952316284,
-            "q1Ms": 19.625,
-            "q3Ms": 24.80000013113022,
-            "p95Ms": 32.18500002622602,
-            "meanMs": 23.053333322207134
+            "medianMs": 40.89999997615814,
+            "q1Ms": 37.45000010728836,
+            "q3Ms": 48.59999990463257,
+            "p95Ms": 54.489999961853016,
+            "meanMs": 42.606666668256125
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 957.3999999761581,
-            "q1Ms": 953.1249999403954,
-            "q3Ms": 959.575000166893,
-            "p95Ms": 962.9650000333786,
-            "meanMs": 958.1066666762034
+            "medianMs": 972.1000001430511,
+            "q1Ms": 963.5250001549721,
+            "q3Ms": 981.3249999880791,
+            "p95Ms": 998.4600000739097,
+            "meanMs": 974.5433333476384
           },
           "initializationRequests": {
             "observations": 30,
@@ -4919,43 +5127,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 1.5999999046325684,
-            "q1Ms": 1.4250000715255737,
-            "q3Ms": 1.774999976158142,
-            "p95Ms": 2.1649999737739556,
-            "meanMs": 1.6133333047231038
+            "medianMs": 1.2999999523162842,
+            "q1Ms": 1.1250000596046448,
+            "q3Ms": 1.3749999403953552,
+            "p95Ms": 1.6000001430511475,
+            "meanMs": 1.2800000111262004
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17.200000047683716,
-            "q1Ms": 17.100000143051147,
-            "q3Ms": 17.374999940395355,
-            "p95Ms": 17.554999947547913,
-            "meanMs": 17.239999993642172
+            "medianMs": 17.09999990463257,
+            "q1Ms": 16.90000009536743,
+            "q3Ms": 17.200000047683716,
+            "p95Ms": 18.275,
+            "meanMs": 17.14000001748403
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 2.100000023841858,
-            "q1Ms": 1.7999999523162842,
-            "q3Ms": 2.449999988079071,
-            "p95Ms": 2.8999999880790712,
-            "meanMs": 2.153333306312561
+            "medianMs": 1.5999999046325684,
+            "q1Ms": 1.5,
+            "q3Ms": 1.6000001430511475,
+            "p95Ms": 3.095000064373014,
+            "meanMs": 1.7833333253860473
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 0.5,
-            "q1Ms": 0.40000009536743164,
-            "q3Ms": 0.6999998092651367,
-            "p95Ms": 0.8549998998641966,
-            "meanMs": 0.5533333222071329
+            "medianMs": 0.40000009536743164,
+            "q1Ms": 0.3999999165534973,
+            "q3Ms": 0.5,
+            "p95Ms": 0.5549999475479124,
+            "meanMs": 0.44333334763844806
           },
           "repeatSectionExpansion": {
             "observations": 30,
-            "medianMs": 0.2999999523162842,
+            "medianMs": 0.20000004768371582,
             "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.3000001311302185,
-            "p95Ms": 0.5,
-            "meanMs": 0.29666667779286704
+            "q3Ms": 0.2999999523162842,
+            "p95Ms": 0.2999999523162842,
+            "meanMs": 0.21999999682108562
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -5000,43 +5208,51 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 24.050000071525574,
-            "q1Ms": 22.125,
-            "q3Ms": 27.62499988079071,
-            "p95Ms": 33.76500000953674,
-            "meanMs": 24.876666657129924
+            "medianMs": 50.450000047683716,
+            "q1Ms": 47.324999928474426,
+            "q3Ms": 59.325000047683716,
+            "p95Ms": 68.975,
+            "meanMs": 52.586666663487755
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 50.90000009536743,
+            "q1Ms": 48.15000009536743,
+            "q3Ms": 60.62500011920929,
+            "p95Ms": 69.36500010490417,
+            "meanMs": 53.33000001907349
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 6.850000023841858,
-            "q1Ms": 5.599999904632568,
-            "q3Ms": 7.974999964237213,
-            "p95Ms": 9.355000030994415,
-            "meanMs": 6.976666696866354
+            "medianMs": 9.50000011920929,
+            "q1Ms": 7.199999988079071,
+            "q3Ms": 13.774999856948853,
+            "p95Ms": 18.429999983310697,
+            "meanMs": 10.833333309491476
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 23.850000143051147,
-            "q1Ms": 21.950000166893005,
-            "q3Ms": 27.44999998807907,
-            "p95Ms": 33.66500010490417,
-            "meanMs": 24.72333335876465
+            "medianMs": 48.89999997615814,
+            "q1Ms": 45.8500000834465,
+            "q3Ms": 53.625,
+            "p95Ms": 68.87499998807905,
+            "meanMs": 50.09333332379659
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 54.75,
-            "q1Ms": 47.57499980926514,
-            "q3Ms": 61.375000059604645,
-            "p95Ms": 64.7049999833107,
-            "meanMs": 54.616666634877525
+            "medianMs": 68.30000007152557,
+            "q1Ms": 60.699999928474426,
+            "q3Ms": 73.1499999165535,
+            "p95Ms": 84.90500003099442,
+            "meanMs": 67.03333331743876
           },
           "initializationRequests": {
             "observations": 30,
             "median": 0,
             "q1": 0,
             "q3": 0,
-            "p95": 0.5499999999999972,
-            "mean": 0.06666666666666667
+            "p95": 1,
+            "mean": 0.16666666666666666
           },
           "totalRequests": {
             "observations": 30,
@@ -5096,43 +5312,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 1.399999976158142,
-            "q1Ms": 1.2999999523162842,
-            "q3Ms": 1.5,
-            "p95Ms": 1.5999999046325684,
-            "meanMs": 1.3933333237965901
+            "medianMs": 1,
+            "q1Ms": 1,
+            "q3Ms": 1.199999988079071,
+            "p95Ms": 1.3000001907348633,
+            "meanMs": 1.0900000174840292
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17.299999952316284,
-            "q1Ms": 17.12499988079071,
-            "q3Ms": 17.40000009536743,
-            "p95Ms": 17.664999973773956,
-            "meanMs": 17.293333307902017
+            "medianMs": 17.100000143051147,
+            "q1Ms": 16.899999916553497,
+            "q3Ms": 17.374999940395355,
+            "p95Ms": 18.304999995231626,
+            "meanMs": 16.980000034968057
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 1.8999998569488525,
-            "q1Ms": 1.5999999046325684,
-            "q3Ms": 2.200000047683716,
-            "p95Ms": 2.810000073909759,
-            "meanMs": 1.9366666555404664
+            "medianMs": 1.3999998569488525,
+            "q1Ms": 1.2999999523162842,
+            "q3Ms": 1.4000000953674316,
+            "p95Ms": 1.5,
+            "meanMs": 1.3166666587193807
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 16.59999990463257,
-            "q1Ms": 16.024999976158142,
-            "q3Ms": 17.37499988079071,
-            "p95Ms": 18.15500009059906,
-            "meanMs": 16.736666639645893
+            "medianMs": 17.350000023841858,
+            "q1Ms": 15.550000011920929,
+            "q3Ms": 19.42500001192093,
+            "p95Ms": 21.220000052452086,
+            "meanMs": 16.753333361943564
           },
           "repeatSectionExpansion": {
             "observations": 30,
-            "medianMs": 0.2999999523162842,
-            "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.3000001907348633,
-            "p95Ms": 0.5550000786781308,
-            "meanMs": 0.31000000635782876
+            "medianMs": 0.20000004768371582,
+            "q1Ms": 0.19999980926513672,
+            "q3Ms": 0.20000004768371582,
+            "p95Ms": 0.30000008344650264,
+            "meanMs": 0.21333328088124592
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -5177,43 +5393,51 @@
           "failedTrials": 0,
           "pageLoad": {
             "observations": 30,
-            "medianMs": 26.450000047683716,
-            "q1Ms": 23.849999964237213,
-            "q3Ms": 29.475000023841858,
-            "p95Ms": 31.6549999833107,
-            "meanMs": 26.03666670322418
+            "medianMs": 47.700000047683716,
+            "q1Ms": 40.925000071525574,
+            "q3Ms": 51.25,
+            "p95Ms": 70.32499999999996,
+            "meanMs": 48.1966666618983
+          },
+          "fullPageLoad": {
+            "observations": 30,
+            "medianMs": 48.299999952316284,
+            "q1Ms": 41.52500003576279,
+            "q3Ms": 51.85000002384186,
+            "p95Ms": 71.7049999952316,
+            "meanMs": 48.88666666348775
           },
           "initialization": {
             "observations": 30,
-            "medianMs": 8.5,
-            "q1Ms": 6.300000011920929,
-            "q3Ms": 9.574999928474426,
-            "p95Ms": 10.274999999999999,
-            "meanMs": 7.926666665077209
+            "medianMs": 9.149999976158142,
+            "q1Ms": 6.550000011920929,
+            "q3Ms": 10.400000035762787,
+            "p95Ms": 17.095000064373014,
+            "meanMs": 9.423333334922791
           },
           "readiness": {
             "observations": 30,
-            "medianMs": 26.350000023841858,
-            "q1Ms": 23.849999964237213,
-            "q3Ms": 29.350000083446503,
-            "p95Ms": 31.509999990463257,
-            "meanMs": 25.92333333492279
+            "medianMs": 46.700000047683716,
+            "q1Ms": 39.44999986886978,
+            "q3Ms": 49.24999988079071,
+            "p95Ms": 68.09000003337857,
+            "meanMs": 46.61000000635783
           },
           "prefetchCompletion": {
             "observations": 30,
-            "medianMs": 54.450000047683716,
-            "q1Ms": 48.92500013113022,
-            "q3Ms": 58.75000011920929,
-            "p95Ms": 66.95500003099441,
-            "meanMs": 53.79333335558574
+            "medianMs": 65.75,
+            "q1Ms": 59.050000071525574,
+            "q3Ms": 78.92499989271164,
+            "p95Ms": 93.47999993562698,
+            "meanMs": 69.85
           },
           "initializationRequests": {
             "observations": 30,
             "median": 0,
             "q1": 0,
-            "q3": 0,
+            "q3": 1,
             "p95": 1,
-            "mean": 0.1
+            "mean": 0.36666666666666664
           },
           "totalRequests": {
             "observations": 30,
@@ -5273,43 +5497,43 @@
           },
           "interactionToContent": {
             "observations": 30,
-            "medianMs": 1.5499999523162842,
-            "q1Ms": 1.4000000953674316,
-            "q3Ms": 1.7000000476837158,
-            "p95Ms": 2,
-            "meanMs": 1.5966666698455811
+            "medianMs": 1.2999999523162842,
+            "q1Ms": 1.1000001430511475,
+            "q3Ms": 1.3999998569488525,
+            "p95Ms": 1.5549999475479122,
+            "meanMs": 1.2666666905085247
           },
           "interactionToVisible": {
             "observations": 30,
-            "medianMs": 17.15000009536743,
-            "q1Ms": 17.09999990463257,
+            "medianMs": 17.09999990463257,
+            "q1Ms": 16.899999856948853,
             "q3Ms": 17.30000013113022,
-            "p95Ms": 17.5,
-            "meanMs": 17.190000017484028
+            "p95Ms": 18.46499992609024,
+            "meanMs": 17.033333333333335
           },
           "warmCacheInteraction": {
             "observations": 30,
-            "medianMs": 2.1999998092651367,
-            "q1Ms": 1.9000000953674316,
-            "q3Ms": 2.3999998569488525,
-            "p95Ms": 3.110000026226043,
-            "meanMs": 2.1899999618530273
+            "medianMs": 1.5,
+            "q1Ms": 1.4250000715255737,
+            "q3Ms": 1.6000000834465027,
+            "p95Ms": 3.5200001120567306,
+            "meanMs": 1.7266666730244955
           },
           "sectionExpansion": {
             "observations": 30,
-            "medianMs": 0.5499999523162842,
-            "q1Ms": 0.42500007152557373,
-            "q3Ms": 0.7999999523162842,
-            "p95Ms": 1.3000001907348633,
-            "meanMs": 0.7199999888737997
+            "medianMs": 0.40000009536743164,
+            "q1Ms": 0.40000009536743164,
+            "q3Ms": 0.5,
+            "p95Ms": 0.5550000786781308,
+            "meanMs": 0.45333335399627683
           },
           "repeatSectionExpansion": {
             "observations": 30,
-            "medianMs": 0.2999999523162842,
-            "q1Ms": 0.20000004768371582,
-            "q3Ms": 0.2999999523162842,
-            "p95Ms": 0.6099998950958246,
-            "meanMs": 0.2966666618982951
+            "medianMs": 0.20000004768371582,
+            "q1Ms": 0.19999980926513672,
+            "q3Ms": 0.20000004768371582,
+            "p95Ms": 0.2999999523162842,
+            "meanMs": 0.1899999936421712
           },
           "sectionExpansionRequests": {
             "observations": 30,
@@ -5353,6 +5577,7 @@
       "packageVersion": "2.4.0",
       "gitCommit": "c9600f19f30d2b4cc83c10b7786bf6ed660bcad5",
       "gitWorkingTreeDirty": false,
+      "retained": true,
       "inputSha256": {
         "package.json": "b32562d30adb674e3fa73882f9293c989cd9b82d19690b8f63c03777c8d5792d",
         "package-lock.json": "36b0205447027d69ae09386c60b83d7270a33872beb612f8825f1f6144a12505",
@@ -7347,6 +7572,7 @@
       "packageVersion": "2.4.0",
       "gitCommit": "c9600f19f30d2b4cc83c10b7786bf6ed660bcad5",
       "gitWorkingTreeDirty": false,
+      "retained": true,
       "inputSha256": {
         "package.json": "b32562d30adb674e3fa73882f9293c989cd9b82d19690b8f63c03777c8d5792d",
         "package-lock.json": "36b0205447027d69ae09386c60b83d7270a33872beb612f8825f1f6144a12505",

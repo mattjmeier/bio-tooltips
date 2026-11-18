@@ -111,12 +111,15 @@ describe('live browser benchmark data and reporting', () => {
       summaries: [{ strategy: 'none', annotatedElements: 10, uniqueIdentifiers: 8,
         trials: 2, attemptedTrials: 2, failedTrials: 0,
         pageLoad: { medianMs: 22, q1Ms: 20, q3Ms: 24 },
+        fullPageLoad: { medianMs: 26, q1Ms: 24, q3Ms: 28 },
         readiness: { medianMs: 18, q1Ms: 17, q3Ms: 19 },
         interactionToContent: timing, prefetchCompletion: { medianMs: 100, q1Ms: 99.5, q3Ms: 101 },
         prefetchRequests: { median: 1, q1: 0.30000000000000004, q3: 2 },
         transferredBytes: { median: 3000, q1: 0, q3: 1000000 } }],
     };
     for (const report of [renderLiveSection(result), renderFieldSelectionSection(result)]) {
+      expect(report).toContain('Page load (ms)');
+      expect(report).toContain('26 (24–28)');
       expect(report).toContain('1.8 (0.875–2)');
       expect(report).toContain('100 (99.5–101)');
       expect(report).toContain('1 (0.3–2)');
@@ -125,9 +128,10 @@ describe('live browser benchmark data and reporting', () => {
       expect(report).not.toContain('0.30000000000000004');
     }
     const browserReport = renderLiveSection(result);
-    expect(browserReport).toContain('| DOM loaded (ms) | Tooltips ready (ms) |');
-    expect(browserReport).toContain('| 22 (20–24) | 18 (17–19) |');
-    expect(browserReport).toContain('not browser paint');
+    expect(browserReport).toContain('| DOM loaded (ms) | Page load (ms) | Tooltips ready (ms) |');
+    expect(browserReport).toContain('| 22 (20–24) | 26 (24–28) | 18 (17–19) |');
+    expect(browserCsvRows(result.summaries).find(row => row.metric === 'fullPageLoad'))
+      .toMatchObject({ median: 26, q1: 24, q3: 28, units: 'ms' });
     // Presentation rounding must not change the raw CSV measurements.
     expect(browserCsvRows(result.summaries).find(row => row.metric === 'prefetchRequests')?.q1)
       .toBe(0.30000000000000004);
